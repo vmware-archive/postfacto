@@ -1,0 +1,42 @@
+resources:
+- name: pws
+  type: cf
+  source:
+    api: https://api.run.pivotal.io
+    username: {{pws-username}}
+    password: {{pws-password}}
+    organization: {{pws-org}}
+    space: {{pws-space}}
+
+- name: postfacto-release
+  type: git
+  source:
+    uri: git@github.com:pivotal/postfacto.git
+    private_key: {{git-postfacto-private-key}}
+    tag_filter: '*.*.*'
+
+- name: config
+  type: git
+  source:
+    uri: {{git-config-uri}}
+    private_key: {{git-config-private-key}}
+
+jobs:
+- name: deploy
+  serial: true
+  plan:
+  - get: config
+  - get: postfacto
+    resource: postfacto-release
+  - put: pws
+    params:
+      manifest: config/manifest-api.yml
+      path: postfacto/api
+  - task: build-web
+    file: postfacto/web/static-compile-production.yml
+    params:
+      CONFIG: config
+  - put: pws
+    params:
+      manifest: config/manifest-web.yml
+      path: web-build
