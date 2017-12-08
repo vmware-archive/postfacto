@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+service postgresql start
+
+# Run Tests
+cd postfacto-api/api
+bundle install --path vendor/bundle
+bundle exec rake db:create db:migrate
+bundle exec rake

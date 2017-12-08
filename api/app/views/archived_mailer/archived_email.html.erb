@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+  <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
+  <%= stylesheet_link_tag :archived_email %>
+</head>
+<body>
+  <body style="font-family: 'Karla', arial, sans-serif; text-align: center; margin: 0; padding: 0; background-color: white;" >
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td>
+<h3 class="logo">postfacto</h3>
+<h4 class="team-name"><%= @retro.name %> Retro - Action items</h4>
+<p class="text3">A retro was archived on <%= @archive.created_at.strftime('%-d %B %Y') %>. Here's the actions:</p>
+
+<div class="action-items-section">
+  <table class="action-item-pre" align="center">
+    <tr>
+      <td class="action-items-index">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="action-items-index"><%= @action_items.size %> action items</td>
+    </tr>
+    <tr>
+      <td class="action-items-index">&nbsp;</td>
+    </tr>
+  </table>
+
+  <% for item in @action_items do %>
+      <table class="action-item" align="center">
+        <tr>
+          <td class="item-row-spacing" colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="blank">&nbsp;</td>
+          <td class="square-cell" valign="top">
+            <table class="square-container">
+              <tr>
+                <td class="square"></td>
+              </tr>
+            </table>
+          </td>
+          <td class="space"></td>
+          <td class="action-text" valign="middle"><%= item.description %></td>
+          <td class="blank">&nbsp;</td>
+        </tr>
+        <tr>
+          <td hclass="item-row-spacing" colspan="5"></td>
+        </tr>
+      </table>
+
+      <table class="separator" align="center">
+        <tr>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+  <% end %>
+
+  <table class="action-item-pre" align="center">
+    <tr>
+      <td class="action-items-index">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="action-items-index">&nbsp;</td>
+    </tr>
+  </table>
+
+</div>
+<p>
+  <span class="logo">postfacto</span>
+  <span class="awesome">You're awesome!</span>
+</p>
+
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

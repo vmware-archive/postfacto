@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: postfacto/postfacto
+
+inputs:
+- name: postfacto-api
+
+caches:
+- path: postfacto-api/api/vendor/bundle
+
+run:
+  path: 'postfacto-api/api/ci/run'

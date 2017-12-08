@@ -1,0 +1,49 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  DisplayCopNames: true
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'app/admin/retros.rb'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'app/channels/retros_channel.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Style/WordArray:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false

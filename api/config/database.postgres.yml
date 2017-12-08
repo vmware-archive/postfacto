@@ -1,0 +1,13 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: retro_app_development
+  template: template0
+  pool: 5
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: retro_app_test
+  template: template0
+  pool: 5

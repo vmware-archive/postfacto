@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Karla', arial, sans-serif;
+    background-color: white;
+    text-align: center;
+}
+
+.team-name {
+    color: #0c0c0c;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.text3 {
+    color: #9c9c9c;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+table.separator td {
+    line-height: 0;
+    font-size: 0;
+}
+
+table.square-container {
+    width: 48px;
+    height: 48px;
+}
+
+.square-cell {
+    width: 3%;
+}
+
+tr.line-filler td {
+    line-height: 0;
+}
+
+tr.border_bottom td {
+    border-collapse: collapse;
+    border-bottom: 5px solid #f2eee2;
+    line-height: 0;
+}
+
+td.square {
+    border: 7px solid #f2eee2;
+    background-color: white;
+}
+
+.blank {
+    width: 2%;
+}
+
+.space {
+    width: 10px;
+}
+
+.action-text {
+    overflow-wrap: break-word;
+    color: #0c0c0c;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+.action-item-pre {
+    width: 80%;
+}
+
+.action-item-post {
+    width: 80%;
+}
+
+.action-items-index {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.action-items-section {
+    background: #f2eee2;
+    text-align: center;
+}
+
+.action-item {
+    text-align: left;
+    background: white;
+    width: 80%;
+}
+
+.item-row-spacing {
+    height: 5px;
+}
+
+.logo {
+    color: #51c0b1;
+    font-size: 22px;
+    font-weight: 400;
+}
+
+span.logo {
+    display: block;
+}
+
+.awesome {
+    font-size: 13px;
+    color: #9B9B9B;
+}
