@@ -1,0 +1,13 @@
+.env.json
+.idea
+/config/local.json
+/dist/*
+/node_modules
+/public/*
+/logs/*
+/tmp/*
+.DS_Store
+npm-debug.log
+/credentials.yml
+postfacto-web.iml
+package/*

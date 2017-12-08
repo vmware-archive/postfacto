@@ -1,0 +1,127 @@
+const React = require('react');
+const types = React.PropTypes;
+const {Actions} = require('p-flux');
+const TextareaAutosize = require('react-autosize-textarea');
+
+class RetroColumnInput extends React.Component {
+  static propTypes = {
+    category: types.string.isRequired,
+    retro: types.object.isRequired,
+    retroId: types.string.isRequired,
+  };
+
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      inputText: '',
+      isFocused: false,
+      multiline: ''
+    };
+  }
+
+  resolvePlaceholder() {
+    const {category} = this.props;
+    if (category === 'happy') {
+      return 'I\'m glad that...';
+    }
+    if (category === 'meh') {
+      return 'I\'m wondering about...';
+    }
+    if (category === 'sad') {
+      return 'It wasn\'t so great that...';
+    }
+    return 'Add an action item';
+  }
+
+  onKeyPress(event) {
+    if (event.key === 'Enter') {
+      if(event.target.value !== '') {
+        this.submitRetroItem();
+      }
+      event.preventDefault();
+    }
+  }
+
+  submitRetroItem() {
+    const {retroId, category} = this.props;
+    const {inputText} = this.state;
+    if (category === 'action') {
+      Actions.createRetroActionItem({retro_id: retroId, description: inputText});
+    }
+    else {
+      Actions.createRetroItem({retro_id: retroId, category: category, description: inputText});
+    }
+    this.setState({inputText: '', multiline: ''});
+  }
+
+  onChange(event) {
+    if(event.target.value.trim().length === 0) {
+      this.setState({multiline: ''});
+    }
+
+    this.setState({inputText: event.target.value});
+  }
+
+  onResize(event) {
+      this.setState({multiline: 'multiline', inputText: event.target.value});
+  }
+
+  inputFocus() {
+    this.setState({isFocused: true});
+  }
+
+  inputBlur() {
+    this.setState({isFocused: false});
+  }
+
+  renderButton() {
+    if (this.state.inputText) {
+      return (
+        <div className={'input-button-wrapper ' + this.state.multiline}>
+          <div className="input-button"
+               onClick={this.submitRetroItem.bind(this)}>
+            <i className="fa fa-check" aria-hidden="true"/>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  resolveInputBoxClass() {
+    const {multiline, isFocused} = this.state;
+    let classes = 'input-box ' + multiline;
+
+    if (isFocused) {
+      classes += ' focused';
+    }
+    return classes;
+  }
+
+  render() {
+    const {category} = this.props;
+
+    let classNames = 'retro-item-add-input';
+
+    return (
+      <div className="retro-item-list-input">
+        <div className={this.resolveInputBoxClass()}>
+          <TextareaAutosize type="text" className={classNames} placeholder={this.resolvePlaceholder(category)}
+                            onFocus={this.inputFocus.bind(this)}
+                            onBlur={this.inputBlur.bind(this)}
+                            onChange={this.onChange.bind(this)}
+                            value={this.state.inputText}
+                            onKeyPress={this.onKeyPress.bind(this)}
+                            onResize={this.onResize.bind(this)}
+                            required={true}
+                            autoComplete={false}/>
+          {
+            this.renderButton()
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+module.exports = RetroColumnInput;

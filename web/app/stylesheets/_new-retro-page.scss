@@ -1,0 +1,95 @@
+.new-retro-page, .error-page, .password-page {
+  background-color: $white;
+
+  h1, p {
+    margin: 0 0 2*$global-margin 0;
+  }
+  p, label {
+    font-size:17px;
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .access-instruction {
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.5rem;
+    padding-bottom: 16px;
+    padding-top: 8px;
+  }
+
+  .new-retro-msg {
+    background-color: $page-heading-background;
+    color: $lightest-gray;
+    font-size: 2.5rem;
+    text-align: center;
+    line-height: 3rem;
+
+    @media all and (max-width: map-get($breakpoints, medium)) {
+      font-size: 1.5rem;
+      padding: 2.2rem;
+      line-height: 2rem;
+    }
+
+    div {
+      height: 100vh;
+      padding-top: 20vh;
+
+      @media all and (max-width: map-get($breakpoints, medium)) {
+        height: unset;
+        padding-top: unset;
+      }
+    }
+  }
+
+  .new-retro-column {
+    display: flex;
+    height: 100%;
+    min-height: 53rem;
+    padding: 3.5rem 2rem;
+
+    @media all and (max-width: map-get($breakpoints, medium)) {
+      height: unset;
+      min-height: unset;
+      padding: 2rem;
+    }
+    .row {
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  .retro-form-submit {
+    font-size: 1.1rem;
+    min-width: 10em;
+  }
+
+  .retro-url-prefix {
+    background: inherit;
+    padding: 0;
+    color: $secondary;
+  }
+
+  .retro-url {
+    margin-bottom: 0;
+  }
+
+  .password-terms-text {
+    margin-top: 15px;
+    font-size: 0.9rem;
+
+    a {
+      color: $input-happy;
+    }
+  }
+}
+
+.error-page {
+  .image {
+    margin-bottom: 2rem;
+  }
+
+  .link {
+    color: $input-happy;
+    font-size: 1.1rem;
+  }
+}

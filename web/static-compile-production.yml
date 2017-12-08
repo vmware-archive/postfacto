@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: postfacto/postfacto
+
+inputs:
+- name: pipeline
+- name: postfacto
+
+outputs:
+- name: web-build
+
+caches:
+- path: postfacto/web/node_modules
+
+run:
+  path: 'postfacto/web/ci/static-compile-production'

@@ -1,0 +1,11 @@
+{
+  "globalNamespace": "Retro",
+  "title": "Postfacto",
+  "scripts": [
+    "application.js"
+  ],
+  "stylesheets": [
+    "application.css"
+  ],
+  "useRevManifest": false
+}

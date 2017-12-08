@@ -1,0 +1,147 @@
+@charset 'utf-8';
+
+@import 'palette';
+@import "settings";
+
+.home-page {
+  color: #4a4a4a;
+
+  .start-retro {
+    background-color: #e34e40;
+    font-size: 18px;
+  }
+
+  .sticky-header {
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+
+    .header-title {
+      background-color: $happy;
+      color: #ffffff;
+      height: 77px;
+    }
+
+    .show-for-medium {
+      padding-top: 15px;
+      .title {
+        padding-left: 120px;
+        font-family: $header-font-family;
+        font-size: 27px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        padding-left: 20px;
+      }
+    }
+
+    .hide-for-medium {
+      .title {
+        font-family: $header-font-family;
+        font-size: 27px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+      }
+    }
+  }
+
+  h2 {
+    font-weight: normal;
+    font-family: $body-font-family;
+    font-size: 44px;
+    line-height: 53px;
+    text-align: center;
+    color: #686868;
+  }
+
+  h3 {
+    font-family: $body-font-family;
+    font-size: 28px;
+    line-height: 1.36;
+    text-align: center;
+    color: #4a4a4a;
+  }
+
+  h4 {
+    font-size: 18px;
+    line-height: 3.17;
+    text-align: center;
+    color: #4a4a4a;
+  }
+
+  .pivotal-logo {
+    margin-top: 30px;
+  }
+
+  .whats-a-retro-link {
+    padding: 30px;
+  }
+
+  .row {
+    max-width: 100%;
+  }
+
+  .sample-retro {
+    padding: 105px 0;
+  }
+
+  .panel {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    img {
+      display: block;
+      margin: auto;
+    }
+    .panel-img {
+      margin-bottom: 64px;
+    }
+
+    h2 {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+  }
+
+  .green-panel {
+    background-color: $happy;
+    padding-bottom: 64px;
+    padding-top: 64px;
+
+    h2 {
+      font-size: 34px;
+      color: #ffffff;
+      padding-bottom: 20px;
+    }
+  }
+
+  .panel:nth-child(even) {
+    background-color: #ffffff;
+  }
+
+  .panel:nth-child(odd) {
+    background-color: #f7f7f7;
+  }
+
+  .line {
+    width: 3px;
+    height: 43px;
+    border: solid 1px #51c0b1;
+  }
+
+  .circular-image {
+    border-radius: 50%;
+  }
+
+  .footnote {
+    color: darkgrey;
+    font-size: 14px;
+    padding-top: 15px;
+  }
+
+  .testimonials {
+    margin-bottom: 32px;
+  }
+}

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+pushd postfacto/web
+    npm install
+    export PATH=$PATH:./node_modules/.bin
+    NODE_ENV=production gulp assets
+popd
+
+pushd postfacto/web
+ gulp package
+popd
+
+cp -r postfacto/web/package/* web-build
+
+cp $CONFIG/config.js web-build
+cp $CONFIG/Staticfile web-build

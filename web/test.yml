@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: postfacto/postfacto
+
+inputs:
+- name: postfacto-web
+
+caches:
+- path: postfacto-web/web/node_modules
+
+run:
+  path: 'postfacto-web/web/ci/run'

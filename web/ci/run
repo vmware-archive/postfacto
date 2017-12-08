@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+cd postfacto-web/web
+npm install
+export PATH=$PATH:./node_modules/.bin
+gulp spec-app

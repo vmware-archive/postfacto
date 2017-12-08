@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+service postgresql start
+
+pushd postfacto/web
+    npm install
+    export PATH=$PATH:./node_modules/.bin
+popd
+
+pushd postfacto/api
+    bundle install --path vendor/bundle
+popd
+
+pushd postfacto/e2e
+    bundle install --path vendor/bundle
+popd
+
+cd postfacto/web
+API_DIR=../postfacto/api gulp local-acceptance
