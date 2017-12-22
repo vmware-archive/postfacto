@@ -43,13 +43,13 @@ You can deploy your own Postfacto to [Pivotal Web Services](https://run.pivotal.
 
 ### Running locally
 
-You can run Postfacto locally at [https://localhost:3000]() by running the following in the `web` directory:
+You can run Postfacto locally at [http://localhost:3000]() by running the following in the `web` directory:
 
 ```bash
 gulp local-run
 ```
 
-The admin dashboard will be available at [https://localhost:400/admin]().
+The admin dashboard will be available at [http://localhost:400/admin]().
 
 ### Running tests
 
