@@ -119,3 +119,7 @@ Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platfo
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### License
+
+Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text of the license is available [here](LICENSE.md). It's important to note that this license allows you too deploy an instance of Postfacto for private or internal use.
