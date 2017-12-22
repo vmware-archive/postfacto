@@ -8,3 +8,5 @@ applications:
   services:
     - postfacto-db
     - postfacto-redis
+  env:
+    CLIENT_ORIGIN: https://{{web-app-name}}.cfapps.io
