@@ -86,7 +86,7 @@ Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platfo
     ```bash
     > git clone git@github.com:pivotal/postfacto.git
     ```
-    
+
 1. Choose names for your web and API apps. You can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 1. In the `postfacto` directory change the `{{api-app-name }}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. Deploy the API from the `postfacto` directory:
@@ -117,7 +117,7 @@ Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platfo
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
-### Contributing
+## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -125,6 +125,6 @@ Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platfo
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-### License
+## License
 
 Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text of the license is available [here](LICENSE.md). It's important to note that this license allows you too deploy an instance of Postfacto for private or internal use.
