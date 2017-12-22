@@ -83,32 +83,37 @@ Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platfo
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
 1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
 1. Check out the Postfacto code
-  ```bash
-  > git clone git@github.com:pivotal/postfacto.git
-  ```
+    ```bash
+    > git clone git@github.com:pivotal/postfacto.git
+    ```
+    
 1. Choose names for your web and API apps. You can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 1. In the `postfacto` directory change the `{{api-app-name }}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. Deploy the API from the `postfacto` directory:
-  ```bash
-  > cf push -f deployment/pws/config/manifest.yml -p api
-  ```
+    ```bash
+    > cf push -f deployment/pws/config/manifest.yml -p api
+    ```
+
 1. Create an admin user (for creating and managing retros):
-  ```bash
-  > cf run-task api-app-name 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
-  ```
+    ```bash
+    > cf run-task api-app-name 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
+    ```
+
 1. Log in to the admin dashboard using your chosen email and password to check everything has worked at `api-app-name.cfapps.io`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. In the `postfacto` directory change the `{{web-app-name }}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/manifest-web.yml` to be your `api-app-name` and `web-app-name`
 1. Build the web app in `postfacto/web`:
-  ```bash
-  > NODE_ENV=production gulp assets
-  > gulp package
-  > cp ../deployment/pws/config/config.js .
-  ```
+    ```bash
+    > NODE_ENV=production gulp assets
+    > gulp package
+    > cp ../deployment/pws/config/config.js .
+    ```
+
 1. Deploy the web app from the `postfacto` directory:
-  ```bash
-  > cf push -f deployments/pws/manifest-web.yml -p web
-  ```
+    ```bash
+    > cf push -f deployments/pws/manifest-web.yml -p web
+    ```
+
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
