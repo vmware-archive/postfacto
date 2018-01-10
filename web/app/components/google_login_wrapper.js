@@ -15,7 +15,7 @@ class GoogleLoginWrapper extends React.Component {
   }
 
   handleClickCapture(event) {
-    if (window.mock_google_auth) {
+    if (global.Retro.config.mock_google_auth) {
       event.stopPropagation();
       this.props.onSuccess({
         profileObj: {
