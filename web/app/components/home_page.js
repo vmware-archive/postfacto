@@ -2,7 +2,6 @@ const React = require('react');
 const {Actions} = require('p-flux');
 const RetroFooter = require('./footer');
 const GoogleLoginWrapper = require('./google_login_wrapper.js');
-const Testimonial = require('./testimonial');
 const Logger = require('../../helpers/logger');
 import {HomeLegalBanner} from './retro_legal_banner';
 
