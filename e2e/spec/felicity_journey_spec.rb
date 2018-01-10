@@ -16,7 +16,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
       end
 
       specify 'they can get help' do
-        expect(page).to have_css('a[href="mailto:postfacto@pivotal.io"]', text: 'Contact Us')
+        expect(page).to have_css('a[href="mailto:postfacto@example.com"]', text: 'Contact Us')
       end
 
       specify 'they can register and create a retro' do

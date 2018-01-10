@@ -5,31 +5,6 @@ describe 'Leslie', type: :feature, js: true do
     Capybara.execute_script "localStorage.clear()"
   end
 
-  describe 'viewing new privacy policy' do
-    before do
-      visit_privacy_page
-    end
-
-    specify 'sees the new policy' do
-      visit_privacy_page
-      expect(page).to have_content 'Privacy Policy'
-    end
-  end
-
-  describe 'viewing new terms page' do
-    specify 'sees the new terms' do
-      visit_new_terms_page
-      expect(page).to have_content 'Postfacto Services Agreement'
-    end
-  end
-
-  describe 'viewing old terms page' do
-    specify 'sees 404' do
-      visit_old_terms_page
-      expect(page).to have_content 'page you\'re looking for doesn\'t exist'
-    end
-  end
-
   describe 'viewing the home page' do
     before do
       visit_home_page
@@ -39,7 +14,7 @@ describe 'Leslie', type: :feature, js: true do
       scroll_to_bottom
 
       within('.footer') do
-        expect(page).to have_link("Privacy Policy", :href=>"https://pivotal.io/privacy-policy")
+        expect(page).to have_link("Privacy Policy", :href=>"https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
       end
     end
 
@@ -47,12 +22,12 @@ describe 'Leslie', type: :feature, js: true do
       scroll_to_bottom
 
       within('.footer') do
-        find('a[href="/terms"]', text: 'Terms & Conditions').click
+        click_on('Terms & Conditions')
       end
-        
+
       close_current_tab
       select_last_tab
-      expect(page).to have_content 'Postfacto Services Agreement'
+      expect(page).to have_content 'Lorem ipsum'
     end
    end
 
@@ -63,10 +38,10 @@ describe 'Leslie', type: :feature, js: true do
 
      specify 'sees banner with terms, privacy and cookie warning' do
        within(".banner") do
-         expect(find_link('Terms of Use')[:href]).to eq("#{RETRO_APP_BASE_URL}/terms")
+         expect(find_link('Terms of Use')[:href]).to eq("https://loripsum.net/api")
          expect(find_link('Terms of Use')[:target]).to eq("_blank")
 
-         expect(find_link('Privacy Policy')[:href]).to eq("https://pivotal.io/privacy-policy")
+         expect(find_link('Privacy Policy')[:href]).to eq("https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
          expect(find_link('Privacy Policy')[:target]).to eq("_blank")
 
          expect(page).to have_content('use of cookies')
@@ -93,16 +68,16 @@ describe 'Leslie', type: :feature, js: true do
 
       expect(page).to have_content 'use of cookies'
 
-      find('.password-terms-text a[href="/terms"]', text: 'Terms of Use').click
+      click_on('Terms of Use')
       close_current_tab
       select_last_tab
-      expect(page).to have_content 'Postfacto Services Agreement'
+      expect(page).to have_content 'Lorem ipsum'
 
       visit retro_url
-      find('.password-terms-text a[href="https://pivotal.io/privacy-policy"]', text: 'Privacy Policy').click
+      click_on('Privacy Policy')
       close_current_tab
       select_last_tab
-      expect(page).to have_content 'Privacy Policy'
+      expect(page).to have_content 'Bacon ipsum'
     end
   end
 
@@ -119,10 +94,10 @@ describe 'Leslie', type: :feature, js: true do
       visit retro_url
 
       within(".banner") do
-        expect(find_link('Terms of Use')[:href]).to eq("#{RETRO_APP_BASE_URL}/terms")
+        expect(find_link('Terms of Use')[:href]).to eq("https://loripsum.net/api")
         expect(find_link('Terms of Use')[:target]).to eq("_blank")
 
-        expect(find_link('Privacy Policy')[:href]).to eq("https://pivotal.io/privacy-policy")
+        expect(find_link('Privacy Policy')[:href]).to eq("https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
         expect(find_link('Privacy Policy')[:target]).to eq("_blank")
       end
 
@@ -144,10 +119,10 @@ describe 'Leslie', type: :feature, js: true do
       visit retro_url
 
       within(".banner") do
-        expect(find_link('Terms of Use')[:href]).to eq("#{RETRO_APP_BASE_URL}/terms")
+        expect(find_link('Terms of Use')[:href]).to eq("https://loripsum.net/api")
         expect(find_link('Terms of Use')[:target]).to eq("_blank")
 
-        expect(find_link('Privacy Policy')[:href]).to eq("https://pivotal.io/privacy-policy")
+        expect(find_link('Privacy Policy')[:href]).to eq("https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
         expect(find_link('Privacy Policy')[:target]).to eq("_blank")
 
         expect(page).to have_content 'use of cookies'

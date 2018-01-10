@@ -7,7 +7,7 @@
   "enable_analytics": false,
   "google_oauth_client_id": null,
   "mock_google_auth": true,
-  "contact": "mailto:postfacto@pivotal.io",
-  "terms": "/terms",
-  "privacy": "https://pivotal.io/privacy-policy"
+  "contact": "mailto:postfacto@example.com",
+  "terms": "https://loripsum.net/api",
+  "privacy": "https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html"
 }

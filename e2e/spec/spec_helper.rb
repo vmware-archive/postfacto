@@ -127,22 +127,6 @@ module SpecHelpers
     visit RETRO_APP_BASE_URL + '/retros/new'
   end
 
-  def visit_privacy_page
-    visit RETRO_APP_BASE_URL + '/privacy'
-  end
-
-  def visit_old_privacy_page
-    visit RETRO_APP_BASE_URL + '/privacy-old'
-  end
-
-  def visit_new_terms_page
-    visit RETRO_APP_BASE_URL + '/terms'
-  end
-
-  def visit_old_terms_page
-    visit RETRO_APP_BASE_URL + '/terms-old'
-  end
-
   def visit_active_admin_page
     visit RETRO_ADMIN_BASE_URL
   end

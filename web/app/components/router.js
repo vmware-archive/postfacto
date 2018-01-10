@@ -15,7 +15,6 @@ const EmptyPage = require('./empty_page');
 const HomePage = require('./home_page');
 const ListRetroArchivesPage = require('./list_retro_archives_page');
 const Alert = require('./alert');
-const PrivacyPage = require('./privacy_page');
 const RegistrationPage = require('./registration_page');
 
 function isObject(obj) {
@@ -46,7 +45,6 @@ const routes = {
   '/retros/:retroId/settings/password': 'showRetroPasswordSettings',
   '/retros/new': 'createRetro',
   '/terms': 'showTerms',
-  '/privacy': 'privacyRedirect',
   '/registration/:accessToken/:email/:fullName': 'showRegistration'
 };
 
@@ -151,10 +149,6 @@ class Router extends React.Component {
       this.injectMockCountryCode();
       this.setState({Page: HomePage});
     }
-  };
-
-  privacyRedirect = () => {
-      this.setState({Page: PrivacyPage});
   };
 
   showRegistration = (req) => {
