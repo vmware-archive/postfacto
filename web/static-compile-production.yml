@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
 - name: postfacto
+- name: config
 
 outputs:
 - name: web-build
