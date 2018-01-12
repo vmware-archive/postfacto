@@ -15,3 +15,4 @@ popd
 cp -r postfacto/web/package/* web-build
 
 cp $CONFIG/config.js web-build
+cp postfacto/web Staticfile web-build
