@@ -41,7 +41,7 @@ ActiveAdmin.register Retro do
   filter :created_at
   filter :updated_at
   filter :is_private, :label => 'Private'
-
+  
   index do
     column('ID', sortable: :id) { |retro| link_to "#{retro.id} ", admin_retro_path(retro) }
     column('Name', :name)
@@ -130,6 +130,7 @@ ActiveAdmin.register Retro do
       f.input :name
       f.input :slug
       f.input :video_link
+      f.input :owner_email, label: 'Owner Email'
     end
     f.inputs do
       if f.object.encrypted_password?
@@ -148,7 +149,17 @@ ActiveAdmin.register Retro do
       @retro = Retro.friendly.find(params.fetch(:id))
     end
 
+    def find_user_by_email(owner_email)
+      User.find_by_email(owner_email)
+    end
+
     def update
+      new_owner = find_user_by_email(params['retro']['owner_email'])
+
+
+      redirect_to edit_admin_retro_path(@retro), flash: {error: 'Could not change owners. User not found by email.'} and return unless new_owner
+      @retro.user = new_owner
+
       if params['retro']['remove_password'] && params['retro']['remove_password'][1] == 'Remove'
         params[:retro][:encrypted_password] = nil
       end

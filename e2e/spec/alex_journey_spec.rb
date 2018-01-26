@@ -33,7 +33,7 @@ require 'spec_helper'
 describe 'Alex', type: :feature, js: true do
   describe 'on the users page' do
     context 'when a user has retros' do
-      specify 'can delete that user' do
+      specify 'can not delete that user' do
         visit_active_admin_page
 
         fill_in 'admin_user_email', with: 'admin@example.com'
@@ -64,6 +64,56 @@ describe 'Alex', type: :feature, js: true do
 
         expect(page).to_not have_content 'Rey Troless'
       end
+    end
+  end
+  describe 'on the retros page' do
+    fspecify 'can change the owner to another user' do
+      visit_active_admin_page
+
+      fill_in 'admin_user_email', with: 'admin@example.com'
+      fill_in 'admin_user_password', with: 'secret'
+      click_on 'Login'
+
+      click_on 'Retros'
+      fill_in 'q_name', with: 'Spartacus'
+      click_on 'Filter'
+
+      click_on 'Edit'
+
+      expect(page).to have_content 'Owner Email'
+      expect(find_field('retro_owner_email').value).to eq 'user-spartacus-carloman@example.com'
+
+      fill_in 'retro_owner_email', with: 'user-with-retro@example.com'
+
+      click_on 'Update Retro'
+
+      first(:link, 'Retros').click
+      fill_in 'q_name', with: 'Spartacus'
+      click_on 'Filter'
+
+      click_on 'Edit'
+
+      expect(find_field('retro_owner_email').value).to eq 'user-with-retro@example.com'
+    end
+
+    specify 'the new owner email does not match any user' do
+      visit_active_admin_page
+
+      fill_in 'admin_user_email', with: 'admin@example.com'
+      fill_in 'admin_user_password', with: 'secret'
+      click_on 'Login'
+
+      click_on 'Retros'
+      fill_in 'q_name', with: 'Spartacus'
+      click_on 'Filter'
+
+      click_on 'Edit'
+
+      fill_in 'retro_owner_email', with: 'wrong@example.com'
+
+      click_on 'Update Retro'
+
+      expect(page).to have_content 'Could not change owners. User not found by email.'
     end
   end
 end

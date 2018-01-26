@@ -76,6 +76,10 @@ class Retro < ActiveRecord::Base
     end
   end
 
+  def owner_email
+    user.email
+  end
+
   private
 
   def generate_slug
