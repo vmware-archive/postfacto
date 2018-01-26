@@ -32,9 +32,10 @@ require 'rails_helper'
 
 describe '/admin/retros', type: :request do
   let!(:retro) do
+    user = User.create!(email: 'user@example.com')
     retro = Retro.create!(
       name: 'My Retro', password: 'the-password', video_link: 'the-video-link',
-      created_at: Time.at(12_345_678), updated_at: Time.at(123_456_789), is_private: true
+      created_at: Time.at(12_345_678), updated_at: Time.at(123_456_789), is_private: true, user: user
     )
     1.times { Item.create!(retro: retro, description: 'Nonarchived item', category: :happy, vote_count: 0) }
     Item.create!(retro: retro, description: 'Archived item A', category: :happy, vote_count: 5, archived_at: Time.at(0))
@@ -180,7 +181,7 @@ describe '/admin/retros', type: :request do
       expect(response.body).to include(
         "\n" \
         "#{retro.id},My Retro,#{retro.slug},3,2,7,4," \
-        '1970-05-23 21:21:18 UTC,1973-11-29 21:33:09 UTC,the-video-link,yes,""' \
+        '1970-05-23 21:21:18 UTC,1973-11-29 21:33:09 UTC,the-video-link,yes,' \
         "\n"
       )
     end

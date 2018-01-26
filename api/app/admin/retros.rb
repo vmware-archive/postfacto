@@ -41,7 +41,7 @@ ActiveAdmin.register Retro do
   filter :created_at
   filter :updated_at
   filter :is_private, :label => 'Private'
-  
+
   index do
     column('ID', sortable: :id) { |retro| link_to "#{retro.id} ", admin_retro_path(retro) }
     column('Name', :name)

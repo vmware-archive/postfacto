@@ -49,15 +49,15 @@ User.find_or_create_by!(
 )
 
 alda = User.find_or_create_by!(
-    email: 'user-with-retro@example.com',
-    name: 'Alda Retros',
-    auth_token: 'secret-test-user-token-ef87c521b971'
+  email: 'user-with-retro@example.com',
+  name: 'Alda Retros',
+  auth_token: 'secret-test-user-token-ef87c521b971'
 )
 
 spartacus = User.find_or_create_by!(
-    email: 'user-spartacus-carloman@example.com',
-    name: 'Spartacus Carloman',
-    auth_token: 'secret-test-user-token-ef87c521b972'
+  email: 'user-spartacus-carloman@example.com',
+  name: 'Spartacus Carloman',
+  auth_token: 'secret-test-user-token-ef87c521b972'
 )
 
 Retro.find_or_create_by!(
@@ -65,8 +65,7 @@ Retro.find_or_create_by!(
   user: alda
 )
 
-
 Retro.find_or_create_by!(
-    name: "Spartacus undesired personal retro",
-    user: spartacus
+  name: 'Spartacus undesired personal retro',
+  user: spartacus
 )

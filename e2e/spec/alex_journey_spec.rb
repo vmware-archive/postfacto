@@ -67,7 +67,7 @@ describe 'Alex', type: :feature, js: true do
     end
   end
   describe 'on the retros page' do
-    fspecify 'can change the owner to another user' do
+    specify 'can change the owner to another user' do
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
