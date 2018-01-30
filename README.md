@@ -49,7 +49,11 @@ You can run Postfacto locally at [http://localhost:3000]() by running the follow
 gulp local-run
 ```
 
-The admin dashboard will be available at [http://localhost:400/admin]().
+The admin dashboard will be available at [http://localhost:400/admin](). You can create an admin user using the following rake task in the `api` directory:
+
+```bash
+ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user
+```
 
 ### Running tests
 
