@@ -110,12 +110,13 @@ gulp local-acceptance
     ```bash
     NODE_ENV=production gulp assets
     gulp package
-    cp ../deployment/pws/config/config.js .
+    cp ../deployment/pws/config/config.js package
+    cp Staticfile package
     ```
 
 1. Deploy the web app from the `postfacto` directory:
     ```bash
-    cf push -f deployment/pws/config/manifest-web.yml -p web
+    cf push -f deployment/pws/config/manifest-web.yml -p web/package
     ```
 
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
