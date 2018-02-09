@@ -88,19 +88,19 @@ gulp local-acceptance
 1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
 1. Check out the Postfacto code
     ```bash
-    > git clone git@github.com:pivotal/postfacto.git
+    git clone git@github.com:pivotal/postfacto.git
     ```
 
 1. So you're ready to set Postfacto up, choose names for your web and API apps. You can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 1. In the `postfacto` directory change the `{{api-app-name }}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. Deploy the API from the `postfacto` directory:
     ```bash
-    > cf push -f deployment/pws/config/manifest-api.yml -p api
+    cf push -f deployment/pws/config/manifest-api.yml -p api
     ```
 
 1. Create an admin user (for creating and managing retros):
     ```bash
-    > cf run-task api-app-name 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
+    cf run-task api-app-name 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
     ```
 
 1. Log in to the admin dashboard using your chosen email and password to check everything has worked at `api-app-name.cfapps.io`
@@ -108,14 +108,14 @@ gulp local-acceptance
 1. In the `postfacto` directory change the `{{web-app-name }}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/manifest-web.yml` to be your `api-app-name` and `web-app-name`
 1. Build the web app in `postfacto/web`:
     ```bash
-    > NODE_ENV=production gulp assets
-    > gulp package
-    > cp ../deployment/pws/config/config.js .
+    NODE_ENV=production gulp assets
+    gulp package
+    cp ../deployment/pws/config/config.js .
     ```
 
 1. Deploy the web app from the `postfacto` directory:
     ```bash
-    > cf push -f deployments/pws/manifest-web.yml -p web
+    cf push -f deployments/pws/manifest-web.yml -p web
     ```
 
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
