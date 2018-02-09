@@ -105,7 +105,7 @@ gulp local-acceptance
 
 1. Log in to the admin dashboard using your chosen email and password to check everything has worked at `api-app-name.cfapps.io`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. In the `postfacto` directory change the `{{web-app-name }}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/manifest-web.yml` to be your `api-app-name` and `web-app-name`
+1. In the `postfacto` directory change the `{{web-app-name }}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/config.js` to be your `api-app-name` and `web-app-name`
 1. Build the web app in `postfacto/web`:
     ```bash
     NODE_ENV=production gulp assets
@@ -115,7 +115,7 @@ gulp local-acceptance
 
 1. Deploy the web app from the `postfacto` directory:
     ```bash
-    cf push -f deployments/pws/manifest-web.yml -p web
+    cf push -f deployment/pws/config/manifest-web.yml -p web
     ```
 
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
