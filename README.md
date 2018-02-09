@@ -92,32 +92,17 @@ gulp local-acceptance
     ```
 
 1. So you're ready to set Postfacto up, choose names for your web and API apps. You can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
-1. In the `postfacto` directory change the `{{api-app-name }}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
-1. Deploy the API from the `postfacto` directory:
-    ```bash
-    cf push -f deployment/pws/config/manifest-api.yml -p api
-    ```
+1. In the `postfacto` directory change the `{{api-app-name}}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
+1. In the `postfacto` directory change the `{{web-app-name}}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/config.js` to be your `api-app-name` and `web-app-name`
 
-1. Create an admin user (for creating and managing retros):
-    ```bash
-    cf run-task api-app-name 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
-    ```
+1. Run the PWS deployment script from the `postfacto` directory:
 
-1. Log in to the admin dashboard using your chosen email and password to check everything has worked at `api-app-name.cfapps.io`
+  ```bash
+  deployment/pws/deploy.sh
+  ```
+
+1. Log in to the admin dashboard (email: "email@example.com" and password: "password") to check everything has worked at `api-app-name.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. In the `postfacto` directory change the `{{web-app-name }}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/config.js` to be your `api-app-name` and `web-app-name`
-1. Build the web app in `postfacto/web`:
-    ```bash
-    NODE_ENV=production gulp assets
-    gulp package
-    cp ../deployment/pws/config/config.js package
-    ```
-
-1. Deploy the web app from the `postfacto` directory:
-    ```bash
-    cf push -f deployment/pws/config/manifest-web.yml -p web/package
-    ```
-
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
