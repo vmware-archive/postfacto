@@ -95,7 +95,7 @@ gulp local-acceptance
 1. In the `postfacto` directory change the `{{api-app-name }}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. Deploy the API from the `postfacto` directory:
     ```bash
-    > cf push -f deployment/pws/config/manifest.yml -p api
+    > cf push -f deployment/pws/config/manifest-api.yml -p api
     ```
 
 1. Create an admin user (for creating and managing retros):
