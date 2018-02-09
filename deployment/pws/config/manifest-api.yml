@@ -10,3 +10,4 @@ applications:
     - postfacto-redis
   env:
     CLIENT_ORIGIN: https://{{web-app-name}}.cfapps.io
+    WEBSOCKET_PORT: 4443
