@@ -77,7 +77,7 @@ class Retro < ActiveRecord::Base
   end
 
   def owner_email
-    user.email
+    user.try(:email)
   end
 
   private

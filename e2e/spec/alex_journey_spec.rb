@@ -66,7 +66,27 @@ describe 'Alex', type: :feature, js: true do
       end
     end
   end
+
   describe 'on the retros page' do
+    specify 'can create a new retro' do
+      visit_active_admin_page
+
+      fill_in 'admin_user_email', with: 'admin@example.com'
+      fill_in 'admin_user_password', with: 'secret'
+      click_on 'Login'
+
+      click_on 'Retros'
+      click_on 'New Retro'
+
+      fill_in 'retro_name', with: 'My awesome new retro'
+      fill_in 'retro_slug', with: 'my-awesome-new-retro'
+      fill_in 'retro_password', with: 'secret'
+
+      click_on 'Create Retro'
+
+      expect(page).to have_content 'My awesome new retro'
+    end
+
     specify 'can change the owner to another user' do
       visit_active_admin_page
 
