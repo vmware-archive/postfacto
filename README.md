@@ -26,7 +26,7 @@ Postfacto will auto generate you an [appear.in](https://appear.in) room for your
 
 ### Easily deployable
 
-You can deploy your own Postfacto to [Pivotal Web Services](https://run.pivotal.io) and stay in control of your own data.
+You can deploy your own Postfacto to [Pivotal Web Services](#pivotal-web-services) and stay in control of your own data.
 
 ## Development
 
@@ -82,7 +82,7 @@ gulp local-acceptance
 
 ### Pivotal Web Services
 
-Pivotal Web Services provides a hosted version of Pivotal's Cloud Foundry platform and is probably the easiest place to get Postfacto up and running. To set it up just carry out the following steps:
+[Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running. To set it up just carry out the following steps:
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
 1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
