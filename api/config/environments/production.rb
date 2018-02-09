@@ -70,7 +70,7 @@ Rails.application.configure do
   # config.action_cable.mount_path = nil
 
   host = JSON.parse(ENV['VCAP_APPLICATION']).fetch('uris')[0]
-  config.action_cable.url = "wss://#{host}:4443/cable"
+  config.action_cable.url = "wss://#{host}:#{ENV['WEBSOCKET_PORT'] || 443}/cable"
   config.action_cable.allowed_request_origins =
     ["https://#{host}", ENV['CLIENT_ORIGIN']]
 
