@@ -111,7 +111,6 @@ gulp local-acceptance
     NODE_ENV=production gulp assets
     gulp package
     cp ../deployment/pws/config/config.js package
-    cp Staticfile package
     ```
 
 1. Deploy the web app from the `postfacto` directory:

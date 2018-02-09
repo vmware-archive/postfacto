@@ -72,6 +72,6 @@ gulp.task('package', cb => {
   execSync('cp public/index.html package');
   execSync('cp public/application.js package');
   execSync('cp public/application.css package');
+  execSync('cp Staticfile package');
   execSync('cp -rf public/images package/images');
 });
-
