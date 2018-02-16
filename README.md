@@ -41,6 +41,8 @@ You can deploy your own Postfacto to [Pivotal Web Services](#pivotal-web-service
 * gulp
 * chromedriver
 
+You can also use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development if you'd prefer.
+
 ### Running locally
 
 You can run Postfacto locally at [http://localhost:3000]() by running the following in the `web` directory:
