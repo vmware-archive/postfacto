@@ -44,8 +44,11 @@ class Header extends React.Component {
     let documentTitle = retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title;
     return (
       <Helmet title={documentTitle}
-              link={[{'rel': 'icon',
-              'href': '/images/favicon.png?v=2'}]}/> // bump version when you update favicon.png
+              link={[
+                {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
+                {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'}
+              ]}>
+      </Helmet>
     );
   }
 }
