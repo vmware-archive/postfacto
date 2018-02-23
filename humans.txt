@@ -1,6 +1,6 @@
 /* TEAM */
   Engineer: Callum Stott
-	Contact: callum@seadowg.com
+  Contact: callum@seadowg.com
 
-	Product Manager: Liam Darmody
+  Product Manager: Liam Darmody
   Contact: liamdarmody@gmail.com
