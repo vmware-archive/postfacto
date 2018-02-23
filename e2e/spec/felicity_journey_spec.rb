@@ -238,6 +238,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
 
 
   specify 'Journey' do
+    logout
     # Visiting create a new retro
     visit_home_page
     expect(page).to have_content('A retro app for successful teams.')

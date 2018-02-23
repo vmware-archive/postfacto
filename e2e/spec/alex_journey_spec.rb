@@ -33,6 +33,12 @@ require 'spec_helper'
 describe 'Alex', type: :feature, js: true do
   describe 'on the users page' do
     context 'when a user has retros' do
+      before(:all) do
+        register('user-with-retros')
+        create_public_retro
+        logout
+      end
+
       specify 'can not delete that user' do
         visit_active_admin_page
 
@@ -41,15 +47,20 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Login'
 
         click_on 'Users'
-        fill_in 'q_name', with: 'Alda Retros'
+        fill_in 'q_email', with: 'user-with-retros'
         click_on 'Filter'
         click_on 'Delete'
 
-        expect(page).to have_content 'Alda Retros'
+        expect(page).to have_content 'user-with-retros'
       end
     end
 
     context 'when a user does not have retros' do
+      before(:all) do
+        register('user-without-retros')
+        logout
+      end
+
       specify 'can delete that user' do
         visit_active_admin_page
 
@@ -58,11 +69,11 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Login'
 
         click_on 'Users'
-        fill_in 'q_name', with: 'Rey Troless'
+        fill_in 'q_email', with: 'user-without-retros'
         click_on 'Filter'
         click_on 'Delete'
 
-        expect(page).to_not have_content 'Rey Troless'
+        expect(page).to_not have_content 'user-without-retros'
       end
     end
   end
@@ -88,6 +99,11 @@ describe 'Alex', type: :feature, js: true do
     end
 
     specify 'can change the owner to another user' do
+      register('old-retro-owner')
+      create_public_retro('Retro needs new owner')
+      register('new-retro-owner')
+      logout
+
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
@@ -95,28 +111,32 @@ describe 'Alex', type: :feature, js: true do
       click_on 'Login'
 
       click_on 'Retros'
-      fill_in 'q_name', with: 'Spartacus'
+      fill_in 'q_name', with: 'Retro needs new owner'
       click_on 'Filter'
 
       click_on 'Edit'
 
       expect(page).to have_content 'Owner Email'
-      expect(find_field('retro_owner_email').value).to eq 'user-spartacus-carloman@example.com'
+      expect(find_field('retro_owner_email').value).to eq 'old-retro-owner@example.com'
 
-      fill_in 'retro_owner_email', with: 'user-with-retro@example.com'
+      fill_in 'retro_owner_email', with: 'new-retro-owner@example.com'
 
       click_on 'Update Retro'
 
       first(:link, 'Retros').click
-      fill_in 'q_name', with: 'Spartacus'
+      fill_in 'q_name', with: 'Retro needs new owner'
       click_on 'Filter'
 
       click_on 'Edit'
 
-      expect(find_field('retro_owner_email').value).to eq 'user-with-retro@example.com'
+      expect(find_field('retro_owner_email').value).to eq 'new-retro-owner@example.com'
     end
 
     specify 'the new owner email does not match any user' do
+      register('unwanting-retro-owner')
+      create_public_retro('Not wanted retro')
+      logout
+
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
@@ -124,7 +144,7 @@ describe 'Alex', type: :feature, js: true do
       click_on 'Login'
 
       click_on 'Retros'
-      fill_in 'q_name', with: 'Spartacus'
+      fill_in 'q_name', with: 'Not wanted retro'
       click_on 'Filter'
 
       click_on 'Edit'
@@ -132,7 +152,6 @@ describe 'Alex', type: :feature, js: true do
       fill_in 'retro_owner_email', with: 'wrong@example.com'
 
       click_on 'Update Retro'
-
       expect(page).to have_content 'Could not change owners. User not found by email.'
     end
   end
