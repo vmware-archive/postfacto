@@ -98,61 +98,88 @@ describe 'Alex', type: :feature, js: true do
       expect(page).to have_content 'My awesome new retro'
     end
 
-    specify 'can change the owner to another user' do
-      register('old-retro-owner')
-      create_public_retro('Retro needs new owner')
-      register('new-retro-owner')
-      logout
+    describe 'editing a retro' do
+      specify 'can change the owner to another user' do
+        register('old-retro-owner')
+        create_public_retro('Retro needs new owner')
+        register('new-retro-owner')
+        logout
 
-      visit_active_admin_page
+        visit_active_admin_page
 
-      fill_in 'admin_user_email', with: 'admin@example.com'
-      fill_in 'admin_user_password', with: 'secret'
-      click_on 'Login'
+        fill_in 'admin_user_email', with: 'admin@example.com'
+        fill_in 'admin_user_password', with: 'secret'
+        click_on 'Login'
 
-      click_on 'Retros'
-      fill_in 'q_name', with: 'Retro needs new owner'
-      click_on 'Filter'
+        click_on 'Retros'
+        fill_in 'q_name', with: 'Retro needs new owner'
+        click_on 'Filter'
 
-      click_on 'Edit'
+        click_on 'Edit'
 
-      expect(page).to have_content 'Owner Email'
-      expect(find_field('retro_owner_email').value).to eq 'old-retro-owner@example.com'
+        expect(page).to have_content 'Owner Email'
+        expect(find_field('retro_owner_email').value).to eq 'old-retro-owner@example.com'
 
-      fill_in 'retro_owner_email', with: 'new-retro-owner@example.com'
+        fill_in 'retro_owner_email', with: 'new-retro-owner@example.com'
 
-      click_on 'Update Retro'
+        click_on 'Update Retro'
 
-      first(:link, 'Retros').click
-      fill_in 'q_name', with: 'Retro needs new owner'
-      click_on 'Filter'
+        first(:link, 'Retros').click
+        fill_in 'q_name', with: 'Retro needs new owner'
+        click_on 'Filter'
 
-      click_on 'Edit'
+        click_on 'Edit'
 
-      expect(find_field('retro_owner_email').value).to eq 'new-retro-owner@example.com'
-    end
+        expect(find_field('retro_owner_email').value).to eq 'new-retro-owner@example.com'
+      end
 
-    specify 'the new owner email does not match any user' do
-      register('unwanting-retro-owner')
-      create_public_retro('Not wanted retro')
-      logout
+      specify 'remove an owner from a retro' do
+        register('banished-user')
+        create_public_retro('Banished user retro')
+        logout
 
-      visit_active_admin_page
+        login_as_admin
 
-      fill_in 'admin_user_email', with: 'admin@example.com'
-      fill_in 'admin_user_password', with: 'secret'
-      click_on 'Login'
+        click_on 'Retros'
+        fill_in 'q_name', with: 'Banished user retro'
+        click_on 'Filter'
 
-      click_on 'Retros'
-      fill_in 'q_name', with: 'Not wanted retro'
-      click_on 'Filter'
+        click_on 'Edit'
 
-      click_on 'Edit'
+        fill_in 'retro_owner_email', with: ''
 
-      fill_in 'retro_owner_email', with: 'wrong@example.com'
+        click_on 'Update Retro'
 
-      click_on 'Update Retro'
-      expect(page).to have_content 'Could not change owners. User not found by email.'
+        first(:link, 'Retros').click
+        fill_in 'q_name', with: 'Banished user retro'
+        click_on 'Filter'
+
+        click_on 'Edit'
+        expect(find_field('retro_owner_email').value).to eq ''
+      end
+
+      specify 'the new owner email does not match any user' do
+        register('unwanting-retro-owner')
+        create_public_retro('Not wanted retro')
+        logout
+
+        visit_active_admin_page
+
+        fill_in 'admin_user_email', with: 'admin@example.com'
+        fill_in 'admin_user_password', with: 'secret'
+        click_on 'Login'
+
+        click_on 'Retros'
+        fill_in 'q_name', with: 'Not wanted retro'
+        click_on 'Filter'
+
+        click_on 'Edit'
+
+        fill_in 'retro_owner_email', with: 'wrong@example.com'
+
+        click_on 'Update Retro'
+        expect(page).to have_content 'Could not change owners. User not found by email.'
+      end
     end
   end
 end

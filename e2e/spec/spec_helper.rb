@@ -161,6 +161,14 @@ module SpecHelpers
     visit RETRO_ADMIN_BASE_URL
   end
 
+  def login_as_admin
+    visit_active_admin_page
+
+    fill_in 'admin_user_email', with: 'admin@example.com'
+    fill_in 'admin_user_password', with: 'secret'
+    click_on 'Login'
+  end
+
   def scroll_to_bottom
     page.execute_script('window.scrollTo(0,100000)')
   end

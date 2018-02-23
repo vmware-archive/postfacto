@@ -154,11 +154,16 @@ ActiveAdmin.register Retro do
     end
 
     def update
-      new_owner = find_user_by_email(params['retro']['owner_email'])
+      owner_email = params['retro']['owner_email']
 
+      if owner_email.blank?
+        @retro.user = nil
+      else
+        user = find_user_by_email(owner_email)
 
-      redirect_to edit_admin_retro_path(@retro), flash: {error: 'Could not change owners. User not found by email.'} and return unless new_owner
-      @retro.user = new_owner
+        redirect_to edit_admin_retro_path(@retro), flash: {error: 'Could not change owners. User not found by email.'} and return unless user
+        @retro.user = user
+      end
 
       if params['retro']['remove_password'] && params['retro']['remove_password'][1] == 'Remove'
         params[:retro][:encrypted_password] = nil
