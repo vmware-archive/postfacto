@@ -105,7 +105,7 @@ gulp local-acceptance
   deployment/pws/deploy.sh
   ```
 
-1. Log in to the admin dashboard (email: "email@example.com" and password: "password") to check everything has worked at `api-app-name.cfapps.io/admin`
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
