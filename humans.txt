@@ -36,8 +36,10 @@ Contact: callum@seadowg.com
 Product Manager: Liam Darmody
 Contact: liamdarmody@gmail.com
 
-/* CONTRIBUTORS */
+/* PIVOTAL LONDON */
 
 Engineer: Chris Whitty
 
 Engineer: Katie Moulang
+
+/* CONTRIBUTORS */
