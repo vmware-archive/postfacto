@@ -35,3 +35,9 @@ Contact: callum@seadowg.com
 
 Product Manager: Liam Darmody
 Contact: liamdarmody@gmail.com
+
+/* CONTRIBUTORS */
+
+Engineer: Chris Whitty
+
+Engineer: Katie Moulang
