@@ -40,6 +40,7 @@ Contact: liamdarmody@gmail.com
 /* PIVOTAL LONDON */
 
 Engineer: Chris Whitty
+Contact: chris.whitty@gmail.com
 
 Engineer: Katie Moulang
 
