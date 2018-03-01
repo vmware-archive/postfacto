@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* TEAM */
+/* CORE TEAM */
 
 Engineer: Callum Stott
 Contact: callum@seadowg.com
