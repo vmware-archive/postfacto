@@ -79,7 +79,7 @@ describe 'Alex', type: :feature, js: true do
   end
 
   describe 'on the retros page' do
-    specify 'can create a new retro' do
+    specify 'can create a new private retro' do
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
@@ -89,13 +89,39 @@ describe 'Alex', type: :feature, js: true do
       click_on 'Retros'
       click_on 'New Retro'
 
-      fill_in 'retro_name', with: 'My awesome new retro'
-      fill_in 'retro_slug', with: 'my-awesome-new-retro'
+      fill_in 'retro_name', with: 'My awesome new private retro'
+      fill_in 'retro_slug', with: 'my-awesome-new-private-retro'
       fill_in 'retro_password', with: 'secret'
 
       click_on 'Create Retro'
 
-      expect(page).to have_content 'My awesome new retro'
+      visit RETRO_APP_BASE_URL + '/retros/my-awesome-new-private-retro'
+
+      fill_in 'Password', with: 'secret'
+      click_button 'Login'
+
+      expect(page).to have_content('My awesome new private retro')
+    end
+
+    specify 'can create a new public retro' do
+      visit_active_admin_page
+
+      fill_in 'admin_user_email', with: 'admin@example.com'
+      fill_in 'admin_user_password', with: 'secret'
+      click_on 'Login'
+
+      click_on 'Retros'
+      click_on 'New Retro'
+
+      fill_in 'retro_name', with: 'My awesome new public retro'
+      fill_in 'retro_slug', with: 'my-awesome-new-public-retro'
+      uncheck 'retro_is_private'
+
+      click_on 'Create Retro'
+
+      visit RETRO_APP_BASE_URL + '/retros/my-awesome-new-public-retro'
+
+      expect(page).to have_content('My awesome new public retro')
     end
 
     describe 'editing a retro' do

@@ -33,7 +33,7 @@ require_relative "../models/queries/safe_order_by"
 ActiveAdmin.register Retro do
   menu priority: 1
   actions :all, except: [:destroy]
-  permit_params :name, :slug, :video_link, :password, :encrypted_password
+  permit_params :name, :slug, :video_link, :password, :encrypted_password, :is_private
 
   filter :name
   filter :slug
@@ -126,12 +126,15 @@ ActiveAdmin.register Retro do
 
   form do |f|
     f.semantic_errors
+
     f.inputs 'Details' do
       f.input :name
       f.input :slug
       f.input :video_link
       f.input :owner_email, label: 'Owner Email'
+      f.input :is_private, label: 'Private?', input_html: { checked: f.object.is_private || true }
     end
+
     f.inputs do
       if f.object.encrypted_password?
         f.input :remove_password, label: 'Remove old Password?', as: :check_boxes, collection: ['Remove']
