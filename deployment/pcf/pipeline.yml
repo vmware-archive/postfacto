@@ -1,0 +1,42 @@
+resources:
+- name: pcf
+  type: cf
+  source:
+    api: {{pcf-api-url;}}
+    username: {{pcf-username}}
+    password: {{pcf-password}}
+    organization: {{pcf-org}}
+    space: {{pcf-space}}
+
+- name: postfacto-release
+  type: git
+  source:
+    uri: git@github.com:pivotal/postfacto.git
+    private_key: {{git-postfacto-private-key}}
+    tag_filter: '*.*.*'
+
+- name: config
+  type: git
+  source:
+    uri: {{git-config-uri}}
+    private_key: {{git-config-private-key}}
+
+jobs:
+- name: deploy
+  serial: true
+  plan:
+  - get: config
+  - get: postfacto
+    resource: postfacto-release
+  - put: pcf
+    params:
+      manifest: config/manifest-api.yml
+      path: postfacto/api
+  - task: build-web
+    file: postfacto/web/static-compile-production.yml
+    params:
+      CONFIG: config
+  - put: pcf
+    params:
+      manifest: config/manifest-web.yml
+      path: web-build
