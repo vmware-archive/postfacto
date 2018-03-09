@@ -38,7 +38,6 @@ const {useStore} = require('p-flux');
 const {useRouter} = require('./use_router');
 const Router = require('./router');
 const Header = require('./header');
-const SegmentAnalytics = require('../../vendor/segment-analytics');
 const Logger = require('../../helpers/logger');
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -60,10 +59,6 @@ class Application extends React.Component {
 
   componentDidMount() {
     injectTapEventPlugin();
-    const segment_key = global.Retro.config.segment_key;
-    if (global.Retro.config.enable_analytics && segment_key) {
-      SegmentAnalytics.load(segment_key);
-    }
     Logger.info('Application started');
   }
 

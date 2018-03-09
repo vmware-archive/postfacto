@@ -44,13 +44,7 @@ class Logger {
   }
 
   static log(message, logLevel) {
-    const sumoLogicUrl = global.Retro.config.sumo_logic_url;
-    if (sumoLogicUrl) {
-      const prefix = `${new Date().toISOString()} - postfacto-web - ${logLevel}: `;
-      const url = `${sumoLogicUrl}?${prefix}${message}`;
-      const img = new Image();
-      img.src = url;
-    }
+  
   }
 }
 
