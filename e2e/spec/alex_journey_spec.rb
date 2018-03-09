@@ -79,7 +79,7 @@ describe 'Alex', type: :feature, js: true do
   end
 
   describe 'on the retros page' do
-    specify 'can create a new private retro' do
+    specify 'create a new private retro' do
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
@@ -103,7 +103,7 @@ describe 'Alex', type: :feature, js: true do
       expect(page).to have_content('My awesome new private retro')
     end
 
-    specify 'can create a new public retro' do
+    specify 'create a new public retro' do
       visit_active_admin_page
 
       fill_in 'admin_user_email', with: 'admin@example.com'
@@ -206,6 +206,27 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Update Retro'
         expect(page).to have_content 'Could not change owners. User not found by email.'
       end
+    end
+
+    specify 'delete a retro' do
+      register('dead-retro-user')
+      create_public_retro('Dead retro')
+      logout
+
+      visit_active_admin_page
+
+      fill_in 'admin_user_email', with: 'admin@example.com'
+      fill_in 'admin_user_password', with: 'secret'
+      click_on 'Login'
+
+      click_on 'Retros'
+      fill_in 'q_name', with: 'Dead retro'
+      click_on 'Filter'
+
+      click_on 'Delete'
+      page.driver.browser.switch_to.alert.accept
+
+      expect(page).to_not have_content('Dead retro')
     end
   end
 end

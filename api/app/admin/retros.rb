@@ -32,7 +32,7 @@ require_relative "../models/queries/safe_order_by"
 
 ActiveAdmin.register Retro do
   menu priority: 1
-  actions :all, except: [:destroy]
+  actions :all
   permit_params :name, :slug, :video_link, :password, :encrypted_password, :is_private
 
   filter :name
