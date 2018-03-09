@@ -64,8 +64,6 @@ class Application extends React.Component {
     if (global.Retro.config.enable_analytics && segment_key) {
       SegmentAnalytics.load(segment_key);
     }
-    /* can't be declared on top of the class - rollbar has references to window and is not ready before */
-    require('../../vendor/rollbar.min').init(global.Retro.config.rollbar);
     Logger.info('Application started');
   }
 
