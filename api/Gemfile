@@ -47,7 +47,6 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rest-client'
-gem 'rollbar'
 gem 'uglifier'
 
 group :development, :test do
