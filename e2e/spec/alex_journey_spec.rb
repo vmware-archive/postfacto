@@ -30,7 +30,7 @@
 #
 require 'spec_helper'
 
-describe 'Alex', type: :feature, js: true do
+fdescribe 'Alex', type: :feature, js: true do
   describe 'on the users page' do
     context 'when a user has retros' do
       before(:all) do
@@ -50,6 +50,7 @@ describe 'Alex', type: :feature, js: true do
         fill_in 'q_email', with: 'user-with-retros'
         click_on 'Filter'
         click_on 'Delete'
+        page.driver.browser.switch_to.alert.accept
 
         expect(page).to have_content 'user-with-retros'
       end
@@ -72,6 +73,7 @@ describe 'Alex', type: :feature, js: true do
         fill_in 'q_email', with: 'user-without-retros'
         click_on 'Filter'
         click_on 'Delete'
+        page.driver.browser.switch_to.alert.accept
 
         expect(page).to_not have_content 'user-without-retros'
       end
