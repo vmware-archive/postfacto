@@ -146,7 +146,7 @@ ActiveAdmin.register Retro do
   end
 
   controller do
-    before_action :load_retro, only: [:show, :edit, :update]
+    before_action :load_retro, only: [:show, :edit, :update, :destroy]
 
     def load_retro
       @retro = Retro.friendly.find(params.fetch(:id))

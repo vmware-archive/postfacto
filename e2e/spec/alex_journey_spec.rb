@@ -30,7 +30,7 @@
 #
 require 'spec_helper'
 
-fdescribe 'Alex', type: :feature, js: true do
+describe 'Alex', type: :feature, js: true do
   describe 'on the users page' do
     context 'when a user has retros' do
       before(:all) do
@@ -228,6 +228,7 @@ fdescribe 'Alex', type: :feature, js: true do
       click_on 'Delete'
       page.driver.browser.switch_to.alert.accept
 
+      expect(page).to have_content('Retros')
       expect(page).to_not have_content('Dead retro')
     end
   end

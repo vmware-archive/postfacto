@@ -60,7 +60,8 @@ ActiveAdmin.register User do
       user = User.find(params[:id])
 
       if user.retros.empty?
-        destroy!
+        user.destroy!
+        redirect_to admin_users_path, flash: { success: 'User was successfully destroyed.' }
       else
         redirect_to admin_users_path, flash: { error: 'Can\'t delete a user with Retros!' }
       end
