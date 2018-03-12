@@ -1,5 +1,7 @@
 # postfacto
 
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/pivotalpostfacto/Lobby)
+
 Postfacto is a **free**, **open-source** and **self-hosted** **retro tool** aimed at helping **remote teams**.
 
 ![](media/sample-retro.png)
