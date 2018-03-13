@@ -33,7 +33,7 @@ require 'rails_helper'
 describe '/retros/:retro_id/discussion' do
   let(:retro) { Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link') }
   let(:item) { retro.items.create!(description: 'archived happy item', category: :happy) }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
 
   describe 'POST /' do
     context 'when authenticated' do

@@ -35,7 +35,7 @@ describe '/retros' do
     Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
   end
 
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
 
   describe 'POST /' do
     context 'when auth header is provided' do
@@ -252,7 +252,7 @@ describe '/retros' do
         put retro_path(retro) + '/login', params: { retro: { password: password } }, as: :json
         expect(status).to eq(200)
         data = JSON.parse(response.body)
-        expect(data['token']).to eq(retro.encrypted_password)
+        expect(data['token']).to eq(retro.auth_token)
       end
     end
 
@@ -457,7 +457,7 @@ describe '/retros' do
 
       retro.reload
       data = JSON.parse(response.body)
-      expect(data['token']).to eq(retro.encrypted_password)
+      expect(data['token']).to eq(retro.auth_token)
       expect(retro.validate_login?('after')).to eq(true)
     end
 

@@ -36,6 +36,8 @@ class Retro < ActiveRecord::Base
   has_many :archives
   belongs_to :user
   enum item_order: { time: 'time', votes: 'votes' }
+
+  before_create :reset_auth_token
   after_initialize :generate_video_link
 
   MAX_SLUG_LENGTH = 236
@@ -80,6 +82,10 @@ class Retro < ActiveRecord::Base
     user.try(:email)
   end
 
+  def reset_auth_token
+    self.auth_token = generate_auth_token
+  end
+
   private
 
   def generate_slug
@@ -97,5 +103,9 @@ class Retro < ActiveRecord::Base
   def generate_video_link
     self.video_link = video_link.presence ||
                       'https://appear.in/retro-app-' + Array.new(8) { [*'0'..'9', *'a'..'z'].sample }.join
+  end
+
+  def generate_auth_token
+    SecureRandom.uuid.delete('/\-/')
   end
 end

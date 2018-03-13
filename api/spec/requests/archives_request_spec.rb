@@ -32,7 +32,7 @@ require 'rails_helper'
 
 describe 'retros/:retro_id/archives' do
   let(:retro) { Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
 
   before do
     retro.items.create!(description: 'The Item', category: 'happy')

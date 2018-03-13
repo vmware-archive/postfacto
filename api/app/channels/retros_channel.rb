@@ -76,7 +76,7 @@ class RetrosChannel < ApplicationCable::Channel
   def valid_token_provided?(retro, api_token)
     ActiveSupport::SecurityUtils.variable_size_secure_compare(
       api_token,
-      retro.encrypted_password
+      retro.auth_token
     )
   end
 end

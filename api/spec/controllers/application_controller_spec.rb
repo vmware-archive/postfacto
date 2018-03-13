@@ -45,7 +45,7 @@ RSpec.describe ApplicationController do
   end
 
   it 'returns a success response when authenticated' do
-    token = ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password)
+    token = ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token)
     request.headers['HTTP_AUTHORIZATION'] = token
     subject
     expect(response.status).to eq(204)

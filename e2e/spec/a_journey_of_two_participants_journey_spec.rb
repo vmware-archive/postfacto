@@ -329,7 +329,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     end
   end
 
-  xspecify 'Changing retro password and re-login for Peter' do
+  specify 'Changing retro password and re-login for Peter' do
     retro_url = ''
 
     in_browser(:felicity) do
@@ -377,6 +377,8 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     in_browser(:peter) do
       expect(page).not_to have_content 'this is a happy item'
       expect(page).to have_content 'The owner of this retro has chosen to protect it with a password.'
+
+      visit retro_url
 
       fill_in 'Password', with: 'new_password'
       click_button 'Login'
