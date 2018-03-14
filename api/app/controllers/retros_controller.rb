@@ -39,7 +39,7 @@ class RetrosController < ApplicationController
   def create
     @retro = @user.retros.create(retro_params)
     if @retro.valid?
-      @retro.create_instruction_cards! if first_retro_for @user
+      @retro.create_instruction_cards! if @user.retros.count == 1
       render json: {
         retro: @retro.as_json(only: [:id, :name, :slug]),
         token: @retro.auth_token
@@ -83,9 +83,7 @@ class RetrosController < ApplicationController
   def update_password
     if password_matches?(retro_update_password_params.fetch(:current_password))
       @retro.update!(password: retro_update_password_params.fetch(:new_password))
-      @retro.reset_auth_token
-      @retro.save!
-      
+
       RetrosChannel.broadcast_force_relogin(@retro.reload, retro_update_password_params.fetch(:request_uuid))
       render json: { token: @retro.auth_token }, status: :ok
     else
@@ -151,9 +149,5 @@ class RetrosController < ApplicationController
 
   def load_retro_with_items
     @retro = Retro.includes(:items, :action_items).find_by_slug!(params.fetch(:id))
-  end
-
-  def first_retro_for(user)
-    user.retros.count == 1
   end
 end

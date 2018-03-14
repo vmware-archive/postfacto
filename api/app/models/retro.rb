@@ -37,7 +37,6 @@ class Retro < ActiveRecord::Base
   belongs_to :user
   enum item_order: { time: 'time', votes: 'votes' }
 
-  before_create :reset_auth_token
   after_initialize :generate_video_link
 
   MAX_SLUG_LENGTH = 236
@@ -51,6 +50,7 @@ class Retro < ActiveRecord::Base
     unless val.blank?
       self.salt = BCrypt::Engine.generate_salt
       self.encrypted_password = BCrypt::Engine.hash_secret(val, salt)
+      self.auth_token = generate_auth_token
     end
   end
 
@@ -80,10 +80,6 @@ class Retro < ActiveRecord::Base
 
   def owner_email
     user.try(:email)
-  end
-
-  def reset_auth_token
-    self.auth_token = generate_auth_token
   end
 
   private
