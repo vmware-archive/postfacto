@@ -40,6 +40,7 @@ You can deploy your own Postfacto to [Pivotal Web Services](#pivotal-web-service
 * bundler
 * rspec
 * Postgres
+* MySql
 * Node 6
 * npm 3.10.10 (`npm install -g npm@3.10.10`)
 * gulp
