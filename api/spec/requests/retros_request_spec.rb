@@ -241,15 +241,9 @@ describe '/retros' do
   end
 
   describe 'PUT /login' do
-    subject do
-      put retro_path(retro) + '/login', params: { retro: { password: password } }, as: :json
-    end
-
     context 'if password is correct' do
-      let(:password) { 'the-password' }
-
       it 'responds with 200 and returns token' do
-        put retro_path(retro) + '/login', params: { retro: { password: password } }, as: :json
+        put retro_path(retro) + '/login', params: { retro: { password: 'the-password' } }, as: :json
         expect(status).to eq(200)
         data = JSON.parse(response.body)
         expect(data['token']).to eq(retro.auth_token)
@@ -257,11 +251,23 @@ describe '/retros' do
     end
 
     context 'if password is incorrect' do
-      let(:password) { 'wrong-password' }
-
       it 'responds with forbidden' do
-        put retro_path(retro) + '/login', params: { retro: { password: password } }, as: :json
+        put retro_path(retro) + '/login', params: { retro: { password: 'anything-else' } }, as: :json
         expect(status).to eq(403)
+      end
+    end
+
+    context 'if auth_token is nil' do
+      before do
+        retro.auth_token = nil
+      end
+
+      it 'generates an auth_token' do
+        put retro_path(retro) + '/login', params: { retro: { password: 'the-password' } }, as: :json
+        expect(status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['token']).to eq(retro.reload.auth_token)
+        expect(data['token']).to_not be_nil
       end
     end
   end

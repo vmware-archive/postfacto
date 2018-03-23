@@ -58,6 +58,7 @@ class RetrosController < ApplicationController
 
   def login
     if password_matches?(retro_params.fetch(:password))
+      @retro.generate_auth_token! if @retro.auth_token.nil?
       render json: { token: @retro.auth_token }, status: :ok
     else
       render json: :no_content, status: :forbidden

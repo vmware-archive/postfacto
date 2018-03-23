@@ -82,6 +82,11 @@ class Retro < ActiveRecord::Base
     user.try(:email)
   end
 
+  def generate_auth_token!
+    self.auth_token = generate_auth_token
+    save!
+  end
+
   private
 
   def generate_slug
