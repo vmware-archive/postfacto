@@ -447,8 +447,9 @@ describe '/retros' do
   end
 
   describe 'PATCH /:id/password' do
-    it 'updates the retro password if the current password matches' do
+    it 'updates the retro password and auth_token if the current password matches' do
       retro.update!(password: 'before')
+      old_token = retro.auth_token
 
       patch retro_update_password_path(retro),
             params: { current_password: 'before', new_password: 'after', request_uuid: 'blah' }, as: :json
@@ -458,6 +459,7 @@ describe '/retros' do
       retro.reload
       data = JSON.parse(response.body)
       expect(data['token']).to eq(retro.auth_token)
+      expect(data['token']).to_not eq(old_token)
       expect(retro.validate_login?('after')).to eq(true)
     end
 

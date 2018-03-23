@@ -378,8 +378,6 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       expect(page).not_to have_content 'this is a happy item'
       expect(page).to have_content 'The owner of this retro has chosen to protect it with a password.'
 
-      visit retro_url
-
       fill_in 'Password', with: 'new_password'
       click_button 'Login'
 
