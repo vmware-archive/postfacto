@@ -32,7 +32,7 @@ require 'rails_helper'
 
 describe '/retros/:retro_id/action_items' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
 
   describe 'when password is provided' do
     it 'successfully create an action item and renders json' do
@@ -109,7 +109,7 @@ end
 describe 'PATCH /retros/:retro_id/action_items/:action_item_id' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }
   let(:action_item) { retro.action_items.create!(description: 'action item 1', done: false) }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.encrypted_password) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
 
   it 'updates the action item with the given value for done' do
     expect(RetrosChannel).to receive(:broadcast).twice

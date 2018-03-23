@@ -59,12 +59,7 @@ class ApplicationController < ActionController::Base
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      # Compare the tokens in a time-constant manner, to mitigate
-      # timing attacks.
-      ActiveSupport::SecurityUtils.variable_size_secure_compare(
-        token,
-        @retro.encrypted_password
-      )
+      token == @retro.auth_token
     end
   end
 

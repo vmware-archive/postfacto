@@ -329,7 +329,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     end
   end
 
-  xspecify 'Changing retro password and re-login for Peter' do
+  specify 'Changing retro password and re-login for Peter' do
     retro_url = ''
 
     in_browser(:felicity) do
