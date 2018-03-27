@@ -50,10 +50,10 @@ You can also use the Postfacto [docker image](https://hub.docker.com/r/postfacto
 
 ### Running locally
 
-You can run Postfacto locally at [http://localhost:3000]() by running the following in the `web` directory:
+You can run Postfacto locally at [http://localhost:3000]() by running:
 
 ```bash
-gulp local-run
+./run.sh
 ```
 
 The admin dashboard will be available at [http://localhost:4000/admin](). You can create an admin user using the following rake task in the `api` directory:
@@ -63,6 +63,12 @@ ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user
 ```
 
 ### Running tests
+
+You can run the tests for the whole project in the root directory by simply running:
+
+```bash
+./test.sh
+```
 
 #### Web
 
