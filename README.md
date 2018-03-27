@@ -46,7 +46,7 @@ You can deploy your own Postfacto to [Pivotal Web Services](#pivotal-web-service
 * gulp
 * chromedriver
 
-You can also use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development if you'd prefer.
+You can also use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development if you'd prefer. If you're not using Docker you'll need to install all the dependencies on your local machine and then run `bundle install` in `web` and `e2e` to install Ruby dependencies and then run `npm install` in `web` to install Javascript ones.
 
 ### Running locally
 
