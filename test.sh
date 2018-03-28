@@ -3,6 +3,7 @@
 set -e
 
 pushd api
+  bundle exec rake db:create db:migrate
   bundle exec rake
 popd
 
