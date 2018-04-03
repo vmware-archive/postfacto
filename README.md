@@ -107,6 +107,8 @@ gulp local-acceptance
 1. So you're ready to set Postfacto up, choose names for your web and API apps. You can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 1. In the `postfacto` directory change the `{{api-app-name}}` and `{{web-app-name}}` in `deployment/pws/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. In the `postfacto` directory change the `{{web-app-name}}` and `{{api-app-name}}` in `deployment/pws/config/manifest-web.yml` and `deployment/pws/config/config.js` to be your `api-app-name` and `web-app-name`
+1. In the `postfacto` directory change the `{{api-app-name}}` in
+   `deployment/pws/deploy.sh` to be your `api-app-name`
 
 1. Run the PWS deployment script from the `postfacto` directory:
 
@@ -133,6 +135,8 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 1. So you're ready to set Postfacto up, choose names for your web and API apps. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 1. In the `postfacto` directory change the `{{api-app-name}}` and `{{web-app-name}}` in `deployment/pcf/config/manifest-api.yml` to be your `api-app-name` and `web-app-name`
 1. In the `postfacto` directory change the `{{web-app-name}}` and `{{api-app-name}}` in `deployment/pcf/config/manifest-web.yml` and `deployment/pcf/config/config.js` to be your `api-app-name` and `web-app-name`
+1. In the `postfacto` directory change the `{{api-app-name}}` in
+   `deployment/pcf/deploy.sh` to be your `api-app-name`
 
 1. Run the PCF deployment script from the `postfacto` directory:
 
