@@ -7,7 +7,6 @@ window.Retro = {
     "useRevManifest": true,
     "api_base_url": "https://{{api-app-name}}.cfapps.io",
     "websocket_url": "wss://{{api-app-name}}.cfapps.io:4443/cable",
-    "google_oauth_client_id": "{{client-id}}",
     "contact": "",
     "terms": "",
     "privacy": ""

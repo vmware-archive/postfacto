@@ -96,18 +96,6 @@ gulp local-acceptance
 So you're ready to set Postfacto up, choose names for your web and API apps. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
 If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can check they are available by making sure there is an error when visiting `your-chosen-name.cfapps.io`.
 
-### Setting up Google OAuth
-
-In order for users to sign-up and create their own retros, Postfacto needs Google OAuth setup.
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com) and
-   create a new project
-1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
-1. Choose a name for your app
-1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`.  For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.cfapps.io`
-1. You can leave redirect blank
-1. Take note of your `client-id` that is generated
-
 ### Pivotal Web Services
 
 [Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running. You can use [Concourse](https://concourse.ci) to deploy and keep your instance up to date using the example pipeline in `deployments/pws` or if you'd prefer you can set it up manually using the steps below:
@@ -121,7 +109,7 @@ In order for users to sign-up and create their own retros, Postfacto needs Googl
 
 1. In `postfacto/deployment/pws/config/manifest-api.yml`, change the `{{api-app-name}}` and `{{web-app-name}}` to be your `api-app-name` and `web-app-name`
 1. In `postfacto/deployment/pws/config/manifest-web.yml`, change the `{{web-app-name}}` to be your `web-app-name`
-1. In `postfacto/deployment/pws/config/config.js`, change the `{{api-app-name}}`, and `{{client-id}}` to be your `api-app-name`, and generated Google OAuth `client-id` (Don't have your `client-id`? Refer to [Setting up Google OAuth](#setting-up-google-oauth))
+1. In `postfacto/deployment/pws/config/config.js`, change the `{{api-app-name}}` to be your `api-app-name`
 1. In `postfacto/deployment/pws/deploy.sh`, change the `{{api-app-name}}` to be your `api-app-name`
 
 1. Run the PWS deployment script from the `postfacto` directory:
@@ -146,10 +134,9 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
     ```bash
     git clone git@github.com:pivotal/postfacto.git
     ```
-
 1. In `postfacto/deployment/pcf/config/manifest-api.yml`, change the `{{api-app-name}}`, `{{web-app-name}}`, `{{pcf-url}}` to be your `api-app-name`, `web-app-name` and `pcf-url`
 1. In `postfacto/deployment/pcf/config/manifest-web.yml`, change the `{{web-app-name}}` to be your `web-app-name`
-1. In `postfacto/deployment/pcf/config/config.js`, change the `{{api-app-name}}`, `{{web-app-name}}`, `{{pcf-url}}`, `{{client-id}}` to be your `api-app-name`, `web-app-name`, your generated Google OAuth `client-id`, and `pcf-url`
+1. In `postfacto/deployment/pcf/config/config.js`, change the `{{api-app-name}}`, `{{web-app-name}}`, and `{{pcf-url}}` to be your `api-app-name`, `web-app-name`, and `pcf-url`
 1. In `postfacto/deployment/pcf/deploy.sh`, change the `{{api-app-name}}` to be your `api-app-name`
 
 1. Run the PCF deployment script from the `postfacto` directory:
@@ -162,6 +149,29 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
+
+### Optional Setup
+
+#### Setting up Google OAuth
+
+In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
+For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
+`api-app-name.cfapps.io/admin` or `api-app-name.{{pcf-url}}/admin`.
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) and
+   create a new project
+1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
+1. Choose a name for your app
+1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`.  For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.cfapps.io`
+1. You can leave redirect blank
+1. Take note of your `client-id` that is generated
+1. In additional to the steps required for deploying to PWS, and PCF:
+  1. For PWS, in `postfacto/deployment/pws/config/config.js`, add the
+     line `"google_oauth_client_id": {{client-id}}` to the config object, and change
+`{{client-id}}` to your generated Google OAuth `client-id`
+  1. For PCF, in `postfacto/deployment/pcf/config/config.js`, add the
+     line `"google_oauth_client_id": {{client-id}}` to the config object, and change
+`{{client-id}}` to your generated Google OAuth `client-id`
 
 ## Contributing
 
