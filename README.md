@@ -166,10 +166,10 @@ For deployments that do not want to setup Google OAuth, you will need to create 
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
 1. In additional to the steps required for deploying to PWS, and PCF:
-  1. For PWS, in `postfacto/deployment/pws/config/config.js`, add the
+   - For PWS, in `postfacto/deployment/pws/config/config.js`, add the
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
-  1. For PCF, in `postfacto/deployment/pcf/config/config.js`, add the
+   - For PCF, in `postfacto/deployment/pcf/config/config.js`, add the
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
 
