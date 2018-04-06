@@ -10,6 +10,10 @@ We generally only need you (or your employer) to sign our CLA once and once sign
 
 Note: if you would like to submit an "_obvious fix_" for something like a typo, formatting issue or spelling mistake, you may not need to sign the CLA. Please see our information on [obvious fixes](https://cla.pivotal.io/about#obvious-fix) for more details.
 
+## Working on features
+
+If you're interested on working on a feature for us we have a [Backlog](https://github.com/pivotal/postfacto/projects/1) of work for people to pick up at anytime. Have a look at both the Backlog' and 'Icebox' sections and if something catches your eye leave a comment and we can chat about assigning it to you. If the feature you had in mind isn't already there then [get in touch](https://gitter.im/pivotalpostfacto/Lobby)! We're always eager to hear about new ideas for Postfacto.
+
 ## Code reviews
 
 All submissions, including submissions by project members, require review and we use GitHub's pull requests for this purpose. Please consult [GitHub Help](https://help.github.com/articles/about-pull-requests/) if you need more information about using pull requests.
