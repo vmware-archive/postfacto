@@ -28,4 +28,4 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-HOSTED_DOMAIN = ENV['HOSTED_DOMAIN']
+HOSTED_DOMAIN = ENV.fetch('HOSTED_DOMAIN') { nil }
