@@ -34,6 +34,7 @@ class Retro < ActiveRecord::Base
   has_many :items, -> { order(:created_at).where(archived: false) }, dependent: :destroy
   has_many :action_items, -> { order(:created_at).where(archived: false) }, dependent: :destroy
   has_many :archives
+
   belongs_to :user
   enum item_order: { time: 'time', votes: 'votes' }
 

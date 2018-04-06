@@ -28,14 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
-
-test:
-  adapter: sqlite3
-  database: db/test.sqlite3
-  pool: 5
-  timeout: 5000
+class MakeHighlightedItemDbAgnostic < ActiveRecord::Migration[5.1]
+  def change
+    remove_column :retros, :highlighted_item_id
+    add_column :retros, :highlighted_item_id, :integer
+  end
+end

@@ -41,8 +41,6 @@ gem 'devise'
 gem 'friendly_id', '~> 5.1.0'
 gem 'inherited_resources'
 gem 'jbuilder'
-gem 'mysql2'
-gem 'pg'
 gem 'premailer-rails'
 gem 'puma'
 gem 'rack-cors', require: 'rack/cors'
@@ -60,6 +58,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'sqlite3'
   gem 'bullet'
   gem 'listen'
   gem 'web-console'
@@ -68,4 +67,6 @@ end
 group :production do
   gem 'cf-app-utils'
   gem 'redis', '~> 3.3.3'
+  gem 'mysql2'
+  gem 'pg'
 end
