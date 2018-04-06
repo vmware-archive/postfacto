@@ -22,7 +22,7 @@ Retros are designed to help the team improve and that's hard to do without keepi
 
 ### Choose your level of security
 
-You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access it.
+You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access it. You can also let users sign up to your instance using Google OAuth or control access with the admin dashboard.
 
 ### Use your own video conferencing
 
