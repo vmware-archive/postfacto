@@ -31,10 +31,28 @@
 class Item < ActiveRecord::Base
   belongs_to :retro
   belongs_to :archive
+
   enum category: { happy: 'happy', meh: 'meh', sad: 'sad' }
+
+  before_destroy :clear_highlight
 
   def vote!
     Item.where(id: id).update_all('vote_count = vote_count + 1')
     reload
+  end
+
+  private
+
+  def clear_highlight
+    if using_sqlite?
+      if retro.highlighted_item_id == id
+        retro.highlighted_item_id = nil
+        retro.save!
+      end
+    end
+  end
+
+  def using_sqlite?
+    ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::SQLite3Adapter
   end
 end

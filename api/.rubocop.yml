@@ -47,3 +47,6 @@ Lint/AmbiguousBlockAssociation:
 
 Metrics/MethodLength:
   Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
