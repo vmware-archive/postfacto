@@ -46,3 +46,6 @@ USER root
 
 # Install Mysql dev tools
 RUN apt-get update && apt-get install -y libmysqlclient-dev
+
+# Install Sqlite dev tools
+RUN apt-get update && apt-get install libsqlite3-dev
