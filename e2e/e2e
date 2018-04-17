@@ -31,8 +31,6 @@
 #
 set -e
 
-service postgresql start
-
 pushd postfacto/web
     npm install
     export PATH=$PATH:./node_modules/.bin

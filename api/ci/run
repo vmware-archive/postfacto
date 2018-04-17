@@ -32,8 +32,6 @@
 
 set -e
 
-service postgresql start
-
 # Run Tests
 cd postfacto-api/api
 bundle install --path vendor/bundle
