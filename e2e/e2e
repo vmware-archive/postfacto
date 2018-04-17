@@ -37,7 +37,7 @@ pushd postfacto/web
 popd
 
 pushd postfacto/api
-    bundle install --path vendor/bundle
+    bundle install --path vendor/bundle --without production
 popd
 
 pushd postfacto/e2e

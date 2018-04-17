@@ -34,6 +34,6 @@ set -e
 
 # Run Tests
 cd postfacto-api/api
-bundle install --path vendor/bundle
+bundle install --path vendor/bundle --without production
 bundle exec rake db:create db:migrate
 bundle exec rake
