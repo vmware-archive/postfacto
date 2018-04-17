@@ -55,6 +55,7 @@ group :development, :test do
   gem 'rubocop', require: false
   gem 'shoulda-matchers'
   gem 'webmock'
+  gem 'tzinfo-data'
 end
 
 group :development do

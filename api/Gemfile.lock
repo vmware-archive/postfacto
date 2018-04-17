@@ -273,6 +273,8 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2018.4)
+      tzinfo (>= 1.0.0)
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
@@ -324,6 +326,7 @@ DEPENDENCIES
   rubocop
   shoulda-matchers
   sqlite3
+  tzinfo-data
   uglifier
   web-console
   webmock
