@@ -36,16 +36,5 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 
 RUN apt-get -yqq update && apt-get -yqq install google-chrome-stable && rm -rf /var/lib/apt/lists/*
 
-# Install PostgreSQL
-RUN apt-get update && apt-get install -y postgresql
-
-# Start and initialize PostgreSQL DB
-USER postgres
-RUN /etc/init.d/postgresql start && createuser --superuser root
-USER root
-
-# Install Mysql dev tools
-RUN apt-get update && apt-get install -y libmysqlclient-dev
-
 # Install Sqlite dev tools
 RUN apt-get update && apt-get install libsqlite3-dev
