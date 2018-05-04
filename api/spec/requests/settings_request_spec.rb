@@ -39,7 +39,7 @@ describe '/retros/:id/settings' do
   describe 'GET /' do
     context 'when auth header is provided' do
       it 'returns the updated retro' do
-        get "/retros/#{retro.id}/settings", headers: { HTTP_AUTHORIZATION: token }, as: :json
+        get retro_settings_path(retro), headers: { HTTP_AUTHORIZATION: token }, as: :json
 
         expect(response.status).to eq(200)
 
@@ -53,7 +53,7 @@ describe '/retros/:id/settings' do
 
     context 'when not authenticated' do
       it 'returns forbidden' do
-        get "/retros/#{retro.id}/settings", headers: {}, as: :json
+        get retro_settings_path(retro), headers: {}, as: :json
 
         expect(response.status).to eq(403)
       end

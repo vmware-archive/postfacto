@@ -50,3 +50,9 @@ Metrics/MethodLength:
 
 Bundler/OrderedGems:
   Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Layout/AlignHash:
+  Enabled: false

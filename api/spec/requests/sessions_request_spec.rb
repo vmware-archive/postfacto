@@ -47,7 +47,7 @@ describe '/sessions' do
       end
 
       it 'returns user details' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'the-access-token' }, as: :json
 
         expect(response.status).to eq(200)
 
@@ -72,7 +72,7 @@ describe '/sessions' do
       end
 
       it 'returns user details' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'the-access-token' }, as: :json
 
         expect(response.status).to eq(200)
 
@@ -94,7 +94,7 @@ describe '/sessions' do
       end
 
       it 'returns 404' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'the-access-token' }, as: :json
 
         expect(response.status).to eq(404)
       end
@@ -108,7 +108,7 @@ describe '/sessions' do
       end
 
       it 'returns 500' do
-        post '/sessions', params: { access_token: 'invalid-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'invalid-access-token' }, as: :json
 
         expect(response.status).to eq(500)
       end
@@ -120,7 +120,7 @@ describe '/sessions' do
           .with('the-access-token')
           .and_raise(GoogleClient::InvalidUserDomain.new)
 
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'the-access-token' }, as: :json
         expect(response).to be_forbidden
       end
 
@@ -133,7 +133,7 @@ describe '/sessions' do
 
         expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+        post sessions_path, params: { access_token: 'the-access-token' }, as: :json
         expect(response).to be_not_found
       end
     end

@@ -33,7 +33,7 @@ const {fetchJson} = require('../../helpers/fetch_helper');
 
 const RetroApi = {
   apiBaseUrl() {
-    return global.Retro.config.api_base_url;
+    return global.Retro.config.api_base_url + "/api";
   },
   ipCheckerUrl() {
     return "https://freegeoip.net/json/";

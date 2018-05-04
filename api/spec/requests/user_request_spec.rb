@@ -42,7 +42,7 @@ describe '/users' do
 
       expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-      post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
+      post users_path, params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
                                full_name: 'Felicity Toad' }, as: :json
 
       expect(response).to be_created
@@ -67,7 +67,7 @@ describe '/users' do
 
         expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-        post '/users', params: { access_token: 'the-access-token', company_name: 'Irrelevant',
+        post users_path, params: { access_token: 'the-access-token', company_name: 'Irrelevant',
                                  full_name: 'Irrelevant' }, as: :json
 
         expect(response.status).to eq(300)
@@ -84,7 +84,7 @@ describe '/users' do
 
         expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-        post '/users', params: { access_token: 'the-access-token' }, as: :json
+        post users_path, params: { access_token: 'the-access-token' }, as: :json
 
         expect(response).to be_created
         expect(User.last.company_name).to be_nil
@@ -101,7 +101,7 @@ describe '/users' do
 
         expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-        post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps' }, as: :json
+        post users_path, params: { access_token: 'the-access-token', company_name: 'Felicity Corps' }, as: :json
 
         expect(response).to be_created
         expect(User.last.name).to eq('Felicity Frog')
@@ -114,7 +114,7 @@ describe '/users' do
           .with('the-access-token')
           .and_raise(GoogleClient::InvalidUserDomain.new)
 
-        post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
+        post users_path, params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
                                  full_name: 'Felicity Toad' }, as: :json
 
         expect(response).to be_forbidden
@@ -129,7 +129,7 @@ describe '/users' do
 
         expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
 
-        post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
+        post users_path, params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
                                  full_name: 'Felicity Toad' }, as: :json
 
         expect(response).to be_created
