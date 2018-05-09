@@ -26,3 +26,8 @@ vendor
 /.idea
 postfacto-api.iml
 db/schema.rb
+
+# Ignore integrated web app
+public/application.css
+public/application.js
+public/humans.txt

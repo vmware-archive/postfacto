@@ -54,4 +54,7 @@ Rails.application.routes.draw do
       resource :discussion, only: [:create, :destroy, :update]
     end
   end
+
+  get '/' => 'pages#app'
+  get '/*path' => 'pages#app'
 end
