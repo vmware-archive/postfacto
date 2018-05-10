@@ -53,6 +53,7 @@ class Item < ActiveRecord::Base
   end
 
   def using_sqlite?
+    return false unless defined? ActiveRecord::ConnectionAdapters::SQLite3Adapter
     ActiveRecord::Base.connection.instance_of? ActiveRecord::ConnectionAdapters::SQLite3Adapter
   end
 end
