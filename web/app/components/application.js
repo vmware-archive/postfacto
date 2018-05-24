@@ -39,6 +39,7 @@ const {useRouter} = require('./use_router');
 const Router = require('./router');
 const Header = require('./header');
 const Logger = require('../../helpers/logger');
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -60,6 +61,7 @@ class Application extends React.Component {
   componentDidMount() {
     injectTapEventPlugin();
     Logger.info('Application started');
+    window.Mixpanel = require('mixpanel-browser');
   }
 
   render() {

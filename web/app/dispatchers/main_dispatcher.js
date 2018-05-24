@@ -108,6 +108,7 @@ const MainDispatcher = {
         this.$store.refine('retro', 'highlighted_item_id').set(null);
         this.$store.refine('retro', 'items', data.item, 'done').set(true);
         this.dispatch({type: 'checkAllRetroItemsDone'});
+
         this.dispatch({
             type: 'completedRetroItemAnalytics',
             data: {retroId: data.retroId, category: data.item.category}
@@ -284,7 +285,7 @@ const MainDispatcher = {
         this.$store.refine('featureFlags').merge({
             newTerms: data.new_terms,
             oldTerms: data.old_terms,
-              archiveEmails: data.archive_emails
+            archiveEmails: data.archive_emails
         });
     },
     setCountryCode({data}) {
