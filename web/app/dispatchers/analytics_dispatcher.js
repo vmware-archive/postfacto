@@ -58,9 +58,6 @@ const AnalyticsDispatcher = {
   },
   showHomePageAnalytics() {
     Analytics.track('Loaded homepage');
-  },
-  userSignedUpAnalytics({data: {email}}) {
-    Analytics.track('User Signed Up', {userEmail: email});
   }
 };
 
