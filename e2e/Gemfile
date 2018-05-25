@@ -35,7 +35,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-retry'
   gem 'capybara'
-  gem 'selenium-webdriver', github: 'topherbullock/selenium', branch: 'gemspec'
+  gem 'selenium-webdriver'
   gem 'pry'
   gem 'pry-byebug'
 end
