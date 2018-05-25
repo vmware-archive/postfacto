@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "mixpanel-browser": "^2.22.0",
     "actioncable": "5.0.1",
     "babel-polyfill": "^6.6.1",
     "event-stream": "^3.3.2",

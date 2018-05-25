@@ -28,17 +28,23 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+const POSTFACTO_TEAM_ANALYTICS_TOKEN = "d4de349453cc697734eced9ebedcdb22";
 
 class Analytics {
+  static initialized = false;
 
   static track(event, options) {
-    options = options || {};
-    if (typeof analytics !== 'undefined') {
+    if (global.Retro.config.enable_analytics) {
+      if (!Analytics.initialized) {
+        window.Mixpanel.init(POSTFACTO_TEAM_ANALYTICS_TOKEN);
+        Analytics.initialized = true;
+      }
+
+      options = options || {};
       options.timestamp = (new Date()).toJSON();
-      analytics.track(event, options);
+      window.Mixpanel.track(event, options);
     }
   }
-
 }
 
 module.exports = Analytics;
