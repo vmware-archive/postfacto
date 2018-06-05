@@ -98,7 +98,7 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /retros', () => {
-      expect('https://example.com/retros').toHaveBeenRequestedWith({
+      expect('https://example.com/api/retros').toHaveBeenRequestedWith({
         method: 'POST',
         requestHeaders: {
           'accept': 'application/json',
