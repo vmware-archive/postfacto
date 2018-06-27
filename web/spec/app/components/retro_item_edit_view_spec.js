@@ -79,6 +79,13 @@ describe('RetroItemEditView', () => {
       sharedUpdateActionBehavior();
     });
 
+    it('does not submit when pressing shift + enter so new line is added', () => {
+      $('textarea').val('a new action item').simulate('change');
+
+      $('textarea').simulate('keyPress', {key: 'Enter', shiftKey: true});
+      expect(saveSpy).not.toHaveBeenCalled();
+    });
+
     it('does not allow editing if value is empty', () => {
       $('textarea').val('').simulate('change');
       $('.edit-save').simulate('click');

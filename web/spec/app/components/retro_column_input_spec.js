@@ -92,6 +92,13 @@ describe('inputting an action item', () => {
     expect('textarea').toHaveValue('');
   });
 
+  it('does not submit when pressing shift + enter so new line is added', () => {
+    $('textarea').val('a new action item').simulate('change');
+
+    $('textarea').simulate('keyPress', {key: 'Enter', shiftKey: true});
+    expect('createRetroActionItem').not.toHaveBeenDispatched();
+  });
+
   it('doesn\'t add an item when pressing enter on an empty input field', () => {
     $('textarea').val('').simulate('change');
     $('textarea').simulate('keyPress', {key: 'Enter'});

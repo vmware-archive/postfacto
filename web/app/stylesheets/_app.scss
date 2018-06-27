@@ -744,6 +744,7 @@ button:focus {
     font-weight: bold;
     font-size: 1.3rem;
     line-height: 1.2;
+    white-space: pre-line;
 
     span {
       @extend .show-for-small-only;
