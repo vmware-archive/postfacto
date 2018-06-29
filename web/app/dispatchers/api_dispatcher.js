@@ -140,6 +140,12 @@ const ApiDispatcher = {
       this.dispatch({type: 'retroItemSuccessfullyVoted', data: {item: data.item}});
     });
   },
+  nextRetroItem({data: {retro_id}}) {
+      Logger.info('nextRetroItem');
+      return RetroApi.nextRetroItem(retro_id, getApiToken(retro_id)).then(() => {
+          this.dispatch({type: 'checkAllRetroItemsDone'});
+      })
+  },
   highlightRetroItem({data: {retro_id, item}}) {
     Logger.info('highlightRetroItem');
     RetroApi.highlightRetroItem(retro_id, item.id, getApiToken(retro_id)).then(([, data]) => {

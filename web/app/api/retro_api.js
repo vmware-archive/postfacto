@@ -136,6 +136,16 @@ const RetroApi = {
       accessToken: token});
   },
 
+  nextRetroItem(retro_id, token) {
+      return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion/transitions`, {
+          method: 'POST',
+          accessToken: token,
+          body: JSON.stringify({
+              transition: 'NEXT'
+          })
+      });
+  },
+
   highlightRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion`, {
       method: 'POST',

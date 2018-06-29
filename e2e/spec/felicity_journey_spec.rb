@@ -236,6 +236,44 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
   end
 
+ specify 'Auto facilitation journey' do
+    register('felicity-auto-facilitate-user')
+    create_public_retro('first-retro')
+    retro_url = create_public_retro('auto-facilitate-retro')
+    visit retro_url
+
+    fill_in("I'm glad that...", with: 'something happy 1')
+    find('.column-happy textarea.retro-item-add-input').native.send_keys(:return)
+    fill_in("I'm wondering about...", with: 'something meh 1')
+    find('.column-meh textarea.retro-item-add-input').native.send_keys(:return)
+    fill_in("It wasn't so great that...", with: 'something sad 1')
+    find('.column-sad textarea.retro-item-add-input').native.send_keys(:return)
+
+    def send_right_key
+      # Chrome web driver only allows sending key events on focusable elements, this button has a tabindex so is focusable
+      keyEventReciever = first('.retro-heading-button a')
+      keyEventReciever.native.send_keys(:right)
+    end
+
+    send_right_key
+    expect(page).to have_css('.highlight .item-text', text: 'something happy 1')
+
+    # Should not affect right keypresses in textareas
+    keyEventReciever = first('.retro-item-add-input')
+    keyEventReciever.native.send_keys(:right)
+    sleep(0.5)
+    expect(page).to have_css('.highlight .item-text', text: 'something happy 1')
+
+    send_right_key
+    expect(page).to have_css('.highlight .item-text', text: 'something meh 1')
+
+    send_right_key
+    expect(page).to have_css('.highlight .item-text', text: 'something sad 1')
+
+    sleep(0.5)
+    send_right_key
+    expect(page).to have_content('The board will be cleared ready for your next retro and incomplete action items will be carried across.')
+  end
 
   specify 'Journey' do
     logout
