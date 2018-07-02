@@ -50,3 +50,12 @@ Metrics/MethodLength:
 
 Bundler/OrderedGems:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/FirstParameterIndentation:
+  Enabled: false
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
