@@ -76,9 +76,8 @@ class RetroItemEditView extends React.Component {
   onKeyPress(event) {
     const {editedText} = this.state;
     const value = event.target.value;
-
-    if (event.key === 'Enter' && value && value.trim().length > 0) {
-      this.props.saveItem(editedText);
+    if (event.key === 'Enter' && !event.shiftKey && value && value.trim().length > 0) {
+          this.props.saveItem(editedText);
     }
   }
 

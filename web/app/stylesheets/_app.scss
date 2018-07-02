@@ -743,7 +743,11 @@ button:focus {
     overflow-wrap: break-word;
     font-weight: bold;
     font-size: 1.3rem;
-    line-height: 1.2;
+    white-space: pre-line;
+
+    button {
+      line-height: 1.1;
+    }
 
     span {
       @extend .show-for-small-only;
