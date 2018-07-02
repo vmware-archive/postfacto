@@ -28,34 +28,21 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-class TransitionsController < ApplicationController
-  before_action :load_retro, :authenticate_retro
 
-  def transitions
-    transition = params.require(:transition)
+describe OrderedByVoteRule do
+  let(:retro) {
+    user = User.create!(email: 'me@example.com')
+    Retro.create!(name: 'My Retro', user: user)
+  }
 
-    if transition != 'NEXT'
-      render json: :nothing, status: 400
-      return
-    end
+  it 'should order by the highest number of votes' do
+    Item.create!(retro: retro, description: 'Item A', done: true, category: :happy, vote_count: 1)
+    Item.create!(retro: retro, description: 'Item B', category: :happy, vote_count: 2)
 
-    unless @retro.highlighted_item_id.nil?
-      previous_item = @retro.items.find(@retro.highlighted_item_id)
-      previous_item.done = true
-      previous_item.save!
-    end
+    items = OrderedByVoteRule.new.apply(retro, retro.items)
 
-    next_item = RetroFacilitator.new.facilitate(@retro).first
-
-    if next_item.nil?
-      @retro.highlighted_item_id = nil
-    else
-      @retro.highlighted_item_id = next_item.id
-      @retro.retro_item_end_time = 5.minutes.from_now
-    end
-
-    @retro.save!
-    RetrosChannel.broadcast(@retro)
-    render 'retros/show'
+    expect(items.length).to eq(2)
+    expect(items.first.description).to eq('Item B')
+    expect(items.second.description).to eq('Item A')
   end
 end

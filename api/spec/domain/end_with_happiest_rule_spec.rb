@@ -28,34 +28,28 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-class TransitionsController < ApplicationController
-  before_action :load_retro, :authenticate_retro
 
-  def transitions
-    transition = params.require(:transition)
+describe EndWithHappiestRule do
+  let(:retro) {
+    user = User.create!(email: 'me@example.com')
+    Retro.create!(name: 'My Retro', user: user)
+  }
 
-    if transition != 'NEXT'
-      render json: :nothing, status: 400
-      return
-    end
+  it 'should move happiest item to end' do
+    most_happy = Item.create!(retro: retro, description: 'Item B', category: :happy, vote_count: 20)
+    happy = Item.create!(retro: retro, description: 'Item C', category: :happy, vote_count: 10)
+    meh = Item.create!(retro: retro, description: 'Item A', category: :meh, vote_count: 1)
 
-    unless @retro.highlighted_item_id.nil?
-      previous_item = @retro.items.find(@retro.highlighted_item_id)
-      previous_item.done = true
-      previous_item.save!
-    end
+    items = EndWithHappiestRule.new.apply(retro, retro.items)
 
-    next_item = RetroFacilitator.new.facilitate(@retro).first
+    expect(items).to eq([happy, meh, most_happy])
+  end
 
-    if next_item.nil?
-      @retro.highlighted_item_id = nil
-    else
-      @retro.highlighted_item_id = next_item.id
-      @retro.retro_item_end_time = 5.minutes.from_now
-    end
+  it 'should do nothing when no happy items' do
+    meh = Item.create!(retro: retro, description: 'Item A', category: :meh, vote_count: 1)
 
-    @retro.save!
-    RetrosChannel.broadcast(@retro)
-    render 'retros/show'
+    items = EndWithHappiestRule.new.apply(retro, retro.items)
+
+    expect(items).to eq([meh])
   end
 end

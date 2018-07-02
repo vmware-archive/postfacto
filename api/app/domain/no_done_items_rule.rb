@@ -28,34 +28,13 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-class TransitionsController < ApplicationController
-  before_action :load_retro, :authenticate_retro
 
-  def transitions
-    transition = params.require(:transition)
+class NoDoneItemsRule
+  def initialize(chain = NoOpRule.new)
+    @chain = chain
+  end
 
-    if transition != 'NEXT'
-      render json: :nothing, status: 400
-      return
-    end
-
-    unless @retro.highlighted_item_id.nil?
-      previous_item = @retro.items.find(@retro.highlighted_item_id)
-      previous_item.done = true
-      previous_item.save!
-    end
-
-    next_item = RetroFacilitator.new.facilitate(@retro).first
-
-    if next_item.nil?
-      @retro.highlighted_item_id = nil
-    else
-      @retro.highlighted_item_id = next_item.id
-      @retro.retro_item_end_time = 5.minutes.from_now
-    end
-
-    @retro.save!
-    RetrosChannel.broadcast(@retro)
-    render 'retros/show'
+  def apply(retro, items)
+    @chain.apply(retro, items.reject(&:done))
   end
 end

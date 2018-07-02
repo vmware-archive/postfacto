@@ -242,6 +242,15 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     retro_url = create_public_retro('auto-facilitate-retro')
     visit retro_url
 
+    fill_in("I'm glad that...", with: 'something really happy')
+    find('.column-happy textarea.retro-item-add-input').native.send_keys(:return)
+    within('div.retro-item', text: 'something really happy') do
+      4.times do |index|
+        find('.item-vote-submit').click
+        expect(page).to have_content(index + 1)
+      end
+    end
+
     fill_in("I'm glad that...", with: 'something happy 1')
     find('.column-happy textarea.retro-item-add-input').native.send_keys(:return)
     fill_in("I'm wondering about...", with: 'something meh 1')
@@ -270,8 +279,11 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     send_right_key
     expect(page).to have_css('.highlight .item-text', text: 'something sad 1')
 
-    sleep(0.5)
     send_right_key
+    expect(page).to have_css('.highlight .item-text', text: 'something really happy')
+
+    send_right_key
+    sleep(0.5)
     expect(page).to have_content('The board will be cleared ready for your next retro and incomplete action items will be carried across.')
   end
 

@@ -28,34 +28,19 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-class TransitionsController < ApplicationController
-  before_action :load_retro, :authenticate_retro
 
-  def transitions
-    transition = params.require(:transition)
+class EndWithHappiestRule
+  def initialize(chain = NoOpRule.new)
+    @chain = chain
+  end
 
-    if transition != 'NEXT'
-      render json: :nothing, status: 400
-      return
-    end
+  def apply(retro, items)
+    happiest_item = items.select { |i| i.category == 'happy' }
+                         .reduce { |most, other| most.vote_count > other.vote_count ? most : other }
 
-    unless @retro.highlighted_item_id.nil?
-      previous_item = @retro.items.find(@retro.highlighted_item_id)
-      previous_item.done = true
-      previous_item.save!
-    end
+    if happiest_item.nil? then return items end
 
-    next_item = RetroFacilitator.new.facilitate(@retro).first
-
-    if next_item.nil?
-      @retro.highlighted_item_id = nil
-    else
-      @retro.highlighted_item_id = next_item.id
-      @retro.retro_item_end_time = 5.minutes.from_now
-    end
-
-    @retro.save!
-    RetrosChannel.broadcast(@retro)
-    render 'retros/show'
+    removed = items.reject { |i| i == happiest_item }
+    @chain.apply(retro, removed) << happiest_item
   end
 end
