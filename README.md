@@ -30,7 +30,7 @@ Postfacto will auto generate you an [appear.in](https://appear.in) room for your
 
 ### Easily deployable
 
-You can deploy your own Postfacto to **Pivotal Web Services** or **Pivotal Cloud Foundry** and stay in control of your own data.
+You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or **Pivotal Cloud Foundry** and stay in control of your own data.
 
 ## Development
 
