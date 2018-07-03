@@ -44,6 +44,7 @@ const RetroWebsocket = require('./retro_websocket');
 const RetroFooter = require('./footer');
 import { RetroLegalBanner } from './retro_legal_banner';
 import RetroHeading from './retro_heading';
+import {HotKeys} from 'react-hotkeys';
 
 const EmptyPage = require('./empty_page');
 const jQuery = require('jquery');
@@ -149,6 +150,14 @@ class ShowRetroPage extends React.Component {
     return jQuery.grep(items, function (item) {
       return item.archived_at === timestamp;
     });
+  }
+
+  moveToNextItem(event) {
+    if(event.target.type === "textarea") {
+      return;
+    }
+    const {retroId} = this.props;
+    Actions.nextRetroItem({retro_id: retroId});
   }
 
   getArchivesTimestamps(archivesTimestamps, items) {
@@ -286,51 +295,62 @@ class ShowRetroPage extends React.Component {
     );
   }
 
-  renderDesktop(retro) {
-    const {config: {websocket_url}, retroId, archives} = this.props;
-    const {isMobile} = this.state;
-    let retroContainerClasses = 'full-height full-height-retro';
+    renderDesktop(retro) {
+        const {config: {websocket_url}, retroId, archives} = this.props;
+        const {isMobile} = this.state;
+        let retroContainerClasses = 'full-height full-height-retro';
 
-    if (archives) {
-      retroContainerClasses += ' archived';
+        if (archives) {
+            retroContainerClasses += ' archived';
+        }
+
+        const keyMap = {
+            'next': 'right'
+        };
+
+        const keyHandlers = {
+            'next': this.moveToNextItem.bind(this)
+        };
+
+        return (
+            <HotKeys keyMap={keyMap} handlers={keyHandlers}>
+                <span>
+                  <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+                    {this.renderArchiveConfirmationDialog()}
+                    <div className={retroContainerClasses}>
+
+                    <RetroLegalBanner retro={retro}/>
+
+                    <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
+                                  showVideoButton={!archives}/>
+                    <div className="retro-item-list">
+                      <RetroColumn category="happy"
+                                   retro={retro}
+                                   retroId={retroId}
+                                   archives={archives}
+                                   isMobile={isMobile}/>
+                      <RetroColumn category="meh"
+                                   retro={retro}
+                                   retroId={retroId}
+                                   archives={archives}
+                                   isMobile={isMobile}/>
+                      <RetroColumn category="sad"
+                                   retro={retro}
+                                   retroId={retroId}
+                                   archives={archives}
+                                   isMobile={isMobile}/>
+                    </div>
+                    <RetroActionPanel
+                        retro={retro}
+                        retroId={retroId}
+                        isMobile={isMobile}
+                        archives={archives}/>
+                    <RetroFooter/>
+                  </div>
+                </span>
+            </HotKeys>
+        );
     }
-
-    return (
-      <span>
-        <RetroWebsocket url={websocket_url} retro_id={retroId}/>
-        {this.renderArchiveConfirmationDialog()}
-        <div className={retroContainerClasses}>
-
-          <RetroLegalBanner retro={retro}/>
-
-          <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives} showVideoButton={!archives}/>
-          <div className="retro-item-list">
-            <RetroColumn category="happy"
-                         retro={retro}
-                         retroId={retroId}
-                         archives={archives}
-                         isMobile={isMobile}/>
-            <RetroColumn category="meh"
-                         retro={retro}
-                         retroId={retroId}
-                         archives={archives}
-                         isMobile={isMobile}/>
-            <RetroColumn category="sad"
-                         retro={retro}
-                         retroId={retroId}
-                         archives={archives}
-                         isMobile={isMobile}/>
-          </div>
-          <RetroActionPanel
-            retro={retro}
-            retroId={retroId}
-            isMobile={isMobile}
-            archives={archives}/>
-          <RetroFooter/>
-        </div>
-      </span>
-    );
-  }
 
   render() {
     const {retro, archives} = this.props;

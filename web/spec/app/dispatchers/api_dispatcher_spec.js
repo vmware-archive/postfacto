@@ -695,6 +695,32 @@ describe('ApiDispatcher', () => {
     });
   });
 
+  describe('nextRetroItem', () => {
+    it('makes an API POST to /retros/:id/discussion/transition', () => {
+      spyOn(window.localStorage, 'getItem').and.returnValue('the-token');
+      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
+
+      expect('/retros/1/discussion/transition').toHaveBeenRequestedWith({
+        method: 'POST',
+        requestHeaders: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+          'authorization': 'Bearer the-token'
+        },
+        data: {transition: 'NEXT'}
+      });
+
+      const request = jasmine.Ajax.requests.mostRecent();
+      request.succeed({retro: retro});
+      MockPromises.tickAllTheWay();
+
+      expect('checkAllRetroItemsDone').toHaveBeenDispatchedWith({
+        type: 'checkAllRetroItemsDone'
+      });
+    });
+
+  });
   describe('highlightRetroItem', () => {
     let item;
     beforeEach(() => {
