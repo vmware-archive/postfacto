@@ -287,45 +287,37 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
 
   specify 'Public retro settings cannot be changed without password' do
     settings_url = ''
+    retro_url = ''
+
     in_browser(:felicity) do
       register('public-cannot-be-changed-without-password')
       visit_retro_new_page
-      fill_in 'Team name', with: 'My Retro'
-      fill_in 'team-name', with: Time.now.strftime('%Y%m%d%H%M%s')
-      fill_in 'Create password', with: 'password'
-
-      click_button 'Create'
-      expect(page).to have_content 'My Retro'
+      retro_url = create_public_retro('My Retro')
 
       click_menu_item 'Retro settings'
 
-      expect(page).to have_content 'My Retro'
-
+      settings_url = current_url
       fill_in('name', with: 'My New Retro')
       click_button('Save changes')
 
-      settings_url = current_url
-
-      expect(find('.retro-name')).to have_content('My New Retro')
+      visit retro_url
+      expect(page).to have_content('My New Retro')
     end
 
     in_browser(:peter) do
       visit settings_url
-
-      # Ensure settings page is password protected
-      expect(page).to have_content "Psst... what's the password?"
 
       fill_in 'Password', with: 'password'
       click_button 'Login'
 
       click_menu_item 'Retro settings'
 
-      expect(current_url).to eq(settings_url)
-
-      fill_in('name', with: 'My New Retro')
+      fill_in('name', with: 'My Old Retro')
       click_button('Save changes')
 
-      expect(current_url).to eq(settings_url)
+      visit retro_url
+      expect(page).to_not have_content('My Old Retro')
+      expect(page).to have_content('My New Retro')
     end
   end
 
