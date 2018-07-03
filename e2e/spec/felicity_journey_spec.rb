@@ -143,7 +143,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
         click_on 'VIDEO'
 
         select_last_tab
-        expect(page).to have_content("You're about to enter a video meeting")
+        expect(page).to have_content("appear.in")
         expect(current_url).to include("https://appear.in/retro-app-")
       end
     end
