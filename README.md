@@ -30,7 +30,7 @@ Postfacto will auto generate you an [appear.in](https://appear.in) room for your
 
 ### Easily deployable
 
-You can deploy your own Postfacto to [Pivotal Web Services](DEPLOYMENT.md#pivotal-web-services) or [Pivotal Cloud Foundry](DEPLOYMENT.md#pivotal-cloud-foundry) and stay in control of your own data.
+You can deploy your own Postfacto to **Pivotal Web Services** or **Pivotal Cloud Foundry** and stay in control of your own data.
 
 ## Development
 
@@ -93,7 +93,7 @@ gulp local-acceptance
 
 ## Deployment
 
-See our [Deployment Guide](DEPLOYMENT.md) for instructions on deploying your own instance of Postfacto.
+Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
 
 ## Contributing
 
