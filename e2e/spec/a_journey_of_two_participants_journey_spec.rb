@@ -286,7 +286,6 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
   end
 
   specify 'Public retro settings cannot be changed without password' do
-    settings_url = ''
     retro_url = ''
 
     in_browser(:felicity) do
@@ -305,7 +304,8 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     end
 
     in_browser(:peter) do
-      visit settings_url
+      visit retro_url
+      click_menu_item 'Retro settings'
 
       fill_in 'Password', with: 'password'
       click_button 'Login'
@@ -316,8 +316,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       click_button('Save changes')
 
       visit retro_url
-      expect(page).to_not have_content('My Old Retro')
-      expect(page).to have_content('My New Retro')
+      expect(page).to have_content('My Old Retro')
     end
   end
 
