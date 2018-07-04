@@ -17,7 +17,7 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
 1. Run the PWS deployment script from the `pws` directory:
 
   ```bash
-  deploy.sh
+  ./deploy.sh
   ```
 
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
@@ -32,16 +32,15 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
 1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
-1. Download and unzip the latest release source code [here](https://github.com/pivotal/postfacto/releases).
-1. In `postfacto/deployment/pcf/config/manifest-api.yml`, change the `{{api-app-name}}`, `{{web-app-name}}`, `{{pcf-url}}` to be your `api-app-name`, `web-app-name` and `pcf-url`
-1. In `postfacto/deployment/pcf/config/manifest-web.yml`, change the `{{web-app-name}}` to be your `web-app-name`
-1. In `postfacto/deployment/pcf/config/config.js`, change the `{{api-app-name}}`, `{{web-app-name}}`, and `{{pcf-url}}` to be your `api-app-name`, `web-app-name`, and `pcf-url`
-1. In `postfacto/deployment/pcf/deploy.sh`, change the `{{api-app-name}}` to be your `api-app-name`
+1. In `pcf/config/manifest-api.yml`, change the `{{api-app-name}}`, `{{web-app-name}}`, `{{pcf-url}}` to be your `api-app-name`, `web-app-name` and `pcf-url`
+1. In `pcf/config/manifest-web.yml`, change the `{{web-app-name}}` to be your `web-app-name`
+1. In `pcf/config/config.js`, change the `{{api-app-name}}`, `{{web-app-name}}`, and `{{pcf-url}}` to be your `api-app-name`, `web-app-name`, and `pcf-url`
+1. In `pcf/deploy.sh`, change the `{{api-app-name}}` to be your `api-app-name`
 
-1. Run the PCF deployment script from the `postfacto` directory:
+1. Run the PCF deployment script from the `pcf` directory:
 
   ```bash
-  deployment/pcf/deploy.sh
+  ./deploy.sh
   ```
 
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
@@ -65,10 +64,10 @@ For deployments that do not want to setup Google OAuth, you will need to create 
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
 1. In additional to the steps required for deploying to PWS, and PCF:
-   - For PWS, in `postfacto/deployment/pws/config/config.js`, add the
+   - For PWS, in `pws/config/config.js`, add the
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
-   - For PCF, in `postfacto/deployment/pcf/config/config.js`, add the
+   - For PCF, in `pcf/config/config.js`, add the
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
 
