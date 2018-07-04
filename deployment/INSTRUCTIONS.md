@@ -27,7 +27,7 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
 
 ## Pivotal Cloud Foundry
 
-You can use [Concourse](https://concourse.ci) to deploy and keep your instance up to date using the example pipeline in `deployments/pcf` or if you'd prefer you can set it up manually using the steps below:
+You can use [Concourse](https://concourse.ci) to deploy and keep your instance up to date using the example `pipeline.yml` in `pcf` or if you'd prefer you can set it up manually using the steps below:
 
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
