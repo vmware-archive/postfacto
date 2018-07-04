@@ -32,4 +32,10 @@ cp -r web/package package/pcf/assets/web
 
 
 # Docs
+
 cp deployment/INSTRUCTIONS.md package
+
+# Zip
+
+zip -r package.zip package
+rm -r package
