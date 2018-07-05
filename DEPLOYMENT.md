@@ -72,3 +72,7 @@ For deployments that do not want to setup Google OAuth, you will need to create 
    - For PCF, in `postfacto/deployment/pcf/config/config.js`, add the
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
+
+### Enabling Analytics
+
+If you'd like to have your instance send analytics data to the Postfacto team so they can learn about how you're using it and continue to improve it you can! To switch this on add `"enable_analytics": true` to the `config.js` object for your installation. Please note that we do not record any personal data (such as emails or retro data). As we are recording events from you we will however see the URL of the web client for your instance. If you're not comfortable with this don't worry, this feature is disabled by default.
