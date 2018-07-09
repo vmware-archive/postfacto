@@ -1,33 +1,10 @@
+/* Typography */
+
 body {
     color: #2b3342;
     font-family: 'Karla', sans-serif;
     font-size: 16px;
     line-height: 24px;
-}
-
-header, main, footer {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-footer {
-    background-color: #00ae9e;
-}
-
-.container {
-    max-width: 1168px;
-    padding: 20px;
-}
-
-h1, h2, h3 {
-    color: #13377d;
-}
-
-h1 {
-    font-size: 32px;
-    line-height: 40px;
 }
 
 a {
@@ -39,6 +16,94 @@ footer a {
     font-weight: bold;
 }
 
+h1, h2, h3, h4 {
+    color: #13377d;
+}
+
+h1 {
+    font-size: 32px;
+    line-height: 40px;
+}
+
+h2 {
+    font-size: 27px;
+    line-height: 36px;
+}
+
+h4 {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+/* Layout */
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1168px;
+    padding: 0 20px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section {
+    padding: 48px 0 56px 0;
+    width: 100%;
+}
+
+main .section:nth-of-type(2n) {
+    background-color: #f8f8f8;
+}
+
+footer {
+    background-color: #00ae9e;
+}
+
+/* Contribution cards */
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    padding: 20px 0;
+    display: flex;
+}
+
+.card:not(:last-child) {
+    border-bottom: 2px solid #cbe3fa;
+}
+
+.logo {
+    border-radius: 50%;
+    box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.2);
+    flex-shrink: 0;
+    float: left;
+    height: 84px;
+    margin-right: 20px;
+    width: 84px;
+}
+
+#gitHubLogo {
+    height: 44px;
+    margin: 20px 15px 20px 16px;
+}
+
+#sketchLogo {
+    height: 56px;
+    margin: 14px;
+}
+
+#mediumLogo {
+    height: 40px;
+    margin: 22px;
+}
+
+/* Responsive */
 @media (min-width: 601px) {
     body {
         font-size: 18px;
@@ -50,7 +115,26 @@ footer a {
         line-height: 68px;
     }
 
+    h2 {
+        font-size: 42px;
+        line-height: 56px;
+    }
+
+    h4 {
+        font-size: 26px;
+        line-height: 32px;
+    }
+
     .introduction {
         width: 50%;
+    }
+
+    .card {
+        flex-direction: row-reverse;
+        width: calc(50% - 14px);
+    }
+
+    .card:nth-of-type(3) {
+        border-bottom: none;
     }
 }
