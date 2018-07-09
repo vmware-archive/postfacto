@@ -20,6 +20,12 @@ h1, h2, h3, h4 {
     color: #13377d;
 }
 
+#brand {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+}
+
 h1 {
     font-size: 32px;
     line-height: 40px;
@@ -54,11 +60,15 @@ h4 {
     width: 100%;
 }
 
+header .section {
+    padding: 24px 0;
+}
+
 main .section:nth-of-type(2n) {
     background-color: #f8f8f8;
 }
 
-footer {
+header, footer {
     background-color: #00ae9e;
 }
 
@@ -114,7 +124,7 @@ footer {
 }
 
 .teamwork-card h4 {
-    border-bottom: 3px solid #51c0b1;
+    border-bottom: 3px solid #00ae9e;
     display: inline-block;
     margin: 16px 0;
 }
