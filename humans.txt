@@ -44,6 +44,9 @@ Contact: chris.whitty@gmail.com
 
 Engineer: Katie Moulang
 
+Engineer: Jonathan Sharpe
+Contact: mail@jonrshar.pe
+
 /* CONTRIBUTORS */
 
 Engineer: Andrew Leung
