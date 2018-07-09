@@ -93,7 +93,7 @@ footer {
 
 /*Teamwork cards*/
 
-#teamwork h2 {
+#teamwork {
     text-align: center;
 }
 
@@ -111,10 +111,6 @@ footer {
 
 .teamwork-card:not(:last-child) {
     margin-bottom: 32px;
-}
-
-.teamwork-card p {
-    text-align: center;
 }
 
 .teamwork-card h4 {
