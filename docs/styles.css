@@ -80,28 +80,15 @@ footer {
 }
 
 .logo {
-    border-radius: 50%;
-    box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.2);
     flex-shrink: 0;
-    float: left;
     height: 84px;
     margin-right: 20px;
     width: 84px;
 }
 
-#gitHubLogo {
-    height: 44px;
-    margin: 20px 15px 20px 16px;
-}
-
-#sketchLogo {
-    height: 56px;
-    margin: 14px;
-}
-
-#mediumLogo {
-    height: 40px;
-    margin: 22px;
+.logo img {
+    height: 100%;
+    width: 100%;
 }
 
 /*Teamwork cards*/
