@@ -28,6 +28,7 @@ h1 {
 h2 {
     font-size: 27px;
     line-height: 36px;
+    margin-bottom: 32px;
 }
 
 h4 {
@@ -63,18 +64,18 @@ footer {
 
 /* Contribution cards */
 
-.cards {
+.contribute-cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.card {
+.contribute-card {
     padding: 20px 0;
     display: flex;
 }
 
-.card:not(:last-child) {
+.contribute-card:not(:last-child) {
     border-bottom: 2px solid #cbe3fa;
 }
 
@@ -103,6 +104,38 @@ footer {
     margin: 22px;
 }
 
+/*Teamwork cards*/
+
+#teamwork h2 {
+    text-align: center;
+}
+
+.teamwork-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.teamwork-card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.teamwork-card:not(:last-child) {
+    margin-bottom: 32px;
+}
+
+.teamwork-card p {
+    text-align: center;
+}
+
+.teamwork-card h4 {
+    border-bottom: 3px solid #51c0b1;
+    display: inline-block;
+    margin: 16px 0;
+}
+
 /* Responsive */
 @media (min-width: 601px) {
     body {
@@ -125,16 +158,24 @@ footer {
         line-height: 32px;
     }
 
-    .introduction {
+    #introduction section {
         width: 50%;
     }
 
-    .card {
+    .contribute-card {
         flex-direction: row-reverse;
         width: calc(50% - 14px);
     }
 
-    .card:nth-of-type(3) {
+    .contribute-card:nth-of-type(3) {
         border-bottom: none;
+    }
+
+    .teamwork-card {
+        width: calc(33% - 19px);
+    }
+
+    .teamwork-card:not(:last-child) {
+        margin-bottom: 0;
     }
 }
