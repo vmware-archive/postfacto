@@ -146,6 +146,10 @@ header, footer {
     width: 100%;
 }
 
+.howto-card .image {
+    height: 100%;
+}
+
 /* Contribution cards */
 
 .contribute-cards {
