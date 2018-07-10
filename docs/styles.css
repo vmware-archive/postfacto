@@ -191,6 +191,13 @@ header, footer {
     align-items: center;
     display: flex;
     flex-direction: column;
+    /* Fix bug in IE with flex items overflowing on small screens */
+    width: 100%;
+}
+
+.teamwork-card > * {
+    /* Fix bug with column flex items overflowing on IE - https://github.com/philipwalton/flexbugs */
+    max-width: 100%;
 }
 
 .teamwork-card:not(:last-child) {
