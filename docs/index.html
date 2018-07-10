@@ -36,6 +36,8 @@
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="styles.css">
+    <!-- Polyfill image source sets for IE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/picturefill/3.0.3/picturefill.min.js"></script>
 </head>
 <body>
 <header>
@@ -67,7 +69,10 @@
                 <p class="howto-title">1. Create your retro</p>
                 <div class="howto-card">
                     <div class="image">
-                        <img src="images/postfacto-ui.png" alt="Screenshot of Postfacto retrospective board">
+                        <img src="images/postfacto-ui.png"
+                             alt="Screenshot of Postfacto retrospective board"
+                             sizes="(min-width: 600px) 50vw, 100vw"
+                             srcset="images/postfacto-ui@2x.png 1204w, images/postfacto-ui@3x.png 1806w">
                     </div>
                     <div class="text">
                         <h3>Set up your first retro board</h3>
@@ -90,7 +95,10 @@
                 <p class="howto-title">2. Add retro items</p>
                 <div class="howto-card">
                     <div class="image">
-                        <img src="images/postfacto-ui-2.png" alt="Annotated retrospective items">
+                        <img src="images/postfacto-ui-2.png"
+                             alt="Annotated retrospective items"
+                             sizes="(min-width: 600px) 50vw, 100vw"
+                             srcset="images/postfacto-ui-2@2x.png 1114w, images/postfacto-ui-2@3x.png 1671w">
                     </div>
                     <div class="text">
                         <h3>Create retro items to discuss</h3>
@@ -108,7 +116,10 @@
                 <p class="howto-title">3. Add actions</p>
                 <div class="howto-card">
                     <div class="image">
-                        <img src="images/postfacto-ui-3.png" alt="Annotated retrospective actions">
+                        <img src="images/postfacto-ui-3.png"
+                             alt="Annotated retrospective actions"
+                             sizes="(min-width: 600px) 50vw, 100vw"
+                             srcset="images/postfacto-ui-3@2x.png 1114w, images/postfacto-ui-3@3x.png 1671w">
                     </div>
                     <div class="text">
                         <h3>Record actions to be taken</h3>
@@ -156,7 +167,10 @@
                 <div class="contribute-cards">
                     <div class="contribute-card">
                         <div class="logo">
-                            <img src="images/github.png" alt="GitHub logo">
+                            <img src="images/github.png"
+                                 alt="GitHub logo"
+                                 sizes="84px"
+                                 srcset="images/github@2x.png 194w, images/github@3x.png 291w">
                         </div>
                         <div class="text">
                             <h4>Get involved</h4>
