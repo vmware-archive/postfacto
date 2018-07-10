@@ -126,6 +126,10 @@ header, footer {
     background-color: #00ae9e;
 }
 
+.desktop {
+    display: none;
+}
+
 /*How to cards*/
 
 .howto-card {
@@ -249,8 +253,34 @@ header, footer {
         width: 50%;
     }
 
-    .howto-title {
-        margin-left: 4px;
+    .mobile {
+        display: none;
+    }
+
+    .desktop {
+        display: block;
+    }
+
+    .tabs {
+        border-bottom: solid 2px #243587;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 32px;
+    }
+
+    .tab {
+        cursor: pointer;
+        margin-bottom: -5px;
+        padding: 14px 16px;
+    }
+
+    .tab.active {
+        border-bottom: 8px solid #00ae9e;
+    }
+
+    .tab:not(.active) {
+        border-bottom: none;
+        color: #6b717a;
     }
 
     .howto-card {
@@ -260,6 +290,10 @@ header, footer {
 
     .howto-card h3 {
         margin-top: 0;
+    }
+
+    .howto-card:not(.active) {
+        display: none;
     }
 
     .howto-card .image {

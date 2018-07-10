@@ -65,9 +65,16 @@
     <div class="section" id="howto">
         <div class="container">
             <h2>Easy and simple to use</h2>
+
+            <div class="tabs desktop">
+                <div id="howToTab1" class="howto-title tab active">1. Create your retro</div>
+                <div id="howToTab2" class="howto-title tab">2. Add retro items</div>
+                <div id="howToTab3" class="howto-title tab">3. Add actions</div>
+            </div>
+
             <div>
-                <p class="howto-title">1. Create your retro</p>
-                <div class="howto-card">
+                <p class="howto-title mobile">1. Create your retro</p>
+                <div id="howToCard1" class="howto-card active">
                     <div class="image">
                         <img src="images/postfacto-ui.png"
                              alt="Screenshot of Postfacto retrospective board"
@@ -92,8 +99,8 @@
                 </div>
             </div>
             <div>
-                <p class="howto-title">2. Add retro items</p>
-                <div class="howto-card">
+                <p class="howto-title mobile">2. Add retro items</p>
+                <div id="howToCard2" class="howto-card">
                     <div class="image">
                         <img src="images/postfacto-ui-2.png"
                              alt="Annotated retrospective items"
@@ -113,8 +120,8 @@
                 </div>
             </div>
             <div>
-                <p class="howto-title">3. Add actions</p>
-                <div class="howto-card">
+                <p class="howto-title mobile">3. Add actions</p>
+                <div id="howToCard3" class="howto-card">
                     <div class="image">
                         <img src="images/postfacto-ui-3.png"
                              alt="Annotated retrospective actions"
@@ -230,5 +237,21 @@
         </div>
     </div>
 </footer>
+<script>
+    function clearActiveStates () {
+        var activeElements = document.querySelectorAll(".active");
+        for (var i = 0; i < activeElements.length; i++) {
+            activeElements.item(i).classList.remove("active");
+        }
+    }
+
+    [1, 2, 3].forEach(function (index) {
+        document.querySelector("#howToTab" + index).addEventListener("click", function () {
+            clearActiveStates();
+            document.querySelector("#howToTab" + index).classList.add("active");
+            document.querySelector("#howToCard" + index).classList.add("active");
+        });
+    });
+</script>
 </body>
 </html>
