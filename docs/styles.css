@@ -67,9 +67,33 @@ h2 {
     margin-bottom: 32px;
 }
 
+h3 {
+    font-size: 24px;
+    line-height: 40px;
+    margin-bottom: 16px;
+    margin-top: 28px;
+}
+
 h4 {
     font-size: 20px;
     line-height: 30px;
+}
+
+ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+li {
+    /* Size for bullet point */
+    font-size: 12px;
+    padding-left: 10px;
+    margin-bottom: 8px;
+}
+
+li > span {
+    font-size: 16px;
+    vertical-align: top;
 }
 
 /* Layout */
@@ -94,12 +118,32 @@ header .section {
     padding: 24px 0;
 }
 
-main .section:nth-of-type(2n) {
+main .section:nth-of-type(2n+1) {
     background-color: #f8f8f8;
 }
 
 header, footer {
     background-color: #00ae9e;
+}
+
+/*How to cards*/
+
+.howto-card {
+    border-left: 2px solid #243587;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0 16px 16px;
+}
+
+.howto-title {
+    font-size: 24px;
+    line-height: 30px;
+    margin-bottom: 4px;
+    margin-top: 8px;
+}
+
+.howto-card img {
+    width: 100%;
 }
 
 /* Contribution cards */
@@ -176,13 +220,44 @@ header, footer {
         line-height: 56px;
     }
 
+    h3 {
+        font-size: 32px;
+        line-height: 48px;
+    }
+
     h4 {
         font-size: 26px;
         line-height: 32px;
     }
 
+    li {
+        margin-bottom: 16px;
+    }
+
     #introduction section {
         width: 50%;
+    }
+
+    .howto-title {
+        margin-left: 4px;
+    }
+
+    .howto-card {
+        border: none;
+        flex-direction: row-reverse;
+    }
+
+    .howto-card h3 {
+        margin-top: 0;
+    }
+
+    .howto-card .image {
+        flex-shrink: 0;
+        width: 50%;
+    }
+
+    .howto-card .text {
+        padding-right: 40px;
     }
 
     .contribute-card {
