@@ -1,0 +1,204 @@
+/*
+ * Postfacto, a free, open-source and self-hosted retro tool aimed at helping remote teams.
+ *
+ * Copyright (C) 2016 - Present Pivotal Software, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ *
+ * it under the terms of the GNU Affero General Public License as
+ *
+ * published by the Free Software Foundation, either version 3 of the
+ *
+ * License, or (at your option) any later version.
+ *
+ *
+ *
+ * This program is distributed in the hope that it will be useful,
+ *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *
+ * GNU Affero General Public License for more details.
+ *
+ *
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ *
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/* Typography */
+
+body {
+    color: #2b3342;
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+a {
+    color: #4a90e2;
+}
+
+footer a {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+h1, h2, h3, h4 {
+    color: #13377d;
+}
+
+#brand {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 32px;
+    line-height: 40px;
+}
+
+h2 {
+    font-size: 27px;
+    line-height: 36px;
+    margin-bottom: 32px;
+}
+
+h4 {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+/* Layout */
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1168px;
+    padding: 0 20px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section {
+    padding: 48px 0 56px 0;
+    width: 100%;
+}
+
+header .section {
+    padding: 24px 0;
+}
+
+main .section:nth-of-type(2n) {
+    background-color: #f8f8f8;
+}
+
+header, footer {
+    background-color: #00ae9e;
+}
+
+/* Contribution cards */
+
+.contribute-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.contribute-card {
+    padding: 20px 0;
+    display: flex;
+}
+
+.contribute-card:not(:last-child) {
+    border-bottom: 2px solid #cbe3fa;
+}
+
+.logo {
+    flex-shrink: 0;
+    height: 84px;
+    margin-right: 20px;
+    width: 84px;
+}
+
+.logo img {
+    height: 100%;
+    width: 100%;
+}
+
+/*Teamwork cards*/
+
+#teamwork {
+    text-align: center;
+}
+
+.teamwork-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.teamwork-card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.teamwork-card:not(:last-child) {
+    margin-bottom: 32px;
+}
+
+.teamwork-card h4 {
+    border-bottom: 3px solid #00ae9e;
+    display: inline-block;
+    margin: 16px 0;
+}
+
+/* Responsive */
+@media (min-width: 601px) {
+    body {
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    h1 {
+        font-size: 48px;
+        line-height: 68px;
+    }
+
+    h2 {
+        font-size: 42px;
+        line-height: 56px;
+    }
+
+    h4 {
+        font-size: 26px;
+        line-height: 32px;
+    }
+
+    #introduction section {
+        width: 50%;
+    }
+
+    .contribute-card {
+        flex-direction: row-reverse;
+        width: calc(50% - 14px);
+    }
+
+    .contribute-card:nth-of-type(3) {
+        border-bottom: none;
+    }
+
+    .teamwork-card {
+        width: calc(33% - 19px);
+    }
+
+    .teamwork-card:not(:last-child) {
+        margin-bottom: 0;
+    }
+}
