@@ -64,12 +64,12 @@ h1 {
 h2 {
     font-size: 27px;
     line-height: 36px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 h3 {
-    font-size: 24px;
-    line-height: 40px;
+    font-size: 22px;
+    line-height: 38px;
     margin-bottom: 16px;
     margin-top: 28px;
 }
@@ -77,6 +77,7 @@ h3 {
 h4 {
     font-size: 20px;
     line-height: 30px;
+    margin-bottom: 16px;
 }
 
 ul {
@@ -133,16 +134,16 @@ header, footer {
 /*How to cards*/
 
 .howto-card {
-    border-left: 2px solid #243587;
+    border-left: 1px solid #243587;
     display: flex;
     flex-direction: column;
     padding: 16px 0 16px 16px;
 }
 
 .howto-title {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 30px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     margin-top: 8px;
 }
 
@@ -156,6 +157,10 @@ header, footer {
 
 /* Contribution cards */
 
+#contribute h2 {
+    margin-bottom: 20px;
+}
+
 .contribute-cards {
     display: flex;
     flex-wrap: wrap;
@@ -163,8 +168,12 @@ header, footer {
 }
 
 .contribute-card {
-    padding: 20px 0;
+    padding: 28px 0;
     display: flex;
+}
+
+.contribute-card .text {
+    padding-right: 20px;
 }
 
 .contribute-card:not(:last-child) {
@@ -187,6 +196,10 @@ header, footer {
 
 #teamwork {
     text-align: center;
+}
+
+#teamwork .container {
+    padding: 0 64px;
 }
 
 .teamwork-cards {
@@ -215,7 +228,8 @@ header, footer {
 .teamwork-card h4 {
     border-bottom: 3px solid #00ae9e;
     display: inline-block;
-    margin: 16px 0;
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
 }
 
 /* Responsive */
@@ -233,6 +247,7 @@ header, footer {
     h2 {
         font-size: 42px;
         line-height: 56px;
+        margin-bottom: 32px;
     }
 
     h3 {
@@ -264,8 +279,9 @@ header, footer {
     .tabs {
         border-bottom: solid 2px #243587;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         margin-bottom: 32px;
+        padding: 0 32px;
     }
 
     .tab {
@@ -276,6 +292,11 @@ header, footer {
 
     .tab.active {
         border-bottom: 8px solid #00ae9e;
+    }
+
+    .tab:not(.active):hover {
+        color: #2b3342;
+        border-bottom: 8px solid #c7c7c7;
     }
 
     .tab:not(.active) {
@@ -303,6 +324,14 @@ header, footer {
 
     .howto-card .text {
         padding-right: 40px;
+    }
+
+    #teamwork .container {
+        padding: 0 20px;
+    }
+
+    #contribute h2 {
+        margin-bottom: 24px;
     }
 
     .contribute-card {
