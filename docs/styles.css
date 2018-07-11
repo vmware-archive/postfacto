@@ -294,7 +294,7 @@ header, footer {
         border-bottom: 8px solid #00ae9e;
     }
 
-    .tab:not(.active):hover {
+    .tab:not(.active):hover, .tab:not(.active):focus {
         color: #2b3342;
         border-bottom: 8px solid #c7c7c7;
     }
