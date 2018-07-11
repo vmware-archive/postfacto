@@ -38,7 +38,7 @@ body, input {
 }
 
 a {
-    color: #4a90e2;
+    color: #2272ce;
 }
 
 button {
@@ -101,7 +101,6 @@ ul {
 
 #brand, #footerBrand, #mobileBrand {
     font-size: 24px;
-    font-weight: bold;
     line-height: 32px;
 }
 
@@ -149,6 +148,10 @@ nav {
     text-align: center;
     text-decoration: none;
     width: 100%;
+}
+
+input, .button {
+    max-width: 365px;
 }
 
 .container {
@@ -289,13 +292,6 @@ header .container {
     align-items: center;
     display: flex;
     flex-direction: column;
-    /* Fix bug in IE with flex items overflowing on small screens */
-    width: 100%;
-}
-
-.benefits-card > * {
-    /* Fix bug with column flex items overflowing on IE - https://github.com/philipwalton/flexbugs */
-    max-width: 100%;
 }
 
 .benefits-card:not(:last-child) {
@@ -307,6 +303,22 @@ header .container {
     display: inline-block;
     margin: 24px 0 16px 0;
     padding-bottom: 8px;
+}
+
+.benefits-card, .benefits-text {
+        /* Fix bug in IE with flex items overflowing on small screens */
+    width: 100%;
+}
+
+.benefits-card > *, .benefits-text > * {
+    /* Fix bug with column flex items overflowing on IE - https://github.com/philipwalton/flexbugs */
+    max-width: 100%;
+}
+
+.benefits-text {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Contribute */
@@ -397,7 +409,28 @@ footer .container {
 
 /* Responsive */
 
-@media (min-width: 601px) {
+@media (min-width: 691px) {
+    /* Tablet */
+
+    #benefits {
+        text-align: left;
+    }
+
+    .benefits-card {
+        flex-direction: row;
+    }
+
+    .benefits-image {
+        min-width: 200px;
+    }
+
+    .benefits-text {
+        align-items: flex-start;
+    }
+}
+
+@media (min-width: 857px) {
+    /* Desktop */
 
     /* Typography */
 
@@ -427,9 +460,18 @@ footer .container {
         line-height: 32px;
     }
 
-    #brand, #mobileBrand, footerBrand {
+    footer {
+        font-size: initial;
+    }
+
+    #brand, #mobileBrand {
         font-size: 36px;
         line-height: 42px;
+    }
+
+    #footerBrand {
+        font-size: 24px;
+        line-height: 40px;
     }
 
     /* Layout */
@@ -450,7 +492,7 @@ footer .container {
         padding: 12px 36px;
     }
 
-    .button, input {
+    .button, input, .mailing-list input {
         width: auto;
         width: initial;
     }
@@ -546,16 +588,24 @@ footer .container {
 
     /* Benefits */
 
+    #benefits {
+        text-align: center;
+    }
+
+    #benefits .container {
+        padding: 0 20px;
+    }
     .benefits-card {
         width: calc(33% - 19px);
+        flex-direction: column;
     }
 
     .benefits-card:not(:last-child) {
         margin-bottom: 0;
     }
 
-    #benefits .container {
-        padding: 0 20px;
+    .benefits-text {
+        align-items: center;
     }
 
     /* Contribute */
