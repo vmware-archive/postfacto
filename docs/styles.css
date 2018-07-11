@@ -334,8 +334,9 @@ header .container {
 }
 
 .contribute-card {
-    padding: 28px 0;
     display: flex;
+    padding: 28px 0;
+    width: 100%;
 }
 
 .contribute-card .text {
