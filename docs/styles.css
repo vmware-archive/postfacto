@@ -41,6 +41,10 @@ a {
     color: #4a90e2;
 }
 
+button {
+    font-family: 'Karla', sans-serif;
+}
+
 footer a {
     color: #ffffff;
     font-weight: bold;
@@ -118,6 +122,11 @@ li > span {
 .section {
     padding: 48px 0 56px 0;
     width: 100%;
+}
+
+button {
+    background: none;
+    border: none;
 }
 
 header .section {
@@ -342,16 +351,18 @@ footer .container {
     .tab {
         cursor: pointer;
         margin-bottom: -5px;
-        padding: 14px 16px;
+        padding: 14px 16px 20px 16px;
     }
 
     .tab.active {
         border-bottom: 8px solid #00ae9e;
+        padding-bottom: 12px;
     }
 
     .tab:not(.active):hover, .tab:not(.active):focus {
         color: #2b3342;
         border-bottom: 8px solid #c7c7c7;
+        padding-bottom: 12px;
     }
 
     .tab:not(.active) {

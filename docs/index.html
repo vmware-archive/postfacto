@@ -68,9 +68,9 @@
                 <h2>Easy and simple to use</h2>
 
                 <div class="tabs">
-                    <div id="howToTab1" tabindex="0" role="button" class="howto-title tab">1. Create your retro</div>
-                    <div id="howToTab2" tabindex="0" role="button" class="howto-title tab">2. Add retro items</div>
-                    <div id="howToTab3" tabindex="0" role="button" class="howto-title tab">3. Add actions</div>
+                    <button id="howToTab1" class="howto-title tab">1. Create your retro</button>
+                    <button id="howToTab2" class="howto-title tab">2. Add retro items</button>
+                    <button id="howToTab3" class="howto-title tab">3. Add actions</button>
                 </div>
 
                 <div>
@@ -270,12 +270,6 @@
     [1, 2, 3].forEach(function (index) {
         document.querySelector("#howToTab" + index).addEventListener("click", function () {
             handleActivation(index);
-        });
-        document.querySelector("#howToTab" + index).addEventListener("keypress", function (event) {
-            console.log(event);
-            if (event.key !== "Tab") {
-                handleActivation(index);
-            }
         });
     });
 
