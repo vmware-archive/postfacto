@@ -169,6 +169,10 @@ footer .container {
 
 /*How to cards*/
 
+.tabs {
+    display: none;
+}
+
 .howto-card {
     border-left: 1px solid #243587;
     display: flex;
@@ -327,7 +331,7 @@ footer .container {
         display: block;
     }
 
-    .tabs {
+    .enable-tabs .tabs {
         border-bottom: solid 2px #243587;
         display: flex;
         justify-content: space-between;
@@ -355,16 +359,27 @@ footer .container {
         color: #6b717a;
     }
 
+    .enable-tabs .howto-title {
+        display: none;
+    }
+
+    .enable-tabs .howto-title.tab {
+        display: block;
+    }
+
     .howto-card {
-        border: none;
         flex-direction: row-reverse;
+    }
+
+    .enable-tabs .howto-card {
+        border: none;
     }
 
     .howto-card h3 {
         margin-top: 0;
     }
 
-    .howto-card:not(.active) {
+    .enable-tabs .howto-card:not(.active) {
         display: none;
     }
 
