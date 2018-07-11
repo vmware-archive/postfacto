@@ -301,6 +301,8 @@
     </div>
 </footer>
 <script>
+    var welcomeWagon;
+
     function clearActiveStates () {
         var activeElements = document.querySelectorAll(".active");
         for (var i = 0; i < activeElements.length; i++) {
@@ -317,6 +319,7 @@
     function initialise () {
         [1, 2, 3].forEach(function (index) {
             document.querySelector("#featuresTab" + index).addEventListener("click", function () {
+                clearTimeout(welcomeWagon);
                 handleActivation(index);
             });
         });
@@ -334,6 +337,15 @@
         document.querySelector("body").classList.remove("script-off");
         document.querySelector("body").classList.add("script-on");
         initialise();
+        welcomeWagon = setTimeout(function () {
+            var toVisit = [2, 3, 1];
+            welcomeWagon = setInterval(function () {
+                handleActivation(toVisit.shift());
+                if (toVisit.length === 0) {
+                    clearTimeout(welcomeWagon);
+                }
+            }, 15000);
+        }, 15000);
         handleActivation(1);
     }
 </script>
