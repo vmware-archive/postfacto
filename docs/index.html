@@ -63,20 +63,20 @@
         </div>
     </div>
 
-    <div class="section" id="howto">
+    <div class="section" id="features">
         <div class="container">
             <section class="disable-tabs">
                 <h2>Easy and simple to use</h2>
 
                 <div class="tabs">
-                    <button id="howToTab1" class="howto-title tab">1. Create your retro</button>
-                    <button id="howToTab2" class="howto-title tab">2. Add retro items</button>
-                    <button id="howToTab3" class="howto-title tab">3. Add actions</button>
+                    <button id="featuresTab1" class="features-title tab">1. Create your retro</button>
+                    <button id="featuresTab2" class="features-title tab">2. Add retro items</button>
+                    <button id="featuresTab3" class="features-title tab">3. Add actions</button>
                 </div>
 
                 <div>
-                    <p class="howto-title">1. Create your retro</p>
-                    <div id="howToCard1" class="howto-card">
+                    <p class="features-title">1. Create your retro</p>
+                    <div id="featuresCard1" class="features-card">
                         <div class="image">
                             <img src="images/postfacto-ui.png"
                                  alt="Screenshot of Postfacto retrospective board"
@@ -102,8 +102,8 @@
                 </div>
 
                 <div>
-                    <p class="howto-title">2. Add retro items</p>
-                    <div id="howToCard2" class="howto-card">
+                    <p class="features-title">2. Add retro items</p>
+                    <div id="featuresCard2" class="features-card">
                         <div class="image">
                             <img src="images/postfacto-ui-2.png"
                                  alt="Annotated retrospective items"
@@ -124,8 +124,8 @@
                 </div>
 
                 <div>
-                    <p class="howto-title">3. Add actions</p>
-                    <div id="howToCard3" class="howto-card">
+                    <p class="features-title">3. Add actions</p>
+                    <div id="featuresCard3" class="features-card">
                         <div class="image">
                             <img src="images/postfacto-ui-3.png"
                                  alt="Annotated retrospective actions"
@@ -147,24 +147,24 @@
         </div>
     </div>
 
-    <div class="section" id="teamwork">
+    <div class="section" id="benefits">
         <div class="container">
             <section>
                 <h2>Teamwork & Collaboration</h2>
-                <div class="teamwork-cards">
-                    <div class="teamwork-card">
+                <div class="benefits-cards">
+                    <div class="benefits-card">
                         <img src="images/cake.svg" alt="Piece of cake">
                         <h4>Easy & simple to use</h4>
                         <p>Intuitive interface and simple functionality. It’s like using a whiteboard.</p>
                     </div>
 
-                    <div class="teamwork-card">
+                    <div class="benefits-card">
                         <img src="images/speaker.svg" alt="Hifi speaker">
                         <h4>Everyone can be heard</h4>
                         <p>Inclusivity is important to your team. Members can all add items to be discussed so no one is left out. </p>
                     </div>
 
-                    <div class="teamwork-card">
+                    <div class="benefits-card">
                         <img src="images/remote.svg" alt="Laptop computer">
                         <h4>Remote & co-located teams</h4>
                         <p>Part of your team may be remote, share your retro board with them and collaborate via video conferencing.</p>
@@ -252,9 +252,9 @@
                 </form>
             </div>
             <div class="links">
-                <a href="#howto" class="footer-link">Features</a>
+                <a href="#features" class="footer-link">Features</a>
                 <a href="https://retros.cfapps.io/terms" class="footer-link">Terms & Conditions</a>
-                <a href="#teamwork" class="footer-link">Benefits</a>
+                <a href="#benefits" class="footer-link">Benefits</a>
                 <a href="https://pivotal.io/privacy-policy" class="footer-link">Privacy Policy</a>
                 <a href="#contribute" class="footer-link">Contribute</a>
                 <a href="https://pivotal.slack.com/app_redirect?channel=postfacto" class="footer-link">Contact Us</a>
@@ -276,19 +276,19 @@
 
     function handleActivation(index) {
         clearActiveStates();
-        document.querySelector("#howToTab" + index).classList.add("active");
-        document.querySelector("#howToCard" + index).classList.add("active");
+        document.querySelector("#featuresTab" + index).classList.add("active");
+        document.querySelector("#featuresCard" + index).classList.add("active");
     }
 
     [1, 2, 3].forEach(function (index) {
-        document.querySelector("#howToTab" + index).addEventListener("click", function () {
+        document.querySelector("#featuresTab" + index).addEventListener("click", function () {
             handleActivation(index);
         });
     });
 
     window.onload = function () {
-        document.querySelector("#howto section").classList.remove("disable-tabs");
-        document.querySelector("#howto section").classList.add("enable-tabs");
+        document.querySelector("#features section").classList.remove("disable-tabs");
+        document.querySelector("#features section").classList.add("enable-tabs");
         handleActivation(1);
     }
 </script>
