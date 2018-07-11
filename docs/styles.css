@@ -50,10 +50,15 @@ h1, h2, h3, h4 {
     color: #13377d;
 }
 
-#brand {
+#brand, #footer-brand, #mobile-brand {
     color: #ffffff;
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
+    line-height: 32px;
+}
+
+#mobile-brand {
+    margin-bottom: 32px;
 }
 
 h1 {
@@ -116,6 +121,10 @@ li > span {
 }
 
 header .section {
+    padding: 20px 0;
+}
+
+footer .section {
     padding: 24px 0;
 }
 
@@ -129,6 +138,29 @@ header, footer {
 
 .desktop {
     display: none;
+}
+
+footer .container {
+    display: flex;
+    flex-direction: column;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.footer-link:not(:last-child) {
+    margin-bottom: 24px;
+}
+
+.copyright {
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 48px;
 }
 
 /*How to cards*/
@@ -239,6 +271,11 @@ header, footer {
         line-height: 26px;
     }
 
+    #brand, #footer-brand, #mobile-brand {
+        font-size: 36px;
+        line-height: 42px;
+    }
+
     h1 {
         font-size: 48px;
         line-height: 68px;
@@ -266,6 +303,16 @@ header, footer {
 
     #introduction section {
         width: 50%;
+    }
+
+    footer .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .copyright {
+        text-align: right;
+        margin-top: 0;
     }
 
     .mobile {
