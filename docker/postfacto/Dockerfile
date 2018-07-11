@@ -37,3 +37,6 @@ RUN apt-get -yqq update && apt-get -yqq install google-chrome-stable && rm -rf /
 
 # Install Sqlite dev tools
 RUN apt-get update && apt-get install libsqlite3-dev
+
+# Install zip for packaging
+RUN apt-get update && apt-get install zip
