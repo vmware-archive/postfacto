@@ -370,6 +370,11 @@ footer .container {
     flex-direction: column;
 }
 
+footer .container > *:not(:last-child) {
+    flex-shrink: 0;
+    padding-right: 48px;
+}
+
 .mailing-list {
     margin-bottom: 40px;
 }
@@ -389,15 +394,11 @@ footer .container {
 
 .links {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-between;
 }
 
-.footer-link {
-    width: calc(50% - 10px);
-}
-
-.footer-link:nth-child(-n+4) {
+.footer-link:not(:last-child) {
     margin-bottom: 24px;
 }
 
@@ -632,13 +633,7 @@ footer .container {
     }
 
     footer .container > * {
-        flex-shrink: 0;
         margin: 0;
-        width: calc(30% - 32px);
-    }
-
-    footer .container .links {
-        width: calc(40% - 32px);
     }
 
     .copyright {
