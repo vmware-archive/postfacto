@@ -45,9 +45,13 @@ button {
     font-family: 'Karla', sans-serif;
 }
 
-footer a {
+header a, footer a {
     color: #ffffff;
     font-weight: bold;
+}
+
+header a {
+    text-decoration: none;
 }
 
 h1, h2, h3, h4 {
@@ -161,6 +165,18 @@ main .section:nth-of-type(2n+1) {
 header .section {
     padding: 20px 0;
 }
+
+header .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+nav {
+    display: none;
+}
+
+/* Introduction */
 
 .strapline {
     margin-bottom: 24px;
@@ -386,6 +402,22 @@ footer .container {
     .button, input {
         width: auto;
         width: initial;
+    }
+
+    /* Header */
+
+    header .container {
+        flex-direction: row;
+    }
+
+    nav {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    nav a:not(:first-child) {
+        margin-left: 48px;
     }
 
     /* Introduction */
