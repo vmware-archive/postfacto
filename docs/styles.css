@@ -414,6 +414,73 @@ footer .container > *:not(:last-child) {
 @media (min-width: 691px) {
     /* Tablet */
 
+    /* Features */
+
+    .script-on .tabs {
+        border-bottom: solid 2px #243587;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        padding: 0 32px;
+    }
+
+    .tab {
+        cursor: pointer;
+        margin-bottom: -5px;
+        padding: 14px 16px 20px 16px;
+    }
+
+    .tab.active {
+        border-bottom: 8px solid #00ae9e;
+        padding-bottom: 12px;
+    }
+
+    .tab:not(.active):hover, .tab:not(.active):focus {
+        color: #2b3342;
+        border-bottom: 8px solid #c7c7c7;
+        padding-bottom: 12px;
+    }
+
+    .tab:not(.active) {
+        border-bottom: none;
+        color: #6b717a;
+    }
+
+    .script-on .features-title {
+        display: none;
+    }
+
+    .script-on .features-title.tab {
+        display: block;
+    }
+
+    .features-card {
+        flex-direction: row-reverse;
+    }
+
+    .script-on .features-card {
+        border: none;
+    }
+
+    .features-card h3 {
+        margin-top: 0;
+    }
+
+    .script-on .features-card:not(.active) {
+        display: none;
+    }
+
+    .features-card .image {
+        flex-shrink: 0;
+        width: 50%;
+    }
+
+    .features-card .text {
+        padding-right: 40px;
+    }
+
+    /* Benefits */
+
     #benefits {
         text-align: left;
     }
@@ -521,71 +588,6 @@ footer .container > *:not(:last-child) {
 
     .installation {
         margin-bottom: 48px;
-    }
-
-    /* Features */
-
-    .script-on .tabs {
-        border-bottom: solid 2px #243587;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 32px;
-        padding: 0 32px;
-    }
-
-    .tab {
-        cursor: pointer;
-        margin-bottom: -5px;
-        padding: 14px 16px 20px 16px;
-    }
-
-    .tab.active {
-        border-bottom: 8px solid #00ae9e;
-        padding-bottom: 12px;
-    }
-
-    .tab:not(.active):hover, .tab:not(.active):focus {
-        color: #2b3342;
-        border-bottom: 8px solid #c7c7c7;
-        padding-bottom: 12px;
-    }
-
-    .tab:not(.active) {
-        border-bottom: none;
-        color: #6b717a;
-    }
-
-    .script-on .features-title {
-        display: none;
-    }
-
-    .script-on .features-title.tab {
-        display: block;
-    }
-
-    .features-card {
-        flex-direction: row-reverse;
-    }
-
-    .script-on .features-card {
-        border: none;
-    }
-
-    .features-card h3 {
-        margin-top: 0;
-    }
-
-    .script-on .features-card:not(.active) {
-        display: none;
-    }
-
-    .features-card .image {
-        flex-shrink: 0;
-        width: 50%;
-    }
-
-    .features-card .text {
-        padding-right: 40px;
     }
 
     /* Benefits */
