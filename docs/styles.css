@@ -30,7 +30,7 @@
 
 /* Typography */
 
-body {
+body, input {
     color: #2b3342;
     font-family: 'Karla', sans-serif;
     font-size: 16px;
@@ -55,7 +55,6 @@ h1, h2, h3, h4 {
 }
 
 #brand, #footer-brand, #mobile-brand {
-    color: #ffffff;
     font-size: 24px;
     font-weight: bold;
     line-height: 32px;
@@ -129,10 +128,11 @@ li > span {
     border-radius: 3px;
     box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
     color: #ffffff;
+    cursor: pointer;
     display: inline-block;
     font-size: 16px;
     font-weight: bold;
-    padding: 8px 30px;
+    padding: 10px 30px;
     text-align: center;
     text-decoration: none;
     width: 100%;
@@ -157,6 +157,7 @@ main .section:nth-of-type(2n+1) {
 
 header, footer {
     background-color: #00ae9e;
+    color: #ffffff;
 }
 
 .strapline {
@@ -194,8 +195,24 @@ footer .container {
     margin-bottom: 24px;
 }
 
+.mailing-list {
+    margin-bottom: 40px;
+}
+
+.mailing-list .button {
+    background-color: #f27062;
+}
+
+.mailing-list input {
+    border: none;
+    border-radius: 3px;
+    margin: 12px 0 24px 0;
+    outline: none;
+    padding: 10px 14px;
+    width: 100%;
+}
+
 .copyright {
-    color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -356,13 +373,27 @@ footer .container {
         margin-bottom: 48px;
     }
 
-    .button {
+    .button, .mailing-list input {
         width: initial;
+    }
+
+    .button {
+        padding: 12px 36px;
     }
 
     footer .container {
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    footer .container > * {
+        width: calc(30% - 16px);
+        flex-shrink: 0;
+        margin: 0;
+    }
+
+    footer .container .links {
+        width: calc(40% - 16px);
     }
 
     .copyright {
