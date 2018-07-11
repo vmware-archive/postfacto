@@ -496,6 +496,17 @@ footer .container > *:not(:last-child) {
     .benefits-text {
         align-items: flex-start;
     }
+
+    /* Contribute */
+
+    .contribute-card {
+        flex-direction: row-reverse;
+        width: calc(50% - 14px);
+    }
+
+    .contribute-card:nth-of-type(3) {
+        border-bottom: none;
+    }
 }
 
 @media (min-width: 857px) {
@@ -616,15 +627,6 @@ footer .container > *:not(:last-child) {
 
     #contribute h2 {
         margin-bottom: 24px;
-    }
-
-    .contribute-card {
-        flex-direction: row-reverse;
-        width: calc(50% - 14px);
-    }
-
-    .contribute-card:nth-of-type(3) {
-        border-bottom: none;
     }
 
     /* Footer */
