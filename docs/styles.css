@@ -124,6 +124,20 @@ li > span {
     width: 100%;
 }
 
+.button {
+    background-color: #51c0b1;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
+    color: #ffffff;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 30px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
 button {
     background: none;
     border: none;
@@ -143,6 +157,18 @@ main .section:nth-of-type(2n+1) {
 
 header, footer {
     background-color: #00ae9e;
+}
+
+.strapline {
+    margin-bottom: 24px;
+}
+
+.description {
+    margin-bottom: 32px;
+}
+
+.installation {
+    margin-bottom: 40px;
 }
 
 .desktop {
@@ -320,6 +346,18 @@ footer .container {
 
     #introduction section {
         width: 50%;
+    }
+
+    .description {
+        margin-bottom: 40px;
+    }
+
+    .installation {
+        margin-bottom: 48px;
+    }
+
+    .button {
+        width: initial;
     }
 
     footer .container {
