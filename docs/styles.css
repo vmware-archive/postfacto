@@ -129,6 +129,12 @@ main .section:nth-of-type(2n+1) {
     background-color: #f8f8f8;
 }
 
+nav {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
 .button {
     background-color: #51c0b1;
     border-radius: 3px;
@@ -155,6 +161,10 @@ main .section:nth-of-type(2n+1) {
     display: none;
 }
 
+.mobile-nav {
+    border-top: 1px solid #d3d3d3
+}
+
 .section {
     padding: 48px 0 56px 0;
     width: 100%;
@@ -170,10 +180,6 @@ header .container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-nav {
-    display: none;
 }
 
 /* Introduction */
@@ -411,9 +417,7 @@ footer .container {
     }
 
     nav {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
+        height: 100%;
     }
 
     nav a:not(:first-child) {
