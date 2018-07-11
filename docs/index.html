@@ -39,7 +39,7 @@
     <!-- Polyfill image source sets for IE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/picturefill/3.0.3/picturefill.min.js"></script>
 </head>
-<body>
+<body class="script-off">
 <header>
     <div class="section">
         <div class="container">
@@ -51,9 +51,16 @@
                     <a href="#contribute" class="header-link">Contribute</a>
                 </nav>
             </div>
+            <div class="mobile burger-container">
+                <button class="burger" id="menuButton">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="section mobile mobile-nav">
+    <div class="section mobile mobile-nav" id="mobileNav">
         <div class="container">
             <nav>
                 <a href="#features" class="header-link">Features</a>
@@ -81,7 +88,7 @@
 
     <div class="section" id="features">
         <div class="container">
-            <section class="disable-tabs">
+            <section>
                 <h2>Easy and simple to use</h2>
 
                 <div class="tabs">
@@ -254,7 +261,7 @@
 <footer>
     <div class="section">
         <div class="container">
-            <p id="mobile-brand" class="mobile">postfacto</p>
+            <p id="mobileBrand" class="mobile">postfacto</p>
             <div class="mailing-list">
                 <form action="https://postfacto.us16.list-manage.com/subscribe?u=a67350d2445c50afeee31d399&id=aabf11231c"
                       method="post">
@@ -276,7 +283,7 @@
                 <a href="https://pivotal.slack.com/app_redirect?channel=postfacto" class="footer-link">Contact Us</a>
             </div>
             <div class="copyright">
-                <p id="footer-brand" class="desktop">postfacto</p>
+                <p id="footerBrand" class="desktop">postfacto</p>
                 <p>© Copyright 2018 Pivotal Software, Inc. All Rights Reserved.</p>
             </div>
         </div>
@@ -296,15 +303,26 @@
         document.querySelector("#featuresCard" + index).classList.add("active");
     }
 
-    [1, 2, 3].forEach(function (index) {
-        document.querySelector("#featuresTab" + index).addEventListener("click", function () {
-            handleActivation(index);
+    function initialise () {
+        [1, 2, 3].forEach(function (index) {
+            document.querySelector("#featuresTab" + index).addEventListener("click", function () {
+                handleActivation(index);
+            });
         });
-    });
+
+        document.querySelector("#menuButton").addEventListener("click", function () {
+            if (document.querySelector("header").classList.contains("open-menu")) {
+                document.querySelector("header").classList.remove("open-menu");
+            } else {
+                document.querySelector("header").classList.add("open-menu");
+            }
+        });
+    }
 
     window.onload = function () {
-        document.querySelector("#features section").classList.remove("disable-tabs");
-        document.querySelector("#features section").classList.add("enable-tabs");
+        document.querySelector("body").classList.remove("script-off");
+        document.querySelector("body").classList.add("script-on");
+        initialise();
         handleActivation(1);
     }
 </script>

@@ -99,13 +99,13 @@ ul {
     padding-left: 20px;
 }
 
-#brand, #footer-brand, #mobile-brand {
+#brand, #footerBrand, #mobileBrand {
     font-size: 24px;
     font-weight: bold;
     line-height: 32px;
 }
 
-#mobile-brand {
+#mobileBrand {
     margin-bottom: 32px;
 }
 
@@ -133,6 +133,7 @@ nav {
     align-items: center;
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
 .button {
@@ -178,8 +179,52 @@ header .section {
 
 header .container {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
+}
+
+.burger-container {
+    margin: auto 0;
+}
+
+.burger {
+    cursor: pointer;
+    display: none;
+    padding: 0;
+}
+
+.script-on .burger {
+    display: block;
+    height: 24px;
+    width: 24px;
+}
+
+.burger div {
+    transition-duration: 200ms;
+    background-color: #ffffff;
+    height: 3px;
+    width: 24px;
+}
+
+.burger div:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.script-on header:not(.open-menu) .mobile-nav {
+    display: none;
+}
+
+.script-on header.open-menu .burger > div:nth-child(1) {
+    margin: 0;
+    transform: translate(0, 2px) rotate(45deg);
+}
+
+.script-on header.open-menu .burger > div:nth-child(2) {
+    margin: 0;
+    transform:  translate(0, -1px) rotate(-45deg);
+}
+
+.script-on header.open-menu .burger > div:nth-child(3) {
+    display: none;
 }
 
 /* Introduction */
@@ -361,11 +406,6 @@ footer .container {
         line-height: 26px;
     }
 
-    #brand, #footer-brand, #mobile-brand {
-        font-size: 36px;
-        line-height: 42px;
-    }
-
     h1 {
         font-size: 48px;
         line-height: 68px;
@@ -385,6 +425,11 @@ footer .container {
     h4 {
         font-size: 26px;
         line-height: 32px;
+    }
+
+    #brand, #mobileBrand, footerBrand {
+        font-size: 36px;
+        line-height: 42px;
     }
 
     /* Layout */
@@ -412,10 +457,6 @@ footer .container {
 
     /* Header */
 
-    header .container {
-        flex-direction: row;
-    }
-
     nav {
         height: 100%;
     }
@@ -440,7 +481,7 @@ footer .container {
 
     /* Features */
 
-    .enable-tabs .tabs {
+    .script-on .tabs {
         border-bottom: solid 2px #243587;
         display: flex;
         justify-content: space-between;
@@ -470,11 +511,11 @@ footer .container {
         color: #6b717a;
     }
 
-    .enable-tabs .features-title {
+    .script-on .features-title {
         display: none;
     }
 
-    .enable-tabs .features-title.tab {
+    .script-on .features-title.tab {
         display: block;
     }
 
@@ -482,7 +523,7 @@ footer .container {
         flex-direction: row-reverse;
     }
 
-    .enable-tabs .features-card {
+    .script-on .features-card {
         border: none;
     }
 
@@ -490,7 +531,7 @@ footer .container {
         margin-top: 0;
     }
 
-    .enable-tabs .features-card:not(.active) {
+    .script-on .features-card:not(.active) {
         display: none;
     }
 
