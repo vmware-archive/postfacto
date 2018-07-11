@@ -1183,21 +1183,4 @@ describe('ApiDispatcher', () => {
       MockPromises.tickAllTheWay();
     });
   });
-
-  describe('getCountryCode', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'getCountryCode', data: undefined});
-    });
-
-    it('makes an api GET to "https://freegeoip.net/json/"', () => {
-      expect('https://freegeoip.net/json/').toHaveBeenRequestedWith({
-        method: 'GET',
-        url: 'https://freegeoip.net/json/'
-      });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
-      MockPromises.tickAllTheWay();
-    });
-  })
 });

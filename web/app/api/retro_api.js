@@ -35,9 +35,6 @@ const RetroApi = {
   apiBaseUrl() {
     return global.Retro.config.api_base_url;
   },
-  ipCheckerUrl() {
-    return "https://freegeoip.net/json/";
-  },
 
   createRetro(data) {
     return fetchJson(`${this.apiBaseUrl()}/retros`, {
@@ -263,23 +260,7 @@ const RetroApi = {
 
   retrieveConfig() {
     return fetchJson(`${this.apiBaseUrl()}/config`);
-  },
-
-  fetchCountryCode() {
-    if (window.country_code) {
-      return new Promise((resolve) => {
-        resolve([200, { country_code: window.country_code }])
-      });
-    } else {
-      return fetch(this.ipCheckerUrl())
-        .then((response) => {
-          if (response.status === 204) return [response.status, ''];
-          return Promise.all([response.status, response.json()]);
-        });
-    }
   }
-
-
 };
 
 module.exports = RetroApi;

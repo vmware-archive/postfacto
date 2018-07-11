@@ -286,20 +286,7 @@ const ApiDispatcher = {
         this.dispatch({type: 'notFound'});
       }
     });
-  },
-  getCountryCode() {
-    Logger.info('getCountryCode');
-    return RetroApi.fetchCountryCode().then(([status, data]) => {
-      if (status >= 200 && status < 400) {
-        this.dispatch({type: 'setCountryCode', data: {
-          countryCode: data.country_code
-        }});
-      } else if (status === 404) {
-        this.dispatch({type: 'notFound'});
-      }
-    });
-  },
-
+  }
 };
 
 module.exports = ApiDispatcher;

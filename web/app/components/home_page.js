@@ -50,18 +50,12 @@ class HomePage extends React.Component {
     Logger.info('onGoogleLoginFailure');
   }
 
-  isInEU(countryCode) {
-    return ['AT', 'BE', 'BG', 'HR', 'CZ', 'CY', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'SK', 'SI', 'ES', 'SE', 'GB', 'UK'].includes(countryCode);
-  }
-
   render() {
     return (
       <div className="home-page">
         <div className="sticky-header">
           <div className="row">
-            {
-              this.isInEU(this.props.countryCode) ? <HomeLegalBanner /> : null
-            }
+            <HomeLegalBanner />
           </div>
           <div className="row header-title">
             <div className="show-for-medium small-12 columns">

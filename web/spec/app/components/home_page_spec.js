@@ -42,26 +42,4 @@ describe('HomePage', () => {
       expect('showHomePageAnalytics').toHaveBeenDispatched();
     });
   });
-
-  describe('when country code is in EU', () => {
-    beforeEach(() => {
-      const HomePage = require('../../../app/components/home_page');
-      ReactDOM.render(<HomePage countryCode="DE"/>, root);
-    });
-
-    it('shows the cookies banner', () => {
-      expect('.banner').toContainText('use of cookies');
-    });
-  });
-
-  describe('when country code is not in EU', () => {
-    beforeEach(() => {
-      const HomePage = require('../../../app/components/home_page');
-      ReactDOM.render(<HomePage countryCode="US"/>, root);
-    });
-
-    it('does not shows the cookies banner', () => {
-      expect('.banner').not.toExist();
-    });
-  });
 });

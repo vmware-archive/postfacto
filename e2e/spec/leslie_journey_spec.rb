@@ -59,30 +59,24 @@ describe 'Leslie', type: :feature, js: true do
       select_last_tab
       expect(page).to have_content 'Lorem ipsum'
     end
-   end
 
-   describe 'visiting the home page in the EU' do
-     before do
-       visit_home_page('DE')
-     end
+    specify 'sees banner with terms, privacy and cookie warning' do
+      within(".banner") do
+        expect(find_link('Terms of Use')[:href]).to eq("https://loripsum.net/api")
+        expect(find_link('Terms of Use')[:target]).to eq("_blank")
 
-     specify 'sees banner with terms, privacy and cookie warning' do
-       within(".banner") do
-         expect(find_link('Terms of Use')[:href]).to eq("https://loripsum.net/api")
-         expect(find_link('Terms of Use')[:target]).to eq("_blank")
+        expect(find_link('Privacy Policy')[:href]).to eq("https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
+        expect(find_link('Privacy Policy')[:target]).to eq("_blank")
 
-         expect(find_link('Privacy Policy')[:href]).to eq("https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1&format=html")
-         expect(find_link('Privacy Policy')[:target]).to eq("_blank")
+        expect(page).to have_content('use of cookies')
+      end
 
-         expect(page).to have_content('use of cookies')
-       end
+      click_on "OK"
+      expect(page).not_to have_css(".banner")
 
-       click_on "OK"
-       expect(page).not_to have_css(".banner")
-
-       visit_home_page
-       expect(page).not_to have_css(".banner")
-     end
+      visit_home_page
+      expect(page).not_to have_css(".banner")
+    end
    end
 
   describe 'joining private retro' do

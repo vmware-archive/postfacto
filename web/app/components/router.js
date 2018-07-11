@@ -101,7 +101,6 @@ class Router extends React.Component {
     });
 
     Actions.retrieveConfig()
-    Actions.getCountryCode();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -177,7 +176,6 @@ class Router extends React.Component {
     if(this.isUserLoggedIn()){
       this.listRetros();
     } else {
-      this.injectMockCountryCode();
       this.setState({Page: HomePage});
     }
   };
@@ -201,14 +199,6 @@ class Router extends React.Component {
   isUserLoggedIn() {
     return localStorage.getItem('authToken');
   };
-
-  injectMockCountryCode() {
-    let queryString = window.location.search;
-    if (queryString.includes("countryCode=")) {
-      let split = queryString.split("countryCode=");
-      window.country_code = split[1];
-    }
-  }
 }
 
 module.exports = Router;
