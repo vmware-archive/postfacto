@@ -41,6 +41,18 @@ a {
     color: #2272ce;
 }
 
+main a:not(.button):hover {
+    color: #008573;
+}
+
+main a:not(.button):active {
+    color: #0066ab;
+}
+
+main a:not(.button):visited {
+    color: #243587;
+}
+
 button {
     cursor: pointer;
     font-family: 'Karla', sans-serif;
@@ -155,7 +167,7 @@ nav {
 }
 
 .button {
-    background-color: #51c0b1;
+    background-color: #007acc;
     border-radius: 3px;
     box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
     color: #ffffff;
@@ -167,6 +179,14 @@ nav {
     text-align: center;
     text-decoration: none;
     width: 100%;
+}
+
+.button:hover {
+    background-color: #0066ab;
+}
+
+.button:active {
+    background-color: #243587;
 }
 
 input, .button {
@@ -384,6 +404,7 @@ header .container {
 
 .contribute-card .text {
     padding-right: 20px;
+    max-width: 371px;
 }
 
 .contribute-card:not(:last-child) {
@@ -427,6 +448,14 @@ footer .container > *:not(:last-child) {
 .mailing-list .button {
     background-color: #fec722;
     color: #243587;
+}
+
+.mailing-list .button:hover {
+    background-color: #f7ba04;
+}
+
+.mailing-list .button:active {
+    background-color: #f7dc5f;
 }
 
 .mailing-list input {
@@ -677,6 +706,15 @@ footer .container > *:not(:last-child) {
         height: 100%;
     }
 
+    nav .header-link {
+        padding-bottom: 8px;
+    }
+
+    nav .header-link:hover {
+        border-bottom: 3px solid #51c0b1;
+        padding-bottom: 5px;
+    }
+
     nav .header-link:not(:first-child) {
         margin-left: 48px;
     }
@@ -684,6 +722,10 @@ footer .container > *:not(:last-child) {
     /* endregion */
 
     /* region Introduction */
+
+    #introduction {
+        height: 700px;
+    }
 
     .description {
         margin-bottom: 40px;
