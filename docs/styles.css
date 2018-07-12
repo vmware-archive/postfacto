@@ -457,6 +457,10 @@ footer .container > *:not(:last-child) {
         display: block;
     }
 
+    .features-title.tab {
+        font-size: 20px;
+    }
+
     .features-card {
         flex-direction: row-reverse;
     }
@@ -602,6 +606,12 @@ footer .container > *:not(:last-child) {
 
     .installation {
         margin-bottom: 48px;
+    }
+
+    /* Features */
+
+    .features-title.tab {
+        font-size: 22px;
     }
 
     /* Benefits */
