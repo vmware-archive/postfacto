@@ -28,7 +28,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* Typography */
+/* region Typography */
 
 body, input {
     color: #2b3342;
@@ -41,17 +41,39 @@ a {
     color: #2272ce;
 }
 
+main a:not(.button):hover {
+    color: #008573;
+}
+
+main a:not(.button):active {
+    color: #0066ab;
+}
+
+main a:not(.button):visited {
+    color: #243587;
+}
+
 button {
+    cursor: pointer;
     font-family: 'Karla', sans-serif;
 }
 
-header a, footer a {
+footer a {
     color: #ffffff;
+    font-weight: bold;
+}
+
+header a, header nav button {
+    color: #13377d;
     font-weight: bold;
 }
 
 header a {
     text-decoration: none;
+}
+
+header nav button {
+    font-size: inherit;
 }
 
 h1, h2, h3, h4 {
@@ -108,7 +130,11 @@ ul {
     margin-bottom: 32px;
 }
 
-/* Layout */
+/* endregion */
+
+/* endregion */
+
+/* region Layout */
 
 * {
     box-sizing: border-box;
@@ -119,8 +145,13 @@ button {
     border: none;
 }
 
-header, footer {
-    background-color: #00ae9e;
+header {
+    background-color: #ffffff;
+    color: #00ae9e;
+}
+
+footer {
+    background-color: #4c8c94;
     color: #ffffff;
 }
 
@@ -136,7 +167,7 @@ nav {
 }
 
 .button {
-    background-color: #51c0b1;
+    background-color: #007acc;
     border-radius: 3px;
     box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
     color: #ffffff;
@@ -148,6 +179,14 @@ nav {
     text-align: center;
     text-decoration: none;
     width: 100%;
+}
+
+.button:hover {
+    background-color: #0066ab;
+}
+
+.button:active {
+    background-color: #243587;
 }
 
 input, .button {
@@ -165,18 +204,17 @@ input, .button {
     display: none;
 }
 
-.mobile-nav {
-    border-top: 1px solid #d3d3d3
-}
-
 .section {
     padding: 48px 0 56px 0;
     width: 100%;
 }
 
-/* Header */
+/* endregion */
+
+/* region Header */
 
 header .section {
+    border-bottom: 1px solid #d3d3d3;
     padding: 20px 0;
 }
 
@@ -190,7 +228,6 @@ header .container {
 }
 
 .burger {
-    cursor: pointer;
     display: none;
     padding: 0;
 }
@@ -203,7 +240,7 @@ header .container {
 
 .burger div {
     transition-duration: 200ms;
-    background-color: #ffffff;
+    background-color: #13377d;
     height: 3px;
     width: 24px;
 }
@@ -230,7 +267,31 @@ header .container {
     display: none;
 }
 
-/* Introduction */
+/* endregion */
+
+/* region Hero */
+
+#hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("images/mobile-home.png");
+    background-size: cover;
+    height: 0;
+    /* Subtract top padding */
+    padding-bottom: calc(100% - 48px);
+    position: relative
+}
+
+#hero h1 {
+    color: white;
+}
+
+/* endregion */
+
+/* region Introduction */
+
+#introduction .hero-text {
+    display: none;
+}
 
 .strapline {
     margin-bottom: 24px;
@@ -244,7 +305,9 @@ header .container {
     margin-bottom: 40px;
 }
 
-/* Features */
+/* endregion */
+
+/* region Features */
 
 .tabs {
     display: none;
@@ -272,7 +335,9 @@ header .container {
     height: 100%;
 }
 
-/* Benefits */
+/* endregion */
+
+/* region Benefits */
 
 #benefits {
     text-align: center;
@@ -321,7 +386,9 @@ header .container {
     flex-direction: column;
 }
 
-/* Contribute */
+/* endregion */
+
+/* region Contribute */
 
 #contribute h2 {
     margin-bottom: 20px;
@@ -341,6 +408,7 @@ header .container {
 
 .contribute-card .text {
     padding-right: 20px;
+    max-width: 371px;
 }
 
 .contribute-card:not(:last-child) {
@@ -359,7 +427,9 @@ header .container {
     width: 100%;
 }
 
-/* Footer */
+/* endregion */
+
+/* region Footer */
 
 footer .section {
     padding: 24px 0;
@@ -380,7 +450,16 @@ footer .container > *:not(:last-child) {
 }
 
 .mailing-list .button {
-    background-color: #f27062;
+    background-color: #fec722;
+    color: #243587;
+}
+
+.mailing-list .button:hover {
+    background-color: #f7ba04;
+}
+
+.mailing-list .button:active {
+    background-color: #f7dc5f;
 }
 
 .mailing-list input {
@@ -409,12 +488,45 @@ footer .container > *:not(:last-child) {
     margin-top: 48px;
 }
 
-/* Responsive */
+/* endregion */
+
+/* region Responsive */
 
 @media (min-width: 691px) {
-    /* Tablet */
+    /* region Tablet */
 
-    /* Features */
+    /* region Hero */
+
+    #hero {
+        display: none;
+    }
+
+    /* endregion */
+
+    /* region Introduction */
+
+    #introduction {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url("images/home.png");
+        background-size: cover;
+        color: #ffffff;
+    }
+
+    #introduction section {
+        width: 50%;
+    }
+
+    #introduction h1, #introduction a {
+        color: #ffffff;
+    }
+
+    #introduction .hero-text {
+        display: block;
+    }
+
+    /* endregion */
+
+    /* region Features */
 
     .script-on .tabs {
         border-bottom: solid 2px #243587;
@@ -425,7 +537,6 @@ footer .container > *:not(:last-child) {
     }
 
     .tab {
-        cursor: pointer;
         margin-bottom: -5px;
         padding: 14px 16px 20px 16px;
     }
@@ -454,6 +565,10 @@ footer .container > *:not(:last-child) {
         display: block;
     }
 
+    .features-title.tab {
+        font-size: 20px;
+    }
+
     .features-card {
         flex-direction: row-reverse;
     }
@@ -479,7 +594,9 @@ footer .container > *:not(:last-child) {
         padding-right: 40px;
     }
 
-    /* Benefits */
+    /* endregion */
+
+    /* region Benefits */
 
     #benefits {
         text-align: left;
@@ -497,7 +614,9 @@ footer .container > *:not(:last-child) {
         align-items: flex-start;
     }
 
-    /* Contribute */
+    /* endregion */
+
+    /* region Contribute */
 
     .contribute-card {
         flex-direction: row-reverse;
@@ -507,12 +626,16 @@ footer .container > *:not(:last-child) {
     .contribute-card:nth-of-type(3) {
         border-bottom: none;
     }
+
+    /* endregion */
+
+    /* endregion */
 }
 
 @media (min-width: 857px) {
-    /* Desktop */
+    /* region Desktop */
 
-    /* Typography */
+    /* region Typography */
 
     body {
         font-size: 18px;
@@ -554,7 +677,9 @@ footer .container > *:not(:last-child) {
         line-height: 40px;
     }
 
-    /* Layout */
+    /* endregion */
+
+    /* region Layout */
 
     .mobile {
         display: none;
@@ -577,20 +702,33 @@ footer .container > *:not(:last-child) {
         width: initial;
     }
 
-    /* Header */
+    /* endregion */
+
+    /* region Header */
 
     nav {
         height: 100%;
     }
 
-    nav a:not(:first-child) {
+    nav .header-link {
+        padding-bottom: 8px;
+    }
+
+    nav .header-link:hover {
+        border-bottom: 3px solid #51c0b1;
+        padding-bottom: 5px;
+    }
+
+    nav .header-link:not(:first-child) {
         margin-left: 48px;
     }
 
-    /* Introduction */
+    /* endregion */
 
-    #introduction section {
-        width: 50%;
+    /* region Introduction */
+
+    #introduction {
+        height: 700px;
     }
 
     .description {
@@ -601,7 +739,17 @@ footer .container > *:not(:last-child) {
         margin-bottom: 48px;
     }
 
-    /* Benefits */
+    /* endregion */
+
+    /* region Features */
+
+    .features-title.tab {
+        font-size: 22px;
+    }
+
+    /* endregion */
+
+    /* region Benefits */
 
     #benefits {
         text-align: center;
@@ -623,13 +771,17 @@ footer .container > *:not(:last-child) {
         align-items: center;
     }
 
-    /* Contribute */
+    /* endregion */
+
+    /* region Contribute */
 
     #contribute h2 {
         margin-bottom: 24px;
     }
 
-    /* Footer */
+    /* endregion */
+
+    /* region Footer */
 
     footer .container {
         flex-direction: row;
@@ -644,4 +796,10 @@ footer .container > *:not(:last-child) {
         text-align: right;
         margin-top: 0;
     }
+
+    /* endregion */
+
+    /* endregion */
 }
+
+/* endregion */

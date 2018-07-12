@@ -54,6 +54,7 @@
             </div>
             <div class="mobile burger-container">
                 <button class="burger" id="menuButton">
+                    <!--Burger menu stripes-->
                     <div></div>
                     <div></div>
                     <div></div>
@@ -72,17 +73,28 @@
     </div>
 </header>
 <main>
-    <div class="section" id="introduction">
+    <div class="section" id="hero">
         <div class="container">
             <section>
                 <h1 class="site-title">Postfacto.</h1>
                 <h1 class="strapline">The digital retro board.</h1>
+            </section>
+        </div>
+    </div>
+
+    <div class="section" id="introduction">
+        <div class="container">
+            <section>
+                <div class="hero-text">
+                    <h1 class="site-title">Postfacto.</h1>
+                    <h1 class="strapline">The digital retro board.</h1>
+                </div>
                 <p class="description">Postfacto helps team members to facilitate retrospectives, where team members
                     come together and discuss what went well and what could be improved. Postfacto is free and open
                     source!</p>
-                <p class="installation"><a href="https://github.com/Pivotal/postfacto/blob/master/DEPLOYMENT.md">Read
-                    the installation guide on GitHub</a></p>
-                <a href="https://github.com/Pivotal/postfacto/archive/master.zip" class="button">Download source files</a>
+                <p class="installation"><a href="https://github.com/Pivotal/postfacto#readme">Read
+                    about the project on GitHub</a></p>
+                <a href="https://github.com/Pivotal/postfacto/releases/latest" class="button">Download latest release</a>
             </section>
         </div>
     </div>
@@ -316,14 +328,21 @@
         document.querySelector("#featuresCard" + index).classList.add("active");
     }
 
-    function initialise () {
+    function enableScript () {
+        document.querySelector("body").classList.remove("script-off");
+        document.querySelector("body").classList.add("script-on");
+    }
+
+    function initialiseTabs () {
         [1, 2, 3].forEach(function (index) {
             document.querySelector("#featuresTab" + index).addEventListener("click", function () {
                 clearTimeout(welcomeWagon);
                 handleActivation(index);
             });
         });
+    }
 
+    function initialiseNavMenu () {
         document.querySelector("#menuButton").addEventListener("click", function () {
             if (document.querySelector("header").classList.contains("open-menu")) {
                 document.querySelector("header").classList.remove("open-menu");
@@ -333,10 +352,7 @@
         });
     }
 
-    window.onload = function () {
-        document.querySelector("body").classList.remove("script-off");
-        document.querySelector("body").classList.add("script-on");
-        initialise();
+    function initialiseWelcomeWagon () {
         welcomeWagon = setTimeout(function () {
             var toVisit = [2, 3, 1];
             welcomeWagon = setInterval(function () {
@@ -346,6 +362,44 @@
                 }
             }, 15000);
         }, 15000);
+    }
+
+    function handleClick () {
+        var id = this.getAttribute("href");
+        document
+            .querySelector(id)
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", id);
+        return false;
+    }
+
+    function createButton (element) {
+        var button = document.createElement("button");
+        button.classList.add("header-link");
+        button.innerText = element.innerText;
+        button.onclick = handleClick.bind(element);
+        return button;
+    }
+
+    function replaceLinksWithButtons () {
+        var links = document.querySelectorAll(".header-link");
+
+        for (var i = 0; i < links.length; i++) {
+            var element = links.item(i);
+            element.parentElement.replaceChild(createButton(element), element);
+        }
+    }
+
+    function initialise () {
+        enableScript();
+        initialiseTabs();
+        initialiseNavMenu();
+        initialiseWelcomeWagon();
+        replaceLinksWithButtons();
+    }
+
+    window.onload = function () {
+        initialise();
         handleActivation(1);
     }
 </script>
