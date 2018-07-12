@@ -28,7 +28,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* Typography */
+/* region Typography */
 
 body, input {
     color: #2b3342;
@@ -113,7 +113,11 @@ ul {
     margin-bottom: 32px;
 }
 
-/* Layout */
+/* endregion */
+
+/* endregion */
+
+/* region Layout */
 
 * {
     box-sizing: border-box;
@@ -184,7 +188,9 @@ input, .button {
     width: 100%;
 }
 
-/* Header */
+/* endregion */
+
+/* region Header */
 
 header .section {
     padding: 20px 0;
@@ -239,7 +245,9 @@ header .container {
     display: none;
 }
 
-/* Introduction */
+/* endregion */
+
+/* region Introduction */
 
 .strapline {
     margin-bottom: 24px;
@@ -253,7 +261,9 @@ header .container {
     margin-bottom: 40px;
 }
 
-/* Features */
+/* endregion */
+
+/* region Features */
 
 .tabs {
     display: none;
@@ -281,7 +291,9 @@ header .container {
     height: 100%;
 }
 
-/* Benefits */
+/* endregion */
+
+/* region Benefits */
 
 #benefits {
     text-align: center;
@@ -330,7 +342,9 @@ header .container {
     flex-direction: column;
 }
 
-/* Contribute */
+/* endregion */
+
+/* region Contribute */
 
 #contribute h2 {
     margin-bottom: 20px;
@@ -368,7 +382,9 @@ header .container {
     width: 100%;
 }
 
-/* Footer */
+/* endregion */
+
+/* region Footer */
 
 footer .section {
     padding: 24px 0;
@@ -419,12 +435,14 @@ footer .container > *:not(:last-child) {
     margin-top: 48px;
 }
 
-/* Responsive */
+/* endregion */
+
+/* region Responsive */
 
 @media (min-width: 691px) {
-    /* Tablet */
+    /* region Tablet */
 
-    /* Features */
+    /* region Features */
 
     .script-on .tabs {
         border-bottom: solid 2px #243587;
@@ -492,7 +510,9 @@ footer .container > *:not(:last-child) {
         padding-right: 40px;
     }
 
-    /* Benefits */
+    /* endregion */
+
+    /* region Benefits */
 
     #benefits {
         text-align: left;
@@ -510,7 +530,9 @@ footer .container > *:not(:last-child) {
         align-items: flex-start;
     }
 
-    /* Contribute */
+    /* endregion */
+
+    /* region Contribute */
 
     .contribute-card {
         flex-direction: row-reverse;
@@ -520,12 +542,16 @@ footer .container > *:not(:last-child) {
     .contribute-card:nth-of-type(3) {
         border-bottom: none;
     }
+
+    /* endregion */
+
+    /* endregion */
 }
 
 @media (min-width: 857px) {
-    /* Desktop */
+    /* region Desktop */
 
-    /* Typography */
+    /* region Typography */
 
     body {
         font-size: 18px;
@@ -567,7 +593,9 @@ footer .container > *:not(:last-child) {
         line-height: 40px;
     }
 
-    /* Layout */
+    /* endregion */
+
+    /* region Layout */
 
     .mobile {
         display: none;
@@ -590,7 +618,9 @@ footer .container > *:not(:last-child) {
         width: initial;
     }
 
-    /* Header */
+    /* endregion */
+
+    /* region Header */
 
     nav {
         height: 100%;
@@ -600,7 +630,9 @@ footer .container > *:not(:last-child) {
         margin-left: 48px;
     }
 
-    /* Introduction */
+    /* endregion */
+
+    /* region Introduction */
 
     #introduction section {
         width: 50%;
@@ -614,13 +646,17 @@ footer .container > *:not(:last-child) {
         margin-bottom: 48px;
     }
 
-    /* Features */
+    /* endregion */
+
+    /* region Features */
 
     .features-title.tab {
         font-size: 22px;
     }
 
-    /* Benefits */
+    /* endregion */
+
+    /* region Benefits */
 
     #benefits {
         text-align: center;
@@ -642,13 +678,17 @@ footer .container > *:not(:last-child) {
         align-items: center;
     }
 
-    /* Contribute */
+    /* endregion */
+
+    /* region Contribute */
 
     #contribute h2 {
         margin-bottom: 24px;
     }
 
-    /* Footer */
+    /* endregion */
+
+    /* region Footer */
 
     footer .container {
         flex-direction: row;
@@ -663,4 +703,10 @@ footer .container > *:not(:last-child) {
         text-align: right;
         margin-top: 0;
     }
+
+    /* endregion */
+
+    /* endregion */
 }
+
+/* endregion */
