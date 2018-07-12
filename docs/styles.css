@@ -273,8 +273,12 @@ header .container {
 
 #hero {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url("images/home.png");
+        url("images/mobile-home.png");
     background-size: cover;
+    height: 0;
+    /* Subtract top padding */
+    padding-bottom: calc(100% - 48px);
+    position: relative
 }
 
 #hero h1 {
