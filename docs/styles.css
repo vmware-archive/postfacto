@@ -249,7 +249,25 @@ header .container {
 
 /* endregion */
 
+/* region Hero */
+
+#hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("images/home.png");
+    background-size: cover;
+}
+
+#hero h1 {
+    color: white;
+}
+
+/* endregion */
+
 /* region Introduction */
+
+#introduction .hero-text {
+    display: none;
+}
 
 .strapline {
     margin-bottom: 24px;
@@ -444,6 +462,37 @@ footer .container > *:not(:last-child) {
 @media (min-width: 691px) {
     /* region Tablet */
 
+    /* region Hero */
+
+    #hero {
+        display: none;
+    }
+
+    /* endregion */
+
+    /* region Introduction */
+
+    #introduction {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url("images/home.png");
+        background-size: cover;
+        color: #ffffff;
+    }
+
+    #introduction section {
+        width: 50%;
+    }
+
+    #introduction h1, #introduction a {
+        color: #ffffff;
+    }
+
+    #introduction .hero-text {
+        display: block;
+    }
+
+    /* endregion */
+
     /* region Features */
 
     .script-on .tabs {
@@ -635,10 +684,6 @@ footer .container > *:not(:last-child) {
     /* endregion */
 
     /* region Introduction */
-
-    #introduction section {
-        width: 50%;
-    }
 
     .description {
         margin-bottom: 40px;
