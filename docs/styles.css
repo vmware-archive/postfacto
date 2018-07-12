@@ -46,8 +46,13 @@ button {
     font-family: 'Karla', sans-serif;
 }
 
-footer a, header a, header nav button {
+footer a {
     color: #ffffff;
+    font-weight: bold;
+}
+
+header a, header nav button {
+    color: #13377d;
     font-weight: bold;
 }
 
@@ -129,8 +134,8 @@ button {
 }
 
 header {
-    background-color: #00ae9e;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #00ae9e;
 }
 
 footer {
@@ -179,10 +184,6 @@ input, .button {
     display: none;
 }
 
-.mobile-nav {
-    border-top: 1px solid #d3d3d3
-}
-
 .section {
     padding: 48px 0 56px 0;
     width: 100%;
@@ -193,6 +194,7 @@ input, .button {
 /* region Header */
 
 header .section {
+    border-bottom: 1px solid #d3d3d3;
     padding: 20px 0;
 }
 
@@ -218,7 +220,7 @@ header .container {
 
 .burger div {
     transition-duration: 200ms;
-    background-color: #ffffff;
+    background-color: #13377d;
     height: 3px;
     width: 24px;
 }
