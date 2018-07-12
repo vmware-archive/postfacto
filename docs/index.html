@@ -32,6 +32,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
     <title>Postfacto</title>
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
     <link rel="stylesheet" href="reset.css">
@@ -39,11 +40,34 @@
     <!-- Polyfill image source sets for IE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/picturefill/3.0.3/picturefill.min.js"></script>
 </head>
-<body>
+<body class="script-off">
 <header>
     <div class="section">
         <div class="container">
             <div id="brand">postfacto</div>
+            <div class="desktop">
+                <nav>
+                    <a href="#features" class="header-link">Features</a>
+                    <a href="#benefits" class="header-link">Benefits</a>
+                    <a href="#contribute" class="header-link">Contribute</a>
+                </nav>
+            </div>
+            <div class="mobile burger-container">
+                <button class="burger" id="menuButton">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="section mobile mobile-nav" id="mobileNav">
+        <div class="container">
+            <nav>
+                <a href="#features" class="header-link">Features</a>
+                <a href="#benefits" class="header-link">Benefits</a>
+                <a href="#contribute" class="header-link">Contribute</a>
+            </nav>
         </div>
     </div>
 </header>
@@ -51,119 +75,139 @@
     <div class="section" id="introduction">
         <div class="container">
             <section>
-                <h1>Postfacto.</h1>
-                <h1>The digital retro board.</h1>
-                <p>Postfacto helps team members to facilitate retrospectives, where team members come together
-                    and discuss what went well and what could be improved. Postfacto is free and open source!
-                </p>
-                <a href="https://github.com/Pivotal/postfacto/blob/master/DEPLOYMENT.md">Read the installation guide on
-                    GitHub</a>
+                <h1 class="site-title">Postfacto.</h1>
+                <h1 class="strapline">The digital retro board.</h1>
+                <p class="description">Postfacto helps team members to facilitate retrospectives, where team members
+                    come together and discuss what went well and what could be improved. Postfacto is free and open
+                    source!</p>
+                <p class="installation"><a href="https://github.com/Pivotal/postfacto/blob/master/DEPLOYMENT.md">Read
+                    the installation guide on GitHub</a></p>
+                <a href="https://github.com/Pivotal/postfacto/archive/master.zip" class="button">Download source files</a>
             </section>
         </div>
     </div>
 
-    <div class="section" id="howto">
+    <div class="section" id="features">
         <div class="container">
-            <h2>Easy and simple to use</h2>
+            <section>
+                <h2>Easy and simple to use</h2>
 
-            <div class="tabs desktop">
-                <div id="howToTab1" class="howto-title tab active">1. Create your retro</div>
-                <div id="howToTab2" class="howto-title tab">2. Add retro items</div>
-                <div id="howToTab3" class="howto-title tab">3. Add actions</div>
-            </div>
+                <div class="tabs">
+                    <button id="featuresTab1" class="features-title tab">1. Create your retro</button>
+                    <button id="featuresTab2" class="features-title tab">2. Add retro items</button>
+                    <button id="featuresTab3" class="features-title tab">3. Add actions</button>
+                </div>
 
-            <div>
-                <p class="howto-title mobile">1. Create your retro</p>
-                <div id="howToCard1" class="howto-card active">
-                    <div class="image">
-                        <img src="images/postfacto-ui.png"
-                             alt="Screenshot of Postfacto retrospective board"
-                             sizes="(min-width: 600px) 50vw, 100vw"
-                             srcset="images/postfacto-ui@2x.png 1204w, images/postfacto-ui@3x.png 1806w">
-                    </div>
-                    <div class="text">
-                        <h3>Set up your first retro board</h3>
-                        <ul>
-                            <li><span>To create your board, set a name and choose a URL that you can share it with the
-                                team.</span>
-                            </li>
-                            <li><span>Set a password to keep your team’s retro data secure.</span>
-                            </li>
-                            <li><span>You can add retro items on each column for things that went well, what you are
-                                wondering about and what didn’t work so well.</span>
-                            </li>
-                            <li><span>Access archived boards and edit settings.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p class="howto-title mobile">2. Add retro items</p>
-                <div id="howToCard2" class="howto-card">
-                    <div class="image">
-                        <img src="images/postfacto-ui-2.png"
-                             alt="Annotated retrospective items"
-                             sizes="(min-width: 600px) 50vw, 100vw"
-                             srcset="images/postfacto-ui-2@2x.png 1114w, images/postfacto-ui-2@3x.png 1671w">
-                    </div>
-                    <div class="text">
-                        <h3>Create retro items to discuss</h3>
-                        <ul>
-                            <li><span>Add retro items to each column for discussion.</span></li>
-                            <li><span>Edit retro items if you want to make any changes.</span></li>
-                            <li><span>Vote on team members’ retro items that you want to be discussed by clicking on the heart icon.</span>
-                            </li>
-                            <li><span>Keep your retro time-framed with the 5-minute timer.</span></li>
-                        </ul>
+                <div>
+                    <p class="features-title">1. Create your retro</p>
+                    <div id="featuresCard1" class="features-card">
+                        <div class="image">
+                            <img src="images/postfacto-ui.png"
+                                 alt="Screenshot of Postfacto retrospective board"
+                                 sizes="(min-width: 600px) 50vw, 100vw"
+                                 srcset="images/postfacto-ui@2x.png 1204w, images/postfacto-ui@3x.png 1806w">
+                        </div>
+                        <div class="text">
+                            <h3>Set up your first retro board</h3>
+                            <ul>
+                                <li><span>To create your board, set a name and choose a URL that you can share it with the
+                                    team.</span>
+                                </li>
+                                <li><span>Set a password to keep your team’s retro data secure.</span>
+                                </li>
+                                <li><span>You can add retro items on each column for things that went well, what you are
+                                    wondering about and what didn’t work so well.</span>
+                                </li>
+                                <li><span>Access archived boards and edit settings.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <p class="howto-title mobile">3. Add actions</p>
-                <div id="howToCard3" class="howto-card">
-                    <div class="image">
-                        <img src="images/postfacto-ui-3.png"
-                             alt="Annotated retrospective actions"
-                             sizes="(min-width: 600px) 50vw, 100vw"
-                             srcset="images/postfacto-ui-3@2x.png 1114w, images/postfacto-ui-3@3x.png 1671w">
-                    </div>
-                    <div class="text">
-                        <h3>Record actions to be taken</h3>
-                        <ul>
-                            <li><span>Add action items from your retro to improve teamwork.</span></li>
-                            <li><span>Edit action items and assign tasks to team members.</span></li>
-                            <li><span>Revisit previous action items to check what has been achieved and to keep track of things.</span>
-                            </li>
-                        </ul>
+
+                <div>
+                    <p class="features-title">2. Add retro items</p>
+                    <div id="featuresCard2" class="features-card">
+                        <div class="image">
+                            <img src="images/postfacto-ui-2.png"
+                                 alt="Annotated retrospective items"
+                                 sizes="(min-width: 600px) 50vw, 100vw"
+                                 srcset="images/postfacto-ui-2@2x.png 1114w, images/postfacto-ui-2@3x.png 1671w">
+                        </div>
+                        <div class="text">
+                            <h3>Create retro items to discuss</h3>
+                            <ul>
+                                <li><span>Add retro items to each column for discussion.</span></li>
+                                <li><span>Edit retro items if you want to make any changes.</span></li>
+                                <li><span>Vote on team members’ retro items that you want to be discussed by clicking on the heart icon.</span>
+                                </li>
+                                <li><span>Keep your retro time-framed with the 5-minute timer.</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div>
+                    <p class="features-title">3. Add actions</p>
+                    <div id="featuresCard3" class="features-card">
+                        <div class="image">
+                            <img src="images/postfacto-ui-3.png"
+                                 alt="Annotated retrospective actions"
+                                 sizes="(min-width: 600px) 50vw, 100vw"
+                                 srcset="images/postfacto-ui-3@2x.png 1114w, images/postfacto-ui-3@3x.png 1671w">
+                        </div>
+                        <div class="text">
+                            <h3>Record actions to be taken</h3>
+                            <ul>
+                                <li><span>Add action items from your retro to improve teamwork.</span></li>
+                                <li><span>Edit action items and assign tasks to team members.</span></li>
+                                <li><span>Revisit previous action items to check what has been achieved and to keep track of things.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class="section" id="teamwork">
+    <div class="section" id="benefits">
         <div class="container">
-            <h2>Teamwork & Collaboration</h2>
-            <div class="teamwork-cards">
-                <div class="teamwork-card">
-                    <img src="images/cake.svg" alt="Piece of cake">
-                    <h4>Easy & simple to use</h4>
-                    <p>Intuitive interface and simple functionality. It’s like using a whiteboard.</p>
-                </div>
+            <section>
+                <h2>Teamwork & Collaboration</h2>
+                <div class="benefits-cards">
+                    <div class="benefits-card">
+                        <div class="benefits-image">
+                            <img src="images/cake.svg" alt="Piece of cake">
+                        </div>
+                        <div class="benefits-text">
+                            <h4>Easy & simple to use</h4>
+                            <p>Intuitive interface and simple functionality. It’s like using a whiteboard.</p>
+                        </div>
+                    </div>
 
-                <div class="teamwork-card">
-                    <img src="images/speaker.svg" alt="Hifi speaker">
-                    <h4>Everyone can be heard</h4>
-                    <p>Inclusivity is important to your team. Members can all add items to be discussed so no one is left out. </p>
-                </div>
+                    <div class="benefits-card">
+                        <div class="benefits-image">
+                            <img src="images/speaker.svg" alt="Hifi speaker">
+                        </div>
+                        <div class="benefits-text">
+                            <h4>Everyone can be heard</h4>
+                            <p>Inclusivity is important to your team. Members can all add items to be discussed so no one is left out. </p>
+                        </div>
+                    </div>
 
-                <div class="teamwork-card">
-                    <img src="images/remote.svg" alt="Laptop computer">
-                    <h4>Remote & co-located teams</h4>
-                    <p>Part of your team may be remote, share your retro board with them and collaborate via video conferencing.</p>
+                    <div class="benefits-card">
+                        <div class="benefits-image">
+                            <img src="images/remote.svg" alt="Laptop computer">
+                        </div>
+                        <div class="benefits-text">
+                            <h4>Remote & co-located teams</h4>
+                            <p>Part of your team may be remote, share your retro board with them and collaborate via
+                                video conferencing.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 
@@ -231,13 +275,34 @@
 <footer>
     <div class="section">
         <div class="container">
-            <a href="https://retros.cfapps.io/terms">Terms & Conditions</a>
-            <a href="https://pivotal.io/privacy-policy">Privacy Policy</a>
-            <a href="https://pivotal.slack.com/app_redirect?channel=postfacto">Contact Us</a>
+            <p id="mobileBrand" class="mobile">postfacto</p>
+            <div class="mailing-list">
+                <form action="https://postfacto.us16.list-manage.com/subscribe?u=a67350d2445c50afeee31d399&id=aabf11231c"
+                      method="post">
+                    <label for="mce-EMAIL">Subscribe to our mailing list</label>
+                    <div>
+                        <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Email address">
+                    </div>
+                    <div>
+                        <button type="submit" class="button">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+            <div class="links">
+                <a href="https://retros.cfapps.io/terms" class="footer-link">Terms & Conditions</a>
+                <a href="https://pivotal.io/privacy-policy" class="footer-link">Privacy Policy</a>
+                <a href="https://pivotal.slack.com/app_redirect?channel=postfacto" class="footer-link">Contact Us</a>
+            </div>
+            <div class="copyright">
+                <p id="footerBrand" class="desktop">postfacto</p>
+                <p>© Copyright 2018 Pivotal Software, Inc. All Rights Reserved.</p>
+            </div>
         </div>
     </div>
 </footer>
 <script>
+    var welcomeWagon;
+
     function clearActiveStates () {
         var activeElements = document.querySelectorAll(".active");
         for (var i = 0; i < activeElements.length; i++) {
@@ -245,13 +310,44 @@
         }
     }
 
-    [1, 2, 3].forEach(function (index) {
-        document.querySelector("#howToTab" + index).addEventListener("click", function () {
-            clearActiveStates();
-            document.querySelector("#howToTab" + index).classList.add("active");
-            document.querySelector("#howToCard" + index).classList.add("active");
+    function handleActivation(index) {
+        clearActiveStates();
+        document.querySelector("#featuresTab" + index).classList.add("active");
+        document.querySelector("#featuresCard" + index).classList.add("active");
+    }
+
+    function initialise () {
+        [1, 2, 3].forEach(function (index) {
+            document.querySelector("#featuresTab" + index).addEventListener("click", function () {
+                clearTimeout(welcomeWagon);
+                handleActivation(index);
+            });
         });
-    });
+
+        document.querySelector("#menuButton").addEventListener("click", function () {
+            if (document.querySelector("header").classList.contains("open-menu")) {
+                document.querySelector("header").classList.remove("open-menu");
+            } else {
+                document.querySelector("header").classList.add("open-menu");
+            }
+        });
+    }
+
+    window.onload = function () {
+        document.querySelector("body").classList.remove("script-off");
+        document.querySelector("body").classList.add("script-on");
+        initialise();
+        welcomeWagon = setTimeout(function () {
+            var toVisit = [2, 3, 1];
+            welcomeWagon = setInterval(function () {
+                handleActivation(toVisit.shift());
+                if (toVisit.length === 0) {
+                    clearTimeout(welcomeWagon);
+                }
+            }, 15000);
+        }, 15000);
+        handleActivation(1);
+    }
 </script>
 </body>
 </html>

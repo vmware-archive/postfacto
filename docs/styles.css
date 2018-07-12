@@ -30,7 +30,7 @@
 
 /* Typography */
 
-body {
+body, input {
     color: #2b3342;
     font-family: 'Karla', sans-serif;
     font-size: 16px;
@@ -38,22 +38,24 @@ body {
 }
 
 a {
-    color: #4a90e2;
+    color: #2272ce;
 }
 
-footer a {
+button {
+    font-family: 'Karla', sans-serif;
+}
+
+header a, footer a {
     color: #ffffff;
     font-weight: bold;
+}
+
+header a {
+    text-decoration: none;
 }
 
 h1, h2, h3, h4 {
     color: #13377d;
-}
-
-#brand {
-    color: #ffffff;
-    font-size: 36px;
-    font-weight: bold;
 }
 
 h1 {
@@ -80,11 +82,6 @@ h4 {
     margin-bottom: 16px;
 }
 
-ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-
 li {
     /* Size for bullet point */
     font-size: 12px;
@@ -97,10 +94,64 @@ li > span {
     vertical-align: top;
 }
 
+ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+#brand, #footerBrand, #mobileBrand {
+    font-size: 24px;
+    line-height: 32px;
+}
+
+#mobileBrand {
+    margin-bottom: 32px;
+}
+
 /* Layout */
 
 * {
     box-sizing: border-box;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+header, footer {
+    background-color: #00ae9e;
+    color: #ffffff;
+}
+
+main .section:nth-of-type(2n+1) {
+    background-color: #f8f8f8;
+}
+
+nav {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.button {
+    background-color: #51c0b1;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+input, .button {
+    max-width: 365px;
 }
 
 .container {
@@ -110,52 +161,167 @@ li > span {
     width: 100%;
 }
 
+.desktop {
+    display: none;
+}
+
+.mobile-nav {
+    border-top: 1px solid #d3d3d3
+}
+
 .section {
     padding: 48px 0 56px 0;
     width: 100%;
 }
 
+/* Header */
+
 header .section {
-    padding: 24px 0;
+    padding: 20px 0;
 }
 
-main .section:nth-of-type(2n+1) {
-    background-color: #f8f8f8;
+header .container {
+    display: flex;
+    justify-content: space-between;
 }
 
-header, footer {
-    background-color: #00ae9e;
+.burger-container {
+    margin: auto 0;
 }
 
-.desktop {
+.burger {
+    cursor: pointer;
+    display: none;
+    padding: 0;
+}
+
+.script-on .burger {
+    display: block;
+    height: 24px;
+    width: 24px;
+}
+
+.burger div {
+    transition-duration: 200ms;
+    background-color: #ffffff;
+    height: 3px;
+    width: 24px;
+}
+
+.burger div:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.script-on header:not(.open-menu) .mobile-nav {
     display: none;
 }
 
-/*How to cards*/
+.script-on header.open-menu .burger > div:nth-child(1) {
+    margin: 0;
+    transform: translate(0, 2px) rotate(45deg);
+}
 
-.howto-card {
+.script-on header.open-menu .burger > div:nth-child(2) {
+    margin: 0;
+    transform:  translate(0, -1px) rotate(-45deg);
+}
+
+.script-on header.open-menu .burger > div:nth-child(3) {
+    display: none;
+}
+
+/* Introduction */
+
+.strapline {
+    margin-bottom: 24px;
+}
+
+.description {
+    margin-bottom: 32px;
+}
+
+.installation {
+    margin-bottom: 40px;
+}
+
+/* Features */
+
+.tabs {
+    display: none;
+}
+
+.features-card {
     border-left: 1px solid #243587;
     display: flex;
     flex-direction: column;
     padding: 16px 0 16px 16px;
 }
 
-.howto-title {
+.features-title {
     font-size: 22px;
     line-height: 30px;
     margin-bottom: 8px;
     margin-top: 8px;
 }
 
-.howto-card img {
+.features-card img {
     width: 100%;
 }
 
-.howto-card .image {
+.features-card .image {
     height: 100%;
 }
 
-/* Contribution cards */
+/* Benefits */
+
+#benefits {
+    text-align: center;
+}
+
+#benefits .container {
+    padding: 0 64px;
+}
+
+.benefits-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.benefits-card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.benefits-card:not(:last-child) {
+    margin-bottom: 32px;
+}
+
+.benefits-card h4 {
+    border-bottom: 3px solid #00ae9e;
+    display: inline-block;
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
+}
+
+.benefits-card, .benefits-text {
+        /* Fix bug in IE with flex items overflowing on small screens */
+    width: 100%;
+}
+
+.benefits-card > *, .benefits-text > * {
+    /* Fix bug with column flex items overflowing on IE - https://github.com/philipwalton/flexbugs */
+    max-width: 100%;
+}
+
+.benefits-text {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contribute */
 
 #contribute h2 {
     margin-bottom: 20px;
@@ -168,8 +334,9 @@ header, footer {
 }
 
 .contribute-card {
-    padding: 28px 0;
     display: flex;
+    padding: 28px 0;
+    width: 100%;
 }
 
 .contribute-card .text {
@@ -192,48 +359,161 @@ header, footer {
     width: 100%;
 }
 
-/*Teamwork cards*/
+/* Footer */
 
-#teamwork {
-    text-align: center;
+footer .section {
+    padding: 24px 0;
 }
 
-#teamwork .container {
-    padding: 0 64px;
-}
-
-.teamwork-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.teamwork-card {
-    align-items: center;
+footer .container {
     display: flex;
     flex-direction: column;
-    /* Fix bug in IE with flex items overflowing on small screens */
+}
+
+footer .container > *:not(:last-child) {
+    flex-shrink: 0;
+    padding-right: 48px;
+}
+
+.mailing-list {
+    margin-bottom: 40px;
+}
+
+.mailing-list .button {
+    background-color: #f27062;
+}
+
+.mailing-list input {
+    border: none;
+    border-radius: 3px;
+    margin: 12px 0 24px 0;
+    outline: none;
+    padding: 10px 14px;
     width: 100%;
 }
 
-.teamwork-card > * {
-    /* Fix bug with column flex items overflowing on IE - https://github.com/philipwalton/flexbugs */
-    max-width: 100%;
+.links {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.teamwork-card:not(:last-child) {
-    margin-bottom: 32px;
+.footer-link:not(:last-child) {
+    margin-bottom: 24px;
 }
 
-.teamwork-card h4 {
-    border-bottom: 3px solid #00ae9e;
-    display: inline-block;
-    margin: 24px 0 16px 0;
-    padding-bottom: 8px;
+.copyright {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 48px;
 }
 
 /* Responsive */
-@media (min-width: 601px) {
+
+@media (min-width: 691px) {
+    /* Tablet */
+
+    /* Features */
+
+    .script-on .tabs {
+        border-bottom: solid 2px #243587;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        padding: 0 32px;
+    }
+
+    .tab {
+        cursor: pointer;
+        margin-bottom: -5px;
+        padding: 14px 16px 20px 16px;
+    }
+
+    .tab.active {
+        border-bottom: 8px solid #00ae9e;
+        padding-bottom: 12px;
+    }
+
+    .tab:not(.active):hover, .tab:not(.active):focus {
+        color: #2b3342;
+        border-bottom: 8px solid #c7c7c7;
+        padding-bottom: 12px;
+    }
+
+    .tab:not(.active) {
+        border-bottom: none;
+        color: #6b717a;
+    }
+
+    .script-on .features-title {
+        display: none;
+    }
+
+    .script-on .features-title.tab {
+        display: block;
+    }
+
+    .features-card {
+        flex-direction: row-reverse;
+    }
+
+    .script-on .features-card {
+        border: none;
+    }
+
+    .features-card h3 {
+        margin-top: 0;
+    }
+
+    .script-on .features-card:not(.active) {
+        display: none;
+    }
+
+    .features-card .image {
+        flex-shrink: 0;
+        width: 50%;
+    }
+
+    .features-card .text {
+        padding-right: 40px;
+    }
+
+    /* Benefits */
+
+    #benefits {
+        text-align: left;
+    }
+
+    .benefits-card {
+        flex-direction: row;
+    }
+
+    .benefits-image {
+        min-width: 200px;
+    }
+
+    .benefits-text {
+        align-items: flex-start;
+    }
+
+    /* Contribute */
+
+    .contribute-card {
+        flex-direction: row-reverse;
+        width: calc(50% - 14px);
+    }
+
+    .contribute-card:nth-of-type(3) {
+        border-bottom: none;
+    }
+}
+
+@media (min-width: 857px) {
+    /* Desktop */
+
+    /* Typography */
+
     body {
         font-size: 18px;
         line-height: 26px;
@@ -260,13 +540,21 @@ header, footer {
         line-height: 32px;
     }
 
-    li {
-        margin-bottom: 16px;
+    footer {
+        font-size: initial;
     }
 
-    #introduction section {
-        width: 50%;
+    #brand, #mobileBrand {
+        font-size: 36px;
+        line-height: 42px;
     }
+
+    #footerBrand {
+        font-size: 24px;
+        line-height: 40px;
+    }
+
+    /* Layout */
 
     .mobile {
         display: none;
@@ -276,78 +564,84 @@ header, footer {
         display: block;
     }
 
-    .tabs {
-        border-bottom: solid 2px #243587;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 32px;
-        padding: 0 32px;
+    li {
+        margin-bottom: 16px;
     }
 
-    .tab {
-        cursor: pointer;
-        margin-bottom: -5px;
-        padding: 14px 16px;
+    .button {
+        padding: 12px 36px;
     }
 
-    .tab.active {
-        border-bottom: 8px solid #00ae9e;
+    .button, input, .mailing-list input {
+        width: auto;
+        width: initial;
     }
 
-    .tab:not(.active):hover {
-        color: #2b3342;
-        border-bottom: 8px solid #c7c7c7;
+    /* Header */
+
+    nav {
+        height: 100%;
     }
 
-    .tab:not(.active) {
-        border-bottom: none;
-        color: #6b717a;
+    nav a:not(:first-child) {
+        margin-left: 48px;
     }
 
-    .howto-card {
-        border: none;
-        flex-direction: row-reverse;
-    }
+    /* Introduction */
 
-    .howto-card h3 {
-        margin-top: 0;
-    }
-
-    .howto-card:not(.active) {
-        display: none;
-    }
-
-    .howto-card .image {
-        flex-shrink: 0;
+    #introduction section {
         width: 50%;
     }
 
-    .howto-card .text {
-        padding-right: 40px;
+    .description {
+        margin-bottom: 40px;
     }
 
-    #teamwork .container {
+    .installation {
+        margin-bottom: 48px;
+    }
+
+    /* Benefits */
+
+    #benefits {
+        text-align: center;
+    }
+
+    #benefits .container {
         padding: 0 20px;
     }
+    .benefits-card {
+        width: calc(33% - 19px);
+        flex-direction: column;
+    }
+
+    .benefits-card:not(:last-child) {
+        margin-bottom: 0;
+    }
+
+    .benefits-text {
+        align-items: center;
+    }
+
+    /* Contribute */
 
     #contribute h2 {
         margin-bottom: 24px;
     }
 
-    .contribute-card {
-        flex-direction: row-reverse;
-        width: calc(50% - 14px);
+    /* Footer */
+
+    footer .container {
+        flex-direction: row;
+        justify-content: space-between;
     }
 
-    .contribute-card:nth-of-type(3) {
-        border-bottom: none;
+    footer .container > * {
+        margin: 0;
     }
 
-    .teamwork-card {
-        width: calc(33% - 19px);
-    }
-
-    .teamwork-card:not(:last-child) {
-        margin-bottom: 0;
+    .copyright {
+        text-align: right;
+        margin-top: 0;
     }
 }
