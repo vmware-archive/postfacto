@@ -42,16 +42,21 @@ a {
 }
 
 button {
+    cursor: pointer;
     font-family: 'Karla', sans-serif;
 }
 
-header a, footer a {
+footer a, header a, header nav button {
     color: #ffffff;
     font-weight: bold;
 }
 
 header a {
     text-decoration: none;
+}
+
+header nav button {
+    font-size: inherit;
 }
 
 h1, h2, h3, h4 {
@@ -190,7 +195,6 @@ header .container {
 }
 
 .burger {
-    cursor: pointer;
     display: none;
     padding: 0;
 }
@@ -425,7 +429,6 @@ footer .container > *:not(:last-child) {
     }
 
     .tab {
-        cursor: pointer;
         margin-bottom: -5px;
         padding: 14px 16px 20px 16px;
     }
@@ -583,7 +586,7 @@ footer .container > *:not(:last-child) {
         height: 100%;
     }
 
-    nav a:not(:first-child) {
+    nav .header-link:not(:first-child) {
         margin-left: 48px;
     }
 

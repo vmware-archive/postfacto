@@ -316,14 +316,21 @@
         document.querySelector("#featuresCard" + index).classList.add("active");
     }
 
-    function initialise () {
+    function enableScript () {
+        document.querySelector("body").classList.remove("script-off");
+        document.querySelector("body").classList.add("script-on");
+    }
+
+    function initialiseTabs () {
         [1, 2, 3].forEach(function (index) {
             document.querySelector("#featuresTab" + index).addEventListener("click", function () {
                 clearTimeout(welcomeWagon);
                 handleActivation(index);
             });
         });
+    }
 
+    function initialiseNavMenu () {
         document.querySelector("#menuButton").addEventListener("click", function () {
             if (document.querySelector("header").classList.contains("open-menu")) {
                 document.querySelector("header").classList.remove("open-menu");
@@ -333,10 +340,7 @@
         });
     }
 
-    window.onload = function () {
-        document.querySelector("body").classList.remove("script-off");
-        document.querySelector("body").classList.add("script-on");
-        initialise();
+    function initialiseWelcomeWagon () {
         welcomeWagon = setTimeout(function () {
             var toVisit = [2, 3, 1];
             welcomeWagon = setInterval(function () {
@@ -346,6 +350,44 @@
                 }
             }, 15000);
         }, 15000);
+    }
+
+    function handleClick () {
+        var id = this.getAttribute("href");
+        document
+            .querySelector(id)
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", id);
+        return false;
+    }
+
+    function createButton (element) {
+        var button = document.createElement("button");
+        button.classList.add("header-link");
+        button.innerText = element.innerText;
+        button.onclick = handleClick.bind(element);
+        return button;
+    }
+
+    function replaceLinksWithButtons () {
+        var links = document.querySelectorAll(".header-link");
+
+        for (var i = 0; i < links.length; i++) {
+            var element = links.item(i);
+            element.parentElement.replaceChild(createButton(element), element);
+        }
+    }
+
+    function initialise () {
+        enableScript();
+        initialiseTabs();
+        initialiseNavMenu();
+        initialiseWelcomeWagon();
+        replaceLinksWithButtons();
+    }
+
+    window.onload = function () {
+        initialise();
         handleActivation(1);
     }
 </script>
