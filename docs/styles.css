@@ -124,8 +124,13 @@ button {
     border: none;
 }
 
-header, footer {
+header {
     background-color: #00ae9e;
+    color: #ffffff;
+}
+
+footer {
+    background-color: #4c8c94;
     color: #ffffff;
 }
 
@@ -384,7 +389,8 @@ footer .container > *:not(:last-child) {
 }
 
 .mailing-list .button {
-    background-color: #f27062;
+    background-color: #fec722;
+    color: #243587;
 }
 
 .mailing-list input {
