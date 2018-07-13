@@ -167,10 +167,10 @@ nav {
 }
 
 .button {
-    background-color: #007acc;
+    background-color: #51c0b1;
     border-radius: 3px;
     box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.37);
-    color: #ffffff;
+    color: #243587;
     cursor: pointer;
     display: inline-block;
     font-size: 16px;
@@ -182,11 +182,13 @@ nav {
 }
 
 .button:hover {
-    background-color: #0066ab;
+    background-color: #008774;
+    color: #000000;
 }
 
 .button:active {
-    background-color: #243587;
+    background-color: #00ae9e;
+    color: #000000;
 }
 
 input, .button {
@@ -516,7 +518,7 @@ footer .container > *:not(:last-child) {
         width: 50%;
     }
 
-    #introduction h1, #introduction a {
+    #introduction h1, #introduction a:not(.button) {
         color: #ffffff;
     }
 
