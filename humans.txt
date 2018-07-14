@@ -47,6 +47,12 @@ Engineer: Katie Moulang
 Engineer: Jonathan Sharpe
 Contact: mail@jonrshar.pe
 
+Product Designer: Froso Ellina
+Contact: froso.ellina@gmail.com
+
+Product Designer: Zarrin Rahman
+Contact: zarrin.rahman@gmail.com
+
 /* CONTRIBUTORS */
 
 Engineer: Andrew Leung
