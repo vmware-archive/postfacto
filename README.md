@@ -39,14 +39,20 @@ You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or 
 * Ruby 2.4.0
 * bundler
 * rspec
-* Postgres
-* MySql
 * Node 6
 * npm 3.10.10 (`npm install -g npm@3.10.10`)
 * gulp
 * chromedriver
 
-You can also use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development if you'd prefer. If you're not using Docker you'll need to install all the dependencies on your local machine and then run `bundle install` in `api` and `e2e` to install Ruby dependencies and then run `npm install` in `web` to install Javascript ones.
+You can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development.
+
+### Installing library dependencies
+
+You can install library dependencies (gems and npm packages) for the `web`, `api` and `e2e` codebases by running:
+
+```bash
+./deps.sh
+```
 
 ### Running locally
 
