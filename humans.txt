@@ -53,6 +53,11 @@ Contact: froso.ellina@gmail.com
 Product Designer: Zarrin Rahman
 Contact: zarrin.rahman@gmail.com
 
+/* PIVOTAL PARIS */
+
+Engineer: Daniel Garnier-Moiroux
+Contact: git@garnier.wf
+
 /* CONTRIBUTORS */
 
 Engineer: Andrew Leung

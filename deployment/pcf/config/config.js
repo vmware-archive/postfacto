@@ -6,7 +6,7 @@ window.Retro = {
     "stylesheets": ["application.css"],
     "useRevManifest": true,
     "api_base_url": "https://{{api-app-name}}.{{pcf-url}}",
-    "websocket_url": "wss://{{api-app-name}}.{{pcf-url}}:443/cable",
+    "websocket_url": "wss://{{api-app-name}}.{{pcf-url}}:4443/cable",
     "contact": "",
     "terms": "",
     "privacy": ""
