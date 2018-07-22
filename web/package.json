@@ -79,6 +79,7 @@
     "react-addons-test-utils": "^15.0.2",
     "react-dom": "^15.3.0",
     "react-google-login": "^2.5.2",
+    "react-hot-loader": "^4.3.3",
     "react-slick": "^0.14.4",
     "react-tap-event-plugin": "^2.0.0",
     "require-dir": "^0.3.2",
