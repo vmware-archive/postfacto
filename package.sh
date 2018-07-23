@@ -4,32 +4,34 @@ set -e
 
 mkdir package
 
-# PWS
-
-cp -r deployment/pws package
-mkdir package/pws/assets
-
-cp -r api package/pws/assets/api
+# BUILD FRONT-END
 
 pushd web
   NODE_ENV=production gulp assets
   gulp package
 popd
+
+# PWS
+
+cp -r deployment/pws package
+cp -r deployment/deploy.sh package/pws/deploy.sh
+chmod u+x package/pws/deploy.sh
+
+mkdir package/pws/assets
+
+cp -r api package/pws/assets/api
 cp -r web/package package/pws/assets/web
 
 # PCF
 
 cp -r deployment/pcf package
+cp -r deployment/deploy.sh package/pcf/deploy.sh
+chmod u+x package/pcf/deploy.sh
+
 mkdir package/pcf/assets
 
 cp -r api package/pcf/assets/api
-
-pushd web
-  NODE_ENV=production gulp assets
-  gulp package
-popd
 cp -r web/package package/pcf/assets/web
-
 
 # Docs
 
