@@ -42,11 +42,11 @@ You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or 
 * gulp
 * chromedriver
 
-You can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development.
+To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development.
 
 ### Installing library dependencies
 
-You can install library dependencies (gems and npm packages) for the `web`, `api` and `e2e` codebases by running:
+Before development you'll need to install library dependencies (gems and npm packages) for the `web`, `api` and `e2e` codebases by running:
 
 ```bash
 ./deps.sh
