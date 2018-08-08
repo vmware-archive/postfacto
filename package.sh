@@ -19,6 +19,7 @@ chmod u+x package/pws/deploy.sh
 
 mkdir package/pws/assets
 
+rm -rf api/tmp/*
 cp -r api package/pws/assets/api
 cp -r web/package package/pws/assets/web
 
@@ -30,6 +31,7 @@ chmod u+x package/pcf/deploy.sh
 
 mkdir package/pcf/assets
 
+rm -rf api/tmp/*
 cp -r api package/pcf/assets/api
 cp -r web/package package/pcf/assets/web
 
