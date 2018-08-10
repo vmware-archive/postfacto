@@ -700,8 +700,7 @@ footer .container > *:not(:last-child) {
     }
 
     .button, input, .mailing-list input {
-        width: auto;
-        width: initial;
+        width: 640px;
     }
 
     /* endregion */
@@ -791,7 +790,7 @@ footer .container > *:not(:last-child) {
     }
 
     footer .container > * {
-        margin: 0;
+        margin: auto;
     }
 
     .copyright {
