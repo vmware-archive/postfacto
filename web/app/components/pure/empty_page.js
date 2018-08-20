@@ -29,21 +29,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const React = require('react');
+import React from "react";
 
-class Footer extends React.Component {
-
-  render() {
-    return (
-      <div className="footer ">
-          <span className="links">
-              <a href={global.Retro.config.contact}>Contact Us</a>
-              <a target="_blank" href={global.Retro.config.terms}>Terms & Conditions</a>
-              <a target="_blank" href={global.Retro.config.privacy}>Privacy Policy</a>
-          </span>
-      </div>
-    );
-  }
+function EmptyPage() {
+  return <div />;
 }
 
-module.exports = Footer;
+module.exports = EmptyPage;

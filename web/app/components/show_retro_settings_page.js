@@ -37,7 +37,7 @@ const types = React.PropTypes;
 const {Actions} = require('p-flux');
 import RetroMenu from './retro_menu';
 
-const EmptyPage = require('./empty_page');
+const EmptyPage = require('./pure/empty_page');
 import Toggle from 'material-ui/Toggle';
 
 const _ = require('lodash');

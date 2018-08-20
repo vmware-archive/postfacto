@@ -35,7 +35,7 @@ const {Actions} = require('p-flux');
 import { RaisedButton } from 'material-ui';
 
 
-const RetroFooter = require('../footer');
+const RetroFooter = require('../pure/footer');
 const RetroTile = require('../pure/retro_tile');
 const types = React.PropTypes;
 

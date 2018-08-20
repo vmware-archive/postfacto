@@ -97,7 +97,7 @@ class CountdownTimer extends React.Component {
           <div className="retro-item-timer">
             <div className="retro-item-timer-extend"
                  onClick={this.onExtendTimerClicked.bind(this)}>
-              <span className="item-times-up">Time's Up!</span>
+              <span className="item-times-up">{"Time's Up!"}</span>
               <br />
               +2 more minutes
             </div>

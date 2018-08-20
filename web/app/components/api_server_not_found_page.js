@@ -46,7 +46,7 @@ class ApiServerNotFoundPage extends React.Component {
             <div className="image">
               <img src={require('../images/face-dead.svg')}/>
             </div>
-            <h1>Oh no! It's broken</h1>
+            <h1>{"Oh no! It's broken"}</h1>
             <p>Try refreshing the page, or come back later.</p>
           </div>
         </div>

@@ -30,7 +30,7 @@
  */
 
 import React from 'react';
-import RetroFooter from './footer';
+import RetroFooter from './pure/footer';
 
 const NewTermsPage = () => (
   <div id="new-terms" className="terms">
@@ -42,7 +42,7 @@ const NewTermsPage = () => (
           ). By using or accessing any of the services offered at <a href="https://postfacto.io" target="_blank">https://postfacto.io</a>&nbsp;
           ("<strong>Service Offering(s)</strong>"), you agree to be bound by the terms of use between you and Pivotal (the "<strong>Postfacto Agreement</strong>"
           ) and the <strong>Terms of Use</strong>&nbsp;posted at <a href="https://pivotal.io/terms-of-use" target="_blank">https://pivotal.io/terms-of-use</a>, as may be updated by Pivotal from time to time&nbsp;
-          ("<strong>Terms of Use</strong>"), which are incorporated herein by reference. Unless otherwise indicated, capitalized terms have the meaning stated in the Terms of Use. If You do not agree to this Postfacto Agreement, you must not use or access the Service Offering. If you are accepting this Postfacto Agreement on behalf of an Organization (and not for you as individual), you represent and warrant that you have legal authority to bind that Organization, and you hereby enter into this Postfacto Agreement on behalf of that Organization.&nbsp;"You" or "your" means the entity accepting this Postfacto Agreement and the individual accepting this Postfacto Agreement on behalf of the entity. 
+          ("<strong>Terms of Use</strong>"), which are incorporated herein by reference. Unless otherwise indicated, capitalized terms have the meaning stated in the Terms of Use. If You do not agree to this Postfacto Agreement, you must not use or access the Service Offering. If you are accepting this Postfacto Agreement on behalf of an Organization (and not for you as individual), you represent and warrant that you have legal authority to bind that Organization, and you hereby enter into this Postfacto Agreement on behalf of that Organization.&nbsp;"You" or "your" means the entity accepting this Postfacto Agreement and the individual accepting this Postfacto Agreement on behalf of the entity.
         </li>
 
         <li><h2>Definitions</h2>

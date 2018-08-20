@@ -32,7 +32,7 @@
 require('../spec_helper');
 const Alert = require('../../../app/components/alert');
 const Router = require('../../../app/components/router');
-const EmptyPage = require('../../../app/components/empty_page');
+const EmptyPage = require('../../../app/components/pure/empty_page');
 const HomePage = require('../../../app/components/home_page');
 const ApiServerNotFoundPage = require('../../../app/components/api_server_not_found_page');
 const TestUtils = require('react-addons-test-utils');

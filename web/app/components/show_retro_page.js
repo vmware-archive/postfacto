@@ -41,12 +41,12 @@ const {Actions} = require('p-flux');
 const RetroColumn = require('./retro_column');
 const RetroActionPanel = require('./retro_action_panel');
 const RetroWebsocket = require('./retro_websocket');
-const RetroFooter = require('./footer');
+const RetroFooter = require('./pure/footer');
 import { RetroLegalBanner } from './retro_legal_banner';
 import RetroHeading from './retro_heading';
 import {HotKeys} from 'react-hotkeys';
 
-const EmptyPage = require('./empty_page');
+const EmptyPage = require('./pure/empty_page');
 const jQuery = require('jquery');
 
 import { DEFAULT_TOGGLE_STYLE } from '../constants';
@@ -367,4 +367,3 @@ class ShowRetroPage extends React.Component {
 }
 
 module.exports = ShowRetroPage;
-

@@ -29,19 +29,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const React = require('react');
-const types = React.PropTypes;
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class RetroTile extends React.Component {
-
-  static propTypes = {
-    retro: types.object,
-    callback: types.func,
-  };
-
-  render() {
-    return <div className='retro-list-tile' onClick={this.props.callback}>{this.props.retro.name}</div>;
-  }
+function RetroTile({callback, retro}) {
+  return <div className='retro-list-tile' onClick={callback}>{retro.name}</div>;
 }
+
+RetroTile.propTypes = {
+  retro: PropTypes.object,
+  callback: PropTypes.func,
+};
 
 module.exports = RetroTile;
