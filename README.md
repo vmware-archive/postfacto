@@ -12,7 +12,7 @@ You can stay up to date with the latest Postfacto releases by signing up to our 
 
 ### Run retros remotely
 
-Postfacto let's you run an agile retrospective even when your team is distributed across the world.
+Postfacto lets you run an agile retrospective even when your team is distributed across the world.
 
 ### Record action items
 
