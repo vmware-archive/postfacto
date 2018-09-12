@@ -16,10 +16,10 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
 
 1. Run the PWS deployment script from the `pws` directory:
 
-  ```bash
-  ./deploy.sh
-  ```
-
+    ```bash
+    ./deploy.sh
+    ```
+  
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
@@ -39,9 +39,9 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 
 1. Run the PCF deployment script from the `pcf` directory:
 
-  ```bash
-  ./deploy.sh
-  ```
+    ```bash
+    ./deploy.sh
+    ```
 
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
@@ -50,7 +50,7 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 
 ## Optional Setup
 
-### Setting up Google OAuth
+### Allowing users to create retros
 
 In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
 For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
@@ -71,6 +71,6 @@ For deployments that do not want to setup Google OAuth, you will need to create 
      line `"google_oauth_client_id": {{client-id}}` to the config object, and change
 `{{client-id}}` to your generated Google OAuth `client-id`
 
-### Enabling Analytics
+### Enabling analytics
 
 If you'd like to have your instance send analytics data to the Postfacto team so they can learn about how you're using it and continue to improve it you can! To switch this on add `"enable_analytics": true` to the `config.js` object for your installation. Please note that we do not record any personal data (such as emails or retro data). As we are recording events from you we will however see the URL of the web client for your instance. If you're not comfortable with this don't worry, this feature is disabled by default.
