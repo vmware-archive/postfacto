@@ -35,6 +35,16 @@ rm -rf api/tmp/*
 cp -r api package/pcf/assets/api
 cp -r web/package package/pcf/assets/web
 
+# Heroku
+
+cp -r deployment/heroku package
+cp -r deployment/deploy_heroku.sh package/heroku/deploy_heroku.sh
+chmod u+x package/heroku/deploy_heroku.sh
+
+rm -rf api/tmp/*
+cp -r api/* package/heroku/assets/api
+cp -r web/package/* package/heroku/assets/web/public_html
+
 # Docs
 
 cp deployment/INSTRUCTIONS.md package

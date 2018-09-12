@@ -48,6 +48,19 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
+
+## Heroku
+
+1. Run the Heroku deployment script from the `heroku` directory:
+
+  ```bash
+  ./deploy_heroku.sh <web-app-name> <api-app-name>
+  ```
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.herokuapp.com/admin`
+1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Log in to your retro at `web-app-name.herokuapp.com/retros/you-retro-slug`
+1. Share the URL and password with your team and then run a retro!
+
 ## Configuration
 
 ### Allowing users to create retros
