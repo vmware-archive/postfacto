@@ -45,8 +45,7 @@ module.exports = {
   alert: null,
   retros: [],
   featureFlags: {
-    newTerms: false,
-    archiveEmails: false,
+    archiveEmails: false
   },
   countryCode: 'GB'
 };

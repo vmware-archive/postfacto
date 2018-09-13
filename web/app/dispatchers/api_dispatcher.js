@@ -278,8 +278,6 @@ const ApiDispatcher = {
     return RetroApi.retrieveConfig().then(([status, data]) => {
       if (status >= 200 && status < 400) {
         this.dispatch({type: 'setConfig', data: {
-          new_terms: data.new_terms,
-          old_terms: data.old_terms,
           archive_emails: data.archive_emails
         }});
       } else if (status === 404) {

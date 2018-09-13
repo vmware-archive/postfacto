@@ -283,8 +283,6 @@ const MainDispatcher = {
     },
     setConfig({data}) {
         this.$store.refine('featureFlags').merge({
-            newTerms: data.new_terms,
-            oldTerms: data.old_terms,
             archiveEmails: data.archive_emails
         });
     },
