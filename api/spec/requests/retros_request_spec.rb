@@ -214,6 +214,16 @@ describe '/retros' do
           status = get "/retros/#{retro.slug}", as: :json
           expect(status).to eq(403)
         end
+
+        context 'expired token' do
+          it 'returns 403 Forbidden' do
+            retro.update(is_private: true)
+
+            CLOCK.time = Time.now.utc + 5.minutes
+            status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
+            expect(status).to eq(403)
+          end
+        end
       end
     end
 
@@ -268,6 +278,23 @@ describe '/retros' do
         data = JSON.parse(response.body)
         expect(data['token']).to eq(retro.reload.auth_token)
         expect(data['token']).to_not be_nil
+      end
+    end
+
+    context 'if auth_token is expired' do
+      before do
+        retro
+        CLOCK.time = Time.now.utc + 5.minutes
+      end
+
+      it 'generates a new auth_token' do
+        old_token = retro.auth_token
+
+        put retro_path(retro) + '/login', params: { retro: { password: 'the-password' } }, as: :json
+        expect(status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['token']).to eq(retro.reload.auth_token)
+        expect(data['token']).to_not eq(old_token)
       end
     end
   end

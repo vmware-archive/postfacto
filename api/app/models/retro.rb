@@ -88,6 +88,10 @@ class Retro < ActiveRecord::Base
     save!
   end
 
+  def token_has_expired?(current_time)
+    current_time >= (updated_at + 30.seconds)
+  end
+
   private
 
   def generate_slug

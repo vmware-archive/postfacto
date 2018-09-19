@@ -31,7 +31,7 @@
 require 'rails_helper'
 
 describe Retro do
-  describe 'initialize' do
+  describe '#initialize' do
     let(:retro) { Retro.create(name: 'My Retro') }
 
     it 'should have a video link' do
@@ -61,7 +61,7 @@ describe Retro do
     end
   end
 
-  describe 'save' do
+  describe '#save' do
     let(:retro) { Retro.new(name: 'My Retro', video_link: 'the-video-link', slug: 'a' * Retro::MAX_SLUG_LENGTH) }
 
     it 'defaults send_archived_email to true' do
@@ -69,7 +69,7 @@ describe Retro do
     end
   end
 
-  describe 'create_instruction_cards!' do
+  describe '#create_instruction_cards!' do
     let(:retro) { Retro.create(name: 'My Retro') }
 
     it 'creates instruction cards' do
@@ -103,6 +103,18 @@ describe Retro do
 
     it 'returns true when validating the retro without a password' do
       expect(retro.validate_login?(nil)).to be_truthy
+    end
+  end
+
+  describe '#token_has_expired?' do
+    let(:retro) { Retro.create!(name: 'My Retro', password: 'some-password') }
+
+    it 'returns true when token has expired' do
+      expect(retro.token_has_expired?(Time.now.utc + 5.minutes)).to be_truthy
+    end
+
+    it 'returns false when token is still valid' do
+      expect(retro.token_has_expired?(Time.now.utc)).to be_falsey
     end
   end
 
