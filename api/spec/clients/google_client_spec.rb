@@ -32,20 +32,18 @@ require 'spec_helper'
 require 'clients/google_client'
 
 describe GoogleClient do
-  HOSTED_DOMAIN = 'frog.com'.freeze
-
   describe '.get_user' do
     it 'fetches user from google' do
       stub_request(:get, 'http://www.example.com')
         .with(headers: { Authorization: 'Bearer the-access-token' })
         .to_return(
-          body: '{"name": "Felicity Frog", "email": "felicity@frog.com", "hd": "frog.com"}',
+          body: '{"name": "Felicity Frog", "email": "felicity@frog.com"}',
           status: 200
         )
 
-      user_data = GoogleClient.new('http://www.example.com').get_user! 'the-access-token'
+      user_data = GoogleClient.new('http://www.example.com', nil).get_user! 'the-access-token'
 
-      expect(user_data).to eq(name: 'Felicity Frog', email: 'felicity@frog.com', hd: 'frog.com')
+      expect(user_data).to eq(name: 'Felicity Frog', email: 'felicity@frog.com')
     end
 
     context 'fetching user from google' do
@@ -58,7 +56,7 @@ describe GoogleClient do
           )
 
         expect {
-          GoogleClient.new('http://www.example.com').get_user! 'the-access-token'
+          GoogleClient.new('http://www.example.com', nil).get_user! 'the-access-token'
         }.to raise_error(GoogleClient::GetUserFailed)
       end
 
@@ -71,7 +69,7 @@ describe GoogleClient do
           )
 
         expect {
-          GoogleClient.new('http://www.example.com').get_user! 'the-access-token'
+          GoogleClient.new('http://www.example.com', 'frog.com').get_user! 'the-access-token'
         }.to raise_error(GoogleClient::InvalidUserDomain)
       end
     end

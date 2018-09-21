@@ -31,8 +31,9 @@
 require 'rest-client'
 
 class GoogleClient
-  def initialize(url)
+  def initialize(url, hosted_domain)
     @url = url
+    @hosted_domain = hosted_domain
   end
 
   def get_user!(access_token)
@@ -49,8 +50,8 @@ class GoogleClient
   end
 
   def validate_hosted_domain(user)
-    if HOSTED_DOMAIN
-      if user[:hd] != HOSTED_DOMAIN
+    if @hosted_domain
+      if user[:hd] != @hosted_domain
         raise InvalidUserDomain.new
       end
     end
