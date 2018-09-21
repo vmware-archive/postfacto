@@ -110,11 +110,11 @@ describe Retro do
     let(:retro) { Retro.create!(name: 'My Retro', password: 'some-password') }
 
     it 'returns true when token has expired' do
-      expect(retro.token_has_expired?(Time.now.utc + 5.minutes)).to be_truthy
+      expect(retro.token_has_expired?(5.minutes, Time.now.utc + 5.minutes)).to be_truthy
     end
 
     it 'returns false when token is still valid' do
-      expect(retro.token_has_expired?(Time.now.utc)).to be_falsey
+      expect(retro.token_has_expired?(1.minutes, Time.now.utc)).to be_falsey
     end
   end
 

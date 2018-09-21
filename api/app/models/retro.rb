@@ -88,8 +88,8 @@ class Retro < ActiveRecord::Base
     save!
   end
 
-  def token_has_expired?(current_time)
-    current_time >= (updated_at + 30.seconds)
+  def token_has_expired?(session_time, current_time)
+    current_time >= (updated_at + session_time)
   end
 
   private

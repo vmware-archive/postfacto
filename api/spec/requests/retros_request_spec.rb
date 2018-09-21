@@ -209,6 +209,10 @@ describe '/retros' do
       end
 
       context 'private retro' do
+        before do
+          retro.update(is_private: true)
+        end
+
         it 'returns 403 Forbidden' do
           retro.update(is_private: true)
           status = get "/retros/#{retro.slug}", as: :json
@@ -217,9 +221,7 @@ describe '/retros' do
 
         context 'expired token' do
           it 'returns 403 Forbidden' do
-            retro.update(is_private: true)
-
-            CLOCK.time = Time.now.utc + 5.minutes
+            CLOCK.time = Time.now.utc + SESSION_TIME
             status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
             expect(status).to eq(403)
           end
@@ -283,8 +285,9 @@ describe '/retros' do
 
     context 'if auth_token is expired' do
       before do
+        SESSION_TIME = 2.minutes
         retro
-        CLOCK.time = Time.now.utc + 5.minutes
+        CLOCK.time = Time.now.utc + 2.minutes
       end
 
       it 'generates a new auth_token' do

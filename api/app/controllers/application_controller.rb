@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      token == @retro.auth_token && !@retro.token_has_expired?(CLOCK.current_time)
+      token == @retro.auth_token && !@retro.token_has_expired?(SESSION_TIME, CLOCK.current_time)
     end
   end
 
