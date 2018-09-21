@@ -221,7 +221,7 @@ describe '/retros' do
 
         context 'expired token' do
           it 'returns 403 Forbidden' do
-            CLOCK.time = Time.now.utc + SESSION_TIME
+            CLOCK.time = Time.now.utc + Rails.configuration.session_time
             status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
             expect(status).to eq(403)
           end
@@ -285,7 +285,7 @@ describe '/retros' do
 
     context 'if auth_token is expired' do
       before do
-        SESSION_TIME = 2.minutes
+        Rails.configuration.session_time = 2.minutes
         retro
         CLOCK.time = Time.now.utc + 2.minutes
       end

@@ -60,7 +60,7 @@ class RetrosController < ApplicationController
     if password_matches?(retro_params.fetch(:password))
       @retro.generate_auth_token! if
         @retro.auth_token.nil? ||
-        @retro.token_has_expired?(SESSION_TIME, CLOCK.current_time)
+        @retro.token_has_expired?(Rails.configuration.session_time, CLOCK.current_time)
 
       render json: { token: @retro.auth_token }, status: :ok
     else
