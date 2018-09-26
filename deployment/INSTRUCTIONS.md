@@ -19,7 +19,7 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
     ```bash
     ./deploy.sh
     ```
-  
+
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
@@ -48,7 +48,7 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
-## Optional Setup
+## Configuration
 
 ### Allowing users to create retros
 
@@ -74,3 +74,13 @@ For deployments that do not want to setup Google OAuth, you will need to create 
 ### Enabling analytics
 
 If you'd like to have your instance send analytics data to the Postfacto team so they can learn about how you're using it and continue to improve it you can! To switch this on add `"enable_analytics": true` to the `config.js` object for your installation. Please note that we do not record any personal data (such as emails or retro data). As we are recording events from you we will however see the URL of the web client for your instance. If you're not comfortable with this don't worry, this feature is disabled by default.
+
+### Changing session timeout
+
+Postfacto has a default session timeout of 120 minutes. This means that if a user logs in to a Retro using its password and forget the access to that Retro will no longer work if tried 120 minutes later and the user will have to enter the password again. An important note is that for the moment the same expiry window is shared by any one that logs into the Retro using the password.
+
+You can customise the this window by adding a `SESSION_TIME` variable to the `env` block in either `pws/config/manifest-api.yml` or `pcf/config/manifest-api.yml`. The value should be set in minutes so for a session timeout of 1 hour it would be:
+
+```yaml
+SESSION_TIME: 60
+```
