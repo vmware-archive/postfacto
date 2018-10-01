@@ -38,10 +38,12 @@ class SafeOrderBy
     order ||= ''
     descending = order.end_with? '_desc'
     logical = order.sub(/_[^_]*$/, '')
+
     if @mapping[logical]
-      return @mapping[logical] + (descending ? ' DESC' : ' ASC')
+      @mapping[logical] + (descending ? ' DESC' : ' ASC')
+    else
+      ''
     end
-    ''
   end
 
   def order(order)

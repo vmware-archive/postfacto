@@ -36,7 +36,7 @@ class RetroFacilitator
         EndWithHappiestRule.new(
             OrderedByVoteRule.new(
                 HappyMehSadOrderRule.new
-            )))
+              )))
 
     rules.apply(retro, retro.items)
   end

@@ -27,10 +27,25 @@
 # You should have received a copy of the GNU Affero General Public License
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
 
-class NoOpRule
-  def apply(___, items)
-    items
+require 'rails_helper'
+
+RSpec.describe RetrosChannel, type: :channel do
+  describe 'subscription' do
+    context 'for private retro' do
+      let!(:retro) do
+        Retro.create!(name: 'My Retro', password: 'the-password', is_private: true)
+      end
+
+      context 'with correct API token provided' do
+        before do
+          subscribe(retro_id: retro.id, api_token: retro.auth_token)
+        end
+
+        it 'is confirmed' do
+          expect(subscription).to be_confirmed
+        end
+      end
+    end
   end
 end

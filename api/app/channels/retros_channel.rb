@@ -31,6 +31,7 @@
 # Be sure to restart your server when you modify this file.
 # Action Cable runs in a loop that does not support auto reloading.
 class RetrosChannel < ApplicationCable::Channel
+
   def self.broadcast(retro)
     broadcast_to retro, retro: retro.as_json(include: {items: {}, action_items: {}, archives: {only: :id}})
   end
@@ -45,6 +46,8 @@ class RetrosChannel < ApplicationCable::Channel
           RetroSessionService.instance.remove_retro_consumer(retro.id, uuid)
         end
   end
+
+  attr_accessor :request_uuid
 
   def subscribed
     retro = Retro.friendly.find(params[:retro_id])
@@ -74,7 +77,7 @@ class RetrosChannel < ApplicationCable::Channel
   end
 
   def valid_token_provided?(retro, api_token)
-    ActiveSupport::SecurityUtils.variable_size_secure_compare(
+    ActiveSupport::SecurityUtils.secure_compare(
       api_token,
       retro.auth_token
     )

@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
 
   def user_allowed_to_access_retro?
     return true unless @retro.is_private?
+
     !@retro.requires_authentication? || valid_token_provided?
   end
 

@@ -45,7 +45,7 @@ class GoogleClient
     user
   rescue InvalidUserDomain => e
     raise e
-  rescue
+  rescue StandardError
     raise GetUserFailed.new
   end
 
