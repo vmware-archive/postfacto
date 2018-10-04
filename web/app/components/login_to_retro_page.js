@@ -119,6 +119,7 @@ class LoginToRetroPage extends React.Component {
                        onChange={this.onInputChange.bind(this)}
                        onKeyPress={this.onKeyPress.bind(this)}
                        required={true}
+                       autoFocus={true}
                        autoComplete={false}/>
               <p className="password-terms-text">By logging in, you agree to our <a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and <a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and use of cookies.</p>
                 <div className="error-message">{errors}</div>

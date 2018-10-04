@@ -57,6 +57,10 @@ describe('LoginToRetroPage', () => {
       expect('label').toContainText('Enter the password to access the retro name.');
     });
 
+    it('focuses the password input field', () => {
+      expect('.form-input').toBeFocused();
+    });
+
 
     describe('when clicking on the login button', () => {
       it('dispatches loginToRetro', () => {
