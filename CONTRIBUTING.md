@@ -1,3 +1,68 @@
+# Development Environment
+
+## Dependencies
+
+* Ruby 2.4.0
+* bundler
+* rspec
+* Node 6
+* npm 3.10.10 (`npm install -g npm@3.10.10`)
+* gulp
+* chromedriver
+
+To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development.
+
+## Installing library dependencies
+
+Before development you'll need to install library dependencies (gems and npm packages) for the `web`, `api` and `e2e` codebases by running:
+
+```bash
+./deps.sh
+```
+
+## Running locally
+
+You can run Postfacto locally at [http://localhost:3000]() by running:
+
+```bash
+./run.sh
+```
+
+The admin dashboard will be available at [http://localhost:4000/admin](). You can create an admin user using the following rake task in the `api` directory:
+
+```bash
+ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user
+```
+
+## Running tests
+
+You can run the tests for the whole project in the root directory by simply running:
+
+```bash
+./test.sh
+```
+
+### Web
+
+```bash
+cd web
+gulp spec-app
+```
+
+### API
+
+```bash
+cd api
+bundle exec rake
+```
+
+### End to end
+
+```bash
+cd web
+gulp local-acceptance
+```
+
 # Contributing to Pivotal Projects
 
 We’d love to accept your patches and contributions to this project. Please review the following guidelines you'll need to follow in order to make a contribution.
