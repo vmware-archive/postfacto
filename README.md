@@ -30,6 +30,10 @@ Postfacto will auto generate you an [appear.in](https://appear.in) room for your
 
 You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or **Pivotal Cloud Foundry** and stay in control of your own data.
 
+## Deployment
+
+Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
+
 ## Development
 
 ### Dependencies
@@ -94,10 +98,6 @@ bundle exec rake
 cd web
 gulp local-acceptance
 ```
-
-## Deployment
-
-Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
 
 ## Contributing
 
