@@ -51,7 +51,6 @@ class Retro < ActiveRecord::Base
     unless val.blank?
       self.salt = BCrypt::Engine.generate_salt
       self.encrypted_password = BCrypt::Engine.hash_secret(val, salt)
-      self.auth_token = generate_auth_token
     end
   end
 
@@ -88,8 +87,8 @@ class Retro < ActiveRecord::Base
     save!
   end
 
-  def token_has_expired?(session_time, current_time)
-    current_time >= (updated_at + session_time)
+  def token_has_expired?(session_time_limit, current_time)
+    current_time >= (updated_at + session_time_limit)
   end
 
   private

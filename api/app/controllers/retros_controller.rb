@@ -28,6 +28,8 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+require 'security/retro_token'
+
 class RetrosController < ApplicationController
   before_action :load_retro_with_items, only: [:show]
   before_action :load_retro, :authenticate_retro
@@ -58,11 +60,12 @@ class RetrosController < ApplicationController
 
   def login
     if password_matches?(retro_params.fetch(:password))
-      @retro.generate_auth_token! if
-        @retro.auth_token.nil? ||
-        @retro.token_has_expired?(Rails.configuration.session_time, CLOCK.current_time)
+      # @retro.generate_auth_token! if
+      #   @retro.auth_token.nil? ||
+      #   @retro.token_has_expired?(Rails.configuration.session_time, CLOCK.current_time)
 
-      render json: { token: @retro.auth_token }, status: :ok
+      token = RetroToken.generate(@retro.slug, CLOCK.current_time, Rails.configuration.session_time, 'secret') #TODO: DONT USE THIS SECRET
+      render json: { token: token }, status: :ok
     else
       render json: :no_content, status: :forbidden
     end

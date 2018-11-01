@@ -29,12 +29,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 require 'rails_helper'
+require 'security/retro_token'
 
-describe '/retros/:retro_id/action_items' do
+fdescribe '/retros/:retro_id/action_items' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(RetroToken.generate(retro.slug, CLOCK.current_time, Rails.configuration.session_time, 'secret')) }
 
-  describe 'when password is provided' do
+  describe 'when authorized' do
     it 'successfully create an action item and renders json' do
       expect(RetrosChannel).to receive(:broadcast)
       post retro_path(retro) + '/action_items', params: {
@@ -61,14 +62,15 @@ describe '/retros/:retro_id/action_items' do
     end
   end
 
-  describe 'when password is not provided' do
+  describe 'when not authorized' do
     context 'when the retro is private' do
       before { retro.update(is_private: true) }
 
       it 'returns 403 when try to create and and not logged in' do
         expect do
           post retro_path(retro) + '/action_items',
-               params: { action_item: { description: 'This is a description' } }, as: :json
+               params: { action_item: { description: 'This is a description' } }
+               headers: { HTTP_AUTHORIZATION: 'wrong' }, as: :json
         end.to_not change { ActionItem.count }
         expect(response.status).to eq(403)
       end
@@ -77,7 +79,7 @@ describe '/retros/:retro_id/action_items' do
         action_item = retro.action_items.create!(description: 'This is a description')
 
         expect do
-          delete retro_action_item_path(retro, action_item), as: :json
+          delete retro_action_item_path(retro, action_item), headers: { HTTP_AUTHORIZATION: 'wrong' }, as: :json
         end.to_not change { ActionItem.count }
         expect(response.status).to eq(403)
       end

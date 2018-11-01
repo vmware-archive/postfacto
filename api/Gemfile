@@ -47,6 +47,7 @@ gem 'puma'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rest-client'
 gem 'uglifier'
+gem 'jwt'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -59,6 +60,7 @@ group :development, :test do
   gem 'tzinfo-data'
   gem 'climate_control'
   gem 'action-cable-testing'
+  gem 'timecop'
 end
 
 group :development do
