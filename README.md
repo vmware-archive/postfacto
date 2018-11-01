@@ -6,7 +6,9 @@ Postfacto is a **free**, **open-source** and **self-hosted** **retro tool** aime
 
 Postfacto was created by [Pivotal Labs](https://pivotal.io/labs) by a team in their [Sydney office](https://pivotal.io/locations/sydney). It was originally available as a hosted SAAS product at [postfacto.io](https://postfacto.io) but has since been open sourced and focused on being a self hosted product. Postfacto is made up of a **React** web app and a **Ruby on Rails** API that provides an API for the front end.
 
-You can stay up to date with the latest Postfacto releases by signing up to our [mailing list](http://eepurl.com/dlQPND).
+## Deployment
+
+Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
 
 ## Features
 
@@ -29,10 +31,6 @@ Postfacto will auto generate you an [appear.in](https://appear.in) room for your
 ### Easily deployable
 
 You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or **Pivotal Cloud Foundry** and stay in control of your own data.
-
-## Deployment
-
-Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
 
 ## Contributing
 
