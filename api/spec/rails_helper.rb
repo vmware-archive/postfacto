@@ -100,3 +100,12 @@ Shoulda::Matchers.configure do |config|
     with.library :active_model
   end
 end
+
+def token_for(retro)
+  RetroToken.generate(
+    retro.slug,
+    CLOCK.current_time,
+    Rails.configuration.session_time,
+    Rails.application.secrets.secret_key_base
+  )
+end

@@ -44,7 +44,7 @@ class RetrosController < ApplicationController
       @retro.create_instruction_cards! if @user.retros.count == 1
       render json: {
         retro: @retro.as_json(only: [:id, :name, :slug]),
-        token: @retro.auth_token
+        token: generate_retro_token(@retro)
       }, status: :created
     else
       render json: { errors: retro_errors_hash }, status: :unprocessable_entity
@@ -60,12 +60,7 @@ class RetrosController < ApplicationController
 
   def login
     if password_matches?(retro_params.fetch(:password))
-      # @retro.generate_auth_token! if
-      #   @retro.auth_token.nil? ||
-      #   @retro.token_has_expired?(Rails.configuration.session_time, CLOCK.current_time)
-
-      token = RetroToken.generate(@retro.slug, CLOCK.current_time, Rails.configuration.session_time, 'secret') #TODO: DONT USE THIS SECRET
-      render json: { token: token }, status: :ok
+      render json: { token: generate_retro_token(@retro) }, status: :ok
     else
       render json: :no_content, status: :forbidden
     end
@@ -92,7 +87,7 @@ class RetrosController < ApplicationController
       @retro.update!(password: retro_update_password_params.fetch(:new_password))
 
       RetrosChannel.broadcast_force_relogin(@retro.reload, retro_update_password_params.fetch(:request_uuid))
-      render json: { token: @retro.auth_token }, status: :ok
+      render json: { token: generate_retro_token(@retro) }, status: :ok
     else
       render json: { errors: { 'current_password' => 'Sorry! That password does not match the current one.' } },
              status: :unprocessable_entity
@@ -111,7 +106,6 @@ class RetrosController < ApplicationController
   def force_relogin_required?
     changes = @retro.previous_changes
     changed_to_private = [false, true]
-
     changes.key?(:is_private) && changes[:is_private] == changed_to_private
   end
 
@@ -123,11 +117,6 @@ class RetrosController < ApplicationController
 
   def password_matches?(value)
     @retro.validate_login?(value)
-  end
-
-  def authenticate_user
-    @user = User.find_by_auth_token(request.headers['X-AUTH-TOKEN'])
-    render json: :no_content, status: :unauthorized unless @user
   end
 
   def load_retro
@@ -156,5 +145,14 @@ class RetrosController < ApplicationController
 
   def load_retro_with_items
     @retro = Retro.includes(:items, :action_items).find_by_slug!(params.fetch(:id))
+  end
+
+  def generate_retro_token(retro)
+    RetroToken.generate(
+      retro.slug,
+      CLOCK.current_time,
+      Rails.configuration.session_time,
+      Rails.application.secrets.secret_key_base
+    )
   end
 end

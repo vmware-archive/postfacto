@@ -32,7 +32,7 @@ require 'rails_helper'
 
 describe 'retros/:retro_id/archives' do
   let(:retro) { Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   before do
     retro.items.create!(description: 'The Item', category: 'happy')
@@ -84,11 +84,11 @@ describe 'retros/:retro_id/archives' do
     context 'access archive with wrong retro id' do
       let(:wrong_retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link') }
 
-      it 'responds with a http 404 json string' do
+      it 'responds with a http 403 json string' do
         archive = retro.reload.archives.last
         get retro_archive_path(wrong_retro, archive), as: :json
 
-        expect(response).to have_http_status(:not_found)
+        expect(response).to be_forbidden
         expect(response.content_type).to eq('application/json')
 
         expect(JSON.parse(response.body)).to eq({})

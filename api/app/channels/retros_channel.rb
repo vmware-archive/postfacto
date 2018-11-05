@@ -30,6 +30,9 @@
 #
 # Be sure to restart your server when you modify this file.
 # Action Cable runs in a loop that does not support auto reloading.
+
+require 'security/retro_token'
+
 class RetrosChannel < ApplicationCable::Channel
 
   def self.broadcast(retro)
@@ -73,13 +76,6 @@ class RetrosChannel < ApplicationCable::Channel
 
   def user_allowed_to_access_retro?(retro, api_token)
     return true unless retro.is_private?
-    !retro.requires_authentication? || valid_token_provided?(retro, api_token)
-  end
-
-  def valid_token_provided?(retro, api_token)
-    ActiveSupport::SecurityUtils.secure_compare(
-      api_token,
-      retro.auth_token
-    )
+    RetroToken.valid?(retro.slug, api_token, Rails.application.secrets.secret_key_base)
   end
 end

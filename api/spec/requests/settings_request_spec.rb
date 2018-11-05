@@ -34,7 +34,7 @@ describe '/retros/:id/settings' do
   let(:retro) do
     Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
   end
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   describe 'GET /' do
     context 'when auth header is provided' do

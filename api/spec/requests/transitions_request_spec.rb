@@ -32,7 +32,7 @@ require 'rails_helper'
 
 describe '/retros/:retro_id/discussion/transition' do
   let(:retro) { Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   describe 'POST' do
     it 'selects next item when no previous item highlighted' do

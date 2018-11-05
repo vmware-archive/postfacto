@@ -35,7 +35,7 @@ describe '/retros' do
     Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
   end
 
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   describe 'POST /' do
     context 'when auth header is provided' do
@@ -221,9 +221,12 @@ describe '/retros' do
 
         context 'expired token' do
           it 'returns 403 Forbidden' do
-            CLOCK.time = Time.now.utc + Rails.configuration.session_time
-            status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
-            expect(status).to eq(403)
+            expired_token = token # generate token before freezing time
+
+            Timecop.freeze(CLOCK.current_time + Rails.configuration.session_time + 1.minute) do
+              status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: expired_token }, as: :json
+              expect(status).to eq(403)
+            end
           end
         end
       end
@@ -451,9 +454,8 @@ describe '/retros' do
   end
 
   describe 'PATCH /:id/password' do
-    it 'updates the retro password and auth_token if the current password matches' do
+    it 'updates the retro password if the current password matches' do
       retro.update!(password: 'before')
-      old_token = retro.auth_token
 
       patch retro_update_password_path(retro),
             params: { current_password: 'before', new_password: 'after', request_uuid: 'blah' }, as: :json
@@ -461,9 +463,6 @@ describe '/retros' do
       expect(response.status).to eq(200)
 
       retro.reload
-      data = JSON.parse(response.body)
-      expect(data['token']).to eq(retro.auth_token)
-      expect(data['token']).to_not eq(old_token)
       expect(retro.validate_login?('after')).to eq(true)
     end
 

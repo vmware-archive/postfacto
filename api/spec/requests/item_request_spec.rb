@@ -34,7 +34,7 @@ describe '/retros/:retro_id/items' do
   let!(:retro) do
     Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link')
   end
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   let!(:item) do
     retro.items.create!(description: 'This is a description', category: Item.categories.fetch(:happy))

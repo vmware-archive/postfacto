@@ -39,7 +39,7 @@ RSpec.describe RetrosChannel, type: :channel do
 
       context 'with correct API token provided' do
         before do
-          subscribe(retro_id: retro.id, api_token: retro.auth_token)
+          subscribe(retro_id: retro.id, api_token: token_for(retro))
         end
 
         it 'is confirmed' do

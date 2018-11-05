@@ -9,7 +9,7 @@ describe RetroToken do
       session_time_limit = 2.minutes
       token = RetroToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
-      decoded_token = JWT.decode(token, secret, true, { algorithm: 'HS256' })
+      decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
       expect(decoded_token.first['slug']).to eq('happy-sad-meh')
       expect(decoded_token.first['exp']).to eq((current_time + session_time_limit).to_i)
     end

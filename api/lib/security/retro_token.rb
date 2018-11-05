@@ -7,7 +7,7 @@ class RetroToken
   end
 
   def self.valid?(retro_slug, token, secret)
-    decoded = JWT.decode(token, secret, true, { algorithm: 'HS256' })
+    decoded = JWT.decode(token, secret, true, algorithm: 'HS256')
     decoded.first['slug'] == retro_slug
   rescue JWT::ExpiredSignature
     false

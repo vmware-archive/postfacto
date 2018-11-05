@@ -28,11 +28,19 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
+require 'security/retro_token'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   protected
+
+  def authenticate_user
+    @user = User.find_by_auth_token(request.headers['X-AUTH-TOKEN'])
+    render json: :no_content, status: :unauthorized unless @user
+  end
 
   def load_retro
     @retro = Retro.friendly.find(params.fetch(:retro_id))
@@ -49,18 +57,16 @@ class ApplicationController < ActionController::Base
   end
 
   def user_allowed_to_access_retro?
-    return true unless @retro.is_private?
-
-    !@retro.requires_authentication? || valid_token_provided?
+    !@retro.is_private? || valid_token_provided?
   end
 
   def user_allowed_to_perform_admin_action?
-    !@retro.requires_authentication? || valid_token_provided?
+    valid_token_provided?
   end
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      token == @retro.auth_token && !@retro.token_has_expired?(Rails.configuration.session_time, CLOCK.current_time)
+      RetroToken.valid?(@retro.slug, token, Rails.application.secrets.secret_key_base)
     end
   end
 

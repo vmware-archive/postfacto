@@ -31,9 +31,9 @@
 require 'rails_helper'
 require 'security/retro_token'
 
-fdescribe '/retros/:retro_id/action_items' do
+describe '/retros/:retro_id/action_items' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(RetroToken.generate(retro.slug, CLOCK.current_time, Rails.configuration.session_time, 'secret')) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   describe 'when authorized' do
     it 'successfully create an action item and renders json' do
@@ -69,7 +69,7 @@ fdescribe '/retros/:retro_id/action_items' do
       it 'returns 403 when try to create and and not logged in' do
         expect do
           post retro_path(retro) + '/action_items',
-               params: { action_item: { description: 'This is a description' } }
+               params: { action_item: { description: 'This is a description' } },
                headers: { HTTP_AUTHORIZATION: 'wrong' }, as: :json
         end.to_not change { ActionItem.count }
         expect(response.status).to eq(403)
@@ -111,7 +111,7 @@ end
 describe 'PATCH /retros/:retro_id/action_items/:action_item_id' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }
   let(:action_item) { retro.action_items.create!(description: 'action item 1', done: false) }
-  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(retro.auth_token) }
+  let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   it 'updates the action item with the given value for done' do
     expect(RetrosChannel).to receive(:broadcast).twice
