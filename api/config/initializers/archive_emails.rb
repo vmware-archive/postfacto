@@ -42,7 +42,13 @@ FROM_ADDRESS = if Rails.env.production?
 
 if ARCHIVE_EMAILS && Rails.env.production?
   ActionMailer::Base.smtp_settings = begin
-    sendgrid_config = SendgridVCAPParser.get_configuration(ENV['VCAP_SERVICES'])
+    if ENV['VCAP_SERVICES'].nil?
+      username = ENV.fetch('SENDGRID_USERNAME')
+      password = ENV.fetch('SENDGRID_PASSWORD')
+      sendgrid_config = SendgridConfiguration('smtp.sendgrid.net', username, password)
+    else
+      sendgrid_config = SendgridVCAPParser.get_configuration(ENV['VCAP_SERVICES'])
+    end
 
     ActionMailer::Base.smtp_settings = {
       address: sendgrid_config.hostname,

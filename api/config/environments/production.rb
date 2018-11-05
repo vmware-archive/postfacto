@@ -29,6 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 require 'sendgrid_vcap_parser'
+require 'action_cable_host_provider'
+require 'action_cable_configuration_provider'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -69,10 +71,10 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
 
-  host = JSON.parse(ENV['VCAP_APPLICATION']).fetch('uris')[0]
-  config.action_cable.url = "wss://#{host}:#{ENV['WEBSOCKET_PORT'] || 443}/cable"
-  config.action_cable.allowed_request_origins =
-    ["https://#{host}", ENV['CLIENT_ORIGIN']]
+  host = ActionCableHostProvider.new.host
+  action_cable_configuration = ActionCableConfigurationProvider.new.config(host: host)
+  config.action_cable.url = action_cable_configuration.url
+  config.action_cable.allowed_request_origins = action_cable_configuration.allowed_request_origins
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true

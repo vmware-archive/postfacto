@@ -28,48 +28,4 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-source 'https://rubygems.org'
-
-ruby '~> 2.4.0'
-
-gem 'rails', '5.2.1'
-
-gem 'activeadmin'
-gem 'addressable'
-gem 'bcrypt'
-gem 'cf-app-utils'
-gem 'devise'
-gem 'friendly_id', '5.1.0'
-gem 'inherited_resources'
-gem 'jbuilder'
-gem 'premailer-rails'
-gem 'puma'
-gem 'rack-cors', require: 'rack/cors'
-gem 'rest-client'
-gem 'uglifier'
-
-group :development, :test do
-  gem 'dotenv-rails'
-  gem 'pry'
-  gem 'pry-byebug'
-  gem 'rspec-rails'
-  gem 'rubocop', require: false
-  gem 'shoulda-matchers'
-  gem 'webmock'
-  gem 'tzinfo-data'
-  gem 'climate_control'
-  gem 'action-cable-testing'
-end
-
-group :development do
-  gem 'sqlite3'
-  gem 'bullet'
-  gem 'listen'
-  gem 'web-console'
-end
-
-group :production do
-  gem 'redis', '~> 3.3.3'
-  gem 'mysql2'
-  gem 'pg'
-end
+ActionCableConfiguration = Struct.new(:url, :allowed_request_origins)

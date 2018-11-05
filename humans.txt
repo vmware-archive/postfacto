@@ -62,3 +62,9 @@ Contact: git@garnier.wf
 
 Engineer: Andrew Leung
 Contact: leung.andrew@gmail.com
+
+Enngineer: Matthew Chavez
+Contact: matthew@el-chavez.me
+
+Engineer: Mike Stallard
+Contact: mikestallard@gmail.com
