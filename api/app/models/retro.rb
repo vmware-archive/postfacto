@@ -82,11 +82,6 @@ class Retro < ActiveRecord::Base
     user.try(:email)
   end
 
-  def generate_auth_token!
-    self.auth_token = generate_auth_token
-    save!
-  end
-
   def token_has_expired?(session_time_limit, current_time)
     current_time >= (updated_at + session_time_limit)
   end
@@ -108,9 +103,5 @@ class Retro < ActiveRecord::Base
   def generate_video_link
     self.video_link = video_link.presence ||
                       'https://appear.in/retro-app-' + Array.new(8) { [*'0'..'9', *'a'..'z'].sample }.join
-  end
-
-  def generate_auth_token
-    SecureRandom.uuid.delete('/\-/')
   end
 end
