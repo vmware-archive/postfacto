@@ -51,6 +51,7 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 
 ## Heroku
 
+1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) 
 1. Run the Heroku deployment script from the `heroku` directory:
 
   ```bash

@@ -2,6 +2,7 @@
 
 set -e
 
+rm -r package
 mkdir package
 
 # BUILD FRONT-END
@@ -43,7 +44,7 @@ chmod u+x package/heroku/deploy_heroku.sh
 
 rm -rf api/tmp/*
 cp -r api/* package/heroku/assets/api
-cp -r web/package/* package/heroku/assets/web/public_html
+cp -r web/package package/heroku/assets/web/public_html
 
 # Docs
 
