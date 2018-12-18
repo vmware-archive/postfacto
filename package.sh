@@ -2,7 +2,9 @@
 
 set -e
 
-rm -r package
+if [ -d "package" ]; then
+  rm -r package
+fi
 mkdir package
 
 # BUILD FRONT-END
