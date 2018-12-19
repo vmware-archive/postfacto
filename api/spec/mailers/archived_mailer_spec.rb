@@ -41,7 +41,7 @@ RSpec.describe ArchivedMailer, type: :mailer do
     end
 
     let(:mail) do
-      archive = retro.archives.create!(created_at: Time.new(2017, 1, 1))
+      archive = retro.archives.create!(created_at: DateTime.new(2017, 1, 1))
 
       ActionItem.create!(retro: retro, description: 'An unresolved item', done: false, archive_id: archive.id)
       ActionItem.create!(retro: retro, description: 'A resolved item', done: true, archive_id: archive.id)
