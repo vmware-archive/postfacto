@@ -51,11 +51,11 @@ You can use [Concourse](https://concourse.ci) to deploy and keep your instance u
 
 ## Heroku
 
-1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) 
+1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
 
   ```bash
-  ./deploy_heroku.sh <web-app-name> <api-app-name>
+  ./deploy.sh <web-app-name> <api-app-name>
   ```
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.herokuapp.com/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'

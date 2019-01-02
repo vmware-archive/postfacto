@@ -2,7 +2,7 @@
 
 set -e
 
-rm -r package
+rm -rf package
 mkdir package
 
 # BUILD FRONT-END
@@ -39,7 +39,7 @@ cp -r web/package package/pcf/assets/web
 # Heroku
 
 cp -r deployment/heroku package
-cp -r deployment/deploy_heroku.sh package/heroku/deploy_heroku.sh
+cp -r deployment/deploy_heroku.sh package/heroku/deploy.sh
 chmod u+x package/heroku/deploy_heroku.sh
 
 rm -rf api/tmp/*
