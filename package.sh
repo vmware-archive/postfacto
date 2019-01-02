@@ -15,7 +15,7 @@ popd
 # PWS
 
 cp -r deployment/pws package
-cp -r deployment/deploy.sh package/pws/deploy.sh
+cp -r deployment/deploy-cf.sh package/pws/deploy.sh
 chmod u+x package/pws/deploy.sh
 
 mkdir package/pws/assets
@@ -27,7 +27,7 @@ cp -r web/package package/pws/assets/web
 # PCF
 
 cp -r deployment/pcf package
-cp -r deployment/deploy.sh package/pcf/deploy.sh
+cp -r deployment/deploy-cf.sh package/pcf/deploy.sh
 chmod u+x package/pcf/deploy.sh
 
 mkdir package/pcf/assets
@@ -40,7 +40,7 @@ cp -r web/package package/pcf/assets/web
 
 cp -r deployment/heroku package
 cp -r deployment/deploy_heroku.sh package/heroku/deploy.sh
-chmod u+x package/heroku/deploy_heroku.sh
+chmod u+x package/heroku/deploy.sh
 
 rm -rf api/tmp/*
 cp -r api/* package/heroku/assets/api
