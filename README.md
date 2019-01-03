@@ -35,7 +35,7 @@ You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or 
 
 ## Contributing
 
-See our [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md).
+Postfacto's code and design is hosted on [Github](https://github.com/pivotal/postfacto). See our [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md) for more info.
 
 ## License
 
