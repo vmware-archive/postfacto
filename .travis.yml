@@ -1,0 +1,5 @@
+services:
+  - docker
+
+script:
+ - docker run -v $(PWD):/postfacto postfacto/postfacto /bin/bash -c "cd /postfacto && ./deps.sh && ./test.sh"
