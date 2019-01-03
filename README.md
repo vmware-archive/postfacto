@@ -1,4 +1,5 @@
 # postfacto
+![https://travis-ci.org/pivotal/postfacto.svg?branch=master](https://travis-ci.org/pivotal/postfacto.svg?branch=master)
 
 Postfacto is a **free**, **open-source** and **self-hosted** **retro tool** aimed at helping **remote teams**.
 
