@@ -34,8 +34,6 @@ require 'clients/google_client'
 describe GoogleClient do
   describe '.get_user' do
     it 'fetches user from google' do
-      expect(false).to eq(true)
-
       stub_request(:get, 'http://www.example.com')
         .with(headers: { Authorization: 'Bearer the-access-token' })
         .to_return(
