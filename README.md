@@ -35,8 +35,8 @@ You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services** or 
 
 ## Contributing
 
-See our [Contributing Guide](CONTRIBUTING.md).
+See our [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md).
 
 ## License
 
-Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text of the license is available [here](LICENSE.md). It's important to note that this license allows you to deploy an instance of Postfacto for private, public or internal use.
+Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text of the license is available [here](https://github.com/pivotal/postfacto/blob/master/LICENSE.md). It's important to note that this license allows you to deploy an instance of Postfacto for private, public or internal use.
