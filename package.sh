@@ -42,7 +42,7 @@ cp -r web/package package/pcf/assets/web
 # Heroku
 
 cp -r deployment/heroku package
-cp -r deployment/deploy_heroku.sh package/heroku/deploy.sh
+cp -r deployment/deploy-heroku.sh package/heroku/deploy.sh
 chmod u+x package/heroku/deploy.sh
 
 rm -rf api/tmp/*
