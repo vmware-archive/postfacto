@@ -5,7 +5,7 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
 
 ## Pivotal Web Services
 
-[Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running. You can use [Concourse](https://concourse.ci) to deploy and keep your instance up to date using the example `pipeline.yml` in `pws` or if you'd prefer you can set it up manually using the steps below:
+[Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running.
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
 1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
@@ -26,8 +26,6 @@ If you're deploying to [Pivotal Web Services](#pivotal-web-services), you can ch
 1. Share the URL and password with your team and then run a retro!
 
 ## Pivotal Cloud Foundry
-
-You can use [Concourse](https://concourse.ci) to deploy and keep your instance up to date using the example `pipeline.yml` in `pcf` or if you'd prefer you can set it up manually using the steps below:
 
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
