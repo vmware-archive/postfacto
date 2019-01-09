@@ -1,6 +1,6 @@
 ---
 applications:
-- name: {{web-app-name}}
+- name: ((web-app-name))
   memory: 64M
   env:
     FORCE_HTTPS: true

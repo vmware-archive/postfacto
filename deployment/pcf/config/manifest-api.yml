@@ -1,6 +1,6 @@
 ---
 applications:
-- name: {{api-app-name}}
+- name: ((api-app-name))
   instances: 2
   buildpack: https://github.com/cloudfoundry/ruby-buildpack
   memory: 256M
@@ -9,5 +9,5 @@ applications:
     - postfacto-db
     - postfacto-redis
   env:
-    CLIENT_ORIGIN: https://{{web-app-name}}.{{pcf-url}}
+    CLIENT_ORIGIN: https://((web-app-name)).((pcf-url))
     WEBSOCKET_PORT: 443
