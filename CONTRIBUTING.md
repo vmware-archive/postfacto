@@ -5,8 +5,7 @@
 * Ruby 2.4.0
 * bundler
 * rspec
-* Node 6
-* npm 3.10.10 (`npm install -g npm@3.10.10`)
+* Node 11+
 * gulp
 * chromedriver
 

@@ -2,3 +2,5 @@ package
 package.zip
 .idea/
 deploy-acceptance.sh
+.DS_Store
+node_modules/
