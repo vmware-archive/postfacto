@@ -38,6 +38,15 @@ import * as serviceWorker from './serviceWorker';
 // TODO: polyfills?
 
 const {config} = global.Retro;
+
+if (process.env.REACT_APP_USE_MOCK_GOOGLE) {
+  config.mock_google_auth = true;
+  config.google_oauth_client_id = null;
+  window.mock_google_auth = 'expected-valid-access-token_manual-testing';
+} else if (process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID) {
+  config.google_oauth_client_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
+}
+
 window.Retro = {config};
 
 ReactDOM.render(<EnhancedApplication {...{config}}/>, document.getElementById('root'));

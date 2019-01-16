@@ -2,18 +2,15 @@
 
 set -e
 
-pushd api
+BASE_DIR="$(dirname "$0")"
+
+pushd "$BASE_DIR/api" >/dev/null
   bundle install --without production
-popd
+popd >/dev/null
 
-pushd web
-  npm install
-popd
+npm --prefix="$BASE_DIR/web" install
+npm --prefix="$BASE_DIR/mock-google-server" install
 
-pushd mock-google-server
-  npm install
-popd
-
-pushd e2e
+pushd "$BASE_DIR/e2e" >/dev/null
   bundle install
-popd
+popd >/dev/null

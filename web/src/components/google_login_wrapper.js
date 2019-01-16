@@ -48,9 +48,10 @@ export default class GoogleLoginWrapper extends React.Component {
   handleClickCapture(event) {
     if (global.Retro.config.mock_google_auth) {
       event.stopPropagation();
+      const mockedEmail = window.mock_google_auth.split('_')[1];
       this.props.onSuccess({
         profileObj: {
-          email: 'my-email@example.com',
+          email: mockedEmail + '@example.com',
           name: 'my full name'
         },
         accessToken: window.mock_google_auth

@@ -27,7 +27,19 @@ You can run Postfacto locally at [http://localhost:3000]() by running:
 ./run.sh
 ```
 
-The admin dashboard will be available at [http://localhost:4000/admin](). You can create an admin user using the following rake task in the `api` directory:
+Or to use real authentication (this will use no authentication unless `config.js` has a Google Auth client ID):
+
+```bash
+./run.sh --real-auth
+```
+
+---
+
+The admin dashboard will be available at [http://localhost:4000/admin]().
+
+A default admin user 'email@example.com' with password 'password' will be created
+
+You can create other admin users using the following rake task in the `api` directory:
 
 ```bash
 ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user
@@ -41,11 +53,24 @@ You can run the tests for the whole project in the root directory by simply runn
 ./test.sh
 ```
 
+The following sections show how to run individual test suites during development.
+
 ### Web
+
+To run the tests in "watch mode" (runs any tests touched by unstaged Git changes and re-runs tests when files change):
 
 ```bash
 cd web
-gulp spec-app
+npm test
+```
+
+(this can also be written as `npm --prefix=web test` if you prefer).
+
+To run all the tests:
+
+```bash
+cd web
+CI=true npm test
 ```
 
 ### API
