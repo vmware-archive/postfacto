@@ -1,7 +1,15 @@
 language: minimal
-
 services:
-  - docker
-
+- docker
 script:
- - docker run -v $TRAVIS_BUILD_DIR:/postfacto postfacto/postfacto /bin/bash -c "cd /postfacto && ./deps.sh && ./test.sh && ./package.sh"
+- docker run -v $TRAVIS_BUILD_DIR:/postfacto postfacto/postfacto /bin/bash -c "cd
+  /postfacto && ./deps.sh && ./test.sh && ./package.sh"
+deploy:
+  provider: releases
+  draft: true
+  overwrite: true
+  api_key:
+    secure: ihSdsFPrulg3ugZg9jZdRLEUrdMRpLCWPn4U92iJ7/cKNpz3PFCc4cOgzDYPdoxyPk/4fimkCy7g6Rx6987nvVvdl1pbXgiH0sSEzGnapV8uC2z3wVyR0fB3hO3pV+vvS21w35nnBT41huu2SB0v3SEL3KcbQPoV+4XWcexU1K+H2N6tylZx9wvcoInCVSltN7+qommiylNxlnyBCcNIahmjb4FMViUckwIoWsm90NzDlQa+UX7hqgzZMrQJI+4OBzC9nCuJz4k3kpCy42AhPhMRnBPyjsDf8EakFPulOcTks98VZP/5pOlq6qEoeJlWuC/HbQOrOFlUu7ZwDd24qTdxreEGM/j+hyyX29J1n1/VuD54/DI6YAQnxDlfQEt99HMzPJNT/Ky650sUgNpz/zVh9Laheb8eUZ2diU5AYhw40GTSUghRMGwk8KfsG93ci5LH+C5BL+kPFivY601cY5k1pcRczkR13ZyOcuurknqwU8c7DdHTh+iHIYdFqrDB7k2xOS57/7YZcYCdS2/DPYJBKo7i/ZVSYBwmWJG27aWfMF/xpkRzuh7e8to9uYVaByGSusTWdBP10ftAuNCB2yyk9kKHd79BmwVZVHdT3qZKGpnBXacTf31dnQq+mHnzBBzdNRR8uGm24XTgyeg9X/n9ML36OGGmzIeeXNXi9sc=
+  file: package.zip
+  on:
+    repo: pivotal/postfacto
