@@ -2,17 +2,30 @@
 
 set -e
 
+BASE_DIR="$(dirname "$0")"
+
 # API Unit Tests
-pushd api
+pushd "$BASE_DIR/api" >/dev/null
   bundle exec rake db:create db:migrate
+  echo
+  echo "API Unit Tests:"
+  echo
   bundle exec rake
-popd
+popd >/dev/null
 
 # Frontend Unit Tests
-CI=true npm --prefix=web test
+echo
+echo "Frontend Unit Tests:"
+echo
+CI=true npm --prefix="$BASE_DIR/web" test
 
 # E2E Tests
-export USE_MOCK_GOOGLE=true
-pushd e2e
-  bundle exec rspec
-popd
+
+echo
+echo "End-to-end Tests:"
+echo
+"$BASE_DIR/e2e.sh"
+
+# Done
+
+echo "All tests passed :)"

@@ -6,7 +6,6 @@
 * bundler
 * rspec
 * Node 11+
-* gulp
 * chromedriver
 
 To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development.
@@ -83,8 +82,7 @@ bundle exec rake
 ### End to end
 
 ```bash
-cd web
-gulp local-acceptance
+./e2e.sh
 ```
 
 # Contributing to Pivotal Projects

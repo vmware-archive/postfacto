@@ -4,3 +4,4 @@ package.zip
 deploy-acceptance.sh
 .DS_Store
 node_modules/
+*.log
