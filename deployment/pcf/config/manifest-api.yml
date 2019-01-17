@@ -11,3 +11,4 @@ applications:
   env:
     CLIENT_ORIGIN: https://((web-app-name)).((pcf-url))
     WEBSOCKET_PORT: 443
+    SECRET_KEY_BASE: ((secret_key_base))

@@ -1,3 +1,4 @@
 package
 package.zip
 .idea/
+deploy-acceptance.sh

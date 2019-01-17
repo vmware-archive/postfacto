@@ -55,7 +55,7 @@ pushd "$ASSETS_DIR"/api
 heroku create ${API_HOST} --buildpack heroku/ruby
 heroku addons:create heroku-postgresql:hobby-dev -a ${API_HOST}
 heroku addons:create heroku-redis:hobby-dev -a ${API_HOST}
-heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com -a ${API_HOST}
+heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com SECRET_KEY_BASE=$(openssl rand -hex 64) -a ${API_HOST}
 
 rm -rf .git # blow away any existent git directory from a previous run
 git init .
