@@ -62,13 +62,7 @@ For deployments that do not want to setup Google OAuth, you will need to create 
 1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`.  For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.cfapps.io`
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
-1. In additional to the steps required for deploying to PWS, and PCF:
-   - For PWS, in `pws/config/config.js`, add the
-     line `"google_oauth_client_id": {{client-id}}` to the config object, and change
-`{{client-id}}` to your generated Google OAuth `client-id`
-   - For PCF, in `pcf/config/config.js`, add the
-     line `"google_oauth_client_id": {{client-id}}` to the config object, and change
-`{{client-id}}` to your generated Google OAuth `client-id`
+1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
 
 ### Enabling analytics
 
@@ -78,8 +72,8 @@ If you'd like to have your instance send analytics data to the Postfacto team so
 
 Postfacto has a default session timeout of 120 minutes. This means that if a user logs in to a Retro using its password and forget the access to that Retro will no longer work if tried 120 minutes later and the user will have to enter the password again. An important note is that for the moment the same expiry window is shared by any one that logs into the Retro using the password.
 
-You can customise the this window by adding a `SESSION_TIME` variable to the `env` block in either `pws/config/manifest-api.yml` or `pcf/config/manifest-api.yml`. The value should be set in minutes so for a session timeout of 1 hour it would be:
+You can customise the this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
 
-```yaml
-SESSION_TIME: 60
+```bash
+SESSION_TIME=60 ./deploy web-app api-app
 ```
