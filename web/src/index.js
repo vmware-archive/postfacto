@@ -35,8 +35,6 @@ import './stylesheets/application.scss';
 import EnhancedApplication from './components/Application';
 import * as serviceWorker from './serviceWorker';
 
-// TODO: polyfills?
-
 const {config} = global.Retro;
 
 if (process.env.REACT_APP_USE_MOCK_GOOGLE === 'true') {

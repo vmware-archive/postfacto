@@ -7,7 +7,7 @@ window.Retro = {
     "title": "Postfacto",
     "scripts": ["application.js"],
     "stylesheets": ["application.css"],
-    "useRevManifest": false, // TODO: dead?
+    "useRevManifest": false,
     "hotModule": true,
     "useWebpackDevMiddleware": true,
     "api_base_url": "http://localhost:4000",

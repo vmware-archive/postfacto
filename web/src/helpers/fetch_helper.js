@@ -29,7 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// import isomorphic_fetch from 'isomorphic-fetch' //TODO Check if create-react-app does this polyfill for us
 import {Actions} from 'p-flux';
 
 export function fetchJson(url, {accessToken, headers, ...options} = {}) {
