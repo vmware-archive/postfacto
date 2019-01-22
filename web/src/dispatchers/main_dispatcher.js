@@ -31,6 +31,15 @@
 
 const _ = require('lodash');
 
+function pushIfUniqueId(newItem) {
+    return (items) => {
+        if (items.map(({id}) => id).includes(newItem.id)) {
+            return items;
+        }
+        return [...items, newItem];
+    };
+}
+
 export default {
     setRoute({data}) {
         this.router.navigate(data);
@@ -91,7 +100,7 @@ export default {
         this.$store.merge({retroId: data});
     },
     retroItemSuccessfullyCreated({data}) {
-        this.$store.refine('retro', 'items').push(data.item);
+        this.$store.refine('retro', 'items').apply(pushIfUniqueId(data.item));
         this.dispatch({type: 'createdRetroItemAnalytics', data: {retroId: data.retroId, category: data.item.category}});
     },
     retroItemSuccessfullyDeleted({data}) {
@@ -157,10 +166,6 @@ export default {
     },
     websocketSessionDataReceived({data}) {
         this.$store.merge({session: data.payload});
-    },
-    retroActionItemSuccessfullyCreated({data}) {
-        this.$store.refine('retro', 'action_items').push(data.action_item);
-        this.dispatch({type: 'createdActionItemAnalytics', data: {retroId: data.retroId}});
     },
     retroActionItemSuccessfullyDeleted({data}) {
         this.$store.refine('retro', 'action_items').remove(data.action_item);

@@ -323,10 +323,12 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyCreated', () => {
+    let store = null;
     beforeEach(() => {
-      subject.$store = new Cursor({
+      store = {
         retro: retro
-      }, cursorSpy);
+      };
+      subject.$store = new Cursor(store, cursorSpy);
       subject.dispatch({
         type: 'retroItemSuccessfullyCreated', data: {
           item: {id: 10, category: 'happy'},
@@ -338,6 +340,7 @@ describe('MainDispatcher', () => {
     it('creates the retro item', () => {
       retro.items.push({id: 10, category: 'happy'});
       expect(cursorSpy).toHaveBeenCalledWith({retro: retro});
+      expect(store.retro.items.filter((o) => (o.id === 10)).length).toEqual(1);
     });
 
     it('dispatches created retro item analytic', () => {
@@ -345,6 +348,19 @@ describe('MainDispatcher', () => {
         type: 'createdRetroItemAnalytics',
         data: {retroId: retro.id, category: 'happy'}
       });
+    });
+
+    it('deduplicates by ID', () => {
+      expect(store.retro.items.filter((o) => (o.id === 2)).length).toEqual(1);
+
+      subject.dispatch({
+        type: 'retroItemSuccessfullyCreated', data: {
+          item: {id: 2, category: 'happy'},
+          retroId: retro.id
+        }
+      });
+
+      expect(store.retro.items.filter((o) => (o.id === 2)).length).toEqual(1);
     });
   });
 
@@ -728,28 +744,6 @@ describe('MainDispatcher', () => {
       it('updates the store', () => {
         subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: false}}});
         expect(cursorSpy.calls.mostRecent().args[0].retro.action_items[0].done).toBeFalsy();
-      });
-    });
-  });
-
-  describe('retroActionItemSuccessfullyCreated', () => {
-    let action_item = {id: 2, description: 'action item 2', done: false};
-    beforeEach(() => {
-      subject.$store = new Cursor({
-        retro: retro
-      }, cursorSpy);
-      subject.dispatch({type: 'retroActionItemSuccessfullyCreated', data: {action_item: action_item, retroId: 1}});
-    });
-
-    it('updates the store with the new retro action item', () => {
-      retro.action_items.push(action_item);
-      expect(cursorSpy).toHaveBeenCalledWith({retro: retro});
-    });
-
-    it('dispatches created retro action item analytic', () => {
-      expect('createdActionItemAnalytics').toHaveBeenDispatchedWith({
-        type: 'createdActionItemAnalytics',
-        data: {retroId: retro.id}
       });
     });
   });
