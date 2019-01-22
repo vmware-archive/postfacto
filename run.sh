@@ -40,10 +40,10 @@ kill_spawned() {
   if [[ -n "$SPAWNED_PIDS" ]]; then
     echo "Shutting down child processes $SPAWNED_PIDS"
     for PID in $SPAWNED_PIDS; do
-      kill -SIGINT "$PID" || true
+      kill -SIGINT "$PID" >/dev/null || true
     done
-    pkill -P $$ # try really hard to kill everything
-    kill 0 # why won't you die?
+    pkill -P $$ >/dev/null # try really hard to kill everything
+    kill 0 >/dev/null # why won't you die?
     SPAWNED_PIDS=""
   fi
 }

@@ -28,4 +28,5 @@ echo
 
 # Done
 
+echo
 echo "All tests passed :)"
