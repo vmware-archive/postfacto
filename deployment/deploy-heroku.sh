@@ -61,8 +61,8 @@ heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuap
 rm -rf .git # blow away any existent git directory from a previous run
 git init .
 git add .
-git commit -m "Packaging for Heroku"
-git push --force --set-upstream https://git.heroku.com/${API_HOST}.git master
+git commit -m "Packaging for initial Heroku deployment"
+git push --set-upstream https://git.heroku.com/${API_HOST}.git master
 heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${API_HOST}
 popd
 
@@ -79,6 +79,6 @@ heroku create ${WEB_HOST} --buildpack https://github.com/heroku/heroku-buildpack
 rm -rf .git # blow away any existent git directory from a previous run
 git init .
 git add .
-git commit -m "Packaging for Heroku"
+git commit -m "Packaging for initial Heroku deployment"
 git push --set-upstream https://git.heroku.com/${WEB_HOST}.git master
 popd
