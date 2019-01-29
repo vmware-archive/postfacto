@@ -54,5 +54,14 @@ describe RetroToken do
         end
       end
     end
+
+    context 'token is invalid' do
+      it 'returns false' do
+        secret = 'secret'
+        token = 'this-cannot-be-parsed-by-jwt'
+
+        expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(false)
+      end
+    end
   end
 end
