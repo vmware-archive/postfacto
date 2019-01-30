@@ -11,5 +11,4 @@ applications:
   env:
     CLIENT_ORIGIN: https://((web-app-name)).cfapps.io
     WEBSOCKET_PORT: 4443
-    SECRET_KEY_BASE: ((secret-key-base))
     SESSION_TIME: ((session-time))
