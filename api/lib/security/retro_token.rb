@@ -11,5 +11,7 @@ class RetroToken
     decoded.first['slug'] == retro_slug
   rescue JWT::ExpiredSignature
     false
+  rescue JWT::DecodeError
+    false
   end
 end
