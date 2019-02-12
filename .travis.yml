@@ -2,5 +2,5 @@ language: minimal
 services:
 - docker
 script:
-- docker run -v $TRAVIS_BUILD_DIR:/postfacto postfacto/postfacto /bin/bash -c "cd
+- docker run -v $TRAVIS_BUILD_DIR:/postfacto postfacto/postfacto:node11 /bin/bash -c "cd
   /postfacto && ./deps.sh && ./test.sh && ./package.sh"
