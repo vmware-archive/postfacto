@@ -40,7 +40,7 @@ fi
 
 WEB_HOST=$1
 API_HOST=$2
-SESSION_TIME=${SESSION_TIME:-120}
+SESSION_TIME=${SESSION_TIME:-'""'}
 
 # The directory in which this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

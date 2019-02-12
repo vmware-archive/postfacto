@@ -70,9 +70,7 @@ If you'd like to have your instance send analytics data to the Postfacto team so
 
 ### Changing session timeout
 
-Postfacto has a default session timeout of 120 minutes. This means that if a user logs in to a Retro using its password and forget the access to that Retro will no longer work if tried 120 minutes later and the user will have to enter the password again. An important note is that for the moment the same expiry window is shared by any one that logs into the Retro using the password.
-
-You can customise the this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
+You can customise this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
 
 ```bash
 SESSION_TIME=60 ./deploy web-app api-app
