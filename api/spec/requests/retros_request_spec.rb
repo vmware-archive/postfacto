@@ -218,17 +218,6 @@ describe '/retros' do
           status = get "/retros/#{retro.slug}", as: :json
           expect(status).to eq(403)
         end
-
-        context 'expired token' do
-          it 'returns 403 Forbidden' do
-            expired_token = token # generate token before freezing time
-
-            Timecop.freeze(CLOCK.current_time + Rails.configuration.session_time + 1.minute) do
-              status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: expired_token }, as: :json
-              expect(status).to eq(403)
-            end
-          end
-        end
       end
     end
 
