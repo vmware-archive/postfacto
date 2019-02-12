@@ -105,7 +105,7 @@ def token_for(retro)
   RetroToken.generate(
     retro.slug,
     CLOCK.current_time,
-    Rails.configuration.session_time,
+    nil,
     Rails.application.secrets.secret_key_base
   )
 end
