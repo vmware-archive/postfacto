@@ -8,6 +8,6 @@ pushd api
 popd
 
 pushd web
-  gulp spec-app
+  # gulp spec-app
   gulp local-acceptance
 popd

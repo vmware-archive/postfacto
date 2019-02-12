@@ -13,6 +13,18 @@ describe RetroToken do
       expect(decoded_token.first['slug']).to eq('happy-sad-meh')
       expect(decoded_token.first['exp']).to eq((current_time + session_time_limit).to_i)
     end
+
+    context 'session_time_limit is nil' do
+      it 'returns a token that will not expire' do
+        secret = 'secret'
+        current_time = Time.now
+        token = RetroToken.generate('happy-sad-meh', current_time, nil, secret)
+
+        decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
+        expect(decoded_token.first['slug']).to eq('happy-sad-meh')
+        expect(decoded_token.first['exp']).to eq(nil)
+      end
+    end
   end
 
   describe 'valid?' do
