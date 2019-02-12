@@ -31,38 +31,40 @@ describe RetroToken do
     context 'slug is incorrect' do
       it 'returns false' do
         secret = 'secret'
-        current_time = Time.now
-        session_time_limit = 2.minutes
-        token = RetroToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
-        Timecop.freeze(current_time) do
-          expect(RetroToken.valid?('another-one', token, secret)).to eq(false)
-        end
+        payload = {
+          slug: 'happy-sad-meh'
+        }
+
+        token = JWT.encode(payload, secret, 'HS256')
+        expect(RetroToken.valid?('another-one', token, secret)).to eq(false)
       end
     end
 
     context 'token has expired' do
       it 'returns false' do
         secret = 'secret'
-        current_time = Time.now
-        session_time_limit = 2.minutes
-        token = RetroToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
-        Timecop.freeze(current_time + session_time_limit) do
-          expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(false)
-        end
+        payload = {
+          slug: 'happy-sad-meh',
+          exp: (Time.now - 1.minutes).to_i
+        }
+
+        token = JWT.encode(payload, secret, 'HS256')
+        expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(false)
       end
 
       context 'token still valid' do
         it 'returns true' do
           secret = 'secret'
-          current_time = Time.now
-          session_time_limit = 2.minutes
-          token = RetroToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
-          Timecop.freeze(current_time) do
-            expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(true)
-          end
+          payload = {
+            slug: 'happy-sad-meh',
+            exp: (Time.now + 1.minutes).to_i
+          }
+
+          token = JWT.encode(payload, secret, 'HS256')
+          expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(true)
         end
       end
     end
