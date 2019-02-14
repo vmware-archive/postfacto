@@ -381,7 +381,7 @@ ol ol > li:before {
   cursor: pointer;
 }
 
-.retro-item:not(.highlight, .editing) {
+.retro-item:not(.highlight):not(.editing) {
   .item-content {
     @extend .row;
     display: flex;
