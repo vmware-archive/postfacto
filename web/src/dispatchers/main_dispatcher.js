@@ -114,13 +114,18 @@ export default {
         this.$store.refine('retro', 'items', item).merge(data.item);
     },
     retroItemSuccessfullyDone({data}) {
+        const retro = this.$store.refine('retro').get();
+        const itemIndex = retro.items.findIndex((item) => item.id === data.itemId);
         this.$store.refine('retro', 'highlighted_item_id').set(null);
-        this.$store.refine('retro', 'items', data.item, 'done').set(true);
-        this.dispatch({type: 'checkAllRetroItemsDone'});
+        this.$store.refine('retro', 'items', itemIndex, 'done').set(true);
 
-        this.dispatch({
-            type: 'completedRetroItemAnalytics',
-            data: {retroId: data.retroId, category: data.item.category}
+        // Delay checking if retro items are done, otherwise the dispatcher will be invoked BEFORE p-flux updates the model
+        Promise.resolve().then(() => {
+            this.dispatch({type: 'checkAllRetroItemsDone'});
+            this.dispatch({
+                type: 'completedRetroItemAnalytics',
+                data: {retroId: data.retroId, category: retro.items[itemIndex].category}
+            });
         });
     },
     retroItemSuccessfullyUndone({data}) {

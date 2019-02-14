@@ -706,6 +706,7 @@ describe('ApiDispatcher', () => {
   describe('nextRetroItem', () => {
     it('makes an API POST to /retros/:id/discussion/transition', () => {
       localStorage.setItem('apiToken-1', 'the-token');
+      retro.highlighted_item_id = 2;
       subject.$store = new Cursor({retro: retro}, cursorSpy);
       subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
 
@@ -804,7 +805,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDone',
-        data: {retroId: 1, item: item}
+        data: {retroId: 1, itemId: item.id}
       });
     });
   });

@@ -141,10 +141,12 @@ export default {
     });
   },
   nextRetroItem({data: {retro_id}}) {
-      Logger.info('nextRetroItem');
-      return RetroApi.nextRetroItem(retro_id, getApiToken(retro_id)).then(() => {
-          this.dispatch({type: 'checkAllRetroItemsDone'});
-      })
+    Logger.info('nextRetroItem');
+    const retro = this.$store.refine('retro').get();
+    if (retro.highlighted_item_id !== null) {
+      this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: retro_id, itemId: retro.highlighted_item_id}});
+    }
+    RetroApi.nextRetroItem(retro_id, getApiToken(retro_id));
   },
   highlightRetroItem({data: {retro_id, item}}) {
     Logger.info('highlightRetroItem');
@@ -160,7 +162,7 @@ export default {
   doneRetroItem({data: {retroId, item}}) {
     Logger.info('doneRetroItem');
     RetroApi.doneRetroItem(retroId, item.id, getApiToken(retroId));
-    this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: retroId, item: item}});
+    this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: retroId, itemId: item.id}});
   },
   undoneRetroItem({data: {retroId, item}}) {
     Logger.info('undoneRetroItem');

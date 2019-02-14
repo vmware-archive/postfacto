@@ -410,7 +410,7 @@ describe('MainDispatcher', () => {
       subject.$store = new Cursor({
         retro: retro
       }, cursorSpy);
-      subject.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: 1, item: item}});
+      subject.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: 1, itemId: item.id}});
     });
 
     it('updates the item to have attribute done = true', () => {
