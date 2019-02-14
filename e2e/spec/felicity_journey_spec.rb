@@ -235,7 +235,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
   end
 
- specify 'Auto facilitation journey' do
+  specify 'Auto facilitation journey' do
     register('felicity-auto-facilitate-user')
     create_public_retro('first-retro')
     retro_url = create_public_retro('auto-facilitate-retro')
@@ -282,7 +282,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     expect(page).to have_css('.highlight .item-text', text: 'something really happy')
 
     send_right_key
-    sleep(3)
+    sleep(1)
     expect(page).to have_content('The board will be cleared ready for your next retro and incomplete action items will be carried across.')
   end
 

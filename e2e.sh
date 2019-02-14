@@ -96,8 +96,8 @@ else
 fi
 
 # Successful, so remove log files
-rm "$API_LOG"
-rm "$WEB_LOG"
+rm "$API_LOG" || true
+rm "$WEB_LOG" || true
 
 sleep 1;
 echo "E2E tests passed"
