@@ -365,6 +365,8 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       find('.column-happy textarea.retro-item-add-input').native.send_keys(:return)
     end
 
+    sleep(1)
+
     in_browser(:peter) do
       expect(page).not_to have_content 'this is a happy item'
       expect(page).to have_content 'The owner of this retro has chosen to protect it with a password.'
