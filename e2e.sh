@@ -53,7 +53,8 @@ register_spawned $!
 
 pushd "$BASE_DIR/api" >/dev/null
   echo 'Launching API...'
-  bundle exec rails server -b 0.0.0.0 -p 4000 -e "$RAILS_ENV" > "$API_LOG" 2>&1 &
+  echo > "$API_LOG"
+  bundle exec rails server -b 0.0.0.0 -p 4000 -e "$RAILS_ENV" >> "$API_LOG" 2>&1 &
   register_spawned $!
 
   echo 'Waiting for API...'
@@ -66,7 +67,8 @@ echo 'Building frontend in E2E test mode...'
 npm --prefix="$BASE_DIR/web" run build
 
 echo 'Launching frontend...'
-npm --prefix="$BASE_DIR/web" run serve-built > "$WEB_LOG" 2>&1 &
+echo > "$WEB_LOG"
+npm --prefix="$BASE_DIR/web" run serve-built >> "$WEB_LOG" 2>&1 &
 register_spawned $!
 
 echo 'Waiting for frontend...'
