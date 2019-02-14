@@ -40,7 +40,9 @@ register_spawned() {
   SPAWNED_PIDS="$SPAWNED_PIDS $1"
 }
 
-trap "kill_spawned; sleep 1; echo 'Shutdown complete.';" INT TERM EXIT
+if [[ "$EPHEMERAL_CONTAINER" != "true" ]]; then
+  trap "kill_spawned; sleep 1; echo 'Shutdown complete.';" INT TERM EXIT
+fi
 
 # Launch mock auth server
 
@@ -79,8 +81,17 @@ popd >/dev/null
 
 # Shutdown services
 
-kill_spawned
-trap "" INT TERM EXIT
+if [[ "$EPHEMERAL_CONTAINER" == "true" ]]; then
+  # Don't need to worry too much about shutting down services,
+  # since container will disappear soon anyway
+  echo "Shutting down child processes $SPAWNED_PIDS"
+  for PID in $SPAWNED_PIDS; do
+    kill -SIGINT "$PID" >/dev/null || true
+  done
+else
+  kill_spawned
+  trap - INT TERM EXIT
+fi
 
 # Successful, so remove log files
 rm "$API_LOG"
