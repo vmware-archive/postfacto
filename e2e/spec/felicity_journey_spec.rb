@@ -282,7 +282,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     expect(page).to have_css('.highlight .item-text', text: 'something really happy')
 
     send_right_key
-    sleep(1)
+    sleep(3)
     expect(page).to have_content('The board will be cleared ready for your next retro and incomplete action items will be carried across.')
   end
 
