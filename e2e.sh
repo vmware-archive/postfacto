@@ -58,7 +58,7 @@ pushd "$BASE_DIR/api" >/dev/null
   register_spawned $!
 
   echo 'Waiting for API...'
-  ( tail -f -n10 "$API_LOG" & ) | grep -q 'Listening'
+  ( tail -f -n10 "$API_LOG" & ) | grep -q 'Listening' || true
 popd >/dev/null
 
 # Launch static content
