@@ -20,7 +20,7 @@ popd
 cp -r deployment/pws package
 cp -r deployment/deploy-cf.sh package/pws/deploy.sh
 cp -r deployment/upgrade-cf.sh package/pws/upgrade.sh
-chmod u+x package/pws/deploy.sh
+chmod u+x package/pws/*.sh
 
 mkdir package/pws/assets
 
@@ -33,7 +33,7 @@ cp -r web/package package/pws/assets/web
 cp -r deployment/pcf package
 cp -r deployment/deploy-cf.sh package/pcf/deploy.sh
 cp -r deployment/upgrade-cf.sh package/pcf/upgrade.sh
-chmod u+x package/pcf/deploy.sh
+chmod u+x package/pcf/*.sh
 
 mkdir package/pcf/assets
 
