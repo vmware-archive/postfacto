@@ -52,6 +52,6 @@ module RetroApp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths << Rails.root.join('lib', 'configurations')
-    config.session_time = ENV['SESSION_TIME'].nil? ? nil : ENV['SESSION_TIME'].to_i.minutes
+    config.session_time = ENV['SESSION_TIME'].blank? ? nil : ENV['SESSION_TIME'].to_i.minutes
   end
 end

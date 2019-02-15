@@ -4,6 +4,8 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ## Pivotal Web Services
 
+### Initial deployment
+
 [Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running.
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
@@ -18,7 +20,16 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pws` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
+
 ## Pivotal Cloud Foundry
+
+### Initial deployment
 
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
@@ -33,8 +44,17 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pcf` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
+
 
 ## Heroku
+
+### Initial deployment
 
 1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
@@ -46,6 +66,13 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.herokuapp.com/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
+
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `heroku` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
 
 ## Configuration
 
@@ -70,9 +97,7 @@ If you'd like to have your instance send analytics data to the Postfacto team so
 
 ### Changing session timeout
 
-Postfacto has a default session timeout of 120 minutes. This means that if a user logs in to a Retro using its password and forget the access to that Retro will no longer work if tried 120 minutes later and the user will have to enter the password again. An important note is that for the moment the same expiry window is shared by any one that logs into the Retro using the password.
-
-You can customise the this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
+You can customise this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
 
 ```bash
 SESSION_TIME=60 ./deploy web-app api-app

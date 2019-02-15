@@ -19,7 +19,8 @@ popd
 
 cp -r deployment/pws package
 cp -r deployment/deploy-cf.sh package/pws/deploy.sh
-chmod u+x package/pws/deploy.sh
+cp -r deployment/upgrade-cf.sh package/pws/upgrade.sh
+chmod u+x package/pws/*.sh
 
 mkdir package/pws/assets
 
@@ -31,7 +32,8 @@ cp -r web/build package/pws/assets/web
 
 cp -r deployment/pcf package
 cp -r deployment/deploy-cf.sh package/pcf/deploy.sh
-chmod u+x package/pcf/deploy.sh
+cp -r deployment/upgrade-cf.sh package/pcf/upgrade.sh
+chmod u+x package/pcf/*.sh
 
 mkdir package/pcf/assets
 
@@ -43,7 +45,8 @@ cp -r web/build package/pcf/assets/web
 
 cp -r deployment/heroku package
 cp -r deployment/deploy-heroku.sh package/heroku/deploy.sh
-chmod u+x package/heroku/deploy.sh
+cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
+chmod u+x package/heroku/*.sh
 
 rm -rf api/tmp/*
 cp -r api/* package/heroku/assets/api

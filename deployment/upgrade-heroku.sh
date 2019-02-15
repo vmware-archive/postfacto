@@ -33,52 +33,53 @@
 set -e
 
 if [ $# -ne 2 ]; then
-  echo "usage: ./deploy_heroku.sh <web-app-name> <api-app-name>"
-  echo "This will deploy the web frontend and api to a .herokuapp.com host of your choosing"
+  echo "usage: ./upgrade_heroku.sh <web-app-name> <api-app-name>"
+  echo "This will upgrade an existing Postfacto deployment to a .herokuapp.com host of your choosing"
   exit 1
 fi
 
 WEB_HOST=$1
 API_HOST=$2
-SESSION_TIME=${SESSION_TIME:-'""'}
 
 # The directory in which this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR"/assets
 CONFIG_DIR="$SCRIPT_DIR"/config
 
+if ! heroku apps:info -a "$WEB_HOST" 2>/dev/null; then
+  echo "Web host ${WEB_HOST} does not exist! Aborting."
+  exit 1
+fi
+
+if ! heroku apps:info -a "$API_HOST" 2>/dev/null; then
+  echo "API host ${API_HOST} does not exist! Aborting."
+  exit 1
+fi
 
 ###################
-# Deploy the API
+# Upgrade the API
 ###################
 
 pushd "$ASSETS_DIR"/api
-heroku create ${API_HOST} --buildpack heroku/ruby
-heroku addons:create heroku-postgresql:hobby-dev -a ${API_HOST}
-heroku addons:create heroku-redis:hobby-dev -a ${API_HOST}
-heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com SESSION_TIME=${SESSION_TIME} -a ${API_HOST}
 
 rm -rf .git # blow away any existent git directory from a previous run
 git init .
 git add .
-git commit -m "Packaging for initial Heroku deployment"
-git push --set-upstream https://git.heroku.com/${API_HOST}.git master
-heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${API_HOST}
+git commit -m "Packaging for Heroku upgrade"
+git push --force --set-upstream https://git.heroku.com/${API_HOST}.git master
 popd
 
 ###########################
-# Deploy the web frontend
+# Upgrade the web frontend
 ###########################
 
 cp "$CONFIG_DIR"/config.js "$ASSETS_DIR"/web/public_html
 pushd "$ASSETS_DIR"/web
 sed -i '' "s/{{api-app-name}}/${API_HOST}/" public_html/config.js
 
-heroku create ${WEB_HOST} --buildpack https://github.com/heroku/heroku-buildpack-static
-
 rm -rf .git # blow away any existent git directory from a previous run
 git init .
 git add .
-git commit -m "Packaging for initial Heroku deployment"
-git push --set-upstream https://git.heroku.com/${WEB_HOST}.git master
+git commit -m "Packaging for Heroku upgrade"
+git push --force --set-upstream https://git.heroku.com/${WEB_HOST}.git master
 popd
