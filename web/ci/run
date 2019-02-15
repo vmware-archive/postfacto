@@ -32,6 +32,8 @@
 
 set -e
 
+# TODO: update for new build
+
 cd postfacto-web/web
 npm install
 export PATH=$PATH:./node_modules/.bin

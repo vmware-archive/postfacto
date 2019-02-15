@@ -1,0 +1,12 @@
+{
+  "name": "mock-google-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "mock-google-auth-server.js",
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "scripts": {
+    "start": "node mock-google-auth-server.js"
+  }
+}

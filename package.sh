@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -d "package" ]; then
+if [[ -d "package" ]]; then
   rm -r package
 fi
 
@@ -11,8 +11,8 @@ mkdir package
 # BUILD FRONT-END
 
 pushd web
-  NODE_ENV=production gulp assets
-  gulp package
+  npm run build
+  cp ../humans.txt build
 popd
 
 # PWS
@@ -26,7 +26,7 @@ mkdir package/pws/assets
 
 rm -rf api/tmp/*
 cp -r api package/pws/assets/api
-cp -r web/package package/pws/assets/web
+cp -r web/build package/pws/assets/web
 
 # PCF
 
@@ -39,7 +39,7 @@ mkdir package/pcf/assets
 
 rm -rf api/tmp/*
 cp -r api package/pcf/assets/api
-cp -r web/package package/pcf/assets/web
+cp -r web/build package/pcf/assets/web
 
 # Heroku
 
@@ -50,7 +50,7 @@ chmod u+x package/heroku/*.sh
 
 rm -rf api/tmp/*
 cp -r api/* package/heroku/assets/api
-cp -r web/package package/heroku/assets/web/public_html
+cp -r web/build package/heroku/assets/web/public_html
 
 # Docs
 
