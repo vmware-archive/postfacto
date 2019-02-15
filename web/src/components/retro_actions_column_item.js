@@ -33,6 +33,8 @@ import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import RetroItemEditView from './retro_item_edit_view';
+import actionTickCheckedSvg from '../images/action-tick-checked.svg';
+import actionTickUncheckedSvg from '../images/action-tick-unchecked.svg';
 
 export default class RetroActionsColumnItem extends React.Component {
   static propTypes = {
@@ -53,8 +55,8 @@ export default class RetroActionsColumnItem extends React.Component {
     const {action_item} = this.props;
 
     let tick = action_item.done ?
-      <img className="action-tick-checked" src={require('../images/action-tick-checked.svg')}/>
-      : <img className="action-tick-unchecked" src={require('../images/action-tick-unchecked.svg')}/>;
+      <img className="action-tick-checked" src={actionTickCheckedSvg}/>
+      : <img className="action-tick-unchecked" src={actionTickUncheckedSvg}/>;
     return (
       <div className="action-tick" onClick={this.onActionTickClicked.bind(this)}>
         {tick}

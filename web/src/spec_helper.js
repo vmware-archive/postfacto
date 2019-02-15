@@ -34,11 +34,13 @@ import Application from './components/Application'; // Load dispatchers (sets gl
 import 'jasmine_dom_matchers';
 import './test_support/dispatcher_matchers';
 import './test_support/react_helper';
-const {Dispatcher} = require('p-flux');
-const jQuery = require('jquery');
-global.React = require('react');
-global.ReactDOM = require('react-dom');
+import {Dispatcher} from 'p-flux';
+import jQuery from 'jquery';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
+global.React = React;
+global.ReactDOM = ReactDOM;
 global.Dispatcher = Dispatcher;
 global.$ = jQuery;
 

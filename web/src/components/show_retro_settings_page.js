@@ -42,6 +42,9 @@ import Toggle from 'material-ui/Toggle';
 
 import {MAX_SLUG_LENGTH, VALID_SLUG_REGEX, DEFAULT_TOGGLE_STYLE} from '../constants';
 
+import iconLockedSvg from '../images/icon-locked.svg';
+import iconEyeSvg from '../images/icon-eye.svg';
+
 export default class ShowRetroSettingsPage extends React.Component {
   static propTypes = {
     alert: types.object,
@@ -231,11 +234,11 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   renderAccessInstruction() {
     const accessPrivate = (<div>
-      <img className="icon-locked" src={require('../images/icon-locked.svg')}/> The password is needed to view or
+      <img className="icon-locked" src={iconLockedSvg}/> The password is needed to view or
       participate.
     </div>);
     const accessPublic = (<div>
-      <img className="icon-locked" src={require('../images/icon-eye.svg')}/> Anyone can view or participate <strong>without</strong>
+      <img className="icon-locked" src={iconEyeSvg}/> Anyone can view or participate <strong>without</strong>
       entering password.
     </div>);
 
@@ -245,8 +248,8 @@ export default class ShowRetroSettingsPage extends React.Component {
 
         <br/>
         Password is always required to: <br/>
-        <img className="icon-locked" src={require('../images/icon-locked.svg')}/> Access archives<br/>
-        <img className="icon-locked" src={require('../images/icon-locked.svg')}/> Edit settings
+        <img className="icon-locked" src={iconLockedSvg}/> Access archives<br/>
+        <img className="icon-locked" src={iconLockedSvg}/> Edit settings
 
       </div>
     );

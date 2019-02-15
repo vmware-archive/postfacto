@@ -31,6 +31,7 @@
 
 import React from 'react';
 import {Actions} from 'p-flux';
+import faceDeadSvg from '../images/face-dead.svg';
 
 export default class ApiServerNotFoundPage extends React.Component {
 
@@ -44,7 +45,7 @@ export default class ApiServerNotFoundPage extends React.Component {
         <div className="row" style={{marginTop:'180px'}}>
           <div className="small-centered medium-8 small-10 columns">
             <div className="image">
-              <img src={require('../images/face-dead.svg')}/>
+              <img src={faceDeadSvg}/>
             </div>
             <h1>{"Oh no! It's broken"}</h1>
             <p>Try refreshing the page, or come back later.</p>

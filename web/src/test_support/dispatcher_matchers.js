@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const {Dispatcher} = require('p-flux');
+import {Dispatcher} from 'p-flux';
 
 expect.extend({
   toHaveBeenDispatched(actual) {

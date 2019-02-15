@@ -31,6 +31,7 @@
 
 import RetroCable from './retro_cable';
 import ReactDOM from 'react-dom';
+import ActionCable from 'actioncable';
 import '../spec_helper';
 
 describe('RetroCable', () => {
@@ -38,7 +39,6 @@ describe('RetroCable', () => {
   describe('rendering a RetroCable', () => {
     let retroCableDOM;
     beforeEach(() => {
-      const ActionCable = require('actioncable');
       const cable = ActionCable.createConsumer('wss://websocket/url');
       retroCableDOM = ReactDOM.render(<RetroCable cable={cable} retro_id={'retro-slug-123'}/>, root);
     });

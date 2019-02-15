@@ -32,6 +32,7 @@
 import React from 'react';
 import types from 'prop-types';
 import SessionCable from './session_cable';
+import ActionCable from 'actioncable';
 
 export default class SessionWebsocket extends React.Component {
   static propTypes = {
@@ -60,7 +61,6 @@ export default class SessionWebsocket extends React.Component {
   }
 
   createCable(url) {
-    const ActionCable = require('actioncable');
     let cable = ActionCable.createConsumer(url);
     this.setState({cable: cable});
   }
