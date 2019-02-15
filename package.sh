@@ -43,7 +43,8 @@ cp -r web/package package/pcf/assets/web
 
 cp -r deployment/heroku package
 cp -r deployment/deploy-heroku.sh package/heroku/deploy.sh
-chmod u+x package/heroku/deploy.sh
+cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
+chmod u+x package/heroku/*.sh
 
 rm -rf api/tmp/*
 cp -r api/* package/heroku/assets/api

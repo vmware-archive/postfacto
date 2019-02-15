@@ -36,6 +36,8 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ## Heroku
 
+### Initial deployment
+
 1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
 
@@ -46,6 +48,13 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.herokuapp.com/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
+
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `heroku` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
 
 ## Configuration
 
