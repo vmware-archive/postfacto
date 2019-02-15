@@ -22,7 +22,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ### Upgrading a deployment
 
-1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `pws` directory:
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pws` directory:
   ```bash
   ./upgrade.sh <web-app-name> <api-app-name>
   ```
@@ -46,7 +46,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ### Upgrading a deployment
 
-1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `pcf` directory:
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pcf` directory:
   ```bash
   ./upgrade.sh <web-app-name> <api-app-name>
   ```
@@ -69,7 +69,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ### Upgrading a deployment
 
-1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `heroku` directory:
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `heroku` directory:
   ```bash
   ./upgrade.sh <web-app-name> <api-app-name>
   ```
