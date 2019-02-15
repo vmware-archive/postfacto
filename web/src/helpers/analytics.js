@@ -30,7 +30,7 @@
  */
 import Mixpanel from 'mixpanel-browser';
 
-const POSTFACTO_TEAM_ANALYTICS_TOKEN = "d4de349453cc697734eced9ebedcdb22";
+const POSTFACTO_TEAM_ANALYTICS_TOKEN = 'd4de349453cc697734eced9ebedcdb22';
 
 export default class Analytics {
   static initialized = false;

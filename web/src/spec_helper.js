@@ -30,7 +30,6 @@
  */
 
 import Application from './components/Application'; // Load dispatchers (sets global state in p-flux Actions)
-
 import 'jasmine_dom_matchers';
 import './test_support/dispatcher_matchers';
 import './test_support/react_helper';

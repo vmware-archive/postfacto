@@ -50,5 +50,4 @@ describe('Retro Tile', () => {
     $('.retro-list-tile').click();
     expect(callbackFn).toHaveBeenCalled();
   });
-
 });

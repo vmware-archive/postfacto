@@ -31,17 +31,13 @@
 
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-
 import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import RetroMenu from './retro_menu';
-
 import EmptyPage from './empty_page';
 import Toggle from 'material-ui/Toggle';
-
-import {MAX_SLUG_LENGTH, VALID_SLUG_REGEX, DEFAULT_TOGGLE_STYLE} from '../constants';
-
+import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../constants';
 import iconLockedSvg from '../images/icon-locked.svg';
 import iconEyeSvg from '../images/icon-eye.svg';
 
@@ -233,14 +229,18 @@ export default class ShowRetroSettingsPage extends React.Component {
   };
 
   renderAccessInstruction() {
-    const accessPrivate = (<div>
-      <img className="icon-locked" src={iconLockedSvg}/> The password is needed to view or
-      participate.
-    </div>);
-    const accessPublic = (<div>
-      <img className="icon-locked" src={iconEyeSvg}/> Anyone can view or participate <strong>without</strong>
-      entering password.
-    </div>);
+    const accessPrivate = (
+      <div>
+        <img className="icon-locked" src={iconLockedSvg}/>
+        {' '}The password is needed to view or participate.
+      </div>
+    );
+    const accessPublic = (
+      <div>
+        <img className="icon-locked" src={iconEyeSvg}/>
+        {' '}Anyone can view or participate <strong>without</strong> entering password.
+      </div>
+    );
 
     return (
       <div className="access-instruction">
@@ -265,7 +265,7 @@ export default class ShowRetroSettingsPage extends React.Component {
     });
   }
 
-  getCurrentHost(){
+  getCurrentHost() {
     return window.location.origin.split('://')[1];
   }
 
@@ -307,7 +307,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                          value={this.state.name}
                          type="text"
                          name="name"
-                         className={`form-input ${ errors.name ? 'input-error' : '' }`}
+                         className={`form-input ${errors.name ? 'input-error' : ''}`}
                          onChange={this.handleChange.bind(this)}
                          placeholder=""/>
                   <div className="error-message">{errors.name}</div>
@@ -321,7 +321,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                            value={this.state.slug}
                            type="text"
                            name="slug"
-                           className={`input-group-field form-input ${ errors.slug ? 'input-error' : '' }`}
+                           className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
                            onChange={this.handleChange.bind(this)}
                            placeholder=""/>
                   </div>

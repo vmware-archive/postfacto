@@ -72,11 +72,12 @@ describe('Show retro page archives', () => {
         archived_at: '2016-07-20T00:00:00.000Z',
         created_at: '2016-07-11T00:00:00.000Z',
       },
-    ]
+    ],
   };
 
   describe('on desktop', () => {
     let originalGetIsMobile;
+
     beforeEach(() => {
       originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
       ShowRetroPage.prototype.getIsMobile = () => false;
@@ -84,13 +85,14 @@ describe('Show retro page archives', () => {
       ReactDOM.render(
         <MuiThemeProvider>
           <ShowRetroPage retro_archives={retro_archives}
-                         retroId={'13'}
+                         retroId="13"
                          archives={true}
                          retro={retro_archives}
                          config={global.Retro.config}
-                         featureFlags={ { archiveEmails: true } }/>
+                         featureFlags={{archiveEmails: true}}/>
         </MuiThemeProvider>, root);
     });
+
     afterEach(() => {
       ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
     });
@@ -120,11 +122,11 @@ describe('Show retro page archives', () => {
         ReactDOM.render(
           <MuiThemeProvider>
             <ShowRetroPage retro_archives={retro_archives}
-                           retroId={'13'}
+                           retroId="13"
                            archives={true}
                            retro={retro_archives}
                            config={global.Retro.config}
-                           featureFlags={ { archiveEmails: true } }/>
+                           featureFlags={{archiveEmails: true}}/>
           </MuiThemeProvider>, root);
       });
 
@@ -154,11 +156,11 @@ describe('Show retro page archives', () => {
       ReactDOM.render(
         <MuiThemeProvider>
           <ShowRetroPage retro_archives={retro_archives}
-                         retroId={'13'}
+                         retroId="13"
                          archives={true}
                          retro={retro_archives}
                          config={global.Retro.config}
-                         featureFlags={ { archiveEmails: true } }/>
+                         featureFlags={{archiveEmails: true}}/>
         </MuiThemeProvider>, root);
     });
 

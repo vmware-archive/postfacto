@@ -36,11 +36,12 @@ import '../spec_helper';
 describe('RetroWebsocket', () => {
 
   describe('rendering a RetroWebsocket', () => {
-    
+
     describe('when websocket url has been fetched', () => {
       let webSocketDOM;
+
       beforeEach(() => {
-        webSocketDOM = ReactDOM.render(<RetroWebsocket url="wss://websocket/url" retro_id={'retro-slug-123'}/>, root);
+        webSocketDOM = ReactDOM.render(<RetroWebsocket url="wss://websocket/url" retro_id="retro-slug-123"/>, root);
       });
 
       it('should create setup cable', () => {

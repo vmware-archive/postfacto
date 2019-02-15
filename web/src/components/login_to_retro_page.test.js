@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('LoginToRetroPage', () => {
   describe('When the retro has not yet been fetched', () => {
     it('renders nothing', () => {
-      ReactDOM.render(<LoginToRetroPage retro={{name: ''}} retroId={'13'} />, root);
+      ReactDOM.render(<LoginToRetroPage retro={{name: ''}} retroId="13"/>, root);
       expect('h1').not.toExist();
     });
   });
@@ -48,7 +48,7 @@ describe('LoginToRetroPage', () => {
     };
 
     beforeEach(() => {
-      ReactDOM.render(<LoginToRetroPage retro={retro} retroId={'13'} />, root);
+      ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13"/>, root);
     });
 
     it('dispatches getRetroLogin', () => {
@@ -66,7 +66,10 @@ describe('LoginToRetroPage', () => {
       it('dispatches loginToRetro', () => {
         $('.form-input').val('pa55word').simulate('change');
         $('.retro-form-submit').simulate('click');
-        expect('loginToRetro').toHaveBeenDispatchedWith({type: 'loginToRetro', data: {retro_id: '13', password: 'pa55word'}});
+        expect('loginToRetro').toHaveBeenDispatchedWith({
+          type: 'loginToRetro',
+          data: {retro_id: '13', password: 'pa55word'}
+        });
         expect('.form-input').toHaveValue('');
       });
     });
@@ -75,17 +78,21 @@ describe('LoginToRetroPage', () => {
       it('dispatches loginToRetro', () => {
         $('.form-input').val('pa55word').simulate('change');
         $('.form-input').simulate('keyPress', {key: 'Enter'});
-        expect('loginToRetro').toHaveBeenDispatchedWith({type: 'loginToRetro', data: {retro_id: '13', password: 'pa55word'}});
+        expect('loginToRetro').toHaveBeenDispatchedWith({
+          type: 'loginToRetro',
+          data: {retro_id: '13', password: 'pa55word'}
+        });
         expect('.form-input').toHaveValue('');
       });
     });
 
     describe('when wrong password is given', () => {
       beforeEach(() => {
-        ReactDOM.render(<LoginToRetroPage retro={retro} retroId={'13'} login_error_message={'Oops, wrong password.'}/>, root);
+        ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13"
+                                          login_error_message="Oops, wrong password."/>, root);
       });
 
-      it('displays an error message', () =>{
+      it('displays an error message', () => {
         $('.form-input').val('lolwut').simulate('change');
         $('.retro-form-submit').simulate('click');
 
@@ -102,7 +109,7 @@ describe('LoginToRetroPage', () => {
     };
 
     const setupRetro = ({force_relogin}) => {
-      component = ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin} />, root);
+      component = ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin}/>, root);
     };
 
     it('returns login required message when force_relogin is false', () => {

@@ -48,7 +48,7 @@ describe('ListRetroArchivesPage', () => {
 
   beforeEach(() => {
     window.innerWidth = 1084;
-    ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId={'789'} archives={archives}/></MuiThemeProvider>, root);
+    ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives}/></MuiThemeProvider>, root);
   });
 
   it('shows all archived retros', () => {
@@ -63,7 +63,7 @@ describe('ListRetroArchivesPage', () => {
   describe('when user is signed in', () => {
     beforeEach(() => {
       window.localStorage.setItem('authToken', 'some-token');
-      ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId={'789'} archives={archives}/></MuiThemeProvider>, root);
+      ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives}/></MuiThemeProvider>, root);
     });
 
     afterEach(() => {
@@ -77,7 +77,7 @@ describe('ListRetroArchivesPage', () => {
     });
   });
 
-  it('Current retro button links to the current retro page', function () {
+  it('Current retro button links to the current retro page', () => {
     expect('.retro-back').toContainText('Current retro');
     $('.retro-back').simulate('click');
     expect('backPressedFromArchives').toHaveBeenDispatchedWith({

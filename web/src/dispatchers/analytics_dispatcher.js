@@ -60,4 +60,3 @@ export default {
     Analytics.track('Loaded homepage');
   }
 };
-

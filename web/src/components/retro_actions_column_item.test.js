@@ -44,7 +44,7 @@ const retro = {
       description: 'the happy retro item',
       category: 'happy',
       created_at: '2016-07-19T00:00:00.000Z',
-      vote_count: 10
+      vote_count: 10,
     }
   ],
   action_items: [
@@ -64,11 +64,11 @@ const retro = {
       archived_at: '2016-07-19T00:00:00.000Z',
       done: true,
     },
-  ]
+  ],
 };
 describe('RetroActionsColumnItem', () => {
   beforeEach(() => {
-    ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]} />, root);
+    ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]}/>, root);
   });
 
   describe('when retro has action items', () => {
@@ -82,11 +82,14 @@ describe('RetroActionsColumnItem', () => {
       expect('.action-tick .action-tick-checked').toExist();
     });
   });
-  
+
   describe('when clicking on tick ', () => {
     it('should mark as not done when clicking on the action item which is ticked', () => {
       $('.retro-action .action-tick').simulate('click');
-      expect('doneRetroActionItem').toHaveBeenDispatchedWith({type: 'doneRetroActionItem', data: {retro_id: retroId, action_item_id: 1, done: false}});
+      expect('doneRetroActionItem').toHaveBeenDispatchedWith({
+        type: 'doneRetroActionItem',
+        data: {retro_id: retroId, action_item_id: 1, done: false},
+      });
     });
   });
 
@@ -153,7 +156,7 @@ describe('RetroActionsColumnItem', () => {
     // See http://stackoverflow.com/a/30616091
     it('updates displayed text value', () => {
       retro.action_items[0].description = 'changed';
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]} />, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]}/>, root);
 
       expect('.retro-action .action-text').toContainText('changed');
     });
@@ -161,13 +164,13 @@ describe('RetroActionsColumnItem', () => {
 
   describe('when action item is not done', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[1]} />, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[1]}/>, root);
     });
     it('should not be checked', () => {
       expect('.action-tick .action-tick-unchecked').toExist();
     });
   });
-  
+
   describe('when archived', () => {
     beforeEach(() => {
       ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[2]} archives={true}/>, root);

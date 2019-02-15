@@ -66,7 +66,7 @@ export default class RetroColumnInput extends React.Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
-      if(event.target.value !== '') {
+      if (event.target.value !== '') {
         this.submitRetroItem();
       }
       event.preventDefault();
@@ -78,15 +78,14 @@ export default class RetroColumnInput extends React.Component {
     const {inputText} = this.state;
     if (category === 'action') {
       Actions.createRetroActionItem({retro_id: retroId, description: inputText});
-    }
-    else {
+    } else {
       Actions.createRetroItem({retro_id: retroId, category: category, description: inputText});
     }
     this.setState({inputText: '', multiline: ''});
   }
 
   onChange(event) {
-    if(event.target.value.trim().length === 0) {
+    if (event.target.value.trim().length === 0) {
       this.setState({multiline: ''});
     }
 
@@ -94,7 +93,7 @@ export default class RetroColumnInput extends React.Component {
   }
 
   onResize(event) {
-      this.setState({multiline: 'multiline', inputText: event.target.value});
+    this.setState({multiline: 'multiline', inputText: event.target.value});
   }
 
   inputFocus() {

@@ -53,7 +53,6 @@ describe('List Retros Page', () => {
     $('.retro-list-tile:eq(0)').click();
     expect('routeToShowRetro').toHaveBeenDispatched();
   });
-
 });
 
 function createRetros(count = 1) {

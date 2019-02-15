@@ -38,7 +38,7 @@ describe('Alert', () => {
 
   describe('when message is empty', () => {
     beforeEach(() => {
-      ReactDOM.render(<Alert alert={null} />, root);
+      ReactDOM.render(<Alert alert={null}/>, root);
     });
 
     it('should render nothing', () => {
@@ -53,7 +53,7 @@ describe('Alert', () => {
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',
       };
-      ReactDOM.render(<Alert alert={alert} />, root);
+      ReactDOM.render(<Alert alert={alert}/>, root);
     });
 
     it('should render alert', () => {
@@ -61,7 +61,7 @@ describe('Alert', () => {
       expect('.alert .alert__link').toContainText('Link Message');
     });
 
-    it('should remove alert after 3.5 seconds by default', () =>{
+    it('should remove alert after 3.5 seconds by default', () => {
       jest.advanceTimersByTime(3499);
       expect('hideAlert').not.toHaveBeenDispatched();
 
@@ -140,7 +140,7 @@ describe('Alert', () => {
 
   describe('when component is updated', () => {
     let renderAlert = (alert) => {
-      return ReactDOM.render(<Alert alert={alert} />, root);
+      return ReactDOM.render(<Alert alert={alert}/>, root);
     };
 
     beforeEach(() => {
@@ -159,7 +159,7 @@ describe('Alert', () => {
         expect('.alert .alert__link').toContainText('Link Message');
       });
 
-      it('should remove alert after 3.5 seconds by default', () =>{
+      it('should remove alert after 3.5 seconds by default', () => {
         jest.advanceTimersByTime(3499);
         expect('hideAlert').not.toHaveBeenDispatched();
 

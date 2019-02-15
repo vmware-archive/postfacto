@@ -43,7 +43,7 @@ const retro = {
       description: 'the happy retro item',
       category: 'happy',
       created_at: '2016-07-19T00:00:00.000Z',
-      vote_count: 10
+      vote_count: 10,
     },
     {
       id: 2,
@@ -62,11 +62,11 @@ const retro = {
       description: 'the sad retro item',
       category: 'sad'
     },
-  ]
+  ],
 };
 describe('RetroColumn', () => {
   beforeEach(() => {
-    ReactDOM.render(<RetroColumn retro={retro} retroId={'retro-slug-123'} category="happy" isMobile={false}/>, root);
+    ReactDOM.render(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false}/>, root);
   });
 
   describe('creating a retro', () => {
@@ -80,5 +80,4 @@ describe('RetroColumn', () => {
     expect($('.column-happy .retro-item .item-text').get(0).textContent).toEqual('the happy retro item');
     expect($('.column-happy .retro-item .item-text').get(1).textContent).toEqual('the 2nd happy retro item');
   });
-
 });

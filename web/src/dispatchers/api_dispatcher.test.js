@@ -31,7 +31,6 @@
 
 import '../spec_helper';
 import '../test_support/fetch_matchers';
-
 import MockPromises from 'mock-promises';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';

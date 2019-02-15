@@ -154,9 +154,11 @@ ol ol > li:before {
       font-weight: bold;
       font-size: small;
       color: $dark-gray;
+
       &:hover {
         cursor: pointer;
       }
+
       i {
         margin: 1.5rem 0.5rem 0.5rem 0.5rem;
         color: $white;
@@ -219,7 +221,7 @@ ol ol > li:before {
   }
 }
 
-@media only screen and (max-width : 640px) {
+@media only screen and (max-width: 640px) {
   .retro-heading {
     flex: none;
     display: flex;
@@ -243,9 +245,9 @@ ol ol > li:before {
   min-height: $retro-heading-height;
 }
 
-.retro-heading-buttons{
-  top:50%;
-  margin-top:-18px;
+.retro-heading-buttons {
+  top: 50%;
+  margin-top: -18px;
   position: absolute;
   right: 15px;
   display: flex;
@@ -285,6 +287,7 @@ ol ol > li:before {
     font-size: 18px;
     vertical-align: middle;
     max-width: calc(100vw - 420px);
+
     h1 {
       font-size: 22px;
       margin-bottom: 0;
@@ -293,8 +296,8 @@ ol ol > li:before {
   }
 
   .postfacto-heading-buttons {
-    top:50%;
-    margin-top:-18px;
+    top: 50%;
+    margin-top: -18px;
     position: absolute;
     right: 15px;
     display: flex;
@@ -306,7 +309,7 @@ ol ol > li:before {
       font-size: 16px;
       white-space: nowrap;
       position: absolute;
-      right:1em;
+      right: 1em;
 
       #HW_badge_cont {
         width: 40px;
@@ -324,7 +327,7 @@ ol ol > li:before {
   }
 }
 
-@media only screen and (max-width : 640px) {
+@media only screen and (max-width: 640px) {
   .postfacto-heading {
     flex: none;
     display: flex;
@@ -354,6 +357,7 @@ ol ol > li:before {
   padding-right: 1rem;
   height: 100% !important;
   min-width: auto !important;
+
   i {
     margin-right: 1rem;
   }
@@ -415,6 +419,7 @@ ol ol > li:before {
 
 .retro-item-list {
   flex: 1;
+
   .column-happy, .column-meh, .column-sad {
     @extend .medium-4;
     @extend .columns;
@@ -505,9 +510,11 @@ ol ol > li:before {
     @extend .small-2;
     @extend .columns;
     padding: 0;
+
     :hover {
       cursor: pointer;
     }
+
     img {
       height: 3em;
 
@@ -557,7 +564,9 @@ ol ol > li:before {
         cursor: pointer;
       }
 
-      i.fa { margin-right: 0.2rem; }
+      i.fa {
+        margin-right: 0.2rem;
+      }
     }
 
     .edit-delete {
@@ -603,6 +612,7 @@ ol ol > li:before {
   .item-discussed {
     display: block;
   }
+
   .item-delete {
     display: none;
   }
@@ -612,6 +622,7 @@ ol ol > li:before {
   :hover {
     cursor: initial !important;
   }
+
   .retro-heading-mobile .retro-name {
     display: none;
   }
@@ -666,6 +677,7 @@ ol ol > li:before {
   .item-text {
     font-weight: bold;
     font-size: xx-large;
+
     button, span {
       padding: 2rem 0;
       width: 100%;
@@ -752,6 +764,7 @@ button:focus {
     span {
       @extend .show-for-small-only;
     }
+
     form {
       button {
         @extend .hide-for-small-only;
@@ -776,9 +789,11 @@ button:focus {
 
   .item-vote {
     padding-right: 0.3rem;
+
     :hover {
       cursor: pointer;
     }
+
     .item-vote-submit {
       display: inline-block;
       text-align: center;
@@ -788,14 +803,17 @@ button:focus {
       border-radius: 1rem;
       margin: 0;
       padding: 0;
+
       &:hover {
         background-color: $white;
       }
+
       .vote-count {
         font-weight: bold;
         font-size: 0.9rem;
 
       }
+
       .vote-icon {
         width: 16px;
         height: 16px;
@@ -811,6 +829,7 @@ button:focus {
     align-self: flex-end;
     margin: 0 auto;
   }
+
   height: 7.4rem;
   vertical-align: center;
   text-align: center;
@@ -864,6 +883,7 @@ button:focus {
 
 .column-happy {
   background-color: $happy;
+
   .input-box {
     background-color: $input-happy;
   }
@@ -871,6 +891,7 @@ button:focus {
 
 .column-meh {
   background-color: $meh;
+
   .input-box {
     background-color: $input-meh;
   }
@@ -878,6 +899,7 @@ button:focus {
 
 .column-sad {
   background-color: $sad;
+
   .input-box {
     background-color: $input-sad;
   }
@@ -939,6 +961,7 @@ button:focus {
 
 .input-error {
   border: 1px solid $primary-red;
+
   &:focus {
     border: 1px solid $primary-red;
   }
@@ -962,19 +985,24 @@ button:focus {
     background-color: inherit;
     box-shadow: none;
     resize: none;
+
     &::-webkit-input-placeholder { /* WebKit, Blink, Edge */
       color: white;
     }
+
     &:-moz-placeholder { /* FF 4-18 */
       color: white;
     }
+
     &::-moz-placeholder { /* FF 19+ */
       color: white;
     }
+
     &:-ms-input-placeholder { /* IE 10+ */
       color: white;
     }
   }
+
   .input-button {
     display: flex;
     background-color: $button;
@@ -982,6 +1010,7 @@ button:focus {
     width: 3.1rem;
     margin: 0.4rem;
     border-radius: 0.2rem;
+
     i {
       margin: auto;
       color: white;
@@ -1004,6 +1033,7 @@ button:focus {
 .input-box.focused {
   transition: background-color 0.15s ease-out;
   background-color: white;
+
   textarea {
     border: none;
     box-shadow: none;
@@ -1011,12 +1041,15 @@ button:focus {
     &::-webkit-input-placeholder { /* WebKit, Blink, Edge */
       color: darken($dark-gray, 5%);
     }
+
     &:-moz-placeholder { /* FF 4-18 */
       color: darken($dark-gray, 5%);
     }
+
     &::-moz-placeholder { /* FF 19+ */
       color: darken($dark-gray, 5%);
     }
+
     &:-ms-input-placeholder { /* IE 10+ */
       color: darken($dark-gray, 5%);
     }
@@ -1108,6 +1141,7 @@ button:focus {
 
   .mobile-tabs {
     flex: none;
+
     .mobile-tabs-list {
 
       display: flex;
@@ -1124,12 +1158,15 @@ button:focus {
       .mobile-tab-happy {
         background-color: $tab-happy;
       }
+
       .mobile-tab-meh {
         background-color: $tab-meh;
       }
+
       .mobile-tab-sad {
         background-color: $tab-sad;
       }
+
       .mobile-tab-action {
         background-color: $tab-action;
       }
@@ -1151,12 +1188,12 @@ button:focus {
     color: $input-happy;
     padding-left: 1rem;
   }
+
   .links {
     @media all and (max-width: map-get($breakpoints, large)) {
       display: block;
     }
   }
-
 }
 
 .banner {
@@ -1174,4 +1211,3 @@ button:focus {
     padding: 0.25rem 1.5rem 0.25rem 1.5rem;
   }
 }
-

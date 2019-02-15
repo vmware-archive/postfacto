@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('RetroNotFoundPage', () => {
   let subject;
   beforeEach(() => {
-    subject = ReactDOM.render(<RetroNotFoundPage />, root);
+    subject = ReactDOM.render(<RetroNotFoundPage/>, root);
   });
 
   describe('When retro is not found', () => {

@@ -43,7 +43,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     retroId: types.string,
     config: types.object,
     session: types.object,
-    alert: types.object
+    alert: types.object,
   };
 
   constructor(props, context) {
@@ -56,8 +56,8 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
       request_uuid: '',
       errors: {
         confirm_new_password: '',
-        current_password: ''
-      }
+        current_password: '',
+      },
     };
   }
 
@@ -74,8 +74,8 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     if (nextProps.errors) {
       this.setState({
         errors: {
-          current_password: nextProps.errors.current_password
-        }
+          current_password: nextProps.errors.current_password,
+        },
       });
     } else {
       this.setState({errors: {}});
@@ -116,10 +116,10 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         retro_id: this.props.retroId,
         new_password: this.state.new_password,
         current_password: this.state.current_password,
-        request_uuid: this.props.session.request_uuid
+        request_uuid: this.props.session.request_uuid,
       });
     }
-    this.setState({ errors });
+    this.setState({errors});
   }
 
   handleChange(e) {
@@ -144,7 +144,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         onClick={this.handleBackButtonClicked.bind(this)}
         label="Back"
         labelStyle={isMobile ? {'display': 'none'} : {}}
-        icon={<FontIcon className="fa fa-chevron-left" />}
+        icon={<FontIcon className="fa fa-chevron-left"/>}
       />
     );
   }
@@ -156,9 +156,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
     return (
       <div className="retro-settings-heading-mobile">
-        {
-          this.renderBackButton()
-        }
+        {this.renderBackButton()}
         <div className="retro-name">
           <h1>{retro.name}</h1>
         </div>
@@ -174,9 +172,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
     return (
       <div className="retro-heading">
-        {
-          this.renderBackButton()
-        }
+        {this.renderBackButton()}
         <div className="retro-name">
           <h1>{retro.name}</h1>
         </div>
@@ -187,12 +183,10 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
   getMenuItems() {
     let items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0}
+      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
-    return items.filter((item) => {
-      return item.isApplicable;
-    });
+    return items.filter((item) => item.isApplicable);
   }
 
   render() {
@@ -200,7 +194,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     const {isMobile, errors} = this.state;
     const retroContainerClasses = isMobile ? 'full-height mobile-display' : 'full-height';
 
-    if (!(retro && retro.id)) return (<EmptyPage />);
+    if (!(retro && retro.id)) {
+      return (<EmptyPage/>);
+    }
 
     return (
       <span>
@@ -221,7 +217,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                          type="password"
                          name="current_password"
                          onChange={this.handleChange.bind(this)}
-                         className={`form-input ${ errors.current_password ? 'input-error' : '' }`}
+                         className={`form-input ${errors.current_password ? 'input-error' : ''}`}
                          placeholder="Current password"/>
                   <div className="error-message">{errors.current_password}</div>
 
@@ -237,7 +233,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                          type="password"
                          name="confirm_new_password"
                          onChange={this.handleChange.bind(this)}
-                         className={`form-input ${ errors.confirm_new_password ? 'input-error' : '' }`}
+                         className={`form-input ${errors.confirm_new_password ? 'input-error' : ''}`}
                          placeholder="New password again"/>
                   <div className="error-message">{errors.confirm_new_password}</div>
                 </div>
@@ -254,7 +250,8 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                   >
                     Save new password
                   </button>
-                  <button className="retro-password-settings-cancel button" onClick={this.handleCancelButtonClicked.bind(this)}>Cancel</button>
+                  <button className="retro-password-settings-cancel button"
+                          onClick={this.handleCancelButtonClicked.bind(this)}>Cancel</button>
                 </div>
               </div>
             </div>

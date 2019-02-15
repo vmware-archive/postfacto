@@ -44,8 +44,8 @@ const retro = {
       description: 'the happy retro item',
       category: 'happy',
       created_at: '2016-08-18T12:00:00.000Z',
-      vote_count: 10
-    }
+      vote_count: 10,
+    },
   ],
   action_items: [
     {
@@ -148,7 +148,7 @@ describe('RetroActionsColumn last-week', () => {
           description: 'the happy retro item',
           category: 'happy',
           created_at: '2016-08-18T12:00:00.000Z',
-          vote_count: 10
+          vote_count: 10,
         }
       ],
       action_items: [
@@ -164,7 +164,7 @@ describe('RetroActionsColumn last-week', () => {
           done: false,
           created_at: '2016-08-18T12:00:00.000Z',
         },
-      ]
+      ],
     };
 
     beforeEach(() => {

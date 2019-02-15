@@ -41,13 +41,17 @@ describe('RetroMenu', () => {
     testCallback = jasmine.createSpy('testCallback');
     let menuItems = [
       {
-        title: 'Menu Item 1', callback: testCallback
+        title: 'Menu Item 1',
+        callback: testCallback,
       },
       {
-        title: 'Menu Item 2', callback: () => {}
+        title: 'Menu Item 2',
+        callback: () => {},
       },
       {
-        title: 'Menu Item 3', callback: () => {}, button: true
+        title: 'Menu Item 3',
+        callback: () => {},
+        button: true,
       },
     ];
     ReactDOM.render(<MuiThemeProvider><RetroMenu isMobile={false} items={menuItems}/></MuiThemeProvider>, root);
@@ -62,7 +66,7 @@ describe('RetroMenu', () => {
       expect($('.retro-menu-item')[2]).toContainText('Menu Item 3');
     });
 
-    it('invokes the callback on click of menu item', function () {
+    it('invokes the callback on click of menu item', () => {
       $('.retro-menu button').simulate('click');
       $('.retro-menu-item').simulate('click');
       expect(testCallback).toHaveBeenCalled();

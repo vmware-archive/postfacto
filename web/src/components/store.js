@@ -36,7 +36,7 @@ export default {
     items: [],
     action_items: [],
     is_private: false,
-    send_archive_email: true
+    send_archive_email: true,
   },
   session: {
     request_uuid: '',
@@ -45,7 +45,7 @@ export default {
   alert: null,
   retros: [],
   featureFlags: {
-    archiveEmails: false
+    archiveEmails: false,
   },
-  countryCode: 'GB'
+  countryCode: 'GB',
 };

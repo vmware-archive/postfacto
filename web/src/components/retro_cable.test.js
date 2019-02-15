@@ -40,7 +40,7 @@ describe('RetroCable', () => {
     let retroCableDOM;
     beforeEach(() => {
       const cable = ActionCable.createConsumer('wss://websocket/url');
-      retroCableDOM = ReactDOM.render(<RetroCable cable={cable} retro_id={'retro-slug-123'}/>, root);
+      retroCableDOM = ReactDOM.render(<RetroCable cable={cable} retro_id="retro-slug-123"/>, root);
     });
 
     it('should subscribe to the channels', () => {
@@ -49,7 +49,7 @@ describe('RetroCable', () => {
       expect(subscriptionJson.channel).toEqual('RetrosChannel');
       expect(subscriptionJson.retro_id).toEqual('retro-slug-123');
     });
-    
+
     it('should dispatch updating the store on receiving data', () => {
       let websocketData = {
         retro: {
@@ -70,7 +70,10 @@ describe('RetroCable', () => {
         }
       };
       retroCableDOM.onReceived(websocketData);
-      expect('websocketRetroDataReceived').toHaveBeenDispatchedWith({type: 'websocketRetroDataReceived', data: websocketData});
+      expect('websocketRetroDataReceived').toHaveBeenDispatchedWith({
+        type: 'websocketRetroDataReceived',
+        data: websocketData,
+      });
     });
   });
 });

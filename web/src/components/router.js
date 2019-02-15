@@ -85,7 +85,7 @@ export default class Router extends React.Component {
     retro: types.object,
     config: types.object,
     alert: types.object,
-    featureFlags: types.object
+    featureFlags: types.object,
   };
 
   constructor(props, context) {
@@ -100,7 +100,7 @@ export default class Router extends React.Component {
       router.get(path, this[callbackName]);
     });
 
-    Actions.retrieveConfig()
+    Actions.retrieveConfig();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,8 +117,9 @@ export default class Router extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.Page === prevState.Page) { return; }
-    Actions.hideAlert();
+    if (this.state.Page !== prevState.Page) {
+      Actions.hideAlert();
+    }
   }
 
   createRetro = () => {
@@ -126,7 +127,7 @@ export default class Router extends React.Component {
   };
 
   showRetro = (req) => {
-    if(req.params.retroId !== 'new') {
+    if (req.params.retroId !== 'new') {
       Actions.retroIdRouted(req.params.retroId);
       this.setState({Page: ShowRetroPage, additionalProps: {retroId: req.params.retroId, archives: false}});
     }
@@ -143,7 +144,10 @@ export default class Router extends React.Component {
 
   showRetroArchive = (req) => {
     Actions.retroIdRouted(req.params.retroId);
-    this.setState({Page: ShowRetroPage, additionalProps: {retroId: req.params.retroId, archives: true, archiveId: req.params.archiveId}});
+    this.setState({
+      Page: ShowRetroPage,
+      additionalProps: {retroId: req.params.retroId, archives: true, archiveId: req.params.archiveId},
+    });
   };
 
   showRetroSettings = (req) => {
@@ -173,7 +177,7 @@ export default class Router extends React.Component {
   };
 
   showHome = () => {
-    if(this.isUserLoggedIn()){
+    if (this.isUserLoggedIn()) {
       this.listRetros();
     } else {
       this.setState({Page: HomePage});
@@ -181,7 +185,10 @@ export default class Router extends React.Component {
   };
 
   showRegistration = (req) => {
-    this.setState({Page: RegistrationPage, additionalProps: {accessToken: req.params.accessToken, email: req.params.email, fullName: req.params.fullName}});
+    this.setState({
+      Page: RegistrationPage,
+      additionalProps: {accessToken: req.params.accessToken, email: req.params.email, fullName: req.params.fullName},
+    });
   };
 
   render() {

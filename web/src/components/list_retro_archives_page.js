@@ -105,7 +105,7 @@ export default class ListRetroArchivesPage extends React.Component {
     let menuItems = this.getMenuItems();
 
     return (
-      <div className={'retro-archives full-height' + (isMobile ? ' mobile-display': '')}>
+      <div className={'retro-archives full-height' + (isMobile ? ' mobile-display' : '')}>
         <div className="retro-heading row">
           <div className="small-2 columns back-button">
             <FlatButton
@@ -113,7 +113,7 @@ export default class ListRetroArchivesPage extends React.Component {
               onClick={this.onCurrentRetroClicked.bind(this)}
               label="Current retro"
               labelStyle={isMobile ? {'display': 'none'} : {}}
-              icon={<FontIcon className="fa fa-chevron-left" />}
+              icon={<FontIcon className="fa fa-chevron-left"/>}
             />
           </div>
           <h1 className="small-8 text-center retro-name">
@@ -132,7 +132,7 @@ export default class ListRetroArchivesPage extends React.Component {
                   <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
                     <div className="archive-link" onClick={this.onArchiveClicked.bind(this, a.id)}>
                       <a href={`/retros/${retroId}/archives/${a.id}`}>
-                        { moment(a.created_at).local().format('DD MMMM YYYY') }
+                        {moment(a.created_at).local().format('DD MMMM YYYY')}
                       </a>
                     </div>
                   </div>
@@ -141,7 +141,7 @@ export default class ListRetroArchivesPage extends React.Component {
             }
           </div>
         </div>
-        <RetroFooter />
+        <RetroFooter/>
       </div>
     );
   }

@@ -33,9 +33,7 @@ import React from 'react';
 import types from 'prop-types';
 
 class LegalBanner extends React.Component {
-
   okClicked() {
-
   }
 
   shouldHide() {
@@ -49,7 +47,10 @@ class LegalBanner extends React.Component {
       return (
         <div className="banner" style={{display: 'flex'}}>
           <div className="terms-text">
-            By accessing and using Postfacto, you agree to our <a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and <a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and use of cookies
+            By accessing and using Postfacto, you agree to our
+            {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
+            {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
+            use of cookies
           </div>
           <button className="button ok-button" onClick={this.okClicked.bind(this)}>OK</button>
         </div>
@@ -59,7 +60,6 @@ class LegalBanner extends React.Component {
 }
 
 class RetroLegalBanner extends LegalBanner {
-
   static propTypes = {
     retro: types.object.isRequired
   };
@@ -102,7 +102,6 @@ class RetroLegalBanner extends LegalBanner {
 }
 
 class HomeLegalBanner extends LegalBanner {
-
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -115,7 +114,7 @@ class HomeLegalBanner extends LegalBanner {
 
     window.localStorage.homeTermsDismissed = true;
 
-    this.setState({ hasBeenDismissed: true });
+    this.setState({hasBeenDismissed: true});
   }
 
   shouldHide() {

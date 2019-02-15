@@ -55,7 +55,7 @@ export default class RetroCable extends React.Component {
 
   componentWillUnmount() {
     const {cable} = this.props;
-    cable.connection.close({ allowReconnect: false });
+    cable.connection.close({allowReconnect: false});
     cable.subscriptions.remove(this.state.subscription);
   }
 

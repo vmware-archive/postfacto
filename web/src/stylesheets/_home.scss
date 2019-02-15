@@ -55,6 +55,7 @@
 
     .show-for-medium {
       padding-top: 15px;
+
       .title {
         padding-left: 120px;
         font-family: $header-font-family;
@@ -122,10 +123,12 @@
   .panel {
     padding-top: 100px;
     padding-bottom: 100px;
+
     img {
       display: block;
       margin: auto;
     }
+
     .panel-img {
       margin-bottom: 64px;
     }

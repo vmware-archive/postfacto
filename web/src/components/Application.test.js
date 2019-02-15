@@ -7,7 +7,7 @@ it('renders without crashing', () => {
   global.Retro = {config};
 
   const div = document.createElement('div');
-  ReactDOM.render(<EnhancedApplication config={config} store={{}} router={{}} />, div);
+  ReactDOM.render(<EnhancedApplication config={config} store={{}} router={{}}/>, div);
 
   return Promise.resolve().then(() => { // wait for promises to resolve
     ReactDOM.unmountComponentAtNode(div);

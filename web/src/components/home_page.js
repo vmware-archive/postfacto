@@ -43,7 +43,11 @@ export default class HomePage extends React.Component {
 
   onSignIn(googleUser) {
     Logger.info('onGoogleSignIn ' + googleUser.profileObj.email);
-    Actions.createSession({access_token: googleUser.accessToken, email: googleUser.profileObj.email, name: googleUser.profileObj.name});
+    Actions.createSession({
+      access_token: googleUser.accessToken,
+      email: googleUser.profileObj.email,
+      name: googleUser.profileObj.name,
+    });
   }
 
   onGoogleLoginFailure() {
@@ -55,7 +59,7 @@ export default class HomePage extends React.Component {
       <div className="home-page">
         <div className="sticky-header">
           <div className="row">
-            <HomeLegalBanner />
+            <HomeLegalBanner/>
           </div>
           <div className="row header-title">
             <div className="show-for-medium small-12 columns">

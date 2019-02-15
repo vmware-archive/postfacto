@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('HomePage', () => {
   describe('When page loaded', () => {
     beforeEach(() => {
-      ReactDOM.render(<HomePage />, root);
+      ReactDOM.render(<HomePage/>, root);
     });
 
     it('dispatches showHomePageAnalytics action when home page is loaded', () => {

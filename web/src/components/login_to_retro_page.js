@@ -106,23 +106,28 @@ export default class LoginToRetroPage extends React.Component {
     }
     return (
       <div className="password-page">
-        <div className="row" style={{marginTop:'180px'}}>
+        <div className="row" style={{marginTop: '180px'}}>
           <div className="small-centered medium-8 small-10 columns">
             <div className="field row">
-              <h1>{ this.pageTitle() }</h1>
-                <label className="label">Enter the password to access {name}.</label>
-                <input className={`form-input ${inputStyle}`}
-                       placeholder="Password"
-                       type="password"
-                       value={this.state.password}
-                       onFocus={this.onInputFocus.bind(this)}
-                       onChange={this.onInputChange.bind(this)}
-                       onKeyPress={this.onKeyPress.bind(this)}
-                       required={true}
-                       autoFocus={true}
-                       autoComplete="off"/>
-              <p className="password-terms-text">By logging in, you agree to our <a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and <a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and use of cookies.</p>
-                <div className="error-message">{errors}</div>
+              <h1>{this.pageTitle()}</h1>
+              <label className="label">Enter the password to access {name}.</label>
+              <input className={`form-input ${inputStyle}`}
+                     placeholder="Password"
+                     type="password"
+                     value={this.state.password}
+                     onFocus={this.onInputFocus.bind(this)}
+                     onChange={this.onInputChange.bind(this)}
+                     onKeyPress={this.onKeyPress.bind(this)}
+                     required={true}
+                     autoFocus={true}
+                     autoComplete="off"/>
+              <p className="password-terms-text">
+                By logging in, you agree to our
+                {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
+                {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
+                use of cookies.
+              </p>
+              <div className="error-message">{errors}</div>
             </div>
             <div className="actions row">
               <button className="retro-form-submit expanded button" style={{fontSize: '1.1rem'}}

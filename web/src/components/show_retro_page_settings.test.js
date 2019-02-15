@@ -36,6 +36,7 @@ import '../spec_helper';
 
 describe('Retro settings', () => {
   let originalGetIsMobile;
+
   beforeEach(() => {
     let retro = createRetro();
 
@@ -44,14 +45,15 @@ describe('Retro settings', () => {
     window.localStorage.setItem('authToken', 'some-token');
 
     ReactDOM.render(<MuiThemeProvider>
-      <ShowRetroPage retro={retro} retroId={'13'} archives={false} config={global.Retro.config} featureFlags={ { archiveEmails: true } }/>
+      <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config} featureFlags={{archiveEmails: true}}/>
     </MuiThemeProvider>, root);
   });
+
   afterEach(() => {
     ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
   });
 
-  it('should have retro settings menu item', () =>{
+  it('should have retro settings menu item', () => {
     $('.retro-menu button').simulate('click');
     expect($('.retro-menu-item')[1]).toContainText('Retro settings');
   });
@@ -102,18 +104,18 @@ function createRetro() {
       {
         id: 1,
         description: 'the happy retro item',
-        category: 'happy'
+        category: 'happy',
       },
       {
         id: 2,
         description: 'the meh retro item',
-        category: 'meh'
+        category: 'meh',
       },
       {
         id: 3,
         description: 'the sad retro item',
-        category: 'sad'
-      }
+        category: 'sad',
+      },
     ],
     action_items: [
       {
@@ -126,6 +128,6 @@ function createRetro() {
         description: 'action item 2',
         done: false,
       },
-    ]
+    ],
   };
 }

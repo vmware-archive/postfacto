@@ -182,7 +182,7 @@ export default class RetroColumnItem extends React.Component {
     const {item, highlighted_item_id, retro_item_end_time, retroId} = this.props;
     if (item.id === highlighted_item_id) {
       return (
-        <CountdownTimer endTimestampInMs={Date.parse(retro_item_end_time)} retroId={retroId} />
+        <CountdownTimer endTimestampInMs={Date.parse(retro_item_end_time)} retroId={retroId}/>
       );
     }
     return null;
@@ -194,7 +194,7 @@ export default class RetroColumnItem extends React.Component {
     if (item.id === highlighted_item_id) {
       return (
         <div className="item-footer">
-          <br />
+          <br/>
           <div className="retro-item-cancel" onClick={this.onItemCancelClicked.bind(this)}>Cancel</div>
           <div className="item-done" onClick={this.onItemDoneClicked.bind(this)}>Done</div>
         </div>
@@ -213,7 +213,7 @@ export default class RetroColumnItem extends React.Component {
     return (
       <div className="item-vote">
         <div className="item-vote-submit" onClick={this.onItemVoteClicked.bind(this)}>
-          <div className="vote-icon"><i className="fa fa-heart" aria-hidden="true" /></div>
+          <div className="vote-icon"><i className="fa fa-heart" aria-hidden="true"/></div>
           <div className="vote-count">{this.props.item.vote_count}</div>
         </div>
       </div>

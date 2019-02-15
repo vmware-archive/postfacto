@@ -37,7 +37,9 @@ export function fetchJson(url, {accessToken, headers, ...options} = {}) {
   options = {credentials: 'same-origin', headers: {...acceptHeaders, ...authorizationHeaders, ...headers}, ...options};
   return fetch(url, options)
     .then((response) => {
-      if (response.status === 204) { return [response.status, '']; }
+      if (response.status === 204) {
+        return [response.status, ''];
+      }
       return Promise.all([Promise.resolve(response.status), response.json()]);
     })
     .catch(() => {

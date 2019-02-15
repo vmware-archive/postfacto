@@ -76,9 +76,8 @@ export default class RetroWebsocket extends React.Component {
   }
 
   render() {
-    return(
+    return (
       this.renderCable()
     );
   }
 }
-

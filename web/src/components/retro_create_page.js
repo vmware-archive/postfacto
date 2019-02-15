@@ -32,12 +32,11 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
-import { MAX_SLUG_LENGTH, VALID_SLUG_REGEX, DEFAULT_TOGGLE_STYLE } from '../constants';
+import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../constants';
 import iconLockedSvg from '../images/icon-locked.svg';
 import iconEyeSvg from '../images/icon-eye.svg';
 
 export default class RetroCreatePage extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -54,7 +53,7 @@ export default class RetroCreatePage extends React.Component {
   }
 
   componentWillMount() {
-    if(!localStorage.getItem('authToken')) {
+    if (!localStorage.getItem('authToken')) {
       Actions.setRoute('/');
     }
   }
@@ -88,11 +87,12 @@ export default class RetroCreatePage extends React.Component {
         name: this.state.name,
         slug: this.state.slug,
         password: this.state.password,
-        isPrivate: this.state.isPrivate });
+        isPrivate: this.state.isPrivate,
+      });
     }
   }
 
-  getCurrentHost(){
+  getCurrentHost() {
     return window.location.origin.split('://')[1];
   }
 
@@ -152,14 +152,20 @@ export default class RetroCreatePage extends React.Component {
   };
 
   renderAccessInstruction() {
-    const accessPrivate = (<div>
-          <img className="icon-locked" src={iconLockedSvg}/> The password is needed to view or participate.
-        </div>);
-    const accessPublic = (<div>
-          <img className="icon-locked" src={iconEyeSvg}/> Anyone can view or participate <strong>without</strong> entering password.
-        </div>);
+    const accessPrivate = (
+      <div>
+        <img className="icon-locked" src={iconLockedSvg}/>
+        {' '}The password is needed to view or participate.
+      </div>
+    );
+    const accessPublic = (
+      <div>
+        <img className="icon-locked" src={iconEyeSvg}/>
+        {' '}Anyone can view or participate <strong>without</strong> entering password.
+      </div>
+    );
 
-    return(
+    return (
       <div className="access-instruction">
         {this.state.isPrivate ? accessPrivate : accessPublic}
 
@@ -169,7 +175,7 @@ export default class RetroCreatePage extends React.Component {
         <img className="icon-locked" src={iconLockedSvg}/> Edit settings
 
       </div>
-      );
+    );
   }
 
   render() {
@@ -191,7 +197,7 @@ export default class RetroCreatePage extends React.Component {
                        value={name}
                        type="text"
                        name="name"
-                       className={`form-input ${ errors.name ? 'input-error' : '' }`}
+                       className={`form-input ${errors.name ? 'input-error' : ''}`}
                        onChange={this.change}
                        placeholder="Team name"/>
                 <div className="error-message">{errors.name}</div>
@@ -204,7 +210,7 @@ export default class RetroCreatePage extends React.Component {
                          value={slug}
                          type="text"
                          name="slug"
-                         className={`input-group-field form-input ${ errors.slug ? 'input-error' : '' }`}
+                         className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
                          onChange={this.change}
                          placeholder="team-name"/>
                 </div>
@@ -216,7 +222,7 @@ export default class RetroCreatePage extends React.Component {
                        value={password}
                        type="password"
                        name="password"
-                       className={`form-input ${ errors.password ? 'input-error' : '' }`}
+                       className={`form-input ${errors.password ? 'input-error' : ''}`}
                        onChange={this.change}
                        placeholder="Create password"/>
                 <div className="error-message">{errors.password}</div>
@@ -227,7 +233,7 @@ export default class RetroCreatePage extends React.Component {
                 <Toggle
                   id="retro_is_private"
                   name="isPrivate"
-                  label={ isPrivate ? 'Yes' : 'No' }
+                  label={isPrivate ? 'Yes' : 'No'}
                   labelPosition="right"
                   toggled={isPrivate}
                   onToggle={this.toggleCheckbox.bind(this)}
@@ -238,7 +244,7 @@ export default class RetroCreatePage extends React.Component {
                   thumbSwitchedStyle={toggle.thumbSwitchedStyle}
                   iconStyle={toggle.iconStyle}
                 />
-                { this.renderAccessInstruction() }
+                {this.renderAccessInstruction()}
               </div>
 
               <div className="row">

@@ -35,9 +35,9 @@ import types from 'prop-types';
 
 export default class GoogleLoginWrapper extends React.Component {
   static propTypes = {
-      onSuccess: types.func.isRequired,
-      onFailure: types.func.isRequired,
-      className: types.string
+    onSuccess: types.func.isRequired,
+    onFailure: types.func.isRequired,
+    className: types.string,
   };
 
   constructor(props, context) {

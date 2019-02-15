@@ -74,8 +74,6 @@ export default class SessionWebsocket extends React.Component {
   }
 
   render() {
-    return(
-      this.renderCable()
-    );
+    return this.renderCable();
   }
 }

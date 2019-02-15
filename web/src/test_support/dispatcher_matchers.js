@@ -34,7 +34,7 @@ import {Dispatcher} from 'p-flux';
 expect.extend({
   toHaveBeenDispatched(actual) {
     const allDispatchers = Dispatcher.dispatch.calls.all()
-        .map((dispatchCall) => dispatchCall.args[0].type);
+      .map((dispatchCall) => dispatchCall.args[0].type);
     const pass = allDispatchers.includes(actual);
 
     let message;
@@ -49,8 +49,8 @@ expect.extend({
 
   toHaveBeenDispatchedWith(actual, expected) {
     const observed = Dispatcher.dispatch.calls.all()
-        .map(dispatchCall => dispatchCall.args[0])
-        .filter(({type}) => type === actual);
+      .map(dispatchCall => dispatchCall.args[0])
+      .filter(({type}) => type === actual);
 
     const pass = observed.some(params => {
       return this.equals(params, expected);

@@ -40,14 +40,14 @@ import RetroColumn from './retro_column';
 import RetroActionPanel from './retro_action_panel';
 import RetroWebsocket from './retro_websocket';
 import RetroFooter from './footer';
-import { RetroLegalBanner } from './retro_legal_banner';
+import {RetroLegalBanner} from './retro_legal_banner';
 import RetroHeading from './retro_heading';
 import {HotKeys} from 'react-hotkeys';
 
 import EmptyPage from './empty_page';
 import jQuery from 'jquery';
 
-import { DEFAULT_TOGGLE_STYLE } from '../constants';
+import {DEFAULT_TOGGLE_STYLE} from '../constants';
 
 export default class ShowRetroPage extends React.Component {
   static propTypes = {
@@ -132,9 +132,7 @@ export default class ShowRetroPage extends React.Component {
     let archivesTimestamps = new Set();
     this.getArchivesTimestamps(archivesTimestamps, retro.items);
     this.getArchivesTimestamps(archivesTimestamps, retro.action_items);
-    let orderedArchivesTimestamps = Array.from(archivesTimestamps).sort(function (a, b) {
-      return new Date(b) - new Date(a);
-    });
+    let orderedArchivesTimestamps = Array.from(archivesTimestamps).sort((a, b) => new Date(b) - new Date(a));
     if (orderedArchivesTimestamps.length > 0) {
       let filteredRetro = retro;
       filteredRetro.items = this.filterItemByTimestamp(retro.items, orderedArchivesTimestamps[0]);
@@ -145,13 +143,11 @@ export default class ShowRetroPage extends React.Component {
   }
 
   filterItemByTimestamp(items, timestamp) {
-    return jQuery.grep(items, function (item) {
-      return item.archived_at === timestamp;
-    });
+    return jQuery.grep(items, (item) => item.archived_at === timestamp);
   }
 
   moveToNextItem(event) {
-    if(event.target.type === "textarea") {
+    if (event.target.type === 'textarea') {
       return;
     }
     const {retroId} = this.props;
@@ -159,7 +155,7 @@ export default class ShowRetroPage extends React.Component {
   }
 
   getArchivesTimestamps(archivesTimestamps, items) {
-    jQuery.each(items, function (_, item) {
+    jQuery.each(items, (_, item) => {
       archivesTimestamps.add(item.archived_at);
     });
   }
@@ -180,11 +176,11 @@ export default class ShowRetroPage extends React.Component {
     Actions.hideDialog();
   }
 
-
-
-    handleArchiveEmailPreferenceChange(e) {
-        Actions.toggleSendArchiveEmail({ currentSendArchiveEmail: this.props.retro.send_archive_email });
-    };
+  handleArchiveEmailPreferenceChange() {
+    Actions.toggleSendArchiveEmail({
+      currentSendArchiveEmail: this.props.retro.send_archive_email,
+    });
+  };
 
   renderColumnMobile(retro) {
     const {archives, retroId} = this.props;
@@ -206,8 +202,7 @@ export default class ShowRetroPage extends React.Component {
     );
   }
 
-    renderArchiveConfirmationDialog() {
-
+  renderArchiveConfirmationDialog() {
     const title = this.props.dialog ? this.props.dialog.title : '';
     const message = this.props.dialog ? this.props.dialog.message : '';
     const toggle = DEFAULT_TOGGLE_STYLE;
@@ -226,39 +221,39 @@ export default class ShowRetroPage extends React.Component {
       </button>
     );
 
-        return (
-            <Dialog title={title}
-                    actions={[cancelButton, archiveButton]}
-                    open={!!this.props.dialog}
-                    onRequestClose={Actions.hideDialog}
-                    actionsContainerClassName="archive-dialog__actions"
-                    contentClassName="archive-dialog">
-                <p>{message}</p>
-                {
-                this.props.featureFlags.archiveEmails ?<div>
-                    <label className="label" htmlFor="send_archive_email">Send action items to the team via
-                        email?</label>
+    return (
+      <Dialog title={title}
+              actions={[cancelButton, archiveButton]}
+              open={!!this.props.dialog}
+              onRequestClose={Actions.hideDialog}
+              actionsContainerClassName="archive-dialog__actions"
+              contentClassName="archive-dialog">
+        <p>{message}</p>
+        {
+          this.props.featureFlags.archiveEmails ? <div>
+              <label className="label" htmlFor="send_archive_email">Send action items to the team via
+                email?</label>
 
-                    <Toggle
-                        id="send_archive_email"
-                        name="sendArchiveEmail"
-                        label={this.props.retro.send_archive_email ? 'Yes' : 'No'}
-                        toggled={this.props.retro.send_archive_email}
-                        labelPosition="right"
-                        onToggle={this.handleArchiveEmailPreferenceChange.bind(this)}
-                        trackStyle={toggle.trackStyle}
-                        trackSwitchedStyle={toggle.trackSwitchedStyle}
-                        labelStyle={toggle.labelStyle}
-                        thumbStyle={toggle.thumbStyle}
-                        thumbSwitchedStyle={toggle.thumbSwitchedStyle}
-                        iconStyle={toggle.iconStyle}
-                    />
-                </div>:
-                  null
-              }
-            </Dialog>
-        );
-    }
+              <Toggle
+                id="send_archive_email"
+                name="sendArchiveEmail"
+                label={this.props.retro.send_archive_email ? 'Yes' : 'No'}
+                toggled={this.props.retro.send_archive_email}
+                labelPosition="right"
+                onToggle={this.handleArchiveEmailPreferenceChange.bind(this)}
+                trackStyle={toggle.trackStyle}
+                trackSwitchedStyle={toggle.trackSwitchedStyle}
+                labelStyle={toggle.labelStyle}
+                thumbStyle={toggle.thumbStyle}
+                thumbSwitchedStyle={toggle.thumbSwitchedStyle}
+                iconStyle={toggle.iconStyle}
+              />
+            </div> :
+            null
+        }
+      </Dialog>
+    );
+  }
 
   renderMobile(retro) {
     const {config: {websocket_url}, retroId, archives} = this.props;
@@ -293,29 +288,29 @@ export default class ShowRetroPage extends React.Component {
     );
   }
 
-    renderDesktop(retro) {
-        const {config: {websocket_url}, retroId, archives} = this.props;
-        const {isMobile} = this.state;
-        let retroContainerClasses = 'full-height full-height-retro';
+  renderDesktop(retro) {
+    const {config: {websocket_url}, retroId, archives} = this.props;
+    const {isMobile} = this.state;
+    let retroContainerClasses = 'full-height full-height-retro';
 
-        if (archives) {
-            retroContainerClasses += ' archived';
-        }
+    if (archives) {
+      retroContainerClasses += ' archived';
+    }
 
-        const keyMap = {
-            'next': 'right'
-        };
+    const keyMap = {
+      'next': 'right'
+    };
 
-        const keyHandlers = {
-            'next': this.moveToNextItem.bind(this)
-        };
+    const keyHandlers = {
+      'next': this.moveToNextItem.bind(this)
+    };
 
-        return (
-            <HotKeys keyMap={keyMap} handlers={keyHandlers}>
+    return (
+      <HotKeys keyMap={keyMap} handlers={keyHandlers}>
                 <span>
                   <RetroWebsocket url={websocket_url} retro_id={retroId}/>
-                    {this.renderArchiveConfirmationDialog()}
-                    <div className={retroContainerClasses}>
+                  {this.renderArchiveConfirmationDialog()}
+                  <div className={retroContainerClasses}>
 
                     <RetroLegalBanner retro={retro}/>
 
@@ -339,16 +334,16 @@ export default class ShowRetroPage extends React.Component {
                                    isMobile={isMobile}/>
                     </div>
                     <RetroActionPanel
-                        retro={retro}
-                        retroId={retroId}
-                        isMobile={isMobile}
-                        archives={archives}/>
+                      retro={retro}
+                      retroId={retroId}
+                      isMobile={isMobile}
+                      archives={archives}/>
                     <RetroFooter/>
                   </div>
                 </span>
-            </HotKeys>
-        );
-    }
+      </HotKeys>
+    );
+  }
 
   render() {
     const {retro, archives} = this.props;

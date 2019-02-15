@@ -45,9 +45,9 @@ describe('ShowRetroSettingsPage', () => {
 
     beforeEach(() => {
       retro = createRetro();
-      session = { request_uuid: 'some-request-uuid' };
+      session = {request_uuid: 'some-request-uuid'};
       ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId={'13'} retro={retro} session={session}/>
+        <ShowRetroSettingsPage retroId="13" retro={retro} session={session}/>
       </MuiThemeProvider>, root);
       $retro_name = $('input#retro_name');
       $retro_url = $('input#retro_url');
@@ -89,7 +89,7 @@ describe('ShowRetroSettingsPage', () => {
     });
 
     describe('video link field', () => {
-      it("populates the video link field", () => {
+      it('populates the video link field', () => {
         expect('input#retro_video_link').toHaveValue(retro.video_link)
       });
     });
@@ -176,7 +176,7 @@ describe('ShowRetroSettingsPage', () => {
       describe('has errors', () => {
         beforeEach(() => {
           ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroSettingsPage retroId={'13'} retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
+            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
           </MuiThemeProvider>, root);
         });
 
@@ -191,7 +191,7 @@ describe('ShowRetroSettingsPage', () => {
       beforeEach(() => {
         retro.is_private = true;
         ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroSettingsPage retroId={'13'} retro={retro}/>
+          <ShowRetroSettingsPage retroId="13" retro={retro}/>
         </MuiThemeProvider>, root);
       });
 
@@ -234,7 +234,7 @@ describe('ShowRetroSettingsPage', () => {
     });
 
     it('updates the retro settings when the save button is clicked', () => {
-      const new_video_url = "newurl.com"
+      const new_video_url = 'newurl.com';
       $retro_name.val('the new retro name').simulate('change');
       $retro_url.val('the-new-retro-slug').simulate('change');
       $retro_video_link.val(new_video_url).simulate('change');
@@ -281,7 +281,7 @@ describe('ShowRetroSettingsPage', () => {
     beforeEach(() => {
       ShowRetroSettingsPage.prototype.getIsMobile = () => false;
       ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId={'13'}/>
+        <ShowRetroSettingsPage retroId="13"/>
       </MuiThemeProvider>, root);
     });
 
@@ -293,7 +293,7 @@ describe('ShowRetroSettingsPage', () => {
     beforeEach(() => {
       ShowRetroSettingsPage.prototype.getIsMobile = () => true;
       ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId={'13'}/>
+        <ShowRetroSettingsPage retroId="13"/>
       </MuiThemeProvider>, root);
     });
 

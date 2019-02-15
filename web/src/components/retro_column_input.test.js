@@ -40,7 +40,7 @@ const retro = {
 
 describe('inputting a retro item', () => {
   beforeEach(() => {
-    ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="happy" />, root);
+    ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="happy"/>, root);
   });
   it('adds an retro item when pressing enter', () => {
     expect($('textarea').attr('placeholder')).toEqual('I\'m glad that...');
@@ -77,9 +77,9 @@ describe('inputting a retro item', () => {
 describe('inputting an action item', () => {
   let subject;
   beforeEach(() => {
-    subject = ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="action" />, root);
+    subject = ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="action"/>, root);
   });
-  
+
   it('adds an action item when pressing enter', () => {
     expect($('textarea').attr('placeholder')).toEqual('Add an action item');
     $('textarea').val('a new action item').simulate('change');

@@ -34,7 +34,6 @@ import ReactDOM from 'react-dom';
 import '../spec_helper';
 
 describe('CountdownTimer', () => {
-
   beforeEach(() => {
     global.Date.now = () => 0;
   });
@@ -42,7 +41,7 @@ describe('CountdownTimer', () => {
   describe('when end time in the future', () => {
     beforeEach(() => {
       let FOUR_MINS_FIVE_SECS = 245000;
-      ReactDOM.render(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId={'retro-slug-123'}/>, root);
+      ReactDOM.render(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123"/>, root);
     });
 
     it('renders a formatted time component', () => {
@@ -60,7 +59,7 @@ describe('CountdownTimer', () => {
 
   describe('when end time in the past', () => {
     beforeEach(() => {
-      ReactDOM.render(<CountdownTimer endTimestampInMs={0} retroId={'retro-slug-123'}/>, root);
+      ReactDOM.render(<CountdownTimer endTimestampInMs={0} retroId="retro-slug-123"/>, root);
     });
 
     it('displays +2 more minutes and Time\'s Up!', () => {

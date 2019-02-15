@@ -53,7 +53,7 @@ export default class SessionCable extends React.Component {
 
   componentWillUnmount() {
     const {cable} = this.props;
-    cable.connection.close({ allowReconnect: false });
+    cable.connection.close({allowReconnect: false});
     cable.subscriptions.remove(this.state.subscription);
   }
 
@@ -71,8 +71,8 @@ export default class SessionCable extends React.Component {
 
   subscribe(cable) {
     let subscription = cable.subscriptions.create(
-      { channel: 'SessionsChannel' },
-      { received: this.onReceived }
+      {channel: 'SessionsChannel'},
+      {received: this.onReceived},
     );
 
     this.setState({subscription: subscription});

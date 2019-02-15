@@ -31,16 +31,12 @@
 
 import React from 'react';
 import {Actions} from 'p-flux';
-
-import { RaisedButton } from 'material-ui';
-
-
+import {RaisedButton} from 'material-ui';
 import RetroFooter from './footer';
 import RetroTile from './retro_tile';
 import types from 'prop-types';
 
 export default class ListRetrosPage extends React.Component {
-
   static propTypes = {
     retros: types.array,
   };
@@ -95,13 +91,12 @@ export default class ListRetrosPage extends React.Component {
 
         <div className="retro-tiles-container">
           <div className="retro-tiles">
-          {retroListItems}
-        </div>
-
+            {retroListItems}
+          </div>
         </div>
 
         <RetroFooter/>
       </div>
-  );
+    );
   }
 }

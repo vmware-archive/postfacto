@@ -49,7 +49,8 @@ export default class RegistrationPage extends React.Component {
   register() {
     let companyName = ReactDOM.findDOMNode(this.refs.companyNameInput).value;
     let fullName = ReactDOM.findDOMNode(this.refs.fullNameInput).value;
-    Actions.createUser({access_token: this.props.accessToken,
+    Actions.createUser({
+      access_token: this.props.accessToken,
       company_name: companyName,
       full_name: fullName
     });
@@ -59,10 +60,10 @@ export default class RegistrationPage extends React.Component {
     return (
       <div className="registration-page">
         <div className="medium-6 small-12 columns registration-side-banner new-retro-column">
-            <div className="medium-centered small-centered">
-              <p>Welcome to Postfacto!</p>
-              <h1>Let’s create an account for you!</h1>
-            </div>
+          <div className="medium-centered small-centered">
+            <p>Welcome to Postfacto!</p>
+            <h1>Let’s create an account for you!</h1>
+          </div>
         </div>
 
         <div className="medium-6 small-12 columns new-retro-column">
@@ -74,7 +75,7 @@ export default class RegistrationPage extends React.Component {
                      id="email"
                      name="email"
                      type="email"
-                     className={'form-input'}
+                     className="form-input"
                      disabled="true"/>
             </div>
 
@@ -86,7 +87,7 @@ export default class RegistrationPage extends React.Component {
                      id="fullName"
                      name="fullName"
                      type="text"
-                     className={'form-input'}/>
+                     className="form-input"/>
             </div>
 
             <div className="row">
@@ -96,11 +97,15 @@ export default class RegistrationPage extends React.Component {
                      id="companyName"
                      name="companyName"
                      type="text"
-                     className={'form-input'}/>
+                     className="form-input"/>
             </div>
 
             <div className="row terms-text">
-              <p>By continuing, you agree to Postfacto's <a href="/terms" target="_blank">Terms of Use</a> and <a href="/privacy" target="_blank">Privacy Policy</a></p>
+              <p>
+                By continuing, you agree to Postfacto's
+                {' '}<a href="/terms" target="_blank">Terms of Use</a> and
+                {' '}<a href="/privacy" target="_blank">Privacy Policy</a>
+              </p>
             </div>
 
             <div className="row">

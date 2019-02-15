@@ -54,7 +54,7 @@ export default class RetroActionsColumnItem extends React.Component {
   renderTick() {
     const {action_item} = this.props;
 
-    let tick = action_item.done ?
+    const tick = action_item.done ?
       <img className="action-tick-checked" src={actionTickCheckedSvg}/>
       : <img className="action-tick-unchecked" src={actionTickUncheckedSvg}/>;
     return (
@@ -111,18 +111,18 @@ export default class RetroActionsColumnItem extends React.Component {
     } else {
       actionContent = (
         <div className="action-content">
-          { this.renderTick() }
+          {this.renderTick()}
           <div className="action-text">
             {this.props.action_item.description}
           </div>
-          { this.renderEditButton() }
+          {this.renderEditButton()}
         </div>
       );
     }
 
     return (
-      <div className={`retro-action ${this.state.isEditing ? 'retro-action-edit' : '' }`}>
-        { actionContent }
+      <div className={`retro-action ${this.state.isEditing ? 'retro-action-edit' : ''}`}>
+        {actionContent}
       </div>
     );
   }

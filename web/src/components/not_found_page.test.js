@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('NotFoundPage', () => {
   let subject;
   beforeEach(() => {
-    subject = ReactDOM.render(<NotFoundPage />, root);
+    subject = ReactDOM.render(<NotFoundPage/>, root);
   });
 
   describe('When page is not found', () => {

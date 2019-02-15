@@ -56,7 +56,7 @@ export default class RetroItemEditView extends React.Component {
   onTextChanged(event) {
     const value = event.target.value;
 
-    this.setState({ editedText: value, saveDisabled: value.length === 0 ? 'disabled' : '' });
+    this.setState({editedText: value, saveDisabled: value.length === 0 ? 'disabled' : ''});
   }
 
   onSaveClicked(event) {
@@ -77,7 +77,7 @@ export default class RetroItemEditView extends React.Component {
     const {editedText} = this.state;
     const value = event.target.value;
     if (event.key === 'Enter' && !event.shiftKey && value && value.trim().length > 0) {
-          this.props.saveItem(editedText);
+      this.props.saveItem(editedText);
     }
   }
 
@@ -88,7 +88,7 @@ export default class RetroItemEditView extends React.Component {
           type="text"
           name="edit-text-field"
           autoFocus={true}
-          value={ this.state.editedText }
+          value={this.state.editedText}
           onChange={this.onTextChanged.bind(this)}
           onKeyPress={this.onKeyPress.bind(this)}
         />
@@ -120,11 +120,11 @@ export default class RetroItemEditView extends React.Component {
     return (
       <div className="edit-view">
         <div className="edit-content">
-          { this.renderTextInput() }
+          {this.renderTextInput()}
         </div>
         <div className="edit-buttons">
-          { this.renderDeleteButton() }
-          { this.renderSaveButton() }
+          {this.renderDeleteButton()}
+          {this.renderSaveButton()}
         </div>
       </div>
     );

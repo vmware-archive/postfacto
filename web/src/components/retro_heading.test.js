@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { MuiThemeProvider } from 'material-ui';
+import {MuiThemeProvider} from 'material-ui';
 import RetroHeading from './retro_heading';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
@@ -43,7 +43,7 @@ describe('RetroHeading', () => {
         retro = createRetro();
         ReactDOM.render(
           <MuiThemeProvider>
-            <RetroHeading retro={retro} retroId={'13'} archives={true} isMobile={false}/>
+            <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
           </MuiThemeProvider>, root
         );
       });
@@ -58,7 +58,7 @@ describe('RetroHeading', () => {
         retro = createRetro();
         ReactDOM.render(
           <MuiThemeProvider>
-            <RetroHeading retro={retro} retroId={'13'} archives={false} isMobile={false}/>
+            <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
           </MuiThemeProvider>, root
         );
       });
@@ -69,7 +69,7 @@ describe('RetroHeading', () => {
     });
   });
 
-  describe('Menu', () =>{
+  describe('Menu', () => {
     describe('when a retro has archives', () => {
       describe('when on an archived retro', () => {
         beforeEach(() => {
@@ -78,7 +78,7 @@ describe('RetroHeading', () => {
           retro.archives = [{id: 1}, {id: 2}, {id: 13}];
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId={'13'} archives={true} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
             </MuiThemeProvider>, root
           );
           $('.retro-menu button').simulate('click');
@@ -100,7 +100,7 @@ describe('RetroHeading', () => {
           retro.archives = [{id: 1}, {id: 2}];
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId={'13'} archives={false} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
             </MuiThemeProvider>, root
           );
           $('.retro-menu button').simulate('click');
@@ -121,7 +121,7 @@ describe('RetroHeading', () => {
           retro.archives = [{id: 1}, {id: 2}];
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId={'13'} archives={false} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
             </MuiThemeProvider>, root
           );
           $('.retro-menu button').simulate('click');
@@ -162,7 +162,7 @@ describe('RetroHeading', () => {
 
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId={'13'} archives={false} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
             </MuiThemeProvider>, root
           );
           $('.retro-menu button').simulate('click');
@@ -182,7 +182,7 @@ describe('RetroHeading', () => {
           retro = createRetro();
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId={'13'} archives={false} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
             </MuiThemeProvider>, root
           );
           $('.retro-menu button').simulate('click');
@@ -213,10 +213,8 @@ describe('RetroHeading', () => {
         });
       });
     });
-
   });
 });
-
 
 function createRetro(isPrivate = false) {
   return {
@@ -228,17 +226,17 @@ function createRetro(isPrivate = false) {
       {
         id: 1,
         description: 'the happy retro item',
-        category: 'happy'
+        category: 'happy',
       },
       {
         id: 2,
         description: 'the meh retro item',
-        category: 'meh'
+        category: 'meh',
       },
       {
         id: 3,
         description: 'the sad retro item',
-        category: 'sad'
+        category: 'sad',
       }
     ],
     action_items: [
@@ -252,6 +250,6 @@ function createRetro(isPrivate = false) {
         description: 'action item 2',
         done: false,
       },
-    ]
+    ],
   };
 }

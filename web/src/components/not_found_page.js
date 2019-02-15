@@ -33,7 +33,6 @@ import React from 'react';
 import {Actions} from 'p-flux';
 
 export default class NotFoundPage extends React.Component {
-
   componentWillUnmount() {
     Actions.resetNotFound();
   }
@@ -45,7 +44,7 @@ export default class NotFoundPage extends React.Component {
   render() {
     return (
       <div className="error-page">
-        <div className="row" style={{marginTop:'180px'}}>
+        <div className="row" style={{marginTop: '180px'}}>
           <div className="small-centered medium-8 small-10 columns">
             <h1>Oops... Looks like the page you're looking for doesn't exist.</h1>
             <p>Perhaps you were trying to do this?</p>

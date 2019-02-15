@@ -53,7 +53,7 @@ describe('RetroColumnItem', () => {
 
   describe('when opening the app on desktop', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile={false} />, root);
+      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile={false}/>, root);
     });
     describe('when rendering a RetroColumnItem', () => {
       it('item has all its data', () => {
@@ -142,7 +142,10 @@ describe('RetroColumnItem', () => {
         it('dispatches a vote action', () => {
           $('.item-vote-submit').simulate('click');
           item.vote_count++;
-          expect('voteRetroItem').toHaveBeenDispatchedWith({type: 'voteRetroItem', data: {retro_id: retroId, item: item}});
+          expect('voteRetroItem').toHaveBeenDispatchedWith({
+            type: 'voteRetroItem',
+            data: {retro_id: retroId, item: item},
+          });
         });
       });
 
@@ -176,7 +179,7 @@ describe('RetroColumnItem', () => {
         expect($item.attr('class')).not.toContain('highlight');
         spyOn(Scroll.scroller, 'scrollTo');
 
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={false} />, root);
+        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
 
         expect($item.attr('class')).toContain('highlight');
 
@@ -209,7 +212,7 @@ describe('RetroColumnItem', () => {
 
       it('does not scroll when highlighted again', () => {
         spyOn(Scroll.scroller, 'scrollTo');
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={highlightedItem} highlighted_item_id={2} archives={false} isMobile={false} />, root);
+        ReactDOM.render(<RetroColumnItem retroId={retroId} item={highlightedItem} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
         expect(Scroll.scroller.scrollTo).not.toHaveBeenCalled();
       });
 
@@ -226,7 +229,10 @@ describe('RetroColumnItem', () => {
       describe('when clicking on done', () => {
         it('sets the item to discussed', () => {
           $('.item-done').simulate('click');
-          expect('doneRetroItem').toHaveBeenDispatchedWith({type: 'doneRetroItem', data: {retroId: retroId, item: highlightedItem}});
+          expect('doneRetroItem').toHaveBeenDispatchedWith({
+            type: 'doneRetroItem',
+            data: {retroId: retroId, item: highlightedItem},
+          });
         });
       });
 
@@ -235,7 +241,7 @@ describe('RetroColumnItem', () => {
           $('.retro-item-cancel').simulate('click');
           expect('unhighlightRetroItem').toHaveBeenDispatchedWith({
             type: 'unhighlightRetroItem',
-            data: {retro_id: retroId}
+            data: {retro_id: retroId},
           });
         });
       });
@@ -303,8 +309,7 @@ describe('RetroColumnItem', () => {
 
   describe('when opening the app on mobile', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={1}
-                                       archives={false} isMobile={true}/>, root);
+      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={1} archives={false} isMobile={true}/>, root);
     });
 
     describe('when clicking on an item', () => {
@@ -316,8 +321,7 @@ describe('RetroColumnItem', () => {
 
     describe('when clicking on done', () => {
       beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2}
-                                         archives={false} isMobile={true}/>, root);
+        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={true}/>, root);
       });
       it('does not done the item ', () => {
         $('.item-done').simulate('click');

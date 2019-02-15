@@ -62,7 +62,7 @@ export default class RetroHeading extends React.PureComponent {
   handleArchiveRetro() {
     Actions.showDialog({
       title: 'You\'re about to archive this retro.',
-      message: 'Are you sure?'
+      message: 'Are you sure?',
     });
   }
 
@@ -88,23 +88,23 @@ export default class RetroHeading extends React.PureComponent {
         title: 'Archive this retro',
         callback: this.handleArchiveRetro.bind(this),
         isApplicable: !archives && retro.items && retro.items.length > 0,
-        button: true
+        button: true,
       },
       {
         title: 'View archives',
         callback: this.handleViewArchives.bind(this),
-        isApplicable: !archives && retro.archives && retro.archives.length > 0
+        isApplicable: !archives && retro.archives && retro.archives.length > 0,
       },
       {
         title: 'Retro settings',
         callback: this.handleRetroSettings.bind(this),
-        isApplicable: true
+        isApplicable: true,
       },
       {
         title: 'Sign out',
         callback: Actions.signOut,
-        isApplicable: window.localStorage.length > 0
-      }
+        isApplicable: window.localStorage.length > 0,
+      },
     ];
 
     return items.filter((item) => item.isApplicable);
@@ -115,9 +115,7 @@ export default class RetroHeading extends React.PureComponent {
 
     return (
       <div className="retro-heading">
-        {
-          this.renderBackButton()
-        }
+        {this.renderBackButton()}
         <span className="retro-heading-content">
           <div className="retro-name">
             <h1>{retro.name}</h1>

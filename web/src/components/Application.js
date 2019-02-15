@@ -53,7 +53,6 @@ const muiTheme = getMuiTheme({
 });
 
 class Application extends React.Component {
-
   static propTypes = {
     config: types.object.isRequired,
     store: types.object.isRequired,
@@ -88,10 +87,10 @@ export default useStore(useRouter(Application),
       apiDispatcher,
       analyticsDispatcher,
     ],
-    /* eslint-disable no-console */
     onDispatch: (event) => {
+      /* eslint-disable no-console */
       console.info('dispatching event', event);
-    }
-    /* eslint-enable no-console */
+      /* eslint-enable no-console */
+    },
   }
 );

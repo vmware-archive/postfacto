@@ -35,7 +35,7 @@ import {configure, mount} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Helmet from 'react-helmet';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 describe('Header', () => {
   const config = {
@@ -61,5 +61,4 @@ describe('Header', () => {
       expect(Helmet.peek().title).toEqual('Retro Title');
     });
   });
-
 });

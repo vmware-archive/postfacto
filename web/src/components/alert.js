@@ -80,7 +80,7 @@ export default class Alert extends React.Component {
     if (alert && (alert.message && alert.message.length > 0)) {
       return (
         <div className={`alert ${className ? className : ''}`}>
-          { this.renderIcon() }
+          {this.renderIcon()}
           <span className="alert__text">{alert.message}</span>
           <span className="alert__link" onClick={alert.linkClick}>{alert.linkMessage}</span>
         </div>

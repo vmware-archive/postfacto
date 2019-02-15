@@ -31,7 +31,7 @@
 
 import Popover from 'material-ui/Popover';
 import MenuItem from 'material-ui/MenuItem';
-import { RaisedButton } from 'material-ui';
+import {RaisedButton} from 'material-ui';
 import React from 'react';
 import types from 'prop-types';
 
@@ -123,7 +123,7 @@ export default class RetroMenu extends React.Component {
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           onRequestClose={this.handleRequestClose.bind(this)}>
-          { this.renderMenuItems() }
+          {this.renderMenuItems()}
         </Popover>
       </div>
     );

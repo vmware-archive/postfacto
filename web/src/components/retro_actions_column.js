@@ -34,8 +34,9 @@ import types from 'prop-types';
 import RetroActionsColumnItem from './retro_actions_column_item';
 import jQuery from 'jquery';
 
-const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+const monthNames = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
 ];
 
 export default class RetroActionsColumn extends React.Component {
@@ -52,7 +53,7 @@ export default class RetroActionsColumn extends React.Component {
 
     if (action_items) {
       return action_items
-        .filter(function (action_item) {
+        .filter((action_item) => {
           if (archives) {
             return category === 'current';
           }
@@ -71,14 +72,10 @@ export default class RetroActionsColumn extends React.Component {
           }
           return createdAt < lastWeekDate;
         })
-        .sort(function (a, b) {
-          return b.created_at <= a.created_at ? -1 : 1;
-        })
-        .map(function (action_item) {
-          return (
-            <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
-          );
-        });
+        .sort((a, b) => (b.created_at <= a.created_at ? -1 : 1))
+        .map((action_item) => (
+          <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
+        ));
     }
   }
 
@@ -110,8 +107,8 @@ export default class RetroActionsColumn extends React.Component {
     const {retro: {action_items}} = this.props;
     let that = this;
     let timestamps = new Set();
-    jQuery.each(action_items, function (_, action_item) {
-      if(action_item.created_at) {
+    jQuery.each(action_items, (_, action_item) => {
+      if (action_item.created_at) {
         let date = new Date(action_item.created_at);
         if (date && !that.isToday(date)) {
           const thing = date.setHours(0, 0, 0, 0);
@@ -122,9 +119,7 @@ export default class RetroActionsColumn extends React.Component {
     if (!timestamps.size) {
       return null;
     }
-    let orderedTimestamps = Array.from(timestamps).sort(function (a, b) {
-      return b - a;
-    });
+    const orderedTimestamps = Array.from(timestamps).sort((a, b) => (b - a));
 
     return new Date(orderedTimestamps[0]);
   }
@@ -159,5 +154,4 @@ export default class RetroActionsColumn extends React.Component {
       </div>
     );
   }
-
 }

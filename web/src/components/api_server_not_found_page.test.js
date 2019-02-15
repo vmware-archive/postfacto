@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('ApiServerNotFoundPage', () => {
   let subject;
   beforeEach(() => {
-    subject = ReactDOM.render(<ApiServerNotFoundPage />, root);
+    subject = ReactDOM.render(<ApiServerNotFoundPage/>, root);
   });
 
   describe('When api server is not found', () => {
