@@ -6,7 +6,6 @@
     "actioncable": "^5.2.2",
     "foundation-sites": "6.2.4",
     "grapnel": "^0.7.0",
-    "lodash": "^4.17.11",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
     "mock-promises": "^0.8.2",

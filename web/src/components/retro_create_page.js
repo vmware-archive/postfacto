@@ -32,7 +32,6 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
-import _ from 'lodash';
 import { MAX_SLUG_LENGTH, VALID_SLUG_REGEX, DEFAULT_TOGGLE_STYLE } from '../constants';
 
 export default class RetroCreatePage extends React.Component {
@@ -82,7 +81,7 @@ export default class RetroCreatePage extends React.Component {
 
     this.setState({errors});
 
-    if (_.isEmpty(errors.name) && _.isEmpty(errors.slug) && _.isEmpty(errors.password)) {
+    if (!errors.name && !errors.slug && !errors.password) {
       Actions.retroCreate({
         name: this.state.name,
         slug: this.state.slug,
@@ -96,14 +95,14 @@ export default class RetroCreatePage extends React.Component {
   }
 
   validateName = (value) => {
-    if (_.isEmpty(value)) {
+    if (!value) {
       return 'Your project needs a team name!';
     }
     return '';
   };
 
   validateSlug = (value) => {
-    if (_.isEmpty(value)) {
+    if (!value) {
       return 'Your project needs a URL!';
     }
 
@@ -119,7 +118,7 @@ export default class RetroCreatePage extends React.Component {
   };
 
   validatePassword = (value) => {
-    if (_.isEmpty(value)) {
+    if (!value) {
       return 'Your project needs a password!';
     }
     return '';

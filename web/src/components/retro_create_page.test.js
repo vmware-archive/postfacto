@@ -31,7 +31,6 @@
 
 import RetroCreatePage from './retro_create_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import {combineElementsContent} from '../spec_helper';
 
@@ -107,7 +106,7 @@ describe('RetroCreatePage', () => {
 
       describe('slug field has more than 236 characters', () => {
         beforeEach(() => {
-          let moreThan236Characters = _.repeat('a', 236 + 1);
+          let moreThan236Characters = 'a'.repeat(236 + 1);
           $retro_url.val(moreThan236Characters).simulate('change');
         });
 
@@ -121,7 +120,7 @@ describe('RetroCreatePage', () => {
           let errorMessage = combineElementsContent('.error-message');
           expect(errorMessage).toEqual('Your URL is too long!');
 
-          $retro_url.val(_.repeat('a', 236));
+          $retro_url.val('a'.repeat(236));
           $retro_url.simulate('change');
 
           errorMessage = combineElementsContent('.error-message');

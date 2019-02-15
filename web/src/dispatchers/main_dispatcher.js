@@ -29,8 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const _ = require('lodash');
-
 function pushIfUniqueId(newItem) {
     return (items) => {
         if (items.map(({id}) => id).includes(newItem.id)) {
@@ -273,7 +271,7 @@ export default {
     },
     checkAllRetroItemsDone() {
         const items = this.$store.refine('retro', 'items').get();
-        if (_.every(items, 'done')) {
+        if (items.every((item) => item.done)) {
             this.dispatch(
                 {
                     type: 'showDialog',

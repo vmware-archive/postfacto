@@ -40,8 +40,6 @@ import RetroMenu from './retro_menu';
 import EmptyPage from './empty_page';
 import Toggle from 'material-ui/Toggle';
 
-import _ from 'lodash';
-
 import {MAX_SLUG_LENGTH, VALID_SLUG_REGEX, DEFAULT_TOGGLE_STYLE} from '../constants';
 
 export default class ShowRetroSettingsPage extends React.Component {
@@ -116,14 +114,14 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   validateName(value) {
-    if (_.isEmpty(value)) {
+    if (!value) {
       return 'Your project needs a name!';
     }
     return '';
-  };
+  }
 
   validateSlug(value) {
-    if (_.isEmpty(value)) {
+    if (!value) {
       return 'Your project needs a URL!';
     }
 
@@ -136,7 +134,7 @@ export default class ShowRetroSettingsPage extends React.Component {
     }
 
     return '';
-  };
+  }
 
   handleChange(e) {
     let errors = Object.assign({}, this.state.errors);
@@ -158,25 +156,23 @@ export default class ShowRetroSettingsPage extends React.Component {
   handleRetroSettingsSubmit() {
     const {retroId, retro, session} = this.props;
     const {name, slug, isPrivate, video_link} = this.state;
-    let errors = {};
+    const errors = {
+      name: this.validateName(name),
+      slug: this.validateSlug(slug),
+    };
 
-    errors.name = this.validateName(this.state.name);
-    errors.slug = this.validateSlug(this.state.slug);
-
-    if (_.isEmpty(errors.name) && _.isEmpty(errors.slug)) {
-      Actions.updateRetroSettings(
-        {
-          retro_id: retroId,
-          retro_name: name,
-          new_slug: slug,
-          old_slug: retro.slug,
-          video_link: video_link,
-          is_private: isPrivate,
-          request_uuid: session.request_uuid,
-        }
-      );
+    if (!errors.name && !errors.slug) {
+      Actions.updateRetroSettings({
+        retro_id: retroId,
+        retro_name: name,
+        new_slug: slug,
+        old_slug: retro.slug,
+        video_link: video_link,
+        is_private: isPrivate,
+        request_uuid: session.request_uuid,
+      });
     } else {
-      this.setState({errors: errors});
+      this.setState({errors});
     }
   }
 
