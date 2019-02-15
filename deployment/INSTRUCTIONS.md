@@ -4,6 +4,8 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 ## Pivotal Web Services
 
+### Initial deployment
+
 [Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running.
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
@@ -18,7 +20,16 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `pws` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
+
 ## Pivotal Cloud Foundry
+
+### Initial deployment
 
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
@@ -32,6 +43,13 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
+
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the Heroku upgrade script from the `pcf` directory:
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name>
+  ```
 
 
 ## Heroku
