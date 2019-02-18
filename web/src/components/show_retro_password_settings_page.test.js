@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {combineElementsContent} from '../spec_helper';
+
+import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('ShowRetroPasswordSettingsPage', () => {
   let retro, session;

@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import NotFoundPage from './not_found_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import NotFoundPage from './not_found_page';
 
 describe('NotFoundPage', () => {
   let subject;

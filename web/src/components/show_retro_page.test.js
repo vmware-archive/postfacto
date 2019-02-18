@@ -29,12 +29,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '../spec_helper';
+
 import ShowRetroPage from './show_retro_page';
 import ReactTestUtils from 'react-dom/test-utils';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import ReactDOM from 'react-dom';
-import '../spec_helper';
 
 function setWindowToMobileSize() {
   window.innerWidth = 639;

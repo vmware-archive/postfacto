@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroActionsColumn from './retro_actions_column';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroActionsColumn from './retro_actions_column';
 
 const retroId = 'retro-slug-123';
 const retro = {

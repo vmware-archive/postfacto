@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Alert from './alert';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import Alert from './alert';
 
 describe('Alert', () => {
   let component;

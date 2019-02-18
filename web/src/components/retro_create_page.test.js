@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroCreatePage from './retro_create_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {combineElementsContent} from '../spec_helper';
+
+import RetroCreatePage from './retro_create_page';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('RetroCreatePage', () => {
   describe('when logged in', () => {

@@ -35,10 +35,8 @@ import './test_support/dispatcher_matchers';
 import './test_support/react_helper';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
-import React from 'react';
 import ReactDOM from 'react-dom';
 
-global.React = React;
 global.$ = jQuery;
 
 export const SpyDispatcher = Dispatcher;

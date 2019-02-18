@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroMenu from './retro_menu';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroMenu from './retro_menu';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('RetroMenu', () => {
   let testCallback;

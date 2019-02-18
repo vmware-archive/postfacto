@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {MuiThemeProvider} from 'material-ui';
-import RetroHeading from './retro_heading';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import {MuiThemeProvider} from 'material-ui';
+import RetroHeading from './retro_heading';
 
 describe('RetroHeading', () => {
   let retro;

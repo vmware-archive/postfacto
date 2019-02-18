@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {useRouter} from './use_router';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import '../spec_helper';
+
+import {useRouter} from './use_router';
+import PropTypes from 'prop-types';
 
 describe('#useRouter', () => {
   let routeSpy;

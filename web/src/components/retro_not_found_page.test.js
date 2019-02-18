@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroNotFoundPage from './retro_not_found_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroNotFoundPage from './retro_not_found_page';
 
 describe('RetroNotFoundPage', () => {
   let subject;

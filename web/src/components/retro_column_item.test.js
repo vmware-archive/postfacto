@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroColumnItem from './retro_column_item';
-import Scroll from 'react-scroll';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroColumnItem from './retro_column_item';
+import Scroll from 'react-scroll';
 
 describe('RetroColumnItem', () => {
   const retroId = 'retro-slug-123';

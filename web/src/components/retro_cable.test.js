@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroCable from './retro_cable';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import ActionCable from 'actioncable';
 import '../spec_helper';
+
+import RetroCable from './retro_cable';
+import ActionCable from 'actioncable';
 
 describe('RetroCable', () => {
 

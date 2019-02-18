@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {MuiThemeProvider} from 'material-ui';
-import ListRetrosPage from './list_retros_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import {MuiThemeProvider} from 'material-ui';
+import ListRetrosPage from './list_retros_page';
 
 describe('List Retros Page', () => {
   let retros;

@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroTile from './retro_tile';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroTile from './retro_tile';
 
 describe('Retro Tile', () => {
   const retro = {

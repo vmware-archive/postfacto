@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroWebsocket from './retro_websocket';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroWebsocket from './retro_websocket';
 
 describe('RetroWebsocket', () => {
 

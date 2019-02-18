@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ShowRetroPage from './show_retro_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import ShowRetroPage from './show_retro_page';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('Retro settings', () => {
   let originalGetIsMobile;

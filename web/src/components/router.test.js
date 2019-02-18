@@ -29,14 +29,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '../spec_helper';
+
 import Alert from './alert';
 import Router from './router';
 import EmptyPage from './empty_page';
 import HomePage from './home_page';
 import ApiServerNotFoundPage from './api_server_not_found_page';
 import TestUtils from 'react-dom/test-utils';
-import ReactDOM from 'react-dom';
-import '../spec_helper';
 
 describe('Router', () => {
   let rendered;

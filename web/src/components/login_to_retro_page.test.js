@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import LoginToRetroPage from './login_to_retro_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import LoginToRetroPage from './login_to_retro_page';
 
 describe('LoginToRetroPage', () => {
   describe('When the retro has not yet been fetched', () => {

@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RetroItemEditView from './retro_item_edit_view';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import RetroItemEditView from './retro_item_edit_view';
 
 describe('RetroItemEditView', () => {
   let deleteSpy, saveSpy;

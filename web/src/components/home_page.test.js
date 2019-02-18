@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import HomePage from './home_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import HomePage from './home_page';
 
 describe('HomePage', () => {
   describe('When page loaded', () => {

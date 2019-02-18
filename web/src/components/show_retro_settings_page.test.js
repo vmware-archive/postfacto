@@ -29,10 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ShowRetroSettingsPage from './show_retro_settings_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {combineElementsContent} from '../spec_helper';
+
+import ShowRetroSettingsPage from './show_retro_settings_page';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('ShowRetroSettingsPage', () => {
   let retro;

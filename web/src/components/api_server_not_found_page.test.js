@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ApiServerNotFoundPage from './api_server_not_found_page';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import ApiServerNotFoundPage from './api_server_not_found_page';
 
 describe('ApiServerNotFoundPage', () => {
   let subject;

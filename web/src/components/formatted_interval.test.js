@@ -29,9 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import FormattedInterval from './formatted_interval';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
+
+import FormattedInterval from './formatted_interval';
 
 describe('FormattedInterval', () => {
   it('should render the time remaining', () => {
