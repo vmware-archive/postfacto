@@ -76,7 +76,7 @@ describe('Router', () => {
 
   describe('when api server not found prop', () => {
     it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
-      rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found={true}/>, root);
+      rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found/>, root);
 
       const pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
       expect(pages.length).toEqual(1);

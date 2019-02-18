@@ -87,7 +87,7 @@ export default class RetroItemEditView extends React.Component {
         <TextareaAutosize
           type="text"
           name="edit-text-field"
-          autoFocus={true}
+          autoFocus
           value={this.state.editedText}
           onChange={this.onTextChanged.bind(this)}
           onKeyPress={this.onKeyPress.bind(this)}

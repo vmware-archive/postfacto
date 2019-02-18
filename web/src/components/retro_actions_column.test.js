@@ -203,7 +203,7 @@ describe('RetroActionsColumn older', () => {
 describe('RetroActionsColumn Current Archive', () => {
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives={true}/>, root);
+    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives/>, root);
   });
 
   describe('column header', () => {
@@ -219,7 +219,7 @@ describe('RetroActionsColumn Current Archive', () => {
 describe('RetroActionsColumn last-week Archive', () => {
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives={true}/>, root);
+    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives/>, root);
   });
 
   it('is empty', () => {

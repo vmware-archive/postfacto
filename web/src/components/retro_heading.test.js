@@ -45,7 +45,7 @@ describe('RetroHeading', () => {
         retro = createRetro();
         ReactDOM.render(
           <MuiThemeProvider>
-            <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
+            <RetroHeading retro={retro} retroId="13" archives isMobile={false}/>
           </MuiThemeProvider>, root,
         );
       });
@@ -80,7 +80,7 @@ describe('RetroHeading', () => {
           retro.archives = [{id: 1}, {id: 2}, {id: 13}];
           ReactDOM.render(
             <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
+              <RetroHeading retro={retro} retroId="13" archives isMobile={false}/>
             </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');

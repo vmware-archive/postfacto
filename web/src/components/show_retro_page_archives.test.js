@@ -89,7 +89,7 @@ describe('Show retro page archives', () => {
           <ShowRetroPage
             retro_archives={retro_archives}
             retroId="13"
-            archives={true}
+            archives
             retro={retro_archives}
             config={global.Retro.config}
             featureFlags={{archiveEmails: true}}
@@ -130,7 +130,7 @@ describe('Show retro page archives', () => {
             <ShowRetroPage
               retro_archives={retro_archives}
               retroId="13"
-              archives={true}
+              archives
               retro={retro_archives}
               config={global.Retro.config}
               featureFlags={{archiveEmails: true}}
@@ -166,7 +166,7 @@ describe('Show retro page archives', () => {
           <ShowRetroPage
             retro_archives={retro_archives}
             retroId="13"
-            archives={true}
+            archives
             retro={retro_archives}
             config={global.Retro.config}
             featureFlags={{archiveEmails: true}}

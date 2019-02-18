@@ -288,7 +288,7 @@ describe('RetroColumnItem', () => {
 
     describe('when rendering an ARCHIVES RetroColumnItem', () => {
       beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={true} isMobile={false}/>, root);
+        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives isMobile={false}/>, root);
       });
 
       it('does not highlight an item when clicked', () => {
@@ -311,7 +311,7 @@ describe('RetroColumnItem', () => {
 
   describe('when opening the app on mobile', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={1} archives={false} isMobile={true}/>, root);
+      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={1} archives={false} isMobile/>, root);
     });
 
     describe('when clicking on an item', () => {
@@ -323,7 +323,7 @@ describe('RetroColumnItem', () => {
 
     describe('when clicking on done', () => {
       beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={true}/>, root);
+        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile/>, root);
       });
       it('does not done the item ', () => {
         $('.item-done').simulate('click');

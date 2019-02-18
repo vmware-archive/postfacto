@@ -118,8 +118,8 @@ export default class LoginToRetroPage extends React.Component {
                 onFocus={this.onInputFocus.bind(this)}
                 onChange={this.onInputChange.bind(this)}
                 onKeyPress={this.onKeyPress.bind(this)}
-                required={true}
-                autoFocus={true}
+                required
+                autoFocus
                 autoComplete="off"
               />
               <p className="password-terms-text">

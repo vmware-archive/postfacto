@@ -146,7 +146,7 @@ export default class RetroColumnInput extends React.Component {
             value={this.state.inputText}
             onKeyPress={this.onKeyPress.bind(this)}
             onResize={this.onResize.bind(this)}
-            required={true}
+            required
             autoComplete="off"
           />
           {

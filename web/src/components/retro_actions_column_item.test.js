@@ -175,7 +175,7 @@ describe('RetroActionsColumnItem', () => {
 
   describe('when archived', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[2]} archives={true}/>, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[2]} archives/>, root);
     });
     it('should not have a edit', () => {
       expect('.action-edit').toHaveLength(0);
