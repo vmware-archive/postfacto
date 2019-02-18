@@ -79,7 +79,7 @@ export default {
   },
   getRetros() {
     Logger.info('getRetros');
-    return RetroApi.getRetros().then(([status, data]) => {
+    return RetroApi.getRetros().then(([, data]) => {
       this.dispatch({type: 'retrosSuccessfullyFetched', data});
     });
   },

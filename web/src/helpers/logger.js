@@ -42,6 +42,6 @@ export default class Logger {
     Logger.log(message, 'WARN');
   }
 
-  static log(message, logLevel) {
+  static log() {
   }
 }

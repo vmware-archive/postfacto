@@ -38,7 +38,6 @@ module.exports = {
     'no-return-assign': ['off'],
     'no-shadow': ['off'],
     'no-unneeded-ternary': ['off'],
-    'no-unused-vars': ['off'],
     'no-use-before-define': ['off'],
     'object-curly-newline': ['off'],
     'object-curly-spacing': ['error', 'never'],
