@@ -56,7 +56,9 @@ function toFlattenedRoutes(routesHash) {
   return Object.keys(routesHash).reduce((paths, parent) => {
     if (isObject(routesHash[parent])) {
       const children = toFlattenedRoutes(routesHash[parent]);
-      Object.keys(children).forEach(child => paths[parent + child] = children[child]);
+      Object.keys(children).forEach(child => {
+        paths[parent + child] = children[child];
+      });
     } else {
       paths[parent] = routesHash[parent];
     }

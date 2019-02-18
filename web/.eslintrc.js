@@ -35,7 +35,6 @@ module.exports = {
     'no-extra-boolean-cast': ['off'],
     'no-param-reassign': ['off'],
     'no-plusplus': ['off'],
-    'no-return-assign': ['off'],
     'no-shadow': ['off'],
     'no-unneeded-ternary': ['off'],
     'no-use-before-define': ['off'],
