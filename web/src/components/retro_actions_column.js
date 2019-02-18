@@ -55,32 +55,34 @@ export default class RetroActionsColumn extends React.Component {
     const {category, archives, retro, retroId, retro: {action_items}} = this.props;
     let that = this;
 
-    if (action_items) {
-      return action_items
-        .filter((action_item) => {
-          if (archives) {
-            return category === 'current';
-          }
-          let createdAt = new Date(action_item.created_at);
-          let lastWeekDate = that.getDateOfLatestItemThatIsNotToday();
-
-          if (category === 'current') {
-            return that.isToday(createdAt);
-          }
-
-          if (!lastWeekDate) {
-            return false;
-          }
-          if (category === 'last-week') {
-            return that.isSameDate(lastWeekDate, createdAt);
-          }
-          return createdAt < lastWeekDate;
-        })
-        .sort((a, b) => (dateToMillis(b.created_at) - dateToMillis(a.created_at)))
-        .map((action_item) => (
-          <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
-        ));
+    if (!action_items) {
+      return null;
     }
+
+    return action_items
+      .filter((action_item) => {
+        if (archives) {
+          return category === 'current';
+        }
+        let createdAt = new Date(action_item.created_at);
+        let lastWeekDate = that.getDateOfLatestItemThatIsNotToday();
+
+        if (category === 'current') {
+          return that.isToday(createdAt);
+        }
+
+        if (!lastWeekDate) {
+          return false;
+        }
+        if (category === 'last-week') {
+          return that.isSameDate(lastWeekDate, createdAt);
+        }
+        return createdAt < lastWeekDate;
+      })
+      .sort((a, b) => (dateToMillis(b.created_at) - dateToMillis(a.created_at)))
+      .map((action_item) => (
+        <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
+      ));
   }
 
   isToday(createdAt) {

@@ -45,15 +45,16 @@ export default class RetroColumn extends React.Component {
 
   renderRetroItems() {
     const {archives, retroId, retro: {items, highlighted_item_id, retro_item_end_time}, category, isMobile} = this.props;
-    if (items) {
-      return items
-        .filter((item) => item.category === category)
-        .sort((a, b) => (b.created_at <= a.created_at ? -1 : 1))
-        .map((item) => (
-          <RetroColumnItem key={item.id} retroId={retroId} item={item} highlighted_item_id={highlighted_item_id}
-                           retro_item_end_time={retro_item_end_time} archives={archives} isMobile={isMobile}/>
-        ));
+    if (!items) {
+      return null;
     }
+    return items
+      .filter((item) => item.category === category)
+      .sort((a, b) => (b.created_at <= a.created_at ? -1 : 1))
+      .map((item) => (
+        <RetroColumnItem key={item.id} retroId={retroId} item={item} highlighted_item_id={highlighted_item_id}
+                         retro_item_end_time={retro_item_end_time} archives={archives} isMobile={isMobile}/>
+      ));
   }
 
   renderColumnHeader() {
