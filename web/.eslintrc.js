@@ -32,7 +32,6 @@ module.exports = {
     'newline-per-chained-call': ['off'],
     'no-bitwise': ['off'],
     'no-console': ['off'],
-    'no-else-return': ['off'],
     'no-extra-boolean-cast': ['off'],
     'no-param-reassign': ['off'],
     'no-plusplus': ['off'],

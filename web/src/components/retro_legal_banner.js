@@ -43,19 +43,19 @@ class LegalBanner extends React.Component {
   render() {
     if (this.shouldHide()) {
       return null;
-    } else {
-      return (
-        <div className="banner" style={{display: 'flex'}}>
-          <div className="terms-text">
-            By accessing and using Postfacto, you agree to our
-            {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
-            {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
-            use of cookies
-          </div>
-          <button className="button ok-button" onClick={this.okClicked.bind(this)}>OK</button>
-        </div>
-      );
     }
+
+    return (
+      <div className="banner" style={{display: 'flex'}}>
+        <div className="terms-text">
+          By accessing and using Postfacto, you agree to our
+          {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
+          {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
+          use of cookies
+        </div>
+        <button className="button ok-button" onClick={this.okClicked.bind(this)}>OK</button>
+      </div>
+    );
   }
 }
 
