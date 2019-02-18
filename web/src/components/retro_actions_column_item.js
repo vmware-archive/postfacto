@@ -55,8 +55,8 @@ export default class RetroActionsColumnItem extends React.Component {
     const {action_item} = this.props;
 
     const tick = action_item.done ?
-      <img className="action-tick-checked" src={actionTickCheckedSvg}/>
-      : <img className="action-tick-unchecked" src={actionTickUncheckedSvg}/>;
+      <img className="action-tick-checked" src={actionTickCheckedSvg}/> :
+      <img className="action-tick-unchecked" src={actionTickUncheckedSvg}/>;
     return (
       <div className="action-tick" onClick={this.onActionTickClicked.bind(this)}>
         {tick}

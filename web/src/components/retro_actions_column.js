@@ -91,9 +91,9 @@ export default class RetroActionsColumn extends React.Component {
   }
 
   isSameDate(a, b) {
-    return a.getFullYear() === b.getFullYear()
-      && a.getMonth() === b.getMonth()
-      && a.getDate() === b.getDate();
+    return a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
   }
 
   renderCurrentDateString() {
