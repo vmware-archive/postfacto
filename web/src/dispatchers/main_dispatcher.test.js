@@ -333,7 +333,8 @@ describe('MainDispatcher', () => {
       store = {retro};
       subject.$store = new Cursor(store, cursorSpy);
       subject.dispatch({
-        type: 'retroItemSuccessfullyCreated', data: {
+        type: 'retroItemSuccessfullyCreated',
+        data: {
           item: {id: 10, category: 'happy'},
           retroId: retro.id,
         },
@@ -357,7 +358,8 @@ describe('MainDispatcher', () => {
       expect(store.retro.items.filter((o) => (o.id === 2)).length).toEqual(1);
 
       subject.dispatch({
-        type: 'retroItemSuccessfullyCreated', data: {
+        type: 'retroItemSuccessfullyCreated',
+        data: {
           item: {id: 2, category: 'happy'},
           retroId: retro.id,
         },
@@ -666,7 +668,8 @@ describe('MainDispatcher', () => {
       describe('when the command was originated by me', () => {
         it('does not dispatch show alert', () => {
           subject.dispatch({
-            type: 'websocketRetroDataReceived', data: {
+            type: 'websocketRetroDataReceived',
+            data: {
               command: 'force_relogin',
               payload: {
                 originator_id: 'fake-request-uuid-1',

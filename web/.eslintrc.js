@@ -37,7 +37,6 @@ module.exports = {
     'no-shadow': ['off'],
     'no-use-before-define': ['off'],
     'object-curly-newline': ['off'],
-    'object-property-newline': ['off'],
     'object-shorthand': ['off'],
     'padded-blocks': ['off'],
     'prefer-destructuring': ['off'],

@@ -286,7 +286,8 @@ export default {
     return RetroApi.retrieveConfig().then(([status, data]) => {
       if (status >= 200 && status < 400) {
         this.dispatch({
-          type: 'setConfig', data: {
+          type: 'setConfig',
+          data: {
             archive_emails: data.archive_emails,
           },
         });

@@ -293,7 +293,8 @@ export default {
       countryCode: data.countryCode,
 
     });
-  }, toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
+  },
+  toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
     this.$store.refine('retro', 'send_archive_email').set(!currentSendArchiveEmail);
   },
 };

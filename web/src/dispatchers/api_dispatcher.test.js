@@ -192,7 +192,8 @@ describe('ApiDispatcher', () => {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-auth-token',
-        }, data: {
+        },
+        data: {
           retro: {
             name: 'the new retro name',
             slug: 'the-new-slug-123',
@@ -337,7 +338,8 @@ describe('ApiDispatcher', () => {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-auth-token',
-        }, data: {
+        },
+        data: {
           current_password: 'current password',
           new_password: 'new password',
           request_uuid: 'some-request-uuid',
