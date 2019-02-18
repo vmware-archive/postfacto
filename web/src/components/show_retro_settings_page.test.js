@@ -288,7 +288,6 @@ describe('ShowRetroSettingsPage', () => {
     });
 
     sharedRetroSettingsBehavior();
-
   });
 
   describe('on mobile', () => {

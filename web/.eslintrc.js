@@ -34,7 +34,6 @@ module.exports = {
     'no-plusplus': ['off'],
     'no-shadow': ['off'],
     'no-use-before-define': ['off'],
-    'padded-blocks': ['off'],
     'prefer-destructuring': ['off'],
     'prefer-template': ['off'],
     'react/destructuring-assignment': ['off'],

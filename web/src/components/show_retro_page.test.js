@@ -47,9 +47,7 @@ function setWindowToDesktopSize() {
 }
 
 describe('ShowRetroPage', () => {
-
   describe('for a private retro', () => {
-
     describe('on mobile', () => {
       beforeEach(() => {
         const retro = createRetro(true);
@@ -60,7 +58,6 @@ describe('ShowRetroPage', () => {
           <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
                          featureFlags={{archiveEmails: true}}/>
         </MuiThemeProvider>, root);
-
       });
 
       it('does not show the privacy and terms banner', () => {
@@ -149,7 +146,6 @@ describe('ShowRetroPage', () => {
       });
 
       describe('when showDialog is set to false', () => {
-
         beforeEach(() => {
           container = ReactDOM.render(<MuiThemeProvider>
             <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}

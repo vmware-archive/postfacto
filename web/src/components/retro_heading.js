@@ -35,7 +35,6 @@ import {FlatButton, FontIcon, RaisedButton} from 'material-ui';
 import {Actions} from 'p-flux';
 
 export default class RetroHeading extends React.PureComponent {
-
   onArchivesButtonClicked() {
     const {retroId} = this.props;
     Actions.routeToRetroArchives({retro_id: retroId});

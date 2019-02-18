@@ -460,7 +460,6 @@ describe('ApiDispatcher', () => {
         type: 'retrosSuccessfullyFetched',
         data: {retros: [retro]},
       });
-
     });
   });
 
@@ -578,7 +577,6 @@ describe('ApiDispatcher', () => {
         });
       });
     });
-
   });
 
   describe('deleteRetroItem', () => {
@@ -742,8 +740,8 @@ describe('ApiDispatcher', () => {
         type: 'checkAllRetroItemsDone',
       });
     });
-
   });
+
   describe('highlightRetroItem', () => {
     let item;
     beforeEach(() => {
@@ -1184,7 +1182,6 @@ describe('ApiDispatcher', () => {
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
     });
-
   });
 
   describe('retrieveConfig', () => {

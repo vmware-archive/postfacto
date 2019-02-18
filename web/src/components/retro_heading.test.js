@@ -153,7 +153,6 @@ describe('RetroHeading', () => {
           expect($('.retro-menu-item')[1]).toHaveText('View archives');
         });
       });
-
     });
 
     describe('when a retro has no archives', () => {

@@ -171,7 +171,6 @@ export default class ShowRetroPage extends React.Component {
   }
 
   handleArchiveRetroConfirmation() {
-
     Actions.archiveRetro({retro: this.props.retro});
     Actions.hideDialog();
   }

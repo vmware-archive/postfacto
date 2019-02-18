@@ -145,9 +145,7 @@ describe('Show retro page archives', () => {
         expect($('.retro-menu-item').last()).toContainText('Sign out');
       });
     });
-
   });
-
 
   describe('on mobile', () => {
     let originalGetIsMobile;

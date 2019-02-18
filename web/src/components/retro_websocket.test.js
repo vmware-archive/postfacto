@@ -36,9 +36,7 @@ import '../spec_helper';
 import RetroWebsocket from './retro_websocket';
 
 describe('RetroWebsocket', () => {
-
   describe('rendering a RetroWebsocket', () => {
-
     describe('when websocket url has been fetched', () => {
       let webSocketDOM;
 

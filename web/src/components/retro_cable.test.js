@@ -37,7 +37,6 @@ import RetroCable from './retro_cable';
 import ActionCable from 'actioncable';
 
 describe('RetroCable', () => {
-
   describe('rendering a RetroCable', () => {
     let retroCableDOM;
     beforeEach(() => {

@@ -34,7 +34,6 @@ import {Actions} from 'p-flux';
 import faceDeadSvg from '../images/face-dead.svg';
 
 export default class ApiServerNotFoundPage extends React.Component {
-
   componentWillUnmount() {
     Actions.resetApiServerNotFound();
   }
