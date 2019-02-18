@@ -35,6 +35,15 @@ import {FlatButton, FontIcon, RaisedButton} from 'material-ui';
 import {Actions} from 'p-flux';
 
 export default class RetroHeading extends React.PureComponent {
+  constructor(props, context) {
+    super(props, context);
+
+    this.onArchivesButtonClicked = this.onArchivesButtonClicked.bind(this);
+    this.handleArchiveRetro = this.handleArchiveRetro.bind(this);
+    this.handleViewArchives = this.handleViewArchives.bind(this);
+    this.handleRetroSettings = this.handleRetroSettings.bind(this);
+  }
+
   onArchivesButtonClicked() {
     const {retroId} = this.props;
     Actions.routeToRetroArchives({retro_id: retroId});
@@ -49,7 +58,7 @@ export default class RetroHeading extends React.PureComponent {
       <div className="small-2 columns back-button">
         <FlatButton
           className="retro-back"
-          onClick={this.onArchivesButtonClicked.bind(this)}
+          onClick={this.onArchivesButtonClicked}
           label="Archives"
           labelStyle={isMobile ? {'display': 'none'} : {}}
           icon={<FontIcon className="fa fa-chevron-left"/>}
@@ -85,18 +94,18 @@ export default class RetroHeading extends React.PureComponent {
     const items = [
       {
         title: 'Archive this retro',
-        callback: this.handleArchiveRetro.bind(this),
+        callback: this.handleArchiveRetro,
         isApplicable: !archives && retro.items && retro.items.length > 0,
         button: true,
       },
       {
         title: 'View archives',
-        callback: this.handleViewArchives.bind(this),
+        callback: this.handleViewArchives,
         isApplicable: !archives && retro.archives && retro.archives.length > 0,
       },
       {
         title: 'Retro settings',
-        callback: this.handleRetroSettings.bind(this),
+        callback: this.handleRetroSettings,
         isApplicable: true,
       },
       {

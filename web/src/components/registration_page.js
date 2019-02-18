@@ -43,6 +43,7 @@ export default class RegistrationPage extends React.Component {
 
   constructor(props, context) {
     super(props, context);
+
     this.register = this.register.bind(this);
   }
 
@@ -119,7 +120,7 @@ export default class RegistrationPage extends React.Component {
                 <input
                   type="submit" className="retro-form-submit expanded button"
                   id="create_new_retro" value="Next: Make a retro"
-                  onClick={this.register.bind(this)}
+                  onClick={this.register}
                 />
               </div>
             </div>

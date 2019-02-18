@@ -51,6 +51,14 @@ export default class RetroColumnItem extends React.Component {
     this.state = {
       isEditing: false,
     };
+
+    this.onItemCancelClicked = this.onItemCancelClicked.bind(this);
+    this.onItemDoneClicked = this.onItemDoneClicked.bind(this);
+    this.onItemVoteClicked = this.onItemVoteClicked.bind(this);
+    this.onItemEditClicked = this.onItemEditClicked.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
+    this.saveRetroItem = this.saveRetroItem.bind(this);
+    this.onItemClicked = this.onItemClicked.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -195,8 +203,8 @@ export default class RetroColumnItem extends React.Component {
       return (
         <div className="item-footer">
           <br/>
-          <div className="retro-item-cancel" onClick={this.onItemCancelClicked.bind(this)}>Cancel</div>
-          <div className="item-done" onClick={this.onItemDoneClicked.bind(this)}>Done</div>
+          <div className="retro-item-cancel" onClick={this.onItemCancelClicked}>Cancel</div>
+          <div className="item-done" onClick={this.onItemDoneClicked}>Done</div>
         </div>
       );
     }
@@ -212,7 +220,7 @@ export default class RetroColumnItem extends React.Component {
 
     return (
       <div className="item-vote">
-        <div className="item-vote-submit" onClick={this.onItemVoteClicked.bind(this)}>
+        <div className="item-vote-submit" onClick={this.onItemVoteClicked}>
           <div className="vote-icon"><i className="fa fa-heart" aria-hidden="true"/></div>
           <div className="vote-count">{this.props.item.vote_count}</div>
         </div>
@@ -228,7 +236,7 @@ export default class RetroColumnItem extends React.Component {
     }
 
     return (
-      <div className="item-edit" onClick={this.onItemEditClicked.bind(this)}>
+      <div className="item-edit" onClick={this.onItemEditClicked}>
         <i className="fa fa-pencil"/>
       </div>
     );
@@ -261,8 +269,8 @@ export default class RetroColumnItem extends React.Component {
       itemContent = (
         <RetroItemEditView
           originalText={item.description}
-          deleteItem={this.deleteItem.bind(this)}
-          saveItem={this.saveRetroItem.bind(this)}
+          deleteItem={this.deleteItem}
+          saveItem={this.saveRetroItem}
         />
       );
     } else {
@@ -278,7 +286,7 @@ export default class RetroColumnItem extends React.Component {
       );
     }
     return (
-      <div id={this.domId()} key={item.id} className={'retro-item' + this.getPrimaryClass()} onClick={this.onItemClicked.bind(this)}>
+      <div id={this.domId()} key={item.id} className={'retro-item' + this.getPrimaryClass()} onClick={this.onItemClicked}>
         {itemContent}
       </div>
     );

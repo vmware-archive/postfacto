@@ -49,6 +49,11 @@ export default class LoginToRetroPage extends React.Component {
       errors: [],
       inputStyle: '',
     };
+
+    this.onInputFocus = this.onInputFocus.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onLoginClicked = this.onLoginClicked.bind(this);
   }
 
   componentDidMount() {
@@ -115,9 +120,9 @@ export default class LoginToRetroPage extends React.Component {
                 placeholder="Password"
                 type="password"
                 value={this.state.password}
-                onFocus={this.onInputFocus.bind(this)}
-                onChange={this.onInputChange.bind(this)}
-                onKeyPress={this.onKeyPress.bind(this)}
+                onFocus={this.onInputFocus}
+                onChange={this.onInputChange}
+                onKeyPress={this.onKeyPress}
                 required
                 autoFocus
                 autoComplete="off"
@@ -135,7 +140,7 @@ export default class LoginToRetroPage extends React.Component {
                 type="submit"
                 className="retro-form-submit expanded button"
                 style={{fontSize: '1.1rem'}}
-                onClick={this.onLoginClicked.bind(this)}
+                onClick={this.onLoginClicked}
               >
                 Login
               </button>

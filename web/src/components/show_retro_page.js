@@ -76,6 +76,11 @@ export default class ShowRetroPage extends React.Component {
       currentMobileCategory: 'happy',
       filtered_retro_archive: {},
     };
+
+    this.handleResize = this.handleResize.bind(this);
+    this.handleArchiveRetroConfirmation = this.handleArchiveRetroConfirmation.bind(this);
+    this.handleArchiveEmailPreferenceChange = this.handleArchiveEmailPreferenceChange.bind(this);
+    this.moveToNextItem = this.moveToNextItem.bind(this);
   }
 
   componentWillMount() {
@@ -85,7 +90,7 @@ export default class ShowRetroPage extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -96,7 +101,7 @@ export default class ShowRetroPage extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this));
+    window.removeEventListener('resize', this.handleResize);
   }
 
   // Calculate if mobile
@@ -215,7 +220,7 @@ export default class ShowRetroPage extends React.Component {
       <button
         className="archive-dialog__actions--archive"
         type="button"
-        onClick={this.handleArchiveRetroConfirmation.bind(this)}
+        onClick={this.handleArchiveRetroConfirmation}
       >
         {this.props.retro.send_archive_email && this.props.featureFlags.archiveEmails ? 'Archive & send email' : 'Archive'}
       </button>
@@ -252,7 +257,7 @@ export default class ShowRetroPage extends React.Component {
                 label={this.props.retro.send_archive_email ? 'Yes' : 'No'}
                 toggled={this.props.retro.send_archive_email}
                 labelPosition="right"
-                onToggle={this.handleArchiveEmailPreferenceChange.bind(this)}
+                onToggle={this.handleArchiveEmailPreferenceChange}
                 trackStyle={toggle.trackStyle}
                 trackSwitchedStyle={toggle.trackSwitchedStyle}
                 labelStyle={toggle.labelStyle}
@@ -330,7 +335,7 @@ export default class ShowRetroPage extends React.Component {
     };
 
     const keyHandlers = {
-      'next': this.moveToNextItem.bind(this),
+      'next': this.moveToNextItem,
     };
 
     return (

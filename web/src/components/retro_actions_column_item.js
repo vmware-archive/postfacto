@@ -49,6 +49,11 @@ export default class RetroActionsColumnItem extends React.Component {
     this.state = {
       isEditing: false,
     };
+
+    this.onActionTickClicked = this.onActionTickClicked.bind(this);
+    this.onActionEditClicked = this.onActionEditClicked.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
+    this.saveActionItem = this.saveActionItem.bind(this);
   }
 
   renderTick() {
@@ -58,7 +63,7 @@ export default class RetroActionsColumnItem extends React.Component {
       <img className="action-tick-checked" src={actionTickCheckedSvg}/> :
       <img className="action-tick-unchecked" src={actionTickUncheckedSvg}/>;
     return (
-      <div className="action-tick" onClick={this.onActionTickClicked.bind(this)}>
+      <div className="action-tick" onClick={this.onActionTickClicked}>
         {tick}
       </div>
     );
@@ -70,7 +75,7 @@ export default class RetroActionsColumnItem extends React.Component {
       return null;
     }
     return (
-      <div className="action-edit" onClick={this.onActionEditClicked.bind(this)}>
+      <div className="action-edit" onClick={this.onActionEditClicked}>
         <i className="fa fa-pencil"/>
       </div>
     );
@@ -104,8 +109,8 @@ export default class RetroActionsColumnItem extends React.Component {
       actionContent = (
         <RetroItemEditView
           originalText={this.props.action_item.description}
-          deleteItem={this.deleteItem.bind(this)}
-          saveItem={this.saveActionItem.bind(this)}
+          deleteItem={this.deleteItem}
+          saveItem={this.saveActionItem}
         />
       );
     } else {

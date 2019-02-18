@@ -38,7 +38,6 @@ module.exports = {
     'react/forbid-prop-types': ['off'],
     'react/jsx-filename-extension': ['off'],
     'react/jsx-max-props-per-line': ['off'],
-    'react/jsx-no-bind': ['off'],
     'react/jsx-no-target-blank': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
     'react/no-access-state-in-setstate': ['off'],
@@ -53,6 +52,13 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/sort-comp': ['off'],
 
+    'react/jsx-no-bind': ['error', {
+      'ignoreDOMComponents': false,
+      'ignoreRefs': false,
+      'allowArrowFunctions': true,
+      'allowFunctions': false,
+      'allowBind': false,
+    }],
     'object-curly-newline': ['error', {
       'consistent': true,
     }],

@@ -46,6 +46,11 @@ export default class RetroItemEditView extends React.Component {
       editedText: '',
       saveDisabled: '',
     };
+
+    this.onTextChanged = this.onTextChanged.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onDeleteClicked = this.onDeleteClicked.bind(this);
+    this.onSaveClicked = this.onSaveClicked.bind(this);
   }
 
   componentDidMount() {
@@ -89,8 +94,8 @@ export default class RetroItemEditView extends React.Component {
           name="edit-text-field"
           autoFocus
           value={this.state.editedText}
-          onChange={this.onTextChanged.bind(this)}
-          onKeyPress={this.onKeyPress.bind(this)}
+          onChange={this.onTextChanged}
+          onKeyPress={this.onKeyPress}
         />
       </div>
     );
@@ -98,7 +103,7 @@ export default class RetroItemEditView extends React.Component {
 
   renderDeleteButton() {
     return (
-      <div className="edit-delete" onClick={this.onDeleteClicked.bind(this)}>
+      <div className="edit-delete" onClick={this.onDeleteClicked}>
         <i className="fa fa-trash-o"/>
         <span>Delete</span>
       </div>
@@ -109,7 +114,7 @@ export default class RetroItemEditView extends React.Component {
     const {saveDisabled} = this.state;
 
     return (
-      <div className={'edit-save ' + saveDisabled} onClick={this.onSaveClicked.bind(this)}>
+      <div className={'edit-save ' + saveDisabled} onClick={this.onSaveClicked}>
         <i className="fa fa-check"/>
         <span>Save</span>
       </div>

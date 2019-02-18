@@ -48,6 +48,13 @@ export default class RetroColumnInput extends React.Component {
       isFocused: false,
       multiline: '',
     };
+
+    this.submitRetroItem = this.submitRetroItem.bind(this);
+    this.inputFocus = this.inputFocus.bind(this);
+    this.inputBlur = this.inputBlur.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onResize = this.onResize.bind(this);
   }
 
   resolvePlaceholder() {
@@ -110,7 +117,7 @@ export default class RetroColumnInput extends React.Component {
         <div className={'input-button-wrapper ' + this.state.multiline}>
           <div
             className="input-button"
-            onClick={this.submitRetroItem.bind(this)}
+            onClick={this.submitRetroItem}
           >
             <i className="fa fa-check" aria-hidden="true"/>
           </div>
@@ -140,18 +147,16 @@ export default class RetroColumnInput extends React.Component {
         <div className={this.resolveInputBoxClass()}>
           <TextareaAutosize
             type="text" className={classNames} placeholder={this.resolvePlaceholder(category)}
-            onFocus={this.inputFocus.bind(this)}
-            onBlur={this.inputBlur.bind(this)}
-            onChange={this.onChange.bind(this)}
+            onFocus={this.inputFocus}
+            onBlur={this.inputBlur}
+            onChange={this.onChange}
             value={this.state.inputText}
-            onKeyPress={this.onKeyPress.bind(this)}
-            onResize={this.onResize.bind(this)}
+            onKeyPress={this.onKeyPress}
+            onResize={this.onResize}
             required
             autoComplete="off"
           />
-          {
-            this.renderButton()
-          }
+          {this.renderButton()}
         </div>
       </div>
     );

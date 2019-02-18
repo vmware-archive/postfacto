@@ -49,6 +49,9 @@ export default class ListRetroArchivesPage extends React.Component {
     this.state = {
       isMobile: false,
     };
+
+    this.handleResize = this.handleResize.bind(this);
+    this.onCurrentRetroClicked = this.onCurrentRetroClicked.bind(this);
   }
 
   componentWillMount() {
@@ -58,7 +61,7 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize);
   }
 
   onArchiveClicked(archiveId, e) {
@@ -110,7 +113,7 @@ export default class ListRetroArchivesPage extends React.Component {
           <div className="small-2 columns back-button">
             <FlatButton
               className="retro-back"
-              onClick={this.onCurrentRetroClicked.bind(this)}
+              onClick={this.onCurrentRetroClicked}
               label="Current retro"
               labelStyle={isMobile ? {'display': 'none'} : {}}
               icon={<FontIcon className="fa fa-chevron-left"/>}
@@ -130,7 +133,7 @@ export default class ListRetroArchivesPage extends React.Component {
               this.sortedArchives(archives).map((a) => {
                 return (
                   <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
-                    <div className="archive-link" onClick={this.onArchiveClicked.bind(this, a.id)}>
+                    <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
                       <a href={`/retros/${retroId}/archives/${a.id}`}>
                         {moment(a.created_at).local().format('DD MMMM YYYY')}
                       </a>

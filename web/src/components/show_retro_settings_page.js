@@ -65,6 +65,13 @@ export default class ShowRetroSettingsPage extends React.Component {
       video_link: '',
       errors: {},
     };
+
+    this.handleResize = this.handleResize.bind(this);
+    this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangePasswordClick = this.handleChangePasswordClick.bind(this);
+    this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.handleRetroSettingsSubmit = this.handleRetroSettingsSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -73,7 +80,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,7 +106,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this));
+    window.removeEventListener('resize', this.handleResize);
     Actions.clearErrors();
   }
 
@@ -198,7 +205,7 @@ export default class ShowRetroSettingsPage extends React.Component {
     return (
       <FlatButton
         className="retro-back"
-        onClick={this.handleBackButtonClicked.bind(this)}
+        onClick={this.handleBackButtonClicked}
         label="Back"
         labelStyle={isMobile ? {'display': 'none'} : {}}
         icon={<FontIcon className="fa fa-chevron-left"/>}
@@ -309,7 +316,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                     type="text"
                     name="name"
                     className={`form-input ${errors.name ? 'input-error' : ''}`}
-                    onChange={this.handleChange.bind(this)}
+                    onChange={this.handleChange}
                     placeholder=""
                   />
                   <div className="error-message">{errors.name}</div>
@@ -325,7 +332,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                       type="text"
                       name="slug"
                       className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
-                      onChange={this.handleChange.bind(this)}
+                      onChange={this.handleChange}
                       placeholder=""
                     />
                   </div>
@@ -341,13 +348,13 @@ export default class ShowRetroSettingsPage extends React.Component {
                     name="video_link"
                     value={this.state.video_link}
                     type="text"
-                    onChange={this.handleChange.bind(this)}
+                    onChange={this.handleChange}
                     className="form-input"
                     placeholder=""
                   />
                 </div>
 
-                <div className="row" onClick={this.handleChangePasswordClick.bind(this)}>
+                <div className="row" onClick={this.handleChangePasswordClick}>
                   <a id="retro-password-settings" href={`/retros/${retroId}/settings/password`}>Change password</a>
                 </div>
 
@@ -362,7 +369,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                     label={this.state.isPrivate ? 'Yes' : 'No'}
                     toggled={this.state.isPrivate}
                     labelPosition="right"
-                    onToggle={this.toggleCheckbox.bind(this)}
+                    onToggle={this.toggleCheckbox}
                     trackStyle={toggle.trackStyle}
                     trackSwitchedStyle={toggle.trackSwitchedStyle}
                     labelStyle={toggle.labelStyle}
@@ -378,7 +385,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                   <button
                     className="retro-settings-form-submit button"
                     type="submit"
-                    onClick={this.handleRetroSettingsSubmit.bind(this)}
+                    onClick={this.handleRetroSettingsSubmit}
                   >
                     Save changes
                   </button>

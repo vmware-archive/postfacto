@@ -50,6 +50,9 @@ export default class RetroCreatePage extends React.Component {
         password: '',
       },
     };
+
+    this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   componentWillMount() {
@@ -242,7 +245,7 @@ export default class RetroCreatePage extends React.Component {
                   label={isPrivate ? 'Yes' : 'No'}
                   labelPosition="right"
                   toggled={isPrivate}
-                  onToggle={this.toggleCheckbox.bind(this)}
+                  onToggle={this.toggleCheckbox}
                   trackStyle={toggle.trackStyle}
                   trackSwitchedStyle={toggle.trackSwitchedStyle}
                   labelStyle={toggle.labelStyle}
@@ -258,7 +261,7 @@ export default class RetroCreatePage extends React.Component {
                   <input
                     type="submit" className="retro-form-submit expanded button"
                     id="create_new_retro" value="Create Retro"
-                    onClick={this.submit.bind(this)}
+                    onClick={this.submit}
                   />
                 </div>
               </div>

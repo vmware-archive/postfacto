@@ -33,6 +33,12 @@ import React from 'react';
 import types from 'prop-types';
 
 class LegalBanner extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.okClicked = this.okClicked.bind(this);
+  }
+
   okClicked() {
   }
 
@@ -53,7 +59,7 @@ class LegalBanner extends React.Component {
           {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
           use of cookies
         </div>
-        <button className="button ok-button" type="button" onClick={this.okClicked.bind(this)}>OK</button>
+        <button className="button ok-button" type="button" onClick={this.okClicked}>OK</button>
       </div>
     );
   }

@@ -33,6 +33,12 @@ import React from 'react';
 import {Actions} from 'p-flux';
 
 export default class NotFoundPage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.onCreateNewRetroClicked = this.onCreateNewRetroClicked.bind(this);
+  }
+
   componentWillUnmount() {
     Actions.resetNotFound();
   }
@@ -53,7 +59,7 @@ export default class NotFoundPage extends React.Component {
                 className="retro-form-submit expanded button"
                 type="button"
                 style={{fontSize: '1.1rem'}}
-                onClick={this.onCreateNewRetroClicked.bind(this)}
+                onClick={this.onCreateNewRetroClicked}
               >Create a Project
               </button>
             </div>

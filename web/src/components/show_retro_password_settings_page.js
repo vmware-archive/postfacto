@@ -59,6 +59,12 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         current_password: '',
       },
     };
+
+    this.handleResize = this.handleResize.bind(this);
+    this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmitButtonClicked = this.handleSubmitButtonClicked.bind(this);
+    this.handleCancelButtonClicked = this.handleCancelButtonClicked.bind(this);
   }
 
   componentWillMount() {
@@ -67,7 +73,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -83,6 +89,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
     Actions.clearErrors();
   }
 
@@ -141,7 +148,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     return (
       <FlatButton
         className="retro-back"
-        onClick={this.handleBackButtonClicked.bind(this)}
+        onClick={this.handleBackButtonClicked}
         label="Back"
         labelStyle={isMobile ? {'display': 'none'} : {}}
         icon={<FontIcon className="fa fa-chevron-left"/>}
@@ -217,7 +224,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     id="retro_current_password"
                     type="password"
                     name="current_password"
-                    onChange={this.handleChange.bind(this)}
+                    onChange={this.handleChange}
                     className={`form-input ${errors.current_password ? 'input-error' : ''}`}
                     placeholder="Current password"
                   />
@@ -228,7 +235,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     id="retro_new_password"
                     type="password"
                     name="new_password"
-                    onChange={this.handleChange.bind(this)}
+                    onChange={this.handleChange}
                     placeholder="New password"
                   />
 
@@ -237,7 +244,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     id="retro_confirm_new_password"
                     type="password"
                     name="confirm_new_password"
-                    onChange={this.handleChange.bind(this)}
+                    onChange={this.handleChange}
                     className={`form-input ${errors.confirm_new_password ? 'input-error' : ''}`}
                     placeholder="New password again"
                   />
@@ -253,14 +260,14 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     type="submit"
                     className="retro-settings-form-submit button"
                     style={{fontSize: '1.1rem'}}
-                    onClick={this.handleSubmitButtonClicked.bind(this)}
+                    onClick={this.handleSubmitButtonClicked}
                   >
                     Save new password
                   </button>
                   <button
                     className="retro-password-settings-cancel button"
                     type="button"
-                    onClick={this.handleCancelButtonClicked.bind(this)}
+                    onClick={this.handleCancelButtonClicked}
                   >
                     Cancel
                   </button>

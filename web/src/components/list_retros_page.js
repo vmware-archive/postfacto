@@ -41,12 +41,18 @@ export default class ListRetrosPage extends React.Component {
     retros: types.array,
   };
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.handleNewRetroButtonClicked = this.handleNewRetroButtonClicked.bind(this);
+    this.handleSignOutButtonClicked = this.handleSignOutButtonClicked.bind(this);
+  }
+
   componentWillMount() {
     Actions.getRetros();
   }
 
-  handleRetroListItemClicked() {
-    const retro = this;
+  handleRetroListItemClicked(retro) {
     Actions.routeToShowRetro(retro);
   }
 
@@ -54,13 +60,13 @@ export default class ListRetrosPage extends React.Component {
     Actions.routeToNewRetro();
   }
 
-  handleSingOutButtonClicked() {
+  handleSignOutButtonClicked() {
     Actions.signOut();
   }
 
   render() {
     const retroListItems = this.props.retros.map((retro, index) => {
-      return <RetroTile key={index} callback={this.handleRetroListItemClicked.bind(retro)} retro={retro}>{retro.name}</RetroTile>;
+      return <RetroTile key={index} callback={() => this.handleRetroListItemClicked(retro)} retro={retro}>{retro.name}</RetroTile>;
     });
     return (
       <div className="list-retros-page full-height">
@@ -75,7 +81,7 @@ export default class ListRetrosPage extends React.Component {
                 backgroundColor="#2574a9"
                 labelColor="#f8f8f8"
                 label="NEW RETRO"
-                onClick={this.handleNewRetroButtonClicked.bind(this)}
+                onClick={this.handleNewRetroButtonClicked}
               />
 
               <RaisedButton
@@ -83,7 +89,7 @@ export default class ListRetrosPage extends React.Component {
                 backgroundColor="#2574a9"
                 labelColor="#f8f8f8"
                 label="SIGN OUT"
-                onClick={this.handleSingOutButtonClicked.bind(this)}
+                onClick={this.handleSignOutButtonClicked}
               />
             </div>
           </span>

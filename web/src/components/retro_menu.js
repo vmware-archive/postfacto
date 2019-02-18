@@ -47,6 +47,10 @@ export default class RetroMenu extends React.Component {
       anchorEl: null,
       open: false,
     };
+
+    this.renderMenuItem = this.renderMenuItem.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   handleMenuClick(event) {
@@ -77,7 +81,7 @@ export default class RetroMenu extends React.Component {
         <button
           className="retro-menu-item retro-menu-item--button"
           type="button"
-          onClick={this.onClick.bind(this, item)}
+          onClick={() => this.onClick(item)}
         >
           {item.title}
         </button>
@@ -87,7 +91,7 @@ export default class RetroMenu extends React.Component {
         <MenuItem
           className="retro-menu-item"
           primaryText={item.title}
-          onClick={this.onClick.bind(this, item)}
+          onClick={() => this.onClick(item)}
         />
       );
     }
@@ -100,7 +104,7 @@ export default class RetroMenu extends React.Component {
   }
 
   renderMenuItems() {
-    return this.props.items.map(this.renderMenuItem.bind(this));
+    return this.props.items.map(this.renderMenuItem);
   }
 
   render() {
@@ -116,7 +120,7 @@ export default class RetroMenu extends React.Component {
           className="retro-heading-button"
           backgroundColor="#2574a9"
           labelColor="#f8f8f8"
-          onClick={this.handleMenuClick.bind(this)}
+          onClick={this.handleMenuClick}
           label="MENU"
         />
         <Popover
@@ -125,7 +129,7 @@ export default class RetroMenu extends React.Component {
           animated={false}
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose.bind(this)}
+          onRequestClose={this.handleRequestClose}
         >
           {this.renderMenuItems()}
         </Popover>
