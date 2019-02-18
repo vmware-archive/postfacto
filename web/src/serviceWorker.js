@@ -55,6 +55,7 @@ export function register(config) {
 }
 
 function registerValidSW(swUrl, config) {
+  /* eslint-disable no-param-reassign */
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -96,6 +97,7 @@ function registerValidSW(swUrl, config) {
     .catch(error => {
       console.error('Error during service worker registration:', error);
     });
+  /* eslint-enable no-param-reassign */
 }
 
 function checkValidServiceWorker(swUrl, config) {

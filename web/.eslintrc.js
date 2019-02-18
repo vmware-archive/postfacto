@@ -31,7 +31,6 @@ module.exports = {
     'max-len': ['off'],
     'no-bitwise': ['off'],
     'no-console': ['off'],
-    'no-param-reassign': ['off'],
     'no-plusplus': ['off'],
     'no-shadow': ['off'],
     'no-use-before-define': ['off'],

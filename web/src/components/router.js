@@ -51,8 +51,8 @@ import RegistrationPage from './registration_page';
 function isObject(obj) {
   return typeof obj === 'object';
 }
-
 function toFlattenedRoutes(routesHash) {
+  /* eslint-disable no-param-reassign */
   return Object.keys(routesHash).reduce((paths, parent) => {
     if (isObject(routesHash[parent])) {
       const children = toFlattenedRoutes(routesHash[parent]);
@@ -64,6 +64,7 @@ function toFlattenedRoutes(routesHash) {
     }
     return paths;
   }, {});
+  /* eslint-enable no-param-reassign */
 }
 
 const routes = {
