@@ -299,7 +299,7 @@ export default class ShowRetroSettingsPage extends React.Component {
               <div className="medium-8 small-12 columns">
                 <div className="row">
                   <h1 className="retro-settings-header">Settings</h1>
-                  </div>
+                </div>
 
                 <div className="row">
                   <label className="label">Project name</label>

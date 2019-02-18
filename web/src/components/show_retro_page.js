@@ -231,9 +231,9 @@ export default class ShowRetroPage extends React.Component {
               contentClassName="archive-dialog">
         <p>{message}</p>
         {
-          this.props.featureFlags.archiveEmails ? <div>
-              <label className="label" htmlFor="send_archive_email">Send action items to the team via
-                email?</label>
+          this.props.featureFlags.archiveEmails ?
+            <div>
+              <label className="label" htmlFor="send_archive_email">Send action items to the team via email?</label>
 
               <Toggle
                 id="send_archive_email"
@@ -260,7 +260,7 @@ export default class ShowRetroPage extends React.Component {
     const {config: {websocket_url}, retroId, archives} = this.props;
     return (
       <span>
-                <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+        <RetroWebsocket url={websocket_url} retro_id={retroId}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
@@ -269,23 +269,23 @@ export default class ShowRetroPage extends React.Component {
           <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}/>
 
           <div className="mobile-tabs">
-                        <div className="mobile-tabs-list">
-                            <div className="mobile-tab-happy"
-                                 onClick={() => this.onMobileTabClick('happy')}>Happy</div>
-                            <div className="mobile-tab-meh"
-                                 onClick={() => this.onMobileTabClick('meh')}>Meh</div>
-                            <div className="mobile-tab-sad"
-                                 onClick={() => this.onMobileTabClick('sad')}>Sad</div>
-                            <div className="mobile-tab-action"
-                                 onClick={() => this.onMobileTabClick('action')}>Action</div>
-                        </div>
-                    </div>
+            <div className="mobile-tabs-list">
+              <div className="mobile-tab-happy"
+                   onClick={() => this.onMobileTabClick('happy')}>Happy</div>
+              <div className="mobile-tab-meh"
+                   onClick={() => this.onMobileTabClick('meh')}>Meh</div>
+              <div className="mobile-tab-sad"
+                   onClick={() => this.onMobileTabClick('sad')}>Sad</div>
+              <div className="mobile-tab-action"
+                   onClick={() => this.onMobileTabClick('action')}>Action</div>
+            </div>
+          </div>
           {
             this.renderColumnMobile(retro)
           }
           <RetroFooter/>
-                </div>
-            </span>
+        </div>
+      </span>
     );
   }
 
@@ -308,40 +308,40 @@ export default class ShowRetroPage extends React.Component {
 
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
-                <span>
-                  <RetroWebsocket url={websocket_url} retro_id={retroId}/>
-                  {this.renderArchiveConfirmationDialog()}
-                  <div className={retroContainerClasses}>
+        <span>
+          <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+          {this.renderArchiveConfirmationDialog()}
+          <div className={retroContainerClasses}>
 
-                    <RetroLegalBanner retro={retro}/>
+            <RetroLegalBanner retro={retro}/>
 
-                    <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
-                                  showVideoButton={!archives}/>
-                    <div className="retro-item-list">
-                      <RetroColumn category="happy"
-                                   retro={retro}
-                                   retroId={retroId}
-                                   archives={archives}
-                                   isMobile={isMobile}/>
-                      <RetroColumn category="meh"
-                                   retro={retro}
-                                   retroId={retroId}
-                                   archives={archives}
-                                   isMobile={isMobile}/>
-                      <RetroColumn category="sad"
-                                   retro={retro}
-                                   retroId={retroId}
-                                   archives={archives}
-                                   isMobile={isMobile}/>
-                    </div>
-                    <RetroActionPanel
-                      retro={retro}
-                      retroId={retroId}
-                      isMobile={isMobile}
-                      archives={archives}/>
-                    <RetroFooter/>
-                  </div>
-                </span>
+            <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
+                          showVideoButton={!archives}/>
+            <div className="retro-item-list">
+              <RetroColumn category="happy"
+                           retro={retro}
+                           retroId={retroId}
+                           archives={archives}
+                           isMobile={isMobile}/>
+              <RetroColumn category="meh"
+                           retro={retro}
+                           retroId={retroId}
+                           archives={archives}
+                           isMobile={isMobile}/>
+              <RetroColumn category="sad"
+                           retro={retro}
+                           retroId={retroId}
+                           archives={archives}
+                           isMobile={isMobile}/>
+            </div>
+            <RetroActionPanel
+              retro={retro}
+              retroId={retroId}
+              isMobile={isMobile}
+              archives={archives}/>
+            <RetroFooter/>
+          </div>
+        </span>
       </HotKeys>
     );
   }
