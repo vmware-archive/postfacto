@@ -282,19 +282,27 @@ export default class ShowRetroPage extends React.Component {
               <div
                 className="mobile-tab-happy"
                 onClick={() => this.onMobileTabClick('happy')}
-              >Happy</div>
+              >
+                Happy
+              </div>
               <div
                 className="mobile-tab-meh"
                 onClick={() => this.onMobileTabClick('meh')}
-              >Meh</div>
+              >
+                Meh
+              </div>
               <div
                 className="mobile-tab-sad"
                 onClick={() => this.onMobileTabClick('sad')}
-              >Sad</div>
+              >
+                Sad
+              </div>
               <div
                 className="mobile-tab-action"
                 onClick={() => this.onMobileTabClick('action')}
-              >Action</div>
+              >
+                Action
+              </div>
             </div>
           </div>
           {

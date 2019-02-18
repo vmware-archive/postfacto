@@ -54,12 +54,15 @@ describe('ShowRetroPage', () => {
 
         setWindowToMobileSize();
 
-        ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroPage
-            retro={retro} retroId="13" archives={false} config={global.Retro.config}
-            featureFlags={{archiveEmails: true}}
-          />
-        </MuiThemeProvider>, root);
+        ReactDOM.render(
+          <MuiThemeProvider>
+            <ShowRetroPage
+              retro={retro} retroId="13" archives={false} config={global.Retro.config}
+              featureFlags={{archiveEmails: true}}
+            />
+          </MuiThemeProvider>,
+          root,
+        );
       });
 
       it('does not show the privacy and terms banner', () => {
@@ -73,12 +76,15 @@ describe('ShowRetroPage', () => {
 
         setWindowToDesktopSize();
 
-        ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroPage
-            retro={retro} retroId="13" archives={false} config={global.Retro.config} isMobile={false}
-            featureFlags={{archiveEmails: true}}
-          />
-        </MuiThemeProvider>, root);
+        ReactDOM.render(
+          <MuiThemeProvider>
+            <ShowRetroPage
+              retro={retro} retroId="13" archives={false} config={global.Retro.config} isMobile={false}
+              featureFlags={{archiveEmails: true}}
+            />
+          </MuiThemeProvider>,
+          root,
+        );
       });
 
       it('does not show the privacy and terms banner', () => {
@@ -97,12 +103,15 @@ describe('ShowRetroPage', () => {
       originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
       ShowRetroPage.prototype.getIsMobile = () => false;
 
-      ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroPage
-          retro={retro} retroId="13" archives={false} config={global.Retro.config}
-          featureFlags={{archiveEmails: true}}
-        />
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <ShowRetroPage
+            retro={retro} retroId="13" archives={false} config={global.Retro.config}
+            featureFlags={{archiveEmails: true}}
+          />
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     afterEach(() => {
@@ -126,16 +135,19 @@ describe('ShowRetroPage', () => {
 
       describe('when dialog exists', () => {
         beforeEach(() => {
-          container = ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroPage
-              retro={retro} retroId="13" archives={false} config={global.Retro.config}
-              dialog={{
-                title: 'Some dialog title',
-                message: 'Some dialog message',
-              }}
-              featureFlags={{archiveEmails: true}}
-            />
-          </MuiThemeProvider>, root);
+          container = ReactDOM.render(
+            <MuiThemeProvider>
+              <ShowRetroPage
+                retro={retro} retroId="13" archives={false} config={global.Retro.config}
+                dialog={{
+                  title: 'Some dialog title',
+                  message: 'Some dialog message',
+                }}
+                featureFlags={{archiveEmails: true}}
+              />
+            </MuiThemeProvider>,
+            root,
+          );
         });
 
         it('opens the dialog and hides it when the cancel button is clicked', () => {
@@ -155,12 +167,15 @@ describe('ShowRetroPage', () => {
 
       describe('when showDialog is set to false', () => {
         beforeEach(() => {
-          container = ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroPage
-              retro={retro} retroId="13" archives={false} config={global.Retro.config}
-              dialog={null} featureFlags={{archiveEmails: true}}
-            />
-          </MuiThemeProvider>, root);
+          container = ReactDOM.render(
+            <MuiThemeProvider>
+              <ShowRetroPage
+                retro={retro} retroId="13" archives={false} config={global.Retro.config}
+                dialog={null} featureFlags={{archiveEmails: true}}
+              />
+            </MuiThemeProvider>,
+            root,
+          );
         });
 
         it('does not open the archive confirmation dialog', () => {
@@ -180,12 +195,15 @@ describe('ShowRetroPage', () => {
       originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
       ShowRetroPage.prototype.getIsMobile = () => true;
 
-      ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroPage
-          retro={retro} retroId="13" archives={false} config={global.Retro.config}
-          featureFlags={{archiveEmails: true}}
-        />
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <ShowRetroPage
+            retro={retro} retroId="13" archives={false} config={global.Retro.config}
+            featureFlags={{archiveEmails: true}}
+          />
+        </MuiThemeProvider>,
+        root,
+      );
     });
     afterEach(() => {
       ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;

@@ -38,7 +38,6 @@ module.exports = {
     'react/destructuring-assignment': ['off'],
     'react/forbid-prop-types': ['off'],
     'react/jsx-boolean-value': ['off'],
-    'react/jsx-closing-tag-location': ['off'],
     'react/jsx-filename-extension': ['off'],
     'react/jsx-max-props-per-line': ['off'],
     'react/jsx-no-bind': ['off'],

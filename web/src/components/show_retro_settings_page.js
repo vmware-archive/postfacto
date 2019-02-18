@@ -352,10 +352,9 @@ export default class ShowRetroSettingsPage extends React.Component {
                 </div>
 
                 <div className="row">
-                  <label
-                    className="label"
-                    htmlFor="retro_is_private"
-                  >Do people need the password to <strong>access</strong> this retro?</label>
+                  <label className="label" htmlFor="retro_is_private">
+                    Do people need the password to <strong>access</strong> this retro?
+                  </label>
 
                   <Toggle
                     id="retro_is_private"

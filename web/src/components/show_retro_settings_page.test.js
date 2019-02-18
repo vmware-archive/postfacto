@@ -48,9 +48,12 @@ describe('ShowRetroSettingsPage', () => {
     beforeEach(() => {
       retro = createRetro();
       session = {request_uuid: 'some-request-uuid'};
-      ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId="13" retro={retro} session={session}/>
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <ShowRetroSettingsPage retroId="13" retro={retro} session={session}/>
+        </MuiThemeProvider>,
+        root,
+      );
       $retro_name = $('input#retro_name');
       $retro_url = $('input#retro_url');
       $retro_video_link = $('input#retro_video_link');
@@ -177,9 +180,12 @@ describe('ShowRetroSettingsPage', () => {
 
       describe('has errors', () => {
         beforeEach(() => {
-          ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
-          </MuiThemeProvider>, root);
+          ReactDOM.render(
+            <MuiThemeProvider>
+              <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
+            </MuiThemeProvider>,
+            root,
+          );
         });
 
         it('displays an error message', () => {
@@ -192,9 +198,12 @@ describe('ShowRetroSettingsPage', () => {
     describe('project is_private field', () => {
       beforeEach(() => {
         retro.is_private = true;
-        ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13" retro={retro}/>
-        </MuiThemeProvider>, root);
+        ReactDOM.render(
+          <MuiThemeProvider>
+            <ShowRetroSettingsPage retroId="13" retro={retro}/>
+          </MuiThemeProvider>,
+          root,
+        );
       });
 
       it('sets the is_private field', () => {
@@ -282,9 +291,12 @@ describe('ShowRetroSettingsPage', () => {
   describe('on web', () => {
     beforeEach(() => {
       ShowRetroSettingsPage.prototype.getIsMobile = () => false;
-      ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId="13"/>
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <ShowRetroSettingsPage retroId="13"/>
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     sharedRetroSettingsBehavior();
@@ -293,9 +305,12 @@ describe('ShowRetroSettingsPage', () => {
   describe('on mobile', () => {
     beforeEach(() => {
       ShowRetroSettingsPage.prototype.getIsMobile = () => true;
-      ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroSettingsPage retroId="13"/>
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <ShowRetroSettingsPage retroId="13"/>
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     sharedRetroSettingsBehavior();

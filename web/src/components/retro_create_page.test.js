@@ -40,9 +40,12 @@ describe('RetroCreatePage', () => {
   describe('when logged in', () => {
     beforeEach(() => {
       localStorage.setItem('authToken', 'some-token');
-      ReactDOM.render(<MuiThemeProvider>
-        <RetroCreatePage/>
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <RetroCreatePage/>
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     describe('creating a retro', () => {
@@ -241,9 +244,12 @@ describe('RetroCreatePage', () => {
   describe('when not logged in', () => {
     beforeEach(() => {
       localStorage.setItem('authToken', '');
-      ReactDOM.render(<MuiThemeProvider>
-        <RetroCreatePage/>
-      </MuiThemeProvider>, root);
+      ReactDOM.render(
+        <MuiThemeProvider>
+          <RetroCreatePage/>
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     it('should redirect to home page when not logged in', () => {

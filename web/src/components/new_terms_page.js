@@ -78,8 +78,7 @@ export default () => (
             </li>
             <li>"<strong>User</strong>" means an Organization or individual that subscribes to the Service Offering.
             </li>
-            <li>"<strong>UserID</strong>"
-              means the email by which you identify your User Profile.</li>
+            <li>"<strong>UserID</strong>" means the email by which you identify your User Profile.</li>
             <li>"<strong>User Profile</strong>" means the your profile information including full name, email and other Login Credentials, provided to us by you and updated by you periodically.
             </li>
             <li>"<strong>Your Content</strong>" means any Content published or displayed through the Service Offerings by you, or your authorized users (or otherwise through your account). Your Content includes Relationship Data, but does not include Usage Data.
@@ -98,8 +97,10 @@ export default () => (
             </li>
             <li><strong>Relationship Data.</strong>&nbsp;We may collect Relationship Data. You agree that we may use and disclose Relationship Data to manage your account, send you notifications, deliver services or information, improve and develop new products and services, monitor compliance and provide support. We may further use and share Relationship Data to provide the Service Offering to you, including sharing with our affiliates as described above and entities who provide payment processing and other services to us necessary to enable us to support the Service Offering, and as required by applicable law.
             </li>
-            <li><strong>Usage Data.</strong>&nbsp;We may generate, collect, store and use Usage Data for any purpose. You agree that, as between you and Pivotal, Pivotal owns all such Usage Data. By way of example, we use Usage Data to track and manage our infrastructure, network storage, and software for billing, capacity planning and other product forecasting, improvement and development purposes. We may further share Usage Data with our affiliates and third party providers to fulfill our contractual obligations such as software license consumption and reporting. You agree that we may use, analyze, and otherwise perform any operations on or in connection with Relationship Data, Usage Data and Your Content to provide the services to which you have subscribed under this Postfacto Agreement. Without limiting the foregoing, unless prohibited by applicable law, we may aggregate Usage Data such that it is not reasonably identifiable with or to the customer to which it relates ("<strong>Aggregate Data</strong>"
-              ). We may use and disclose Aggregate Data for any purpose.</li>
+            <li>
+              <strong>Usage Data.</strong>&nbsp;We may generate, collect, store and use Usage Data for any purpose. You agree that, as between you and Pivotal, Pivotal owns all such Usage Data. By way of example, we use Usage Data to track and manage our infrastructure, network storage, and software for billing, capacity planning and other product forecasting, improvement and development purposes. We may further share Usage Data with our affiliates and third party providers to fulfill our contractual obligations such as software license consumption and reporting. You agree that we may use, analyze, and otherwise perform any operations on or in connection with Relationship Data, Usage Data and Your Content to provide the services to which you have subscribed under this Postfacto Agreement. Without limiting the foregoing, unless prohibited by applicable law, we may aggregate Usage Data such that it is not reasonably identifiable with or to the customer to which it relates ("<strong>Aggregate Data</strong>"
+              ). We may use and disclose Aggregate Data for any purpose.
+            </li>
             <li><strong>Disclosure of Data and Your Content.</strong>&nbsp;You agree that Pivotal may disclose Your Content, Relationship Data and Usage Data in the following circumstances:
               <ol>
                 <li>to our affiliates and other entities of the Pivotal group of companies worldwide for the purposes set forth in this Postfacto Agreement;

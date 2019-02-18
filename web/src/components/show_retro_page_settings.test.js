@@ -46,9 +46,18 @@ describe('Retro settings', () => {
     ShowRetroPage.prototype.getIsMobile = () => false;
     window.localStorage.setItem('authToken', 'some-token');
 
-    ReactDOM.render(<MuiThemeProvider>
-      <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config} featureFlags={{archiveEmails: true}}/>
-    </MuiThemeProvider>, root);
+    ReactDOM.render(
+      <MuiThemeProvider>
+        <ShowRetroPage
+          retro={retro}
+          retroId="13"
+          archives={false}
+          config={global.Retro.config}
+          featureFlags={{archiveEmails: true}}
+        />
+      </MuiThemeProvider>,
+      root,
+    );
   });
 
   afterEach(() => {

@@ -261,7 +261,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     className="retro-password-settings-cancel button"
                     type="button"
                     onClick={this.handleCancelButtonClicked.bind(this)}
-                  >Cancel</button>
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
