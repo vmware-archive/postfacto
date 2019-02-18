@@ -61,7 +61,10 @@ beforeEach(() => {
 
   Application.reset(); // set global state such as p-flux.Actions
 
+  // Capture original dispatch so that we can selectively call it later
+  const nonFakeDispatch = Dispatcher.dispatch.bind(Dispatcher);
   spyOn(Dispatcher, 'dispatch');
+  Dispatcher.nonFakeDispatch = nonFakeDispatch;
 
   global.localStorage.clear();
 

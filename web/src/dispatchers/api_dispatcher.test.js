@@ -31,23 +31,33 @@
 
 import '../spec_helper';
 import '../test_support/fetch_matchers';
-import MockPromises from 'mock-promises';
+import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
 
 describe('ApiDispatcher', () => {
   let subject, cursorSpy;
   let retro;
+  let realDispatchLevels;
 
   beforeEach(() => {
-    Promise = MockPromises.getMockPromise(Promise);
+    PromiseMock.install();
 
     Cursor.async = false;
     cursorSpy = jasmine.createSpy('callback');
     subject = Dispatcher;
 
     //dispatch is spied on in spec_helper
-    subject.dispatch.and.callThrough();
+    let dispatchCount = 0;
+    realDispatchLevels = 1;
+    subject.dispatch.and.callFake((action) => {
+      dispatchCount++;
+      if (dispatchCount <= realDispatchLevels) {
+        // Call through for first (potentially several) dispatches ONLY
+        // Later dispatches are recorded but not invoked
+        subject.nonFakeDispatch(action);
+      }
+    });
 
     //prevent console logs
     spyOn(subject, 'onDispatch');
@@ -88,7 +98,7 @@ describe('ApiDispatcher', () => {
   });
 
   afterEach(() => {
-    Promise = MockPromises.getOriginalPromise();
+    PromiseMock.uninstall();
     jasmine.Ajax.uninstall();
   });
 
@@ -123,7 +133,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro, token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
       expect('retroSuccessfullyCreated').toHaveBeenDispatched();
     });
@@ -132,7 +142,7 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroUnsuccessfullyCreated', () => {
@@ -199,7 +209,7 @@ describe('ApiDispatcher', () => {
           is_private: true
         }
       });
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroSettingsSuccessfullyUpdated').toHaveBeenDispatchedWith({
         type: 'retroSettingsSuccessfullyUpdated',
         data: {
@@ -230,7 +240,7 @@ describe('ApiDispatcher', () => {
 
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches requireRetroLogin', () => {
@@ -251,7 +261,7 @@ describe('ApiDispatcher', () => {
 
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
@@ -278,7 +288,7 @@ describe('ApiDispatcher', () => {
             is_private: false
           }
         });
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroSettingsSuccessfullyUpdated', () => {
@@ -335,7 +345,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'new-api-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroPasswordSuccessfullyUpdated').toHaveBeenDispatchedWith({
         type: 'retroPasswordSuccessfullyUpdated',
         data: {
@@ -364,7 +374,7 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
@@ -393,7 +403,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroSuccessfullyFetched').toHaveBeenDispatchedWith({
         type: 'retroSuccessfullyFetched',
         data: {retro}
@@ -404,7 +414,7 @@ describe('ApiDispatcher', () => {
       it('dispatches requireRetroLogin', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('requireRetroLogin').toHaveBeenDispatchedWith({
           type: 'requireRetroLogin',
           data: {retro_id: 1}
@@ -416,7 +426,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
           type: 'retroNotFound'
         });
@@ -442,7 +452,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retros: [retro]});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retrosSuccessfullyFetched').toHaveBeenDispatchedWith({
         type: 'retrosSuccessfullyFetched',
         data: {retros: [retro]}
@@ -466,7 +476,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('getRetroLoginSuccessfullyReceived').toHaveBeenDispatchedWith({
         type: 'getRetroLoginSuccessfullyReceived',
         data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}}
@@ -477,7 +487,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
           type: 'retroNotFound'
         });
@@ -506,7 +516,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
         request.succeed(response);
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('getRetroSettingsSuccessfullyReceived').toHaveBeenDispatchedWith({
           type: 'getRetroSettingsSuccessfullyReceived',
           data: response
@@ -525,7 +535,7 @@ describe('ApiDispatcher', () => {
         });
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('requireRetroLogin').toHaveBeenDispatchedWith({
           type: 'requireRetroLogin',
           data: {retro_id: 'retro-slug-123'}
@@ -547,7 +557,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
       expect('retroSuccessfullyLoggedIn').toHaveBeenDispatchedWith({
         type: 'retroSuccessfullyLoggedIn',
@@ -559,7 +569,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroLoginFailed', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('retroLoginFailed').toHaveBeenDispatchedWith({
           type: 'retroLoginFailed'
         });
@@ -617,7 +627,7 @@ describe('ApiDispatcher', () => {
     it('dispatches retroItemSuccessfullyCreated with the response', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({item: {id: 1, category: 'happy', description: 'this is an item'}});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroItemSuccessfullyCreated').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyCreated',
         data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1}
@@ -693,7 +703,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({item: item});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('retroItemSuccessfullyVoted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyVoted',
@@ -704,6 +714,8 @@ describe('ApiDispatcher', () => {
 
   describe('nextRetroItem', () => {
     it('makes an API POST to /retros/:id/discussion/transition', () => {
+      realDispatchLevels = 2; // allow nextRetroItem and retroItemSuccessfullyDone
+
       localStorage.setItem('apiToken-1', 'the-token');
       retro.highlighted_item_id = 2;
       subject.$store = new Cursor({retro: retro}, cursorSpy);
@@ -721,7 +733,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('checkAllRetroItemsDone').toHaveBeenDispatchedWith({
         type: 'checkAllRetroItemsDone'
@@ -750,7 +762,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('retroItemSuccessfullyHighlighted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyHighlighted',
@@ -800,7 +812,7 @@ describe('ApiDispatcher', () => {
       item.done = true;
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({item: item});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('retroItemSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDone',
@@ -834,7 +846,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.respondWith({status: 204});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('retroItemSuccessfullyUndone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyUndone',
@@ -862,7 +874,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('extendTimerSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'extendTimerSuccessfullyDone',
@@ -893,7 +905,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('archiveRetroSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'archiveRetroSuccessfullyDone',
@@ -949,7 +961,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({action_item: action_item});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('doneRetroActionItemSuccessfullyToggled').toHaveBeenDispatchedWith({
         type: 'doneRetroActionItemSuccessfullyToggled',
@@ -1008,7 +1020,7 @@ describe('ApiDispatcher', () => {
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({action_item: action_item});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect('retroActionItemSuccessfullyEdited').toHaveBeenDispatchedWith({
         type: 'retroActionItemSuccessfullyEdited',
@@ -1034,7 +1046,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroArchivesSuccessfullyFetched').toHaveBeenDispatched();
     });
 
@@ -1042,7 +1054,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
           type: 'retroNotFound'
         });
@@ -1067,7 +1079,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('retroArchiveSuccessfullyFetched').toHaveBeenDispatched();
     });
 
@@ -1075,7 +1087,7 @@ describe('ApiDispatcher', () => {
       it('dispatches notFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
         expect('notFound').toHaveBeenDispatchedWith({
           type: 'notFound'
         });
@@ -1107,14 +1119,14 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('redirectToRetroCreatePage').toHaveBeenDispatched();
     });
 
     it('stores the auth token in local storage', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({auth_token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
     });
@@ -1142,14 +1154,14 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('loggedInSuccessfully').toHaveBeenDispatched();
     });
 
     it('if the server returns a 404 because the user does not exist', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.notFound();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect('redirectToRegistration').toHaveBeenDispatchedWith({
         type: 'redirectToRegistration',
         data: {
@@ -1161,9 +1173,11 @@ describe('ApiDispatcher', () => {
     });
 
     it('stores the auth token in local storage', () => {
+      realDispatchLevels = 2; // allow createSession and loggedInSuccessfully
+
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({auth_token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
     });
@@ -1186,7 +1200,7 @@ describe('ApiDispatcher', () => {
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
     });
   });
 });

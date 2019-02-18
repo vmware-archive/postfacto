@@ -8,7 +8,6 @@
     "grapnel": "^0.7.0",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
-    "mock-promises": "^0.8.2",
     "moment": "^2.23.0",
     "motion-ui": "^2.0.3",
     "node-sass": "^4.11.0",
@@ -30,6 +29,7 @@
     "jasmine-core": "^3.3.0",
     "jasmine_dom_matchers": "^1.4.0",
     "pivotal-js-jasmine-matchers": "^0.1.1",
+    "promise-mock": "^2.1.0",
     "serve": "^10.1.1"
   },
   "scripts": {

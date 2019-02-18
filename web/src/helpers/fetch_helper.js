@@ -40,7 +40,7 @@ export function fetchJson(url, {accessToken, headers, ...options} = {}) {
       if (response.status === 204) {
         return [response.status, ''];
       }
-      return Promise.all([Promise.resolve(response.status), response.json()]);
+      return Promise.all([response.status, response.json()]);
     })
     .catch(() => {
       Actions.apiServerNotFound();
