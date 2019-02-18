@@ -45,7 +45,7 @@ export const SpyDispatcher = Dispatcher;
 
 export function combineElementsContent(className) {
   let message = '';
-  $(className).map((i, e) => {
+  $(className).each((i, e) => {
     message += e.textContent;
   });
   return message;

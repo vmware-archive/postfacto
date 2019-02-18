@@ -13,6 +13,5 @@ module.exports = {
     'react/react-in-jsx-scope': ['off'],
     'jsx-a11y/alt-text': ['off'],
     'react/jsx-no-target-blank': ['off'],
-    'array-callback-return': ['off'],
   },
 };
