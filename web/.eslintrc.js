@@ -28,7 +28,6 @@ module.exports = {
     'jsx-a11y/label-has-for': ['off'],
     'jsx-a11y/no-autofocus': ['off'],
     'jsx-a11y/no-static-element-interactions': ['off'],
-    'jsx-quotes': ['off'],
     'max-len': ['off'],
     'newline-per-chained-call': ['off'],
     'no-bitwise': ['off'],

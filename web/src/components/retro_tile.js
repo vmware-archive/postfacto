@@ -33,7 +33,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function RetroTile({callback, retro}) {
-  return <div className='retro-list-tile' onClick={callback}>{retro.name}</div>;
+  return <div className="retro-list-tile" onClick={callback}>{retro.name}</div>;
 }
 
 RetroTile.propTypes = {
