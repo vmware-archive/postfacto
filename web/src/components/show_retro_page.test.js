@@ -57,7 +57,10 @@ describe('ShowRetroPage', () => {
         ReactDOM.render(
           <MuiThemeProvider>
             <ShowRetroPage
-              retro={retro} retroId="13" archives={false} config={global.Retro.config}
+              retro={retro}
+              retroId="13"
+              archives={false}
+              config={global.Retro.config}
               featureFlags={{archiveEmails: true}}
             />
           </MuiThemeProvider>,
@@ -79,7 +82,11 @@ describe('ShowRetroPage', () => {
         ReactDOM.render(
           <MuiThemeProvider>
             <ShowRetroPage
-              retro={retro} retroId="13" archives={false} config={global.Retro.config} isMobile={false}
+              retro={retro}
+              retroId="13"
+              archives={false}
+              config={global.Retro.config}
+              isMobile={false}
               featureFlags={{archiveEmails: true}}
             />
           </MuiThemeProvider>,
@@ -106,7 +113,10 @@ describe('ShowRetroPage', () => {
       ReactDOM.render(
         <MuiThemeProvider>
           <ShowRetroPage
-            retro={retro} retroId="13" archives={false} config={global.Retro.config}
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={global.Retro.config}
             featureFlags={{archiveEmails: true}}
           />
         </MuiThemeProvider>,
@@ -138,7 +148,10 @@ describe('ShowRetroPage', () => {
           container = ReactDOM.render(
             <MuiThemeProvider>
               <ShowRetroPage
-                retro={retro} retroId="13" archives={false} config={global.Retro.config}
+                retro={retro}
+                retroId="13"
+                archives={false}
+                config={global.Retro.config}
                 dialog={{
                   title: 'Some dialog title',
                   message: 'Some dialog message',
@@ -170,8 +183,12 @@ describe('ShowRetroPage', () => {
           container = ReactDOM.render(
             <MuiThemeProvider>
               <ShowRetroPage
-                retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                dialog={null} featureFlags={{archiveEmails: true}}
+                retro={retro}
+                retroId="13"
+                archives={false}
+                config={global.Retro.config}
+                dialog={null}
+                featureFlags={{archiveEmails: true}}
               />
             </MuiThemeProvider>,
             root,
@@ -198,7 +215,10 @@ describe('ShowRetroPage', () => {
       ReactDOM.render(
         <MuiThemeProvider>
           <ShowRetroPage
-            retro={retro} retroId="13" archives={false} config={global.Retro.config}
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={global.Retro.config}
             featureFlags={{archiveEmails: true}}
           />
         </MuiThemeProvider>,

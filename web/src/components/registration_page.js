@@ -118,8 +118,10 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <div className="medium-6 small-12 columns" style={{paddingLeft: '0', paddingRight: '0'}}>
                 <input
-                  type="submit" className="retro-form-submit expanded button"
-                  id="create_new_retro" value="Next: Make a retro"
+                  type="submit"
+                  className="retro-form-submit expanded button"
+                  id="create_new_retro"
+                  value="Next: Make a retro"
                   onClick={this.register}
                 />
               </div>

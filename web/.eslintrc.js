@@ -35,7 +35,6 @@ module.exports = {
     'react/destructuring-assignment': ['off'],
     'react/forbid-prop-types': ['off'],
     'react/jsx-filename-extension': ['off'],
-    'react/jsx-max-props-per-line': ['off'],
     'react/jsx-no-target-blank': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
     'react/no-access-state-in-setstate': ['off'],

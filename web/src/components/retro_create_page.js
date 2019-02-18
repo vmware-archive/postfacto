@@ -259,8 +259,10 @@ export default class RetroCreatePage extends React.Component {
               <div className="row">
                 <div className="medium-6 small-12 columns" style={{paddingLeft: '0', paddingRight: '0'}}>
                   <input
-                    type="submit" className="retro-form-submit expanded button"
-                    id="create_new_retro" value="Create Retro"
+                    type="submit"
+                    className="retro-form-submit expanded button"
+                    id="create_new_retro"
+                    value="Create Retro"
                     onClick={this.submit}
                   />
                 </div>

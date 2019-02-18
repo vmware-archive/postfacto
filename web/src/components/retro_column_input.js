@@ -146,7 +146,9 @@ export default class RetroColumnInput extends React.Component {
       <div className="retro-item-list-input">
         <div className={this.resolveInputBoxClass()}>
           <TextareaAutosize
-            type="text" className={classNames} placeholder={this.resolvePlaceholder(category)}
+            type="text"
+            className={classNames}
+            placeholder={this.resolvePlaceholder(category)}
             onFocus={this.inputFocus}
             onBlur={this.inputBlur}
             onChange={this.onChange}

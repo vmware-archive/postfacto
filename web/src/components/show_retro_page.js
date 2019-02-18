@@ -348,7 +348,10 @@ export default class ShowRetroPage extends React.Component {
             <RetroLegalBanner retro={retro}/>
 
             <RetroHeading
-              retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
+              retro={retro}
+              retroId={retroId}
+              isMobile={this.state.isMobile}
+              archives={archives}
               showVideoButton={!archives}
             />
             <div className="retro-item-list">
