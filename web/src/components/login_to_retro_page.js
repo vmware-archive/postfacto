@@ -64,7 +64,7 @@ export default class LoginToRetroPage extends React.Component {
 
     this.setState({
       errors: [login_error_message],
-      inputStyle: !!login_error_message ? 'input-error' : '',
+      inputStyle: login_error_message ? 'input-error' : '',
     });
 
   }
