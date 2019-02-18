@@ -64,6 +64,10 @@ export default class ListRetroArchivesPage extends React.Component {
     window.addEventListener('resize', this.handleResize);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
   onArchiveClicked(archiveId, e) {
     e.preventDefault();
     const {retroId} = this.props;
