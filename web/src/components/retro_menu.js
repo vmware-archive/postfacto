@@ -56,13 +56,13 @@ export default class RetroMenu extends React.Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-  };
+  }
 
   handleRequestClose() {
     this.setState({
       open: false,
     });
-  };
+  }
 
   onClick(menuItem) {
     menuItem.callback.call(this);

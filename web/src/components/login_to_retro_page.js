@@ -57,7 +57,7 @@ export default class LoginToRetroPage extends React.Component {
     if (retroId) {
       Actions.getRetroLogin({retro_id: retroId});
     }
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
     const {login_error_message} = nextProps;

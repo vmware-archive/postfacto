@@ -46,7 +46,7 @@ import store from './store';
 
 import apiDispatcher from '../dispatchers/api_dispatcher';
 import mainDispatcher from '../dispatchers/main_dispatcher';
-import analyticsDispatcher from '../dispatchers/analytics_dispatcher'
+import analyticsDispatcher from '../dispatchers/analytics_dispatcher';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla'

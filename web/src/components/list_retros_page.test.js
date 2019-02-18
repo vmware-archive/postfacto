@@ -46,7 +46,7 @@ describe('List Retros Page', () => {
   it('should show multiple retros', () => {
     ReactDOM.render(<MuiThemeProvider><ListRetrosPage retros={retros}/></MuiThemeProvider>, root);
 
-    expect('.retro-list-tile').toHaveLength(2)
+    expect('.retro-list-tile').toHaveLength(2);
   });
 
   it('should have a link to show retro page', () => {

@@ -87,11 +87,11 @@ describe('RetroHeading', () => {
         });
 
         it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro')
+          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro');
         });
 
         it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('View archives')
+          expect($('.retro-menu-item')[0]).not.toContainText('View archives');
         });
       });
 
@@ -109,11 +109,11 @@ describe('RetroHeading', () => {
         });
 
         it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro')
+          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro');
         });
 
         it('shows the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).toContainText('View archives')
+          expect($('.retro-menu-item')[0]).toContainText('View archives');
         });
       });
 
@@ -131,7 +131,7 @@ describe('RetroHeading', () => {
 
         // Uses toEqual as 'Archive this retro' returns a pure string as it is a button which behaves differently
         it('shows the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro')
+          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro');
         });
 
         it('dispatches showDialog when the archive link is clicked', () => {
@@ -150,7 +150,7 @@ describe('RetroHeading', () => {
         });
 
         it('shows the link to view archives', () => {
-          expect($('.retro-menu-item')[1]).toHaveText('View archives')
+          expect($('.retro-menu-item')[1]).toHaveText('View archives');
         });
       });
 
@@ -171,11 +171,11 @@ describe('RetroHeading', () => {
         });
 
         it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toHaveText('Archive this retro')
+          expect($('.retro-menu-item')[0]).not.toHaveText('Archive this retro');
         });
 
         it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).not.toHaveText('View archives')
+          expect($('.retro-menu-item')[0]).not.toHaveText('View archives');
         });
       });
 
@@ -192,7 +192,7 @@ describe('RetroHeading', () => {
 
         // Uses toEqual as 'Archive this retro' returns a pure string as it is a button which behaves differently
         it('shows the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro')
+          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro');
         });
 
         it('dispatches showDialog when the archive link is clicked', () => {
@@ -211,7 +211,7 @@ describe('RetroHeading', () => {
         });
 
         it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[1]).not.toHaveText('View archives')
+          expect($('.retro-menu-item')[1]).not.toHaveText('View archives');
         });
       });
     });

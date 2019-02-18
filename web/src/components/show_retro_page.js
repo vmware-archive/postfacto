@@ -82,7 +82,7 @@ export default class ShowRetroPage extends React.Component {
     this.fetchRetros(this.props);
     this.initializeArchivesState(this.props);
     this.handleResize();
-  };
+  }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this));
@@ -180,7 +180,7 @@ export default class ShowRetroPage extends React.Component {
     Actions.toggleSendArchiveEmail({
       currentSendArchiveEmail: this.props.retro.send_archive_email,
     });
-  };
+  }
 
   renderColumnMobile(retro) {
     const {archives, retroId} = this.props;

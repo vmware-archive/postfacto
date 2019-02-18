@@ -226,7 +226,7 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   toggleCheckbox(e) {
     this.setState({[e.currentTarget.name]: !this.state.isPrivate});
-  };
+  }
 
   renderAccessInstruction() {
     const accessPrivate = (

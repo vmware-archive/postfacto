@@ -43,7 +43,7 @@ describe('Retro Tile', () => {
 
   it('should show a retro name', () => {
     ReactDOM.render(<RetroTile retro={retro}/>, root);
-    expect('.retro-list-tile').toContainText('Cool Retro')
+    expect('.retro-list-tile').toContainText('Cool Retro');
   });
 
   it('should call the callback when clicked', () => {

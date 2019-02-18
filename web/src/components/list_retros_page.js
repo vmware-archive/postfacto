@@ -60,7 +60,7 @@ export default class ListRetrosPage extends React.Component {
 
   render() {
     const retroListItems = this.props.retros.map((retro, index) => {
-      return <RetroTile key={index} callback={this.handleRetroListItemClicked.bind(retro)} retro={retro}>{retro.name}</RetroTile>
+      return <RetroTile key={index} callback={this.handleRetroListItemClicked.bind(retro)} retro={retro}>{retro.name}</RetroTile>;
     });
     return (
       <div className="list-retros-page full-height">

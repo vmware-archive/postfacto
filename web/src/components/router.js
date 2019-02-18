@@ -205,5 +205,5 @@ export default class Router extends React.Component {
 
   isUserLoggedIn() {
     return localStorage.getItem('authToken');
-  };
+  }
 }

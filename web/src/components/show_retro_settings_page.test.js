@@ -53,7 +53,7 @@ describe('ShowRetroSettingsPage', () => {
       </MuiThemeProvider>, root);
       $retro_name = $('input#retro_name');
       $retro_url = $('input#retro_url');
-      $retro_video_link = $('input#retro_video_link')
+      $retro_video_link = $('input#retro_video_link');
     });
 
     describe('header', () => {
@@ -92,7 +92,7 @@ describe('ShowRetroSettingsPage', () => {
 
     describe('video link field', () => {
       it('populates the video link field', () => {
-        expect('input#retro_video_link').toHaveValue(retro.video_link)
+        expect('input#retro_video_link').toHaveValue(retro.video_link);
       });
     });
 
