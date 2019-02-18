@@ -53,7 +53,6 @@ module.exports = {
     'react/prefer-stateless-function': ['off'],
     'react/prop-types': ['off'],
     'react/require-default-props': ['off'],
-    'react/self-closing-comp': ['off'],
     'react/sort-comp': ['off'],
 
     'object-curly-newline': ['error', {

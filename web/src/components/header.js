@@ -49,8 +49,7 @@ export default class Header extends React.Component {
           {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
           {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
         ]}
-      >
-      </Helmet>
+      />
     );
   }
 }
