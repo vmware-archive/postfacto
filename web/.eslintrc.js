@@ -12,7 +12,6 @@ module.exports = {
   },
   'rules': {
     'arrow-body-style': ['off'],
-    'arrow-parens': ['off'],
     'camelcase': ['off'],
     'class-methods-use-this': ['off'],
     'global-require': ['off'],
@@ -52,6 +51,7 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/sort-comp': ['off'],
 
+    'arrow-parens': ['error', 'always'],
     'react/jsx-no-bind': ['error', {
       'ignoreDOMComponents': false,
       'ignoreRefs': false,

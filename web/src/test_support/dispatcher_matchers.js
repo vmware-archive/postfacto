@@ -49,10 +49,10 @@ expect.extend({
 
   toHaveBeenDispatchedWith(actual, expected) {
     const observed = Dispatcher.dispatch.calls.all()
-      .map(dispatchCall => dispatchCall.args[0])
+      .map((dispatchCall) => dispatchCall.args[0])
       .filter(({type}) => type === actual);
 
-    const pass = observed.some(params => {
+    const pass = observed.some((params) => {
       return this.equals(params, expected);
     });
 

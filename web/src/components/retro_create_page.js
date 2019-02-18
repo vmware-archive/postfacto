@@ -129,7 +129,7 @@ export default class RetroCreatePage extends React.Component {
     return '';
   };
 
-  change = e => {
+  change = (e) => {
     const errors = Object.assign({}, this.state.errors);
 
     const elementName = e.currentTarget.name;
@@ -150,7 +150,7 @@ export default class RetroCreatePage extends React.Component {
     this.setState({[elementName]: elementValue, errors});
   };
 
-  toggleCheckbox = e => {
+  toggleCheckbox = (e) => {
     this.setState({[e.currentTarget.name]: !this.state.isPrivate});
   };
 
