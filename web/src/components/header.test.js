@@ -42,12 +42,11 @@ describe('Header', () => {
     title: 'Retro Title'
   };
 
-  let wrapper;
-
   describe('when retro is available', () => {
     beforeEach(() => {
-      wrapper = mount(<Header retro={{name: 'My Retro Name'}} config={config}/>);
+      mount(<Header retro={{name: 'My Retro Name'}} config={config}/>);
     });
+
     it('should set the document title', () => {
       expect(Helmet.peek().title).toEqual('My Retro Name - Retro Title');
     });
@@ -55,8 +54,9 @@ describe('Header', () => {
 
   describe('when retro is unavailable', () => {
     beforeEach(() => {
-      wrapper = mount(<Header retro={{name: ''}} config={config}/>);
+      mount(<Header retro={{name: ''}} config={config}/>);
     });
+
     it('should set the document title', () => {
       expect(Helmet.peek().title).toEqual('Retro Title');
     });
