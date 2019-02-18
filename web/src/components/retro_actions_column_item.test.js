@@ -47,7 +47,7 @@ const retro = {
       category: 'happy',
       created_at: '2016-07-19T00:00:00.000Z',
       vote_count: 10,
-    }
+    },
   ],
   action_items: [
     {
@@ -111,8 +111,8 @@ describe('RetroActionsColumnItem', () => {
           expect('editRetroActionItem').toHaveBeenDispatchedWith(
             {
               type: 'editRetroActionItem',
-              data: {retro_id: retroId, action_item_id: 1, description: 'some other value'}
-            }
+              data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
+            },
           );
         });
       };
@@ -147,7 +147,7 @@ describe('RetroActionsColumnItem', () => {
         $('.retro-action .edit-delete').simulate('click');
         expect('deleteRetroActionItem').toHaveBeenDispatchedWith({
           type: 'deleteRetroActionItem',
-          data: {retro_id: retroId, action_item: retro.action_items[0]}
+          data: {retro_id: retroId, action_item: retro.action_items[0]},
         });
       });
     });

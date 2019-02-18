@@ -39,7 +39,7 @@ configure({adapter: new Adapter()});
 
 describe('Header', () => {
   const config = {
-    title: 'Retro Title'
+    title: 'Retro Title',
   };
 
   describe('when retro is available', () => {

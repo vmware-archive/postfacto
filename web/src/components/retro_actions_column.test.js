@@ -92,7 +92,7 @@ const retro = {
       done: false,
       created_at: '2016-07-01T12:07:00.000Z',
     },
-  ]
+  ],
 };
 
 function mockDate(date) {
@@ -151,7 +151,7 @@ describe('RetroActionsColumn last-week', () => {
           category: 'happy',
           created_at: '2016-08-18T12:00:00.000Z',
           vote_count: 10,
-        }
+        },
       ],
       action_items: [
         {

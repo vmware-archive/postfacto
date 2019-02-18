@@ -209,18 +209,18 @@ function createRetro(isPrivate = false) {
       {
         id: 1,
         description: 'the happy retro item',
-        category: 'happy'
+        category: 'happy',
       },
       {
         id: 2,
         description: 'the meh retro item',
-        category: 'meh'
+        category: 'meh',
       },
       {
         id: 3,
         description: 'the sad retro item',
-        category: 'sad'
-      }
+        category: 'sad',
+      },
     ],
     action_items: [
       {
@@ -233,6 +233,6 @@ function createRetro(isPrivate = false) {
         description: 'action item 2',
         done: false,
       },
-    ]
+    ],
   };
 }

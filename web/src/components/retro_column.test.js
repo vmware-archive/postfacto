@@ -52,17 +52,17 @@ const retro = {
       description: 'the 2nd happy retro item',
       category: 'happy',
       created_at: '2016-07-18T00:00:00.000Z',
-      vote_count: 9
+      vote_count: 9,
     },
     {
       id: 3,
       description: 'the meh retro item',
-      category: 'meh'
+      category: 'meh',
     },
     {
       id: 4,
       description: 'the sad retro item',
-      category: 'sad'
+      category: 'sad',
     },
   ],
 };

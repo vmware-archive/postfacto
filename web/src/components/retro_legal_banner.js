@@ -61,14 +61,14 @@ class LegalBanner extends React.Component {
 
 class RetroLegalBanner extends LegalBanner {
   static propTypes = {
-    retro: types.object.isRequired
+    retro: types.object.isRequired,
   };
 
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      hasBeenDismissed: this.hasBeenDismissed(props.retro)
+      hasBeenDismissed: this.hasBeenDismissed(props.retro),
     };
   }
 
@@ -78,7 +78,7 @@ class RetroLegalBanner extends LegalBanner {
     this.markAsDismissed(this.props.retro);
 
     this.setState({
-      hasBeenDismissed: true
+      hasBeenDismissed: true,
     });
   }
 
@@ -105,7 +105,7 @@ class HomeLegalBanner extends LegalBanner {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      hasBeenDismissed: window.localStorage.homeTermsDismissed
+      hasBeenDismissed: window.localStorage.homeTermsDismissed,
     };
   }
 

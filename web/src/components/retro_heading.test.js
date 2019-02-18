@@ -46,7 +46,7 @@ describe('RetroHeading', () => {
         ReactDOM.render(
           <MuiThemeProvider>
             <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
-          </MuiThemeProvider>, root
+          </MuiThemeProvider>, root,
         );
       });
 
@@ -61,7 +61,7 @@ describe('RetroHeading', () => {
         ReactDOM.render(
           <MuiThemeProvider>
             <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-          </MuiThemeProvider>, root
+          </MuiThemeProvider>, root,
         );
       });
 
@@ -81,7 +81,7 @@ describe('RetroHeading', () => {
           ReactDOM.render(
             <MuiThemeProvider>
               <RetroHeading retro={retro} retroId="13" archives={true} isMobile={false}/>
-            </MuiThemeProvider>, root
+            </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');
         });
@@ -103,7 +103,7 @@ describe('RetroHeading', () => {
           ReactDOM.render(
             <MuiThemeProvider>
               <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root
+            </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');
         });
@@ -124,7 +124,7 @@ describe('RetroHeading', () => {
           ReactDOM.render(
             <MuiThemeProvider>
               <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root
+            </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');
         });
@@ -143,9 +143,9 @@ describe('RetroHeading', () => {
               type: 'showDialog',
               data: {
                 title: 'You\'re about to archive this retro.',
-                message: 'Are you sure?'
-              }
-            }
+                message: 'Are you sure?',
+              },
+            },
           );
         });
 
@@ -165,7 +165,7 @@ describe('RetroHeading', () => {
           ReactDOM.render(
             <MuiThemeProvider>
               <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root
+            </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');
         });
@@ -185,7 +185,7 @@ describe('RetroHeading', () => {
           ReactDOM.render(
             <MuiThemeProvider>
               <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root
+            </MuiThemeProvider>, root,
           );
           $('.retro-menu button').simulate('click');
         });
@@ -204,9 +204,9 @@ describe('RetroHeading', () => {
               type: 'showDialog',
               data: {
                 title: 'You\'re about to archive this retro.',
-                message: 'Are you sure?'
-              }
-            }
+                message: 'Are you sure?',
+              },
+            },
           );
         });
 
@@ -239,7 +239,7 @@ function createRetro(isPrivate = false) {
         id: 3,
         description: 'the sad retro item',
         category: 'sad',
-      }
+      },
     ],
     action_items: [
       {

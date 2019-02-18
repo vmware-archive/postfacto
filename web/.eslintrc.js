@@ -15,7 +15,6 @@ module.exports = {
     'arrow-parens': ['off'],
     'camelcase': ['off'],
     'class-methods-use-this': ['off'],
-    'comma-dangle': ['off'],
     'consistent-return': ['off'],
     'function-paren-newline': ['off'],
     'func-names': ['off'],

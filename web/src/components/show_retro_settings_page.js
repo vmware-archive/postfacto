@@ -63,7 +63,7 @@ export default class ShowRetroSettingsPage extends React.Component {
       name: '',
       slug: '',
       video_link: '',
-      errors: {}
+      errors: {},
     };
   }
 
@@ -82,7 +82,7 @@ export default class ShowRetroSettingsPage extends React.Component {
         name: nextProps.retro.name,
         slug: nextProps.retro.slug,
         isPrivate: nextProps.retro.is_private,
-        video_link: nextProps.retro.video_link
+        video_link: nextProps.retro.video_link,
       });
     }
 
@@ -90,8 +90,8 @@ export default class ShowRetroSettingsPage extends React.Component {
       this.setState({
         errors: {
           name: nextProps.errors.name,
-          slug: nextProps.errors.slug
-        }
+          slug: nextProps.errors.slug,
+        },
       });
     } else {
       this.setState({errors: {}});
@@ -257,7 +257,7 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   getMenuItems() {
     let items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0}
+      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
     return items.filter((item) => {

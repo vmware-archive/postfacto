@@ -47,8 +47,8 @@ export default class RetroCreatePage extends React.Component {
       errors: {
         name: '',
         slug: '',
-        password: ''
-      }
+        password: '',
+      },
     };
   }
 
@@ -62,8 +62,8 @@ export default class RetroCreatePage extends React.Component {
     if (nextProps.errors) {
       this.setState({
         errors: {
-          slug: nextProps.errors.slug
-        }
+          slug: nextProps.errors.slug,
+        },
       });
     } else {
       this.setState({errors: {}});

@@ -47,7 +47,7 @@ export default class RetroActionsColumnItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: false
+      isEditing: false,
     };
   }
 

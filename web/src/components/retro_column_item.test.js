@@ -43,14 +43,14 @@ describe('RetroColumnItem', () => {
     description: 'the happy retro item',
     vote_count: 1,
     category: 'happy',
-    done: false
+    done: false,
   };
   const item_done = {
     id: 20,
     description: 'the discussed retro item',
     vote_count: 10,
     category: 'happy',
-    done: true
+    done: true,
   };
 
   describe('when opening the app on desktop', () => {
@@ -77,7 +77,7 @@ describe('RetroColumnItem', () => {
             $('.edit-delete i').simulate('click');
             expect('deleteRetroItem').toHaveBeenDispatchedWith({
               type: 'deleteRetroItem',
-              data: {retro_id: retroId, item: item}
+              data: {retro_id: retroId, item: item},
             });
           });
         });
@@ -98,7 +98,7 @@ describe('RetroColumnItem', () => {
             it('updates the retro item', () => {
               expect('updateRetroItem').toHaveBeenDispatchedWith({
                 type: 'updateRetroItem',
-                data: {retro_id: retroId, item: item, description: 'an updated retro item'}
+                data: {retro_id: retroId, item: item, description: 'an updated retro item'},
               });
             });
 
@@ -156,7 +156,7 @@ describe('RetroColumnItem', () => {
           $('.item-text button').simulate('click');
           expect('highlightRetroItem').toHaveBeenDispatchedWith({
             type: 'highlightRetroItem',
-            data: {retro_id: retroId, item: item}
+            data: {retro_id: retroId, item: item},
           });
         });
       });
@@ -187,7 +187,7 @@ describe('RetroColumnItem', () => {
 
         expect(Scroll.scroller.scrollTo).toHaveBeenCalledWith('retro-item-2', jasmine.objectContaining({
           delay: 0,
-          duration: 300
+          duration: 300,
         }));
       });
     });
@@ -202,7 +202,7 @@ describe('RetroColumnItem', () => {
           description: 'the happy retro item',
           vote_count: 1,
           category: 'happy',
-          done: false
+          done: false,
         };
 
         ReactDOM.render(<RetroColumnItem retroId={retroId} item={highlightedItem} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
@@ -223,7 +223,7 @@ describe('RetroColumnItem', () => {
           $('.item-text button').simulate('click');
           expect('unhighlightRetroItem').toHaveBeenDispatchedWith({
             type: 'unhighlightRetroItem',
-            data: {retro_id: retroId}
+            data: {retro_id: retroId},
           });
         });
       });
@@ -277,10 +277,10 @@ describe('RetroColumnItem', () => {
                 description: 'the discussed retro item',
                 vote_count: 10,
                 category: 'happy',
-                done: false
+                done: false,
               },
               retroId: retroId,
-            }
+            },
           });
         });
       });

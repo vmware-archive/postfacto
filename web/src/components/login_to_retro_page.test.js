@@ -46,7 +46,7 @@ describe('LoginToRetroPage', () => {
   describe('When page is shown', () => {
     const retro = {
       id: 13,
-      name: 'the retro name'
+      name: 'the retro name',
     };
 
     beforeEach(() => {
@@ -70,7 +70,7 @@ describe('LoginToRetroPage', () => {
         $('.retro-form-submit').simulate('click');
         expect('loginToRetro').toHaveBeenDispatchedWith({
           type: 'loginToRetro',
-          data: {retro_id: '13', password: 'pa55word'}
+          data: {retro_id: '13', password: 'pa55word'},
         });
         expect('.form-input').toHaveValue('');
       });
@@ -82,7 +82,7 @@ describe('LoginToRetroPage', () => {
         $('.form-input').simulate('keyPress', {key: 'Enter'});
         expect('loginToRetro').toHaveBeenDispatchedWith({
           type: 'loginToRetro',
-          data: {retro_id: '13', password: 'pa55word'}
+          data: {retro_id: '13', password: 'pa55word'},
         });
         expect('.form-input').toHaveValue('');
       });
@@ -107,7 +107,7 @@ describe('LoginToRetroPage', () => {
     let component;
     const retro = {
       id: 13,
-      name: 'the retro name'
+      name: 'the retro name',
     };
 
     const setupRetro = ({force_relogin}) => {

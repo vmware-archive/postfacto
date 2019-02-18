@@ -38,7 +38,7 @@ export default class RegistrationPage extends React.Component {
   static propTypes = {
     accessToken: types.string.isRequired,
     email: types.string.isRequired,
-    fullName: types.string.isRequired
+    fullName: types.string.isRequired,
   };
 
   constructor(props, context) {
@@ -52,7 +52,7 @@ export default class RegistrationPage extends React.Component {
     Actions.createUser({
       access_token: this.props.accessToken,
       company_name: companyName,
-      full_name: fullName
+      full_name: fullName,
     });
   }
 

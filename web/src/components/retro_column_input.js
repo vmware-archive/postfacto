@@ -46,7 +46,7 @@ export default class RetroColumnInput extends React.Component {
     this.state = {
       inputText: '',
       isFocused: false,
-      multiline: ''
+      multiline: '',
     };
   }
 

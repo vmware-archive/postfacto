@@ -81,7 +81,7 @@ export default class RetroCable extends React.Component {
       {
         received: this.onReceived,
         disconnected: this.onDisconnected,
-        connected: this.onConnected
+        connected: this.onConnected,
       });
 
     this.setState({subscription: subscription});

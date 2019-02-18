@@ -49,7 +49,7 @@ export default class RetroColumnItem extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      isEditing: false
+      isEditing: false,
     };
   }
 
@@ -64,7 +64,7 @@ export default class RetroColumnItem extends React.Component {
         offset: -(windowH - itemH) / 2,
         delay: 0,
         smooth: !document.hidden,
-        duration: 300
+        duration: 300,
       });
     }
   }

@@ -44,7 +44,7 @@ export default class CountdownTimer extends React.Component {
     super(props, context);
     this.state = {
       remainingTimeInMs: 0,
-      interval: null
+      interval: null,
     };
   }
 
@@ -68,7 +68,7 @@ export default class CountdownTimer extends React.Component {
     clearInterval(this.state.interval);
     this.setState({
       interval: setInterval(this.updateRemainingTime, 500),
-      remainingTimeInMs: this.getRemainingTimeInMs()
+      remainingTimeInMs: this.getRemainingTimeInMs(),
     });
   };
 

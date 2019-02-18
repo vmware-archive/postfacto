@@ -234,7 +234,7 @@ describe('MainDispatcher', () => {
             slug: 'old-retro-slug',
           },
         },
-        cursorSpy
+        cursorSpy,
       );
 
       subject.dispatch({
@@ -450,7 +450,7 @@ describe('MainDispatcher', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
         retro: jasmine.objectContaining({
           highlighted_item_id: 2,
-        })
+        }),
       });
     });
 
@@ -460,7 +460,7 @@ describe('MainDispatcher', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
         retro: jasmine.objectContaining({
           retro_item_end_time: 123,
-        })
+        }),
       });
     });
   });
@@ -477,7 +477,7 @@ describe('MainDispatcher', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
         retro: jasmine.objectContaining({
           highlighted_item_id: null,
-        })
+        }),
       });
     });
   });
@@ -573,7 +573,7 @@ describe('MainDispatcher', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
         retro: jasmine.objectContaining({
           retro_item_end_time: 321,
-        })
+        }),
       });
     });
   });
@@ -665,7 +665,7 @@ describe('MainDispatcher', () => {
             type: 'websocketRetroDataReceived', data: {
               command: 'force_relogin',
               payload: {
-                originator_id: 'fake-request-uuid-1'
+                originator_id: 'fake-request-uuid-1',
               },
             },
           });
@@ -994,12 +994,12 @@ describe('MainDispatcher', () => {
       subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'redirectToRegistration',
-        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'}
+        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},
       });
 
       expect('setRoute').toHaveBeenDispatchedWith({
         type: 'setRoute',
-        data: '/registration/the-access-token/a@a.a/my full name'
+        data: '/registration/the-access-token/a@a.a/my full name',
       });
       expect(router.navigate.calls.count()).toEqual(1);
       expect(router.navigate.calls.argsFor(0)).toEqual(['/registration/the-access-token/a@a.a/my full name']);

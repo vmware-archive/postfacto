@@ -75,7 +75,7 @@ describe('Retro settings', () => {
 
       expect('routeToRetroSettings').toHaveBeenDispatchedWith({
         type: 'routeToRetroSettings',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
   });
@@ -91,7 +91,7 @@ describe('Retro settings', () => {
 
       expect('requireRetroLogin').toHaveBeenDispatchedWith({
         type: 'requireRetroLogin',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
   });

@@ -34,7 +34,7 @@ import PropTypes from 'prop-types';
 
 export default class FormattedInterval extends React.Component {
   static propTypes = {
-    secondsRemaining: PropTypes.number.isRequired
+    secondsRemaining: PropTypes.number.isRequired,
   };
 
   formatInterval() {

@@ -58,5 +58,5 @@ export default {
   },
   showHomePageAnalytics() {
     Analytics.track('Loaded homepage');
-  }
+  },
 };

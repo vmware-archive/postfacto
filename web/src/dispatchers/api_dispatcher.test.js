@@ -70,19 +70,19 @@ describe('ApiDispatcher', () => {
           id: 2,
           description: 'happy description',
           vote_count: 1,
-          created_at: '2016-01-01T00:00:00.000Z'
+          created_at: '2016-01-01T00:00:00.000Z',
         },
         {
           id: 3,
           description: '2nd description',
           vote_count: 3,
-          created_at: '2016-01-02T00:00:00.000Z'
+          created_at: '2016-01-02T00:00:00.000Z',
         },
         {
           id: 4,
           description: '2nd description',
           vote_count: 2,
-          created_at: '2016-01-03T00:00:00.000Z'
+          created_at: '2016-01-03T00:00:00.000Z',
         },
       ],
       action_items: [
@@ -90,8 +90,8 @@ describe('ApiDispatcher', () => {
           id: 1,
           description: 'action item 1',
           done: false,
-        }
-      ]
+        },
+      ],
     };
 
     jasmine.Ajax.install();
@@ -110,8 +110,8 @@ describe('ApiDispatcher', () => {
         data: {
           name: 'the retro name',
           slug: 'the-retro-name',
-          password: 'the-retro-password'
-        }
+          password: 'the-retro-password',
+        },
       });
     });
 
@@ -121,15 +121,15 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token'
+          'x-auth-token': 'the-auth-token',
         },
         data: {
           retro: {
             name: 'the retro name',
             slug: 'the-retro-name',
             password: 'the-retro-password',
-          }
-        }
+          },
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: retro, token: 'the-token'});
@@ -148,7 +148,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroUnsuccessfullyCreated', () => {
         expect('retroUnsuccessfullyCreated').toHaveBeenDispatchedWith({
           type: 'retroUnsuccessfullyCreated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
 
@@ -190,15 +190,15 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token'
+          'authorization': 'Bearer the-auth-token',
         }, data: {
           retro: {
             name: 'the new retro name',
             slug: 'the-new-slug-123',
             is_private: true,
           },
-          request_uuid: 'some-uuid'
-        }
+          request_uuid: 'some-uuid',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -206,8 +206,8 @@ describe('ApiDispatcher', () => {
         retro: {
           name: 'the new retro name',
           slug: 'the-new-slug-123',
-          is_private: true
-        }
+          is_private: true,
+        },
       });
       Promise.runAll();
       expect('retroSettingsSuccessfullyUpdated').toHaveBeenDispatchedWith({
@@ -216,9 +216,9 @@ describe('ApiDispatcher', () => {
           retro: {
             name: 'the new retro name',
             slug: 'the-new-slug-123',
-            is_private: true
-          }
-        }
+            is_private: true,
+          },
+        },
       });
 
       expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
@@ -230,7 +230,7 @@ describe('ApiDispatcher', () => {
           checkIcon: true,
           message: 'Settings saved!',
           className: 'alert-with-back-button',
-        }
+        },
       });
     });
 
@@ -246,7 +246,7 @@ describe('ApiDispatcher', () => {
       it('dispatches requireRetroLogin', () => {
         expect('requireRetroLogin').toHaveBeenDispatchedWith({
           type: 'requireRetroLogin',
-          data: {retro_id: 13}
+          data: {retro_id: 13},
         });
       });
 
@@ -267,7 +267,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
         expect('retroSettingsUnsuccessfullyUpdated').toHaveBeenDispatchedWith({
           type: 'retroSettingsUnsuccessfullyUpdated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
 
@@ -285,8 +285,8 @@ describe('ApiDispatcher', () => {
           retro: {
             name: 'the new retro name',
             slug: 'retro-slug-123',
-            is_private: false
-          }
+            is_private: false,
+          },
         });
         Promise.runAll();
       });
@@ -298,9 +298,9 @@ describe('ApiDispatcher', () => {
             retro: {
               name: 'the new retro name',
               slug: 'retro-slug-123',
-              is_private: false
-            }
-          }
+              is_private: false,
+            },
+          },
         });
       });
 
@@ -321,8 +321,8 @@ describe('ApiDispatcher', () => {
           retro_id: '13',
           current_password: 'current password',
           new_password: 'new password',
-          request_uuid: 'some-request-uuid'
-        }
+          request_uuid: 'some-request-uuid',
+        },
       });
 
       subject.router = new Grapnel({pushState: true});
@@ -335,12 +335,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token'
+          'authorization': 'Bearer the-auth-token',
         }, data: {
           current_password: 'current password',
           new_password: 'new password',
           request_uuid: 'some-request-uuid',
-        }
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -351,7 +351,7 @@ describe('ApiDispatcher', () => {
         data: {
           retro_id: '13',
           token: 'new-api-token',
-        }
+        },
       });
 
       expect('routeToRetroSettings').toHaveBeenDispatchedWith({
@@ -380,7 +380,7 @@ describe('ApiDispatcher', () => {
       it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
         expect('retroPasswordUnsuccessfullyUpdated').toHaveBeenDispatchedWith({
           type: 'retroPasswordUnsuccessfullyUpdated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
     });
@@ -398,15 +398,15 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro});
       Promise.runAll();
       expect('retroSuccessfullyFetched').toHaveBeenDispatchedWith({
         type: 'retroSuccessfullyFetched',
-        data: {retro}
+        data: {retro},
       });
     });
 
@@ -417,7 +417,7 @@ describe('ApiDispatcher', () => {
         Promise.runAll();
         expect('requireRetroLogin').toHaveBeenDispatchedWith({
           type: 'requireRetroLogin',
-          data: {retro_id: 1}
+          data: {retro_id: 1},
         });
       });
     });
@@ -428,7 +428,7 @@ describe('ApiDispatcher', () => {
         request.notFound();
         Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+          type: 'retroNotFound',
         });
       });
     });
@@ -446,8 +446,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token'
-        }
+          'x-auth-token': 'the-auth-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -455,7 +455,7 @@ describe('ApiDispatcher', () => {
       Promise.runAll();
       expect('retrosSuccessfullyFetched').toHaveBeenDispatchedWith({
         type: 'retrosSuccessfullyFetched',
-        data: {retros: [retro]}
+        data: {retros: [retro]},
       });
 
     });
@@ -472,14 +472,14 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-        }
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
       Promise.runAll();
       expect('getRetroLoginSuccessfullyReceived').toHaveBeenDispatchedWith({
         type: 'getRetroLoginSuccessfullyReceived',
-        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}}
+        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}},
       });
     });
 
@@ -489,7 +489,7 @@ describe('ApiDispatcher', () => {
         request.notFound();
         Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+          type: 'retroNotFound',
         });
       });
     });
@@ -510,8 +510,8 @@ describe('ApiDispatcher', () => {
           requestHeaders: {
             'accept': 'application/json',
             'content-type': 'application/json',
-            'authorization': 'Bearer the-token'
-          }
+            'authorization': 'Bearer the-token',
+          },
         });
         const request = jasmine.Ajax.requests.mostRecent();
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
@@ -519,7 +519,7 @@ describe('ApiDispatcher', () => {
         Promise.runAll();
         expect('getRetroSettingsSuccessfullyReceived').toHaveBeenDispatchedWith({
           type: 'getRetroSettingsSuccessfullyReceived',
-          data: response
+          data: response,
         });
       });
 
@@ -531,14 +531,14 @@ describe('ApiDispatcher', () => {
           requestHeaders: {
             'accept': 'application/json',
             'content-type': 'application/json',
-          }
+          },
         });
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
         Promise.runAll();
         expect('requireRetroLogin').toHaveBeenDispatchedWith({
           type: 'requireRetroLogin',
-          data: {retro_id: 'retro-slug-123'}
+          data: {retro_id: 'retro-slug-123'},
         });
       });
     });
@@ -553,7 +553,7 @@ describe('ApiDispatcher', () => {
     it('makes an api PUT to /retros/:id/login', () => {
       expect('/retros/15/login').toHaveBeenRequestedWith({
         method: 'PUT',
-        data: {retro: {password: 'pa55word'}}
+        data: {retro: {password: 'pa55word'}},
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'the-token'});
@@ -561,7 +561,7 @@ describe('ApiDispatcher', () => {
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
       expect('retroSuccessfullyLoggedIn').toHaveBeenDispatchedWith({
         type: 'retroSuccessfullyLoggedIn',
-        data: {retro_id: 15}
+        data: {retro_id: 15},
       });
     });
 
@@ -571,7 +571,7 @@ describe('ApiDispatcher', () => {
         request.notFound();
         Promise.runAll();
         expect('retroLoginFailed').toHaveBeenDispatchedWith({
-          type: 'retroLoginFailed'
+          type: 'retroLoginFailed',
         });
       });
     });
@@ -592,12 +592,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item}
+        data: {retro_id: 1, item: item},
       });
     });
   });
@@ -615,12 +615,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
           description: 'happy item',
-          category: 'happy'
-        }
+          category: 'happy',
+        },
       });
     });
 
@@ -630,7 +630,7 @@ describe('ApiDispatcher', () => {
       Promise.runAll();
       expect('retroItemSuccessfullyCreated').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyCreated',
-        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1}
+        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1},
       });
     });
   });
@@ -649,11 +649,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
           description: 'updated description',
-        }
+        },
       });
     });
   });
@@ -673,12 +673,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item}
+        data: {retro_id: 1, item: item},
       });
     });
   });
@@ -697,8 +697,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -707,7 +707,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyVoted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyVoted',
-        data: {item: item}
+        data: {item: item},
       });
     });
   });
@@ -726,9 +726,9 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
-        data: {transition: 'NEXT'}
+        data: {transition: 'NEXT'},
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -736,7 +736,7 @@ describe('ApiDispatcher', () => {
       Promise.runAll();
 
       expect('checkAllRetroItemsDone').toHaveBeenDispatchedWith({
-        type: 'checkAllRetroItemsDone'
+        type: 'checkAllRetroItemsDone',
       });
     });
 
@@ -755,9 +755,9 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
-        data: {item_id: 2}
+        data: {item_id: 2},
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -766,7 +766,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyHighlighted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyHighlighted',
-        data: {retro: retro}
+        data: {retro: retro},
       });
     });
   });
@@ -783,8 +783,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       expect('retroItemSuccessfullyUnhighlighted').toHaveBeenDispatched();
     });
@@ -804,8 +804,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       item = retro.items[0];
@@ -816,7 +816,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDone',
-        data: {retroId: 1, itemId: item.id}
+        data: {retroId: 1, itemId: item.id},
       });
     });
   });
@@ -841,7 +841,7 @@ describe('ApiDispatcher', () => {
         },
         data: {
           done: false,
-        }
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -850,7 +850,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyUndone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyUndone',
-        data: {retroId: 1, item: item}
+        data: {retroId: 1, item: item},
       });
     });
   });
@@ -868,8 +868,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -878,7 +878,7 @@ describe('ApiDispatcher', () => {
 
       expect('extendTimerSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'extendTimerSuccessfullyDone',
-        data: {retro: retro}
+        data: {retro: retro},
       });
     });
   });
@@ -896,11 +896,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          send_archive_email: true
-        }
+          send_archive_email: true,
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -909,7 +909,7 @@ describe('ApiDispatcher', () => {
 
       expect('archiveRetroSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'archiveRetroSuccessfullyDone',
-        data: {retro: retro}
+        data: {retro: retro},
       });
     });
   });
@@ -927,11 +927,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          description: 'a new action item'
-        }
+          description: 'a new action item',
+        },
       });
     });
   });
@@ -952,11 +952,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          done: true
-        }
+          done: true,
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -965,7 +965,7 @@ describe('ApiDispatcher', () => {
 
       expect('doneRetroActionItemSuccessfullyToggled').toHaveBeenDispatchedWith({
         type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item: action_item}
+        data: {action_item: action_item},
       });
     });
   });
@@ -985,12 +985,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       expect('retroActionItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroActionItemSuccessfullyDeleted',
-        data: {action_item: action_item}
+        data: {action_item: action_item},
       });
     });
   });
@@ -1004,7 +1004,7 @@ describe('ApiDispatcher', () => {
 
       subject.dispatch({
         type: 'editRetroActionItem',
-        data: {retro_id: 1, action_item_id: action_item.id, description: 'this is a description'}
+        data: {retro_id: 1, action_item_id: action_item.id, description: 'this is a description'},
       });
     });
 
@@ -1014,8 +1014,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -1024,7 +1024,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroActionItemSuccessfullyEdited').toHaveBeenDispatchedWith({
         type: 'retroActionItemSuccessfullyEdited',
-        data: {action_item}
+        data: {action_item},
       });
     });
   });
@@ -1041,8 +1041,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
@@ -1056,7 +1056,7 @@ describe('ApiDispatcher', () => {
         request.notFound();
         Promise.runAll();
         expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+          type: 'retroNotFound',
         });
       });
     });
@@ -1074,8 +1074,8 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
@@ -1089,7 +1089,7 @@ describe('ApiDispatcher', () => {
         request.notFound();
         Promise.runAll();
         expect('notFound').toHaveBeenDispatchedWith({
-          type: 'notFound'
+          type: 'notFound',
         });
       });
     });
@@ -1100,7 +1100,7 @@ describe('ApiDispatcher', () => {
       subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createUser',
-        data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'}
+        data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'},
       });
     });
 
@@ -1114,8 +1114,8 @@ describe('ApiDispatcher', () => {
         data: {
           'access_token': 'the-access-token',
           'company_name': 'Company name',
-          'full_name': 'My Full Name'
-        }
+          'full_name': 'My Full Name',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
@@ -1137,7 +1137,7 @@ describe('ApiDispatcher', () => {
       subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createSession',
-        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'}
+        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'},
       });
     });
 
@@ -1149,8 +1149,8 @@ describe('ApiDispatcher', () => {
           'content-type': 'application/json',
         },
         data: {
-          'access_token': 'the-access-token'
-        }
+          'access_token': 'the-access-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
@@ -1167,8 +1167,8 @@ describe('ApiDispatcher', () => {
         data: {
           'access_token': 'the-access-token',
           'email': 'a@a.a',
-          'name': 'My full name'
-        }
+          'name': 'My full name',
+        },
       });
     });
 

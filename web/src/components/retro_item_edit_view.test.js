@@ -46,7 +46,7 @@ describe('RetroItemEditView', () => {
         originalText="item text"
         deleteItem={deleteSpy}
         saveItem={saveSpy}
-      />, root
+      />, root,
     );
   });
 

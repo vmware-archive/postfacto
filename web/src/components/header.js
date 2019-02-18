@@ -46,7 +46,7 @@ export default class Header extends React.Component {
       <Helmet title={documentTitle}
               link={[
                 {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
-                {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'}
+                {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
               ]}>
       </Helmet>
     );

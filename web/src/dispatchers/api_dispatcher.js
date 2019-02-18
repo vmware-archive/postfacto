@@ -255,11 +255,11 @@ export default {
         resetApiToken(old_slug, new_slug);
         this.dispatch({
           type: 'retroSettingsSuccessfullyUpdated',
-          data: {retro: {name: retro_name, slug: new_slug, is_private: data.retro.is_private}}
+          data: {retro: {name: retro_name, slug: new_slug, is_private: data.retro.is_private}},
         });
         this.dispatch({
           type: 'showAlert',
-          data: {checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'}
+          data: {checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'},
         });
       } else if (status === 403) {
         this.dispatch({type: 'requireRetroLogin', data: {retro_id: retro_id}});
@@ -294,5 +294,5 @@ export default {
         this.dispatch({type: 'notFound'});
       }
     });
-  }
+  },
 };

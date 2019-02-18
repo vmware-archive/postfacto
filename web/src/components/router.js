@@ -76,7 +76,7 @@ const routes = {
   '/retros/:retroId/settings/password': 'showRetroPasswordSettings',
   '/retros/new': 'createRetro',
   '/terms': 'showTerms',
-  '/registration/:accessToken/:email/:fullName': 'showRegistration'
+  '/registration/:accessToken/:email/:fullName': 'showRegistration',
 };
 
 export default class Router extends React.Component {

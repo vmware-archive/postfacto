@@ -38,7 +38,7 @@ import types from 'prop-types';
 export default class RetroMenu extends React.Component {
   static propTypes = {
     isMobile: types.bool.isRequired,
-    items: types.array.isRequired
+    items: types.array.isRequired,
   };
 
   constructor(props, context) {

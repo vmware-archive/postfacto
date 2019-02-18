@@ -59,7 +59,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       expect('backPressedFromSettings').toHaveBeenDispatchedWith({
         type: 'backPressedFromSettings',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
 
@@ -68,7 +68,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       expect('backPressedFromPasswordSettings').toHaveBeenDispatchedWith({
         type: 'backPressedFromPasswordSettings',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
 
@@ -85,8 +85,8 @@ describe('ShowRetroPasswordSettingsPage', () => {
           retro_id: '13',
           current_password: 'current password',
           new_password: 'new password',
-          request_uuid: 'blah'
-        }
+          request_uuid: 'blah',
+        },
       });
     });
 
@@ -103,8 +103,8 @@ describe('ShowRetroPasswordSettingsPage', () => {
             retro_id: '13',
             current_password: '',
             new_password: 'new password',
-            request_uuid: 'blah'
-          }
+            request_uuid: 'blah',
+          },
         });
       });
     });
@@ -121,8 +121,8 @@ describe('ShowRetroPasswordSettingsPage', () => {
             retro_id: '13',
             current_password: 'current password',
             new_password: '',
-            request_uuid: 'blah'
-          }
+            request_uuid: 'blah',
+          },
         });
       });
     });
@@ -149,7 +149,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
         ReactDOM.unmountComponentAtNode(root);
 
         expect('clearErrors').toHaveBeenDispatchedWith({
-          type: 'clearErrors'
+          type: 'clearErrors',
         });
       });
     });
@@ -188,18 +188,18 @@ function createRetro() {
       {
         id: 1,
         description: 'the happy retro item',
-        category: 'happy'
+        category: 'happy',
       },
       {
         id: 2,
         description: 'the meh retro item',
-        category: 'meh'
+        category: 'meh',
       },
       {
         id: 3,
         description: 'the sad retro item',
-        category: 'sad'
-      }
+        category: 'sad',
+      },
     ],
     action_items: [
       {
@@ -212,6 +212,6 @@ function createRetro() {
         description: 'action item 2',
         done: false,
       },
-    ]
+    ],
   };
 }

@@ -63,7 +63,7 @@ export default class ShowRetroPage extends React.Component {
       {
         title: types.string,
         message: types.string,
-      }
+      },
     ),
   };
 
@@ -74,7 +74,7 @@ export default class ShowRetroPage extends React.Component {
     this.state = {
       isMobile: false,
       currentMobileCategory: 'happy',
-      filtered_retro_archive: {}
+      filtered_retro_archive: {},
     };
   }
 
@@ -298,11 +298,11 @@ export default class ShowRetroPage extends React.Component {
     }
 
     const keyMap = {
-      'next': 'right'
+      'next': 'right',
     };
 
     const keyHandlers = {
-      'next': this.moveToNextItem.bind(this)
+      'next': this.moveToNextItem.bind(this),
     };
 
     return (

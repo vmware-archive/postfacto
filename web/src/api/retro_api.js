@@ -246,5 +246,5 @@ export default {
 
   retrieveConfig() {
     return fetchJson(`${this.apiBaseUrl()}/config`);
-  }
+  },
 };

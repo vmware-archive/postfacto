@@ -120,7 +120,7 @@ export default {
       this.dispatch({type: 'checkAllRetroItemsDone'});
       this.dispatch({
         type: 'completedRetroItemAnalytics',
-        data: {retroId: data.retroId, category: retro.items[itemIndex].category}
+        data: {retroId: data.retroId, category: retro.items[itemIndex].category},
       });
     });
   },
@@ -131,28 +131,28 @@ export default {
   retroItemSuccessfullyHighlighted({data}) {
     this.$store.refine('retro').merge({
       highlighted_item_id: data.retro.highlighted_item_id,
-      retro_item_end_time: data.retro.retro_item_end_time
+      retro_item_end_time: data.retro.retro_item_end_time,
     });
   },
   retroItemSuccessfullyUnhighlighted() {
     this.$store.refine('retro').merge({
-      highlighted_item_id: null
+      highlighted_item_id: null,
     });
   },
   extendTimerSuccessfullyDone({data}) {
     this.$store.refine('retro').merge({
-      retro_item_end_time: data.retro.retro_item_end_time
+      retro_item_end_time: data.retro.retro_item_end_time,
     });
   },
   archiveRetroSuccessfullyDone({data}) {
     this.$store.merge({retro: data.retro});
     this.dispatch({
       type: 'archivedRetroAnalytics',
-      data: {retroId: data.retro.id}
+      data: {retroId: data.retro.id},
     });
     this.dispatch({
       type: 'showAlert',
-      data: {message: 'Archived!'}
+      data: {message: 'Archived!'},
     });
   },
   websocketRetroDataReceived({data}) {
@@ -271,9 +271,9 @@ export default {
           type: 'showDialog',
           data: {
             title: 'Archive this retro?',
-            message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.'
-          }
-        }
+            message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.',
+          },
+        },
       );
     }
   },
@@ -285,7 +285,7 @@ export default {
   },
   setConfig({data}) {
     this.$store.refine('featureFlags').merge({
-      archiveEmails: data.archive_emails
+      archiveEmails: data.archive_emails,
     });
   },
   setCountryCode({data}) {
@@ -295,5 +295,5 @@ export default {
     });
   }, toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
     this.$store.refine('retro', 'send_archive_email').set(!currentSendArchiveEmail);
-  }
+  },
 };

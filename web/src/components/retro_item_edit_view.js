@@ -37,14 +37,14 @@ export default class RetroItemEditView extends React.Component {
   static propTypes = {
     originalText: types.string.isRequired,
     deleteItem: types.func.isRequired,
-    saveItem: types.func.isRequired
+    saveItem: types.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       editedText: '',
-      saveDisabled: ''
+      saveDisabled: '',
     };
   }
 

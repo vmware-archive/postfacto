@@ -51,7 +51,7 @@ describe('#useRouter', () => {
       );
     };
     Application.propTypes = {
-      router: PropTypes.object.isRequired
+      router: PropTypes.object.isRequired,
     };
 
     const TestRouter = useRouter(Application);

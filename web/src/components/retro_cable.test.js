@@ -61,15 +61,15 @@ describe('RetroCable', () => {
             {
               id: 2,
               description: 'item 1',
-              vote_count: 1
+              vote_count: 1,
             },
             {
               id: 3,
               description: 'item 3',
-              vote_count: 2
+              vote_count: 2,
             },
-          ]
-        }
+          ],
+        },
       };
       retroCableDOM.onReceived(websocketData);
       expect('websocketRetroDataReceived').toHaveBeenDispatchedWith({

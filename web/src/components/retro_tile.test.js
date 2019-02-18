@@ -38,7 +38,7 @@ import RetroTile from './retro_tile';
 describe('Retro Tile', () => {
   const retro = {
     name: 'Cool Retro',
-    slug: 'cool-retro'
+    slug: 'cool-retro',
   };
 
   it('should show a retro name', () => {

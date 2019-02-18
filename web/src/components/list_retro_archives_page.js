@@ -47,7 +47,7 @@ export default class ListRetroArchivesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      isMobile: false
+      isMobile: false,
     };
   }
 
@@ -88,7 +88,7 @@ export default class ListRetroArchivesPage extends React.Component {
 
   getMenuItems() {
     let items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0}
+      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
     return items.filter((item) => {

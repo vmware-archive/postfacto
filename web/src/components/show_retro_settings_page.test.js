@@ -230,7 +230,7 @@ describe('ShowRetroSettingsPage', () => {
         ReactDOM.unmountComponentAtNode(root);
 
         expect('clearErrors').toHaveBeenDispatchedWith({
-          type: 'clearErrors'
+          type: 'clearErrors',
         });
       });
     });
@@ -253,8 +253,8 @@ describe('ShowRetroSettingsPage', () => {
           new_slug: 'the-new-retro-slug',
           old_slug: retro.slug,
           request_uuid: 'some-request-uuid',
-          video_link: new_video_url
-        }
+          video_link: new_video_url,
+        },
       });
     });
 
@@ -265,7 +265,7 @@ describe('ShowRetroSettingsPage', () => {
         type: 'routeToRetroPasswordSettings',
         data: {
           retro_id: '13',
-        }
+        },
       });
     });
 
@@ -274,7 +274,7 @@ describe('ShowRetroSettingsPage', () => {
 
       expect('backPressedFromSettings').toHaveBeenDispatchedWith({
         type: 'backPressedFromSettings',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
   };
@@ -314,18 +314,18 @@ function createRetro() {
       {
         id: 1,
         description: 'the happy retro item',
-        category: 'happy'
+        category: 'happy',
       },
       {
         id: 2,
         description: 'the meh retro item',
-        category: 'meh'
+        category: 'meh',
       },
       {
         id: 3,
         description: 'the sad retro item',
-        category: 'sad'
-      }
+        category: 'sad',
+      },
     ],
     action_items: [
       {
@@ -338,6 +338,6 @@ function createRetro() {
         description: 'action item 2',
         done: false,
       },
-    ]
+    ],
   };
 }

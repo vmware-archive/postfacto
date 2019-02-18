@@ -52,9 +52,9 @@ export default class GoogleLoginWrapper extends React.Component {
       this.props.onSuccess({
         profileObj: {
           email: mockedEmail + '@example.com',
-          name: 'my full name'
+          name: 'my full name',
         },
-        accessToken: window.mock_google_auth
+        accessToken: window.mock_google_auth,
       });
     }
   }

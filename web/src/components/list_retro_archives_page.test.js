@@ -84,7 +84,7 @@ describe('ListRetroArchivesPage', () => {
     $('.retro-back').simulate('click');
     expect('backPressedFromArchives').toHaveBeenDispatchedWith({
       type: 'backPressedFromArchives',
-      data: {retro_id: '789'}
+      data: {retro_id: '789'},
     });
   });
 
@@ -93,7 +93,7 @@ describe('ListRetroArchivesPage', () => {
       $($('.archives .archive-link a')[0]).simulate('click');
       expect('routeToRetroArchive').toHaveBeenDispatchedWith({
         type: 'routeToRetroArchive',
-        data: {retro_id: '789', archive_id: 123}
+        data: {retro_id: '789', archive_id: 123},
       });
     });
   });

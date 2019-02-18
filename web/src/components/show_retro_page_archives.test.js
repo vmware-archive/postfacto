@@ -114,7 +114,7 @@ describe('Show retro page archives', () => {
       $('.retro-back').simulate('click');
       expect('routeToRetroArchives').toHaveBeenDispatchedWith({
         type: 'routeToRetroArchives',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
 
@@ -178,7 +178,7 @@ describe('Show retro page archives', () => {
       $('.retro-back').simulate('click');
       expect('routeToRetroArchives').toHaveBeenDispatchedWith({
         type: 'routeToRetroArchives',
-        data: {retro_id: '13'}
+        data: {retro_id: '13'},
       });
     });
   });

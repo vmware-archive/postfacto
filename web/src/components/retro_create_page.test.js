@@ -218,7 +218,7 @@ describe('RetroCreatePage', () => {
           ReactDOM.unmountComponentAtNode(root);
 
           expect('clearErrors').toHaveBeenDispatchedWith({
-            type: 'clearErrors'
+            type: 'clearErrors',
           });
         });
       });

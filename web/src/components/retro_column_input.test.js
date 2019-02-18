@@ -52,7 +52,7 @@ describe('inputting a retro item', () => {
     $('textarea').simulate('keyPress', {key: 'Enter'});
     expect('createRetroItem').toHaveBeenDispatchedWith({
       type: 'createRetroItem',
-      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'}
+      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
     expect('textarea').toHaveValue('');
   });
@@ -64,7 +64,7 @@ describe('inputting a retro item', () => {
     $('.input-button').simulate('click');
     expect('createRetroItem').toHaveBeenDispatchedWith({
       type: 'createRetroItem',
-      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'}
+      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
     expect('textarea').toHaveValue('');
   });
@@ -90,7 +90,7 @@ describe('inputting an action item', () => {
     $('textarea').simulate('keyPress', {key: 'Enter'});
     expect('createRetroActionItem').toHaveBeenDispatchedWith({
       type: 'createRetroActionItem',
-      data: {retro_id: retroId, description: 'a new action item'}
+      data: {retro_id: retroId, description: 'a new action item'},
     });
     expect('textarea').toHaveValue('');
   });

@@ -49,14 +49,14 @@ import mainDispatcher from '../dispatchers/main_dispatcher';
 import analyticsDispatcher from '../dispatchers/analytics_dispatcher';
 
 const muiTheme = getMuiTheme({
-  fontFamily: 'Karla'
+  fontFamily: 'Karla',
 });
 
 class Application extends React.Component {
   static propTypes = {
     config: types.object.isRequired,
     store: types.object.isRequired,
-    router: types.oneOfType([types.object, types.func])
+    router: types.oneOfType([types.object, types.func]),
   };
 
   componentDidMount() {
@@ -92,5 +92,5 @@ export default useStore(useRouter(Application),
       console.info('dispatching event', event);
       /* eslint-enable no-console */
     },
-  }
+  },
 );

@@ -78,7 +78,7 @@ describe('Alert', () => {
         message: 'Alert Message',
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',
-        duration: 10000
+        duration: 10000,
       };
       ReactDOM.render(<Alert alert={alert}/>, root);
     });

@@ -72,18 +72,18 @@ function createRetros(count = 1) {
         {
           id: 1,
           description: 'the happy retro item',
-          category: 'happy'
+          category: 'happy',
         },
         {
           id: 2,
           description: 'the meh retro item',
-          category: 'meh'
+          category: 'meh',
         },
         {
           id: 3,
           description: 'the sad retro item',
-          category: 'sad'
-        }
+          category: 'sad',
+        },
       ],
       action_items: [
         {
@@ -96,7 +96,7 @@ function createRetros(count = 1) {
           description: 'action item 2',
           done: false,
         },
-      ]
+      ],
     });
   }
 
