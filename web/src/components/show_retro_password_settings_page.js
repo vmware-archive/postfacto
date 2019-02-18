@@ -53,7 +53,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
       current_password: '',
       confirm_new_password: '',
       new_password: '',
-      request_uuid: '',
       errors: {
         confirm_new_password: '',
         current_password: '',

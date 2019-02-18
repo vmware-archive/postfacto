@@ -87,8 +87,7 @@ export default class RetroActionsColumnItem extends React.Component {
   }
 
   onActionEditClicked() {
-    const {action_item} = this.props;
-    this.setState({isEditing: true, editedText: action_item.description});
+    this.setState({isEditing: true});
   }
 
   deleteItem() {

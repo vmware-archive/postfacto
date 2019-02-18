@@ -101,8 +101,7 @@ export default class RetroColumnItem extends React.Component {
   // event handlers
   onItemEditClicked(event) {
     event.stopPropagation();
-    const {item} = this.props;
-    this.setState({isEditing: true, editedText: item.description});
+    this.setState({isEditing: true});
   }
 
   onItemVoteClicked(event) {
@@ -173,7 +172,7 @@ export default class RetroColumnItem extends React.Component {
     const {isEditing} = this.state;
 
     if (isEditing && editedText.trim().length > 0) {
-      this.setState({isEditing: false, editedText: ''});
+      this.setState({isEditing: false});
       Actions.updateRetroItem({retro_id: retroId, item, description: editedText});
     }
   }
