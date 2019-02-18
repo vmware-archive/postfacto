@@ -160,7 +160,7 @@ describe('ApiDispatcher', () => {
 
   describe('updateRetroSettings', () => {
     function dispatchRetroData(new_slug, old_slug, is_private, request_uuid) {
-      let data = {
+      const data = {
         retro_id: 13,
         retro_name: 'the new retro name',
         new_slug: new_slug,

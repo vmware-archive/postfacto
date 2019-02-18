@@ -42,7 +42,7 @@ describe('CountdownTimer', () => {
 
   describe('when end time in the future', () => {
     beforeEach(() => {
-      let FOUR_MINS_FIVE_SECS = 245000;
+      const FOUR_MINS_FIVE_SECS = 245000;
       ReactDOM.render(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123"/>, root);
     });
 

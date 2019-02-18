@@ -37,7 +37,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ListRetroArchivesPage from './list_retro_archives_page';
 
 describe('ListRetroArchivesPage', () => {
-  let archives = [
+  const archives = [
     {
       created_at: '2016-09-03T21:48:43+11:00',
       id: 456,

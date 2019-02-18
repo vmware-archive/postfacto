@@ -105,7 +105,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   handleSubmitButtonClicked() {
-    let errors = Object.assign({}, this.state.errors);
+    const errors = Object.assign({}, this.state.errors);
 
     if (this.state.new_password !== this.state.confirm_new_password) {
       errors.confirm_new_password = 'Your passwords do not match!';
@@ -152,7 +152,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   renderMobileHeading() {
     const {isMobile} = this.state;
     const {retro} = this.props;
-    let menuItems = this.getMenuItems();
+    const menuItems = this.getMenuItems();
 
     return (
       <div className="retro-settings-heading-mobile">
@@ -168,7 +168,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   renderDesktopHeading() {
     const {isMobile} = this.state;
     const {retro} = this.props;
-    let menuItems = this.getMenuItems();
+    const menuItems = this.getMenuItems();
 
     return (
       <div className="retro-heading">
@@ -182,7 +182,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   getMenuItems() {
-    let items = [
+    const items = [
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 

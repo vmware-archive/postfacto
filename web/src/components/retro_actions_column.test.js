@@ -140,7 +140,7 @@ describe('RetroActionsColumn last-week', () => {
   });
 
   describe('when all action items on the same day', () => {
-    let retro_without_older = {
+    const retro_without_older = {
       id: 123,
       name: 'the retro name',
       video_link: 'http://the/video/link',

@@ -131,7 +131,7 @@ export default class RetroColumnInput extends React.Component {
   render() {
     const {category} = this.props;
 
-    let classNames = 'retro-item-add-input';
+    const classNames = 'retro-item-add-input';
 
     return (
       <div className="retro-item-list-input">

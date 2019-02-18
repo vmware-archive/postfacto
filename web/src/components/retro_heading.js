@@ -83,7 +83,7 @@ export default class RetroHeading extends React.PureComponent {
 
   getMenuItems() {
     const {archives, retro} = this.props;
-    let items = [
+    const items = [
       {
         title: 'Archive this retro',
         callback: this.handleArchiveRetro.bind(this),

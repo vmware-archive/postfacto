@@ -41,7 +41,7 @@ export default class Header extends React.Component {
 
   render() {
     const {config, retro} = this.props;
-    let documentTitle = retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title;
+    const documentTitle = retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title;
     return (
       <Helmet title={documentTitle}
               link={[

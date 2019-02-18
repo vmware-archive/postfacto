@@ -136,7 +136,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   handleChange(e) {
-    let errors = Object.assign({}, this.state.errors);
+    const errors = Object.assign({}, this.state.errors);
 
     const elementName = e.currentTarget.name;
     const elementValue = e.currentTarget.value;
@@ -209,7 +209,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   renderMobileHeading() {
     const {isMobile} = this.state;
     const {retro} = this.props;
-    let menuItems = this.getMenuItems();
+    const menuItems = this.getMenuItems();
 
     return (
       <div className="retro-heading row">
@@ -256,7 +256,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   getMenuItems() {
-    let items = [
+    const items = [
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 

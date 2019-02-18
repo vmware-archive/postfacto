@@ -37,7 +37,7 @@ import ShowRetroPage from './show_retro_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('Show retro page archives', () => {
-  let retro_archives = {
+  const retro_archives = {
     id: 13,
     name: 'retro name',
     send_archive_email: true,

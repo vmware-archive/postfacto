@@ -53,7 +53,7 @@ describe('RetroCable', () => {
     });
 
     it('should dispatch updating the store on receiving data', () => {
-      let websocketData = {
+      const websocketData = {
         retro: {
           id: 1,
           name: 'retro name',

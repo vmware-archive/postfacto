@@ -47,8 +47,8 @@ export default class RegistrationPage extends React.Component {
   }
 
   register() {
-    let companyName = ReactDOM.findDOMNode(this.refs.companyNameInput).value;
-    let fullName = ReactDOM.findDOMNode(this.refs.fullNameInput).value;
+    const companyName = ReactDOM.findDOMNode(this.refs.companyNameInput).value;
+    const fullName = ReactDOM.findDOMNode(this.refs.fullNameInput).value;
     Actions.createUser({
       access_token: this.props.accessToken,
       company_name: companyName,

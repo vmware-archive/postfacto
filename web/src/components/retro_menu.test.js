@@ -41,7 +41,7 @@ describe('RetroMenu', () => {
 
   beforeEach(() => {
     testCallback = jasmine.createSpy('testCallback');
-    let menuItems = [
+    const menuItems = [
       {
         title: 'Menu Item 1',
         callback: testCallback,

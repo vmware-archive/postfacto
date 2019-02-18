@@ -108,7 +108,7 @@ describe('RetroCreatePage', () => {
 
       describe('slug field has more than 236 characters', () => {
         beforeEach(() => {
-          let moreThan236Characters = 'a'.repeat(236 + 1);
+          const moreThan236Characters = 'a'.repeat(236 + 1);
           $retro_url.val(moreThan236Characters).simulate('change');
         });
 
@@ -132,7 +132,7 @@ describe('RetroCreatePage', () => {
         it('submitting should preserve the errors', () => {
           $('.retro-form-submit').simulate('click');
 
-          let errorMessage = combineElementsContent('.error-message');
+          const errorMessage = combineElementsContent('.error-message');
           expect(errorMessage).toContain('Your URL is too long!');
         });
       });
@@ -141,7 +141,7 @@ describe('RetroCreatePage', () => {
         beforeEach(() => {
           $retro_name.val('name').simulate('change');
 
-          let unrecognizedCharacters = 'foo*';
+          const unrecognizedCharacters = 'foo*';
           $retro_url.val(unrecognizedCharacters).simulate('change');
 
           $retro_password.val('password').simulate('change');

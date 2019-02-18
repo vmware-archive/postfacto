@@ -87,7 +87,7 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   getMenuItems() {
-    let items = [
+    const items = [
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
@@ -102,7 +102,7 @@ export default class ListRetroArchivesPage extends React.Component {
       return <div>Loading archives...</div>;
     }
     const {isMobile} = this.state;
-    let menuItems = this.getMenuItems();
+    const menuItems = this.getMenuItems();
 
     return (
       <div className={'retro-archives full-height' + (isMobile ? ' mobile-display' : '')}>

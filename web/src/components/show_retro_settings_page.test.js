@@ -125,7 +125,7 @@ describe('ShowRetroSettingsPage', () => {
 
       describe('has more than 236 characters', () => {
         beforeEach(() => {
-          let moreThan236Characters = 'a'.repeat(236 + 1);
+          const moreThan236Characters = 'a'.repeat(236 + 1);
           $retro_url.val(moreThan236Characters).simulate('change');
         });
 
@@ -148,14 +148,14 @@ describe('ShowRetroSettingsPage', () => {
         it('submitting should preserve the errors', () => {
           $('.retro-settings-form-submit').simulate('click');
 
-          let errorMessage = combineElementsContent('.error-message');
+          const errorMessage = combineElementsContent('.error-message');
           expect(errorMessage).toContain('Your URL is too long!');
         });
       });
 
       describe('has unrecognized characters', () => {
         beforeEach(() => {
-          let unrecognizedCharacters = 'foo*';
+          const unrecognizedCharacters = 'foo*';
           $retro_url.val(unrecognizedCharacters).simulate('change');
         });
 

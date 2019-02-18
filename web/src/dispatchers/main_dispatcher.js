@@ -105,8 +105,8 @@ export default {
     this.$store.refine('retro', 'items').remove(data.item);
   },
   retroItemSuccessfullyVoted({data}) {
-    let items = this.$store.refine('retro', 'items').get();
-    let item = items.find((item) => item.id === data.item.id);
+    const items = this.$store.refine('retro', 'items').get();
+    const item = items.find((item) => item.id === data.item.id);
     this.$store.refine('retro', 'items', item).merge(data.item);
   },
   retroItemSuccessfullyDone({data}) {
@@ -157,7 +157,7 @@ export default {
   },
   websocketRetroDataReceived({data}) {
     if (data.command === 'force_relogin') {
-      let session = this.$store.get('session');
+      const session = this.$store.get('session');
       if (session.request_uuid !== data.payload.originator_id) {
         this.dispatch({type: 'requireRetroRelogin', data: {retro: data.payload.retro}});
       }
@@ -172,17 +172,17 @@ export default {
     this.$store.refine('retro', 'action_items').remove(data.action_item);
   },
   retroActionItemSuccessfullyEdited({data}) {
-    let retro = this.$store.get('retro');
-    let action_item = retro.action_items.find((item) => item.id === data.action_item.id);
+    const retro = this.$store.get('retro');
+    const action_item = retro.action_items.find((item) => item.id === data.action_item.id);
     action_item.description = data.action_item.description;
     this.$store.merge({retro: retro});
   },
   doneRetroActionItemSuccessfullyToggled({data}) {
-    let retro = this.$store.get('retro');
-    let action_item = retro.action_items.find((item) => item.id === data.action_item.id);
+    const retro = this.$store.get('retro');
+    const action_item = retro.action_items.find((item) => item.id === data.action_item.id);
     action_item.done = data.action_item.done;
     this.$store.merge({retro: retro});
-    let analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
+    const analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
     this.dispatch({type: analyticsType, data: {retroId: retro.id}});
   },
   routeToHome() {

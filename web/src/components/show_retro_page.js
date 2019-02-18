@@ -129,12 +129,12 @@ export default class ShowRetroPage extends React.Component {
   }
 
   filterRetroArchives(retro) {
-    let archivesTimestamps = new Set();
+    const archivesTimestamps = new Set();
     this.getArchivesTimestamps(archivesTimestamps, retro.items);
     this.getArchivesTimestamps(archivesTimestamps, retro.action_items);
-    let orderedArchivesTimestamps = Array.from(archivesTimestamps).sort((a, b) => new Date(b) - new Date(a));
+    const orderedArchivesTimestamps = Array.from(archivesTimestamps).sort((a, b) => new Date(b) - new Date(a));
     if (orderedArchivesTimestamps.length > 0) {
-      let filteredRetro = retro;
+      const filteredRetro = retro;
       filteredRetro.items = this.filterItemByTimestamp(retro.items, orderedArchivesTimestamps[0]);
       filteredRetro.action_items = this.filterItemByTimestamp(retro.action_items, orderedArchivesTimestamps[0]);
       return filteredRetro;
@@ -348,7 +348,7 @@ export default class ShowRetroPage extends React.Component {
   render() {
     const {retro, archives} = this.props;
     const {isMobile, filtered_retro_archive} = this.state;
-    let retro_object = archives ? filtered_retro_archive : retro;
+    const retro_object = archives ? filtered_retro_archive : retro;
     if (!(retro_object && retro_object.id)) {
       return (<EmptyPage/>);
     }

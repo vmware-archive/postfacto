@@ -194,7 +194,7 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the retros', () => {
-      let data = {retros: [{name: 'The Retro Name', slug: 'the-retro-123'}]};
+      const data = {retros: [{name: 'The Retro Name', slug: 'the-retro-123'}]};
 
       subject.dispatch({type: 'retrosSuccessfullyFetched', data});
       expect(cursorSpy).toHaveBeenCalledWith(data);
@@ -207,7 +207,7 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the retro', () => {
-      let data = {retro: {name: 'The Retro Name', slug: 'the-retro-123'}};
+      const data = {retro: {name: 'The Retro Name', slug: 'the-retro-123'}};
 
       subject.dispatch({type: 'getRetroSettingsSuccessfullyReceived', data});
       expect(cursorSpy).toHaveBeenCalledWith(data);
@@ -377,7 +377,7 @@ describe('MainDispatcher', () => {
   describe('retroItemSuccessfullyVoted', () => {
     let itemFromApiResponse;
     beforeEach(() => {
-      let item = retro.items[0];
+      const item = retro.items[0];
       item.vote_count = 50;
       item.updated_at = '2016-10-04T23:19:05.269Z';
       itemFromApiResponse = {

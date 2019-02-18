@@ -87,7 +87,7 @@ class RetroLegalBanner extends LegalBanner {
   }
 
   markAsDismissed(retro) {
-    let retroBannersDismissed = JSON.parse(window.localStorage.retroBannersDismissed);
+    const retroBannersDismissed = JSON.parse(window.localStorage.retroBannersDismissed);
     retroBannersDismissed.push(retro.id);
     window.localStorage.retroBannersDismissed = JSON.stringify(retroBannersDismissed);
   }

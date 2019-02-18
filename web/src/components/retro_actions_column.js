@@ -53,7 +53,7 @@ export default class RetroActionsColumn extends React.Component {
 
   renderActionItems() {
     const {category, archives, retro, retroId, retro: {action_items}} = this.props;
-    let that = this;
+    const that = this;
 
     if (!action_items) {
       return null;
@@ -64,8 +64,8 @@ export default class RetroActionsColumn extends React.Component {
         if (archives) {
           return category === 'current';
         }
-        let createdAt = new Date(action_item.created_at);
-        let lastWeekDate = that.getDateOfLatestItemThatIsNotToday();
+        const createdAt = new Date(action_item.created_at);
+        const lastWeekDate = that.getDateOfLatestItemThatIsNotToday();
 
         if (category === 'current') {
           return that.isToday(createdAt);
@@ -97,12 +97,12 @@ export default class RetroActionsColumn extends React.Component {
   }
 
   renderCurrentDateString() {
-    let date = new Date(Date.now());
+    const date = new Date(Date.now());
     return monthNames[date.getMonth()] + ' ' + date.getDate();
   }
 
   renderLastWeekDateString() {
-    let date = this.getDateOfLatestItemThatIsNotToday();
+    const date = this.getDateOfLatestItemThatIsNotToday();
     if (date) {
       return monthNames[date.getMonth()] + ' ' + date.getDate();
     }
@@ -111,11 +111,11 @@ export default class RetroActionsColumn extends React.Component {
 
   getDateOfLatestItemThatIsNotToday() {
     const {retro: {action_items}} = this.props;
-    let that = this;
-    let timestamps = new Set();
+    const that = this;
+    const timestamps = new Set();
     jQuery.each(action_items, (_, action_item) => {
       if (action_item.created_at) {
-        let date = new Date(action_item.created_at);
+        const date = new Date(action_item.created_at);
         if (date && !that.isToday(date)) {
           const thing = date.setHours(0, 0, 0, 0);
           timestamps.add(thing);

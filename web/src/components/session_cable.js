@@ -70,7 +70,7 @@ export default class SessionCable extends React.Component {
   }
 
   subscribe(cable) {
-    let subscription = cable.subscriptions.create(
+    const subscription = cable.subscriptions.create(
       {channel: 'SessionsChannel'},
       {received: this.onReceived},
     );

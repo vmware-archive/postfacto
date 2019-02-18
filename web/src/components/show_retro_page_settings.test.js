@@ -40,7 +40,7 @@ describe('Retro settings', () => {
   let originalGetIsMobile;
 
   beforeEach(() => {
-    let retro = createRetro();
+    const retro = createRetro();
 
     originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
     ShowRetroPage.prototype.getIsMobile = () => false;

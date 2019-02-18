@@ -42,7 +42,7 @@ import TestUtils from 'react-dom/test-utils';
 
 describe('Router', () => {
   let rendered;
-  let fakeRouter = {get: () => {}};
+  const fakeRouter = {get: () => {}};
 
   beforeEach(() => {
     rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter}/>, root);
@@ -78,14 +78,14 @@ describe('Router', () => {
     it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
       rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found={true}/>, root);
 
-      let pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
+      const pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
       expect(pages.length).toEqual(1);
     });
 
     it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
       rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found={false}/>, root);
 
-      let pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
+      const pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
       expect(pages.length).toEqual(0);
     });
   });

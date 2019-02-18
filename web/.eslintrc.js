@@ -49,7 +49,6 @@ module.exports = {
     'one-var-declaration-per-line': ['off'],
     'operator-linebreak': ['off', 'after'],
     'padded-blocks': ['off'],
-    'prefer-const': ['off'],
     'prefer-destructuring': ['off'],
     'prefer-template': ['off'],
     'react/button-has-type': ['off'],

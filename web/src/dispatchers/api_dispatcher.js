@@ -54,7 +54,7 @@ export default {
     Logger.info('retroCreate');
     return RetroApi.createRetro(request.data).then(([status, data]) => {
       if (status >= 200 && status < 400) {
-        let token = data.token;
+        const token = data.token;
         if (token) {
           setApiToken(data.retro.slug, token);
         }
@@ -111,7 +111,7 @@ export default {
     Logger.info('loginToRetro');
     return RetroApi.loginToRetro(data).then(([status, response]) => {
       if (status >= 200 && status < 400) {
-        let token = response.token;
+        const token = response.token;
         if (token) {
           setApiToken(data.retro_id, token);
         }

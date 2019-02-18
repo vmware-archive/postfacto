@@ -50,7 +50,7 @@ describe('Alert', () => {
 
   describe('when message is not empty', () => {
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',
@@ -74,7 +74,7 @@ describe('Alert', () => {
 
   describe('when a duration has been specified', () => {
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',
@@ -94,7 +94,7 @@ describe('Alert', () => {
 
   describe('when the alert is set to sticky', () => {
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',
@@ -112,7 +112,7 @@ describe('Alert', () => {
 
   describe('when the checkIcon is set to true', () => {
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         checkIcon: true,
         sticky: true,
@@ -127,7 +127,7 @@ describe('Alert', () => {
 
   describe('when the checkIcon is set to false', () => {
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         checkIcon: false,
         sticky: true,
@@ -141,12 +141,12 @@ describe('Alert', () => {
   });
 
   describe('when component is updated', () => {
-    let renderAlert = (alert) => {
+    const renderAlert = (alert) => {
       return ReactDOM.render(<Alert alert={alert}/>, root);
     };
 
     beforeEach(() => {
-      let alert = {
+      const alert = {
         message: 'Alert Message',
         linkMessage: 'Link Message',
         linkUrl: 'http://url/',

@@ -62,7 +62,7 @@ export default class RetroWebsocket extends React.Component {
   }
 
   createCable(url) {
-    let cable = ActionCable.createConsumer(url);
+    const cable = ActionCable.createConsumer(url);
     this.setState({cable: cable});
   }
 

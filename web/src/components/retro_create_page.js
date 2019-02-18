@@ -75,7 +75,7 @@ export default class RetroCreatePage extends React.Component {
   }
 
   submit() {
-    let errors = {};
+    const errors = {};
     errors.name = this.validateName(this.state.name);
     errors.slug = this.validateSlug(this.state.slug);
     errors.password = this.validatePassword(this.state.password);
@@ -127,7 +127,7 @@ export default class RetroCreatePage extends React.Component {
   };
 
   change = e => {
-    let errors = Object.assign({}, this.state.errors);
+    const errors = Object.assign({}, this.state.errors);
 
     const elementName = e.currentTarget.name;
     const elementValue = e.currentTarget.value;
