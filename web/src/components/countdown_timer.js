@@ -62,9 +62,7 @@ export default class CountdownTimer extends React.Component {
     clearInterval(this.state.interval);
   }
 
-  getCurrentTimestampInMs = () => {
-    return Date.now();
-  };
+  getCurrentTimestampInMs = () => Date.now();
 
   startTimer = () => {
     clearInterval(this.state.interval);
@@ -74,9 +72,7 @@ export default class CountdownTimer extends React.Component {
     });
   };
 
-  getRemainingTimeInMs = () => {
-    return Math.max(this.props.endTimestampInMs - this.getCurrentTimestampInMs(), 0);
-  };
+  getRemainingTimeInMs = () => Math.max(this.props.endTimestampInMs - this.getCurrentTimestampInMs(), 0);
 
   updateRemainingTime = () => {
     const remainingTimeInMs = this.getRemainingTimeInMs();

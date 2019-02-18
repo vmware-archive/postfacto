@@ -267,9 +267,7 @@ export default class ShowRetroSettingsPage extends React.Component {
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
-    return items.filter((item) => {
-      return item.isApplicable;
-    });
+    return items.filter((item) => item.isApplicable);
   }
 
   getCurrentHost() {

@@ -38,18 +38,14 @@ describe('fetchJson', () => {
       spyOn(window, 'fetch').and.callFake(() => Promise.reject(new Error('some error')));
     });
 
-    it('returns empty array', () => {
-      return fetchJson('http://example.com/some-url')
-        .then((results) => {
-          expect(results).toEqual([]);
-        });
+    it('returns empty array', async () => {
+      const results = await fetchJson('http://example.com/some-url');
+      expect(results).toEqual([]);
     });
 
-    it('dispatches apiServerNotFound', () => {
-      return fetchJson('http://example.com/some-url')
-        .then(() => {
-          expect('apiServerNotFound').toHaveBeenDispatched();
-        });
+    it('dispatches apiServerNotFound', async () => {
+      await fetchJson('http://example.com/some-url');
+      expect('apiServerNotFound').toHaveBeenDispatched();
     });
   });
 
@@ -58,18 +54,14 @@ describe('fetchJson', () => {
       spyOn(window, 'fetch').and.returnValue(Promise.resolve({status: 204, json: () => Promise.resolve('')}));
     });
 
-    it('returns the status code and empty response string', () => {
-      return fetchJson('http://example.com/some-url')
-        .then((results) => {
-          expect(results).toEqual([204, '']);
-        });
+    it('returns the status code and empty response string', async () => {
+      const results = await fetchJson('http://example.com/some-url');
+      expect(results).toEqual([204, '']);
     });
 
-    it('does not dispatch apiServerNotFound', () => {
-      return fetchJson('http://example.com/some-url')
-        .then(() => {
-          expect('apiServerNotFound').not.toHaveBeenDispatched();
-        });
+    it('does not dispatch apiServerNotFound', async () => {
+      await fetchJson('http://example.com/some-url');
+      expect('apiServerNotFound').not.toHaveBeenDispatched();
     });
   });
 });

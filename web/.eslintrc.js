@@ -11,7 +11,6 @@ module.exports = {
     '$': 'readonly',
   },
   'rules': {
-    'arrow-body-style': ['off'],
     'camelcase': ['off'],
     'class-methods-use-this': ['off'],
     'global-require': ['off'],

@@ -142,9 +142,7 @@ describe('Alert', () => {
 
   describe('when component is updated', () => {
     /* eslint-disable react/no-render-return-value */ // There are bigger problems to worry about here
-    const renderAlert = (alert) => {
-      return ReactDOM.render(<Alert alert={alert}/>, root);
-    };
+    const renderAlert = (alert) => ReactDOM.render(<Alert alert={alert}/>, root);
     /* eslint-enable react/no-render-return-value */
 
     beforeEach(() => {

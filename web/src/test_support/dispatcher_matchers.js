@@ -52,9 +52,7 @@ expect.extend({
       .map((dispatchCall) => dispatchCall.args[0])
       .filter(({type}) => type === actual);
 
-    const pass = observed.some((params) => {
-      return this.equals(params, expected);
-    });
+    const pass = observed.some((params) => this.equals(params, expected));
 
     const filtered = observed.map((o) => this.utils.printReceived(o));
 

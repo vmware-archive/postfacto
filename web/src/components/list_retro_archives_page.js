@@ -75,9 +75,7 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   sortedArchives(archives) {
-    return archives.sort((a, b) => {
-      return moment(b.created_at) - moment(a.created_at);
-    });
+    return archives.sort((a, b) => (moment(b.created_at) - moment(a.created_at)));
   }
 
   onCurrentRetroClicked() {
@@ -98,9 +96,7 @@ export default class ListRetroArchivesPage extends React.Component {
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
-    return items.filter((item) => {
-      return item.isApplicable;
-    });
+    return items.filter((item) => item.isApplicable);
   }
 
   render() {
@@ -134,17 +130,15 @@ export default class ListRetroArchivesPage extends React.Component {
         <div className="archives">
           <div className="row">
             {
-              this.sortedArchives(archives).map((a) => {
-                return (
-                  <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
-                    <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
-                      <a href={`/retros/${retroId}/archives/${a.id}`}>
-                        {moment(a.created_at).local().format('DD MMMM YYYY')}
-                      </a>
-                    </div>
+              this.sortedArchives(archives).map((a) => (
+                <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
+                  <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
+                    <a href={`/retros/${retroId}/archives/${a.id}`}>
+                      {moment(a.created_at).local().format('DD MMMM YYYY')}
+                    </a>
                   </div>
-                );
-              })
+                </div>
+              ))
             }
           </div>
         </div>
