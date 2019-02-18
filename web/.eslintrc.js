@@ -36,7 +36,6 @@ module.exports = {
     'no-plusplus': ['off'],
     'no-shadow': ['off'],
     'no-use-before-define': ['off'],
-    'object-curly-newline': ['off'],
     'object-shorthand': ['off'],
     'padded-blocks': ['off'],
     'prefer-destructuring': ['off'],
@@ -71,6 +70,9 @@ module.exports = {
     'react/sort-comp': ['off'],
     'space-before-function-paren': ['off'],
 
+    'object-curly-newline': ['error', {
+      'consistent': true,
+    }],
     'object-curly-spacing': ['error', 'never'],
     'operator-linebreak': ['error', 'after'],
     'react/jsx-tag-spacing': ['error', {
