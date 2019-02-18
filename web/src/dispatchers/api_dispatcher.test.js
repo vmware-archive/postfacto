@@ -1108,7 +1108,7 @@ describe('ApiDispatcher', () => {
       expect('/users').toHaveBeenRequestedWith({
         method: 'POST',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
         data: {
@@ -1145,7 +1145,7 @@ describe('ApiDispatcher', () => {
       expect('/sessions').toHaveBeenRequestedWith({
         method: 'POST',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
         data: {
@@ -1194,7 +1194,7 @@ describe('ApiDispatcher', () => {
       expect('/config').toHaveBeenRequestedWith({
         method: 'GET',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
       });
