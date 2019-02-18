@@ -47,7 +47,7 @@ describe('ApiDispatcher', () => {
     cursorSpy = jasmine.createSpy('callback');
     subject = SpyDispatcher;
 
-    //dispatch is spied on in spec_helper
+    // dispatch is spied on in spec_helper
     let dispatchCount = 0;
     realDispatchLevels = 1;
     subject.dispatch.and.callFake((action) => {
@@ -59,7 +59,7 @@ describe('ApiDispatcher', () => {
       }
     });
 
-    //prevent console logs
+    // prevent console logs
     spyOn(subject, 'onDispatch');
     retro = {
       id: 1,

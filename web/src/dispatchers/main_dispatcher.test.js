@@ -40,10 +40,10 @@ describe('MainDispatcher', () => {
     cursorSpy = jasmine.createSpy('callback');
     subject = SpyDispatcher;
 
-    //dispatch is spied on in spec_helper
+    // dispatch is spied on in spec_helper
     subject.dispatch.and.callThrough();
 
-    //prevent console logs
+    // prevent console logs
     spyOn(subject, 'onDispatch');
 
     router = {

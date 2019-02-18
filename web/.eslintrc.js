@@ -88,7 +88,6 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/self-closing-comp': ['off'],
     'react/sort-comp': ['off'],
-    'spaced-comment': ['off'],
     'space-before-function-paren': ['off'],
     'quote-props': ['error', 'consistent'],
   },
