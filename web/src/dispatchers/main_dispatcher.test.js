@@ -30,7 +30,7 @@
  */
 
 import Cursor from 'pui-cursor';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 describe('MainDispatcher', () => {
   let subject, cursorSpy, retro, retro_archives, router;
@@ -38,7 +38,7 @@ describe('MainDispatcher', () => {
   beforeEach(() => {
     Cursor.async = false;
     cursorSpy = jasmine.createSpy('callback');
-    subject = Dispatcher;
+    subject = SpyDispatcher;
 
     //dispatch is spied on in spec_helper
     subject.dispatch.and.callThrough();

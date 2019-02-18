@@ -30,6 +30,7 @@
  */
 
 import RetroTile from './retro_tile';
+import ReactDOM from 'react-dom';
 import '../spec_helper';
 
 describe('Retro Tile', () => {

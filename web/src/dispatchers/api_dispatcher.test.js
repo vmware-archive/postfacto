@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 import '../test_support/fetch_matchers';
 import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
@@ -45,7 +45,7 @@ describe('ApiDispatcher', () => {
 
     Cursor.async = false;
     cursorSpy = jasmine.createSpy('callback');
-    subject = Dispatcher;
+    subject = SpyDispatcher;
 
     //dispatch is spied on in spec_helper
     let dispatchCount = 0;

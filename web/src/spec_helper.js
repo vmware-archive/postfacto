@@ -39,9 +39,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 global.React = React;
-global.ReactDOM = ReactDOM;
-global.Dispatcher = Dispatcher;
 global.$ = jQuery;
+
+export const SpyDispatcher = Dispatcher;
 
 export function combineElementsContent(className) {
   let message = '';
