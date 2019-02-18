@@ -61,7 +61,6 @@ module.exports = {
     'react/no-unused-state': ['off'],
     'react/prefer-stateless-function': ['off'],
     'react/prop-types': ['off'],
-    'react/no-render-return-value': ['off'],
     'react/require-default-props': ['off'],
     'react/self-closing-comp': ['off'],
     'react/sort-comp': ['off'],
