@@ -29,7 +29,6 @@ module.exports = {
     'jsx-a11y/no-autofocus': ['off'],
     'jsx-a11y/no-static-element-interactions': ['off'],
     'max-len': ['off'],
-    'newline-per-chained-call': ['off'],
     'no-bitwise': ['off'],
     'no-console': ['off'],
     'no-param-reassign': ['off'],

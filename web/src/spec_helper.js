@@ -55,7 +55,11 @@ beforeEach(() => {
   global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
 
   global.root = jQuery('<div id="root" />').get(0);
-  jQuery('body').find('#root').remove().end().append(global.root);
+  jQuery('body')
+    .find('#root')
+    .remove()
+    .end()
+    .append(global.root);
 
   Application.reset(); // set global state such as p-flux.Actions
 
