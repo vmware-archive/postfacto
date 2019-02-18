@@ -79,7 +79,7 @@ export default class RetroColumnInput extends React.Component {
     if (category === 'action') {
       Actions.createRetroActionItem({retro_id: retroId, description: inputText});
     } else {
-      Actions.createRetroItem({retro_id: retroId, category: category, description: inputText});
+      Actions.createRetroItem({retro_id: retroId, category, description: inputText});
     }
     this.setState({inputText: '', multiline: ''});
   }

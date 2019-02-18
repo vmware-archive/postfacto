@@ -144,7 +144,7 @@ export default class RetroCreatePage extends React.Component {
       errors.password = this.validatePassword(elementValue);
     }
 
-    this.setState({[elementName]: elementValue, errors: errors});
+    this.setState({[elementName]: elementValue, errors});
   };
 
   toggleCheckbox = e => {

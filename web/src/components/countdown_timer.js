@@ -78,7 +78,7 @@ export default class CountdownTimer extends React.Component {
 
   updateRemainingTime = () => {
     const remainingTimeInMs = this.getRemainingTimeInMs();
-    this.setState({remainingTimeInMs: remainingTimeInMs});
+    this.setState({remainingTimeInMs});
     if (remainingTimeInMs <= 0) {
       clearInterval(this.state.interval);
     }

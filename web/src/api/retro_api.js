@@ -59,12 +59,12 @@ export default {
       accessToken: token,
       body: JSON.stringify({
         retro: {
-          name: name,
-          slug: slug,
-          is_private: is_private,
-          video_link: video_link,
+          name,
+          slug,
+          is_private,
+          video_link,
         },
-        request_uuid: request_uuid,
+        request_uuid,
       }),
     });
   },

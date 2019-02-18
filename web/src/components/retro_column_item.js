@@ -101,7 +101,7 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, archives} = this.props;
     if (this.isEnabled() && !this.isDone() && !archives) {
-      Actions.voteRetroItem({item: item, retro_id: retroId});
+      Actions.voteRetroItem({item, retro_id: retroId});
     }
   }
 
@@ -114,7 +114,7 @@ export default class RetroColumnItem extends React.Component {
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && !isMobile) {
       item.done = true;
-      Actions.doneRetroItem({item: item, retroId: retroId});
+      Actions.doneRetroItem({item, retroId});
     }
   }
 
@@ -123,7 +123,7 @@ export default class RetroColumnItem extends React.Component {
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && this.isDone() && !isMobile) {
       item.done = false;
-      Actions.undoneRetroItem({item: item, retroId: retroId});
+      Actions.undoneRetroItem({item, retroId});
     } else {
       this.toggleHighlight();
     }
@@ -155,7 +155,7 @@ export default class RetroColumnItem extends React.Component {
       if (this.isHighlighted()) {
         Actions.unhighlightRetroItem({retro_id: retroId});
       } else {
-        Actions.highlightRetroItem({retro_id: retroId, item: item});
+        Actions.highlightRetroItem({retro_id: retroId, item});
       }
     }
   }
@@ -166,14 +166,14 @@ export default class RetroColumnItem extends React.Component {
 
     if (isEditing && editedText.trim().length > 0) {
       this.setState({isEditing: false, editedText: ''});
-      Actions.updateRetroItem({retro_id: retroId, item: item, description: editedText});
+      Actions.updateRetroItem({retro_id: retroId, item, description: editedText});
     }
   }
 
   deleteItem() {
     const {item, retroId} = this.props;
     if (this.isEnabled()) {
-      Actions.deleteRetroItem({item: item, retro_id: retroId});
+      Actions.deleteRetroItem({item, retro_id: retroId});
     }
   }
 

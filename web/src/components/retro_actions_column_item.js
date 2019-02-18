@@ -88,7 +88,7 @@ export default class RetroActionsColumnItem extends React.Component {
 
   deleteItem() {
     const {retroId, action_item} = this.props;
-    Actions.deleteRetroActionItem({retro_id: retroId, action_item: action_item});
+    Actions.deleteRetroActionItem({retro_id: retroId, action_item});
   }
 
   saveActionItem(editedText) {

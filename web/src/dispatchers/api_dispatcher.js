@@ -134,7 +134,7 @@ export default {
   deleteRetroItem({data: {retro_id, item}}) {
     Logger.info('deleteRetroItem');
     RetroApi.deleteRetroItem(retro_id, item.id, getApiToken(retro_id));
-    this.dispatch({type: 'retroItemSuccessfullyDeleted', data: {retro_id: retro_id, item: item}});
+    this.dispatch({type: 'retroItemSuccessfullyDeleted', data: {retro_id, item}});
   },
   voteRetroItem({data: {retro_id, item}}) {
     Logger.info('voteRetroItem');
@@ -164,12 +164,12 @@ export default {
   doneRetroItem({data: {retroId, item}}) {
     Logger.info('doneRetroItem');
     RetroApi.doneRetroItem(retroId, item.id, getApiToken(retroId));
-    this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: retroId, itemId: item.id}});
+    this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId, itemId: item.id}});
   },
   undoneRetroItem({data: {retroId, item}}) {
     Logger.info('undoneRetroItem');
     RetroApi.undoneRetroItem(retroId, item.id, getApiToken(retroId));
-    this.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId: retroId, item: item}});
+    this.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId, item}});
   },
   extendTimer({data: {retro_id}}) {
     Logger.info('extendTimer');
@@ -200,7 +200,7 @@ export default {
   deleteRetroActionItem({data: {retro_id, action_item}}) {
     Logger.info('deleteRetroActionItem');
     RetroApi.deleteRetroActionItem(retro_id, action_item.id, getApiToken(retro_id));
-    this.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item: action_item}});
+    this.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item}});
   },
   editRetroActionItem({data: {retro_id, action_item_id, description}}) {
     Logger.info('editRetroActionItem');
@@ -212,9 +212,9 @@ export default {
     Logger.info('getRetroArchive');
     return RetroApi.getRetroArchive(retro_id, archive_id, getApiToken(retro_id)).then(([status, data]) => {
       if (status >= 200 && status < 400) {
-        this.dispatch({type: 'retroArchiveSuccessfullyFetched', data: data});
+        this.dispatch({type: 'retroArchiveSuccessfullyFetched', data});
       } else if (status === 403) {
-        this.dispatch({type: 'requireRetroLogin', data: {retro_id: retro_id}});
+        this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
       } else if (status === 404) {
         this.dispatch({type: 'notFound'});
       }
@@ -224,7 +224,7 @@ export default {
     Logger.info('getRetroArchives');
     return RetroApi.getRetroArchives(retro_id, getApiToken(retro_id)).then(([status, data]) => {
       if (status >= 200 && status < 400) {
-        this.dispatch({type: 'retroArchivesSuccessfullyFetched', data: data});
+        this.dispatch({type: 'retroArchivesSuccessfullyFetched', data});
       } else if (status === 403) {
         this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
       } else if (status === 404) {
@@ -242,7 +242,7 @@ export default {
   createSession({data: {access_token, email, name}}) {
     return RetroApi.createSession(access_token).then(([status, data]) => {
       if (status === 200) {
-        this.dispatch({type: 'loggedInSuccessfully', data: data});
+        this.dispatch({type: 'loggedInSuccessfully', data});
       } else if (status === 404) {
         this.dispatch({type: 'redirectToRegistration', data: {access_token, email, name}});
       }
@@ -262,7 +262,7 @@ export default {
           data: {checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'},
         });
       } else if (status === 403) {
-        this.dispatch({type: 'requireRetroLogin', data: {retro_id: retro_id}});
+        this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
       } else if (status === 422) {
         this.dispatch({type: 'retroSettingsUnsuccessfullyUpdated', data});
       }
@@ -273,8 +273,8 @@ export default {
     return RetroApi.updateRetroPassword(retro_id, current_password, new_password, request_uuid, getApiToken(retro_id))
       .then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'retroPasswordSuccessfullyUpdated', data: {retro_id: retro_id, token: data.token}});
-          this.dispatch({type: 'routeToRetroSettings', data: {retro_id: retro_id}});
+          this.dispatch({type: 'retroPasswordSuccessfullyUpdated', data: {retro_id, token: data.token}});
+          this.dispatch({type: 'routeToRetroSettings', data: {retro_id}});
           this.dispatch({type: 'showAlert', data: {checkIcon: true, message: 'Password changed'}});
         } else if (status === 422) {
           this.dispatch({type: 'retroPasswordUnsuccessfullyUpdated', data});

@@ -133,7 +133,7 @@ describe('ApiDispatcher', () => {
         },
       });
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro, token: 'the-token'});
+      request.succeed({retro, token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
       expect('retroSuccessfullyCreated').toHaveBeenDispatched();
@@ -164,17 +164,17 @@ describe('ApiDispatcher', () => {
       const data = {
         retro_id: 13,
         retro_name: 'the new retro name',
-        new_slug: new_slug,
-        old_slug: old_slug,
-        is_private: is_private,
-        request_uuid: request_uuid,
+        new_slug,
+        old_slug,
+        is_private,
+        request_uuid,
       };
 
-      subject.dispatch({type: 'updateRetroSettings', data: data});
+      subject.dispatch({type: 'updateRetroSettings', data});
     }
 
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       // test appears to be set up badly and requires both retro ID types:
       // (previously responded to all getItem calls with the token)
       localStorage.setItem('apiToken-retro-slug-123', 'the-auth-token');
@@ -314,7 +314,7 @@ describe('ApiDispatcher', () => {
 
   describe('updateRetroPassword', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-13', 'the-auth-token');
 
       subject.dispatch({
@@ -391,7 +391,7 @@ describe('ApiDispatcher', () => {
 
   describe('getRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-1', 'the-token');
       subject.dispatch({type: 'getRetro', data: {id: 1}});
     });
@@ -500,7 +500,7 @@ describe('ApiDispatcher', () => {
 
   describe('getRetroSettings', () => {
     const doSetup = () => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroSettings', data: {id: 'retro-slug-123'}});
     };
 
@@ -549,7 +549,7 @@ describe('ApiDispatcher', () => {
 
   describe('loginToRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'loginToRetro', data: {retro_id: 15, password: 'pa55word'}});
     });
 
@@ -585,9 +585,9 @@ describe('ApiDispatcher', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item: item}});
+      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
       expect('/retros/1/items/2').toHaveBeenRequestedWith({
@@ -600,7 +600,7 @@ describe('ApiDispatcher', () => {
       });
       expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item},
+        data: {retro_id: 1, item},
       });
     });
   });
@@ -608,7 +608,7 @@ describe('ApiDispatcher', () => {
   describe('createRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroItem', data: {retro_id: 1, description: 'happy item', category: 'happy'}});
     });
 
@@ -643,7 +643,7 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
       item = retro.items[0];
-      subject.dispatch({type: 'updateRetroItem', data: {retro_id: 1, item: item, description: 'updated description'}});
+      subject.dispatch({type: 'updateRetroItem', data: {retro_id: 1, item, description: 'updated description'}});
     });
 
     it('makes an api PATCH to /retros/:retro_id/items/:id', () => {
@@ -665,9 +665,9 @@ describe('ApiDispatcher', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item: item}});
+      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
 
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
@@ -681,7 +681,7 @@ describe('ApiDispatcher', () => {
       });
       expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item},
+        data: {retro_id: 1, item},
       });
     });
   });
@@ -691,8 +691,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/items/:item_id/vote', () => {
       expect('/retros/1/items/2/vote').toHaveBeenRequestedWith({
@@ -705,12 +705,12 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item: item});
+      request.succeed({item});
       Promise.runAll();
 
       expect('retroItemSuccessfullyVoted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyVoted',
-        data: {item: item},
+        data: {item},
       });
     });
   });
@@ -721,7 +721,7 @@ describe('ApiDispatcher', () => {
 
       localStorage.setItem('apiToken-1', 'the-token');
       retro.highlighted_item_id = 2;
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
 
       expect('/retros/1/discussion/transition').toHaveBeenRequestedWith({
@@ -735,7 +735,7 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
+      request.succeed({retro});
       Promise.runAll();
 
       expect('checkAllRetroItemsDone').toHaveBeenDispatchedWith({
@@ -749,8 +749,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/discussion', () => {
       expect('/retros/1/discussion').toHaveBeenRequestedWith({
@@ -764,12 +764,12 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
+      request.succeed({retro});
       Promise.runAll();
 
       expect('retroItemSuccessfullyHighlighted').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyHighlighted',
-        data: {retro: retro},
+        data: {retro},
       });
     });
   });
@@ -777,7 +777,7 @@ describe('ApiDispatcher', () => {
   describe('unhighlightRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'unhighlightRetroItem', data: {retro_id: 1}});
     });
     it('makes an api DELETE to /retros/:id/discussion', () => {
@@ -798,8 +798,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item}});
     });
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
       expect('/retros/1/items/2/done').toHaveBeenRequestedWith({
@@ -814,7 +814,7 @@ describe('ApiDispatcher', () => {
       item = retro.items[0];
       item.done = true;
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item: item});
+      request.succeed({item});
       Promise.runAll();
 
       expect('retroItemSuccessfullyDone').toHaveBeenDispatchedWith({
@@ -830,8 +830,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item}});
     });
 
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
@@ -853,7 +853,7 @@ describe('ApiDispatcher', () => {
 
       expect('retroItemSuccessfullyUndone').toHaveBeenDispatchedWith({
         type: 'retroItemSuccessfullyUndone',
-        data: {retroId: 1, item: item},
+        data: {retroId: 1, item},
       });
     });
   });
@@ -861,7 +861,7 @@ describe('ApiDispatcher', () => {
   describe('extendTimer', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'extendTimer', data: {retro_id: 1}});
     });
 
@@ -876,12 +876,12 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
+      request.succeed({retro});
       Promise.runAll();
 
       expect('extendTimerSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'extendTimerSuccessfullyDone',
-        data: {retro: retro},
+        data: {retro},
       });
     });
   });
@@ -889,7 +889,7 @@ describe('ApiDispatcher', () => {
   describe('archiveRetro', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'archiveRetro', data: {retro: {slug: 1, send_archive_email: true}}});
     });
 
@@ -907,12 +907,12 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
+      request.succeed({retro});
       Promise.runAll();
 
       expect('archiveRetroSuccessfullyDone').toHaveBeenDispatchedWith({
         type: 'archiveRetroSuccessfullyDone',
-        data: {retro: retro},
+        data: {retro},
       });
     });
   });
@@ -920,7 +920,7 @@ describe('ApiDispatcher', () => {
   describe('createRetroActionItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroActionItem', data: {retro_id: 1, description: 'a new action item'}});
     });
 
@@ -945,7 +945,7 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'doneRetroActionItem', data: {retro_id: 1, action_item_id: 1, done: true}});
     });
 
@@ -963,12 +963,12 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item: action_item});
+      request.succeed({action_item});
       Promise.runAll();
 
       expect('doneRetroActionItemSuccessfullyToggled').toHaveBeenDispatchedWith({
         type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item: action_item},
+        data: {action_item},
       });
     });
   });
@@ -978,8 +978,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item: action_item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item}});
     });
 
     it('makes an api DELETE to /retros/:id/action_items/:action_item_id', () => {
@@ -993,7 +993,7 @@ describe('ApiDispatcher', () => {
       });
       expect('retroActionItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
         type: 'retroActionItemSuccessfullyDeleted',
-        data: {action_item: action_item},
+        data: {action_item},
       });
     });
   });
@@ -1003,7 +1003,7 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
 
       subject.dispatch({
         type: 'editRetroActionItem',
@@ -1022,7 +1022,7 @@ describe('ApiDispatcher', () => {
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item: action_item});
+      request.succeed({action_item});
       Promise.runAll();
 
       expect('retroActionItemSuccessfullyEdited').toHaveBeenDispatchedWith({
@@ -1035,7 +1035,7 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchives', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchives', data: {retro_id: '1'}});
     });
 
@@ -1068,7 +1068,7 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchive', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchive', data: {retro_id: '1', archive_id: '1'}});
     });
 

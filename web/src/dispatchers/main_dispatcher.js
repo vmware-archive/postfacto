@@ -175,13 +175,13 @@ export default {
     const retro = this.$store.get('retro');
     const action_item = retro.action_items.find((item) => item.id === data.action_item.id);
     action_item.description = data.action_item.description;
-    this.$store.merge({retro: retro});
+    this.$store.merge({retro});
   },
   doneRetroActionItemSuccessfullyToggled({data}) {
     const retro = this.$store.get('retro');
     const action_item = retro.action_items.find((item) => item.id === data.action_item.id);
     action_item.done = data.action_item.done;
-    this.$store.merge({retro: retro});
+    this.$store.merge({retro});
     const analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
     this.dispatch({type: analyticsType, data: {retroId: retro.id}});
   },

@@ -149,7 +149,7 @@ export default class ShowRetroSettingsPage extends React.Component {
       errors.slug = this.validateSlug(elementValue);
     }
 
-    this.setState({[elementName]: elementValue, errors: errors});
+    this.setState({[elementName]: elementValue, errors});
   }
 
   handleRetroSettingsSubmit() {
@@ -166,7 +166,7 @@ export default class ShowRetroSettingsPage extends React.Component {
         retro_name: name,
         new_slug: slug,
         old_slug: retro.slug,
-        video_link: video_link,
+        video_link,
         is_private: isPrivate,
         request_uuid: session.request_uuid,
       });

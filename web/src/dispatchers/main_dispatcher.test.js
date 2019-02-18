@@ -135,7 +135,7 @@ describe('MainDispatcher', () => {
   describe('retroSuccessfullyCreated', () => {
     beforeEach(() => {
       subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'retroSuccessfullyCreated', data: {retro: retro}});
+      subject.dispatch({type: 'retroSuccessfullyCreated', data: {retro}});
     });
 
     it('redirects to the new retro page', () => {
@@ -343,7 +343,7 @@ describe('MainDispatcher', () => {
 
     it('creates the retro item', () => {
       retro.items.push({id: 10, category: 'happy'});
-      expect(cursorSpy).toHaveBeenCalledWith({retro: retro});
+      expect(cursorSpy).toHaveBeenCalledWith({retro});
       expect(store.retro.items.filter((o) => (o.id === 10)).length).toEqual(1);
     });
 
@@ -435,7 +435,7 @@ describe('MainDispatcher', () => {
       retro.highlighted_item_id = 2;
       item = retro.items[0];
       subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId: 1, item: item}});
+      subject.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId: 1, item}});
     });
 
     it('updates the item to have attribute done = false', () => {
@@ -633,8 +633,8 @@ describe('MainDispatcher', () => {
 
     describe('when the retro is updated', () => {
       it('updates store with data from socket', () => {
-        subject.dispatch({type: 'websocketRetroDataReceived', data: {retro: retro}});
-        expect(cursorSpy).toHaveBeenCalledWith({retro: retro, ...initialStore});
+        subject.dispatch({type: 'websocketRetroDataReceived', data: {retro}});
+        expect(cursorSpy).toHaveBeenCalledWith({retro, ...initialStore});
       });
     });
 
@@ -736,7 +736,7 @@ describe('MainDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item: action_item}});
+      subject.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item}});
     });
 
     it('updates the store and removes the retro action item', () => {
@@ -765,7 +765,7 @@ describe('MainDispatcher', () => {
       subject.dispatch({type: 'retroArchiveSuccessfullyFetched', data: {retro: retro_archives}});
     });
     it('updates the store with the archived retro items', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_archives: retro_archives});
+      expect(cursorSpy).toHaveBeenCalledWith({retro_archives});
     });
   });
 

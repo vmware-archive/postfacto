@@ -75,7 +75,7 @@ export default class SessionCable extends React.Component {
       {received: this.onReceived},
     );
 
-    this.setState({subscription: subscription});
+    this.setState({subscription});
   }
 
   render() {

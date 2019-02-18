@@ -77,7 +77,7 @@ describe('RetroColumnItem', () => {
             $('.edit-delete i').simulate('click');
             expect('deleteRetroItem').toHaveBeenDispatchedWith({
               type: 'deleteRetroItem',
-              data: {retro_id: retroId, item: item},
+              data: {retro_id: retroId, item},
             });
           });
         });
@@ -98,7 +98,7 @@ describe('RetroColumnItem', () => {
             it('updates the retro item', () => {
               expect('updateRetroItem').toHaveBeenDispatchedWith({
                 type: 'updateRetroItem',
-                data: {retro_id: retroId, item: item, description: 'an updated retro item'},
+                data: {retro_id: retroId, item, description: 'an updated retro item'},
               });
             });
 
@@ -146,7 +146,7 @@ describe('RetroColumnItem', () => {
           item.vote_count++;
           expect('voteRetroItem').toHaveBeenDispatchedWith({
             type: 'voteRetroItem',
-            data: {retro_id: retroId, item: item},
+            data: {retro_id: retroId, item},
           });
         });
       });
@@ -156,7 +156,7 @@ describe('RetroColumnItem', () => {
           $('.item-text button').simulate('click');
           expect('highlightRetroItem').toHaveBeenDispatchedWith({
             type: 'highlightRetroItem',
-            data: {retro_id: retroId, item: item},
+            data: {retro_id: retroId, item},
           });
         });
       });
@@ -233,7 +233,7 @@ describe('RetroColumnItem', () => {
           $('.item-done').simulate('click');
           expect('doneRetroItem').toHaveBeenDispatchedWith({
             type: 'doneRetroItem',
-            data: {retroId: retroId, item: highlightedItem},
+            data: {retroId, item: highlightedItem},
           });
         });
       });
@@ -279,7 +279,7 @@ describe('RetroColumnItem', () => {
                 category: 'happy',
                 done: false,
               },
-              retroId: retroId,
+              retroId,
             },
           });
         });

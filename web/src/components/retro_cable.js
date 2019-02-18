@@ -77,14 +77,14 @@ export default class RetroCable extends React.Component {
 
   subscribe(cable, retro_id, api_token) {
     const subscription = cable.subscriptions.create(
-      {channel: 'RetrosChannel', retro_id: retro_id, api_token: api_token},
+      {channel: 'RetrosChannel', retro_id, api_token},
       {
         received: this.onReceived,
         disconnected: this.onDisconnected,
         connected: this.onConnected,
       });
 
-    this.setState({subscription: subscription});
+    this.setState({subscription});
   }
 
   render() {
