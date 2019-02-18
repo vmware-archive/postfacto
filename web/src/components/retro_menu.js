@@ -75,6 +75,7 @@ export default class RetroMenu extends React.Component {
     if (item.button) {
       menuItem = (
         <button className="retro-menu-item retro-menu-item--button"
+                type="button"
                 onClick={this.onClick.bind(this, item)}>
           {item.title}
         </button>

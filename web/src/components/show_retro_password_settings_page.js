@@ -244,6 +244,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
                 <div className="row actions">
                   <button
+                    type="submit"
                     className="retro-settings-form-submit button"
                     style={{fontSize: '1.1rem'}}
                     onClick={this.handleSubmitButtonClicked.bind(this)}
@@ -251,6 +252,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     Save new password
                   </button>
                   <button className="retro-password-settings-cancel button"
+                          type="button"
                           onClick={this.handleCancelButtonClicked.bind(this)}>Cancel</button>
                 </div>
               </div>

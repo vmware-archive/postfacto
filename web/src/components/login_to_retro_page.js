@@ -130,8 +130,11 @@ export default class LoginToRetroPage extends React.Component {
               <div className="error-message">{errors}</div>
             </div>
             <div className="actions row">
-              <button className="retro-form-submit expanded button" style={{fontSize: '1.1rem'}}
-                      onClick={this.onLoginClicked.bind(this)}>
+              <button
+                type="submit"
+                className="retro-form-submit expanded button"
+                style={{fontSize: '1.1rem'}}
+                onClick={this.onLoginClicked.bind(this)}>
                 Login
               </button>
             </div>

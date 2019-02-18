@@ -46,7 +46,7 @@ describe('#useRouter', () => {
       router.get('/test', routeSpy);
       return (
         <div className="application">
-          <button onClick={() => router.navigate('/test')}>Route</button>
+          <button type="button" onClick={() => router.navigate('/test')}>Route</button>
         </div>
       );
     };

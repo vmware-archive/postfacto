@@ -51,6 +51,7 @@ export default class RetroNotFoundPage extends React.Component {
             <p>If you haven't created a project, why don't you create one?</p>
             <div className="row">
               <button className="retro-form-submit expanded button"
+                      type="button"
                       style={{fontSize: '1.1rem'}}
                       onClick={this.onCreateNewRetroClicked.bind(this)}>
                 Create a Project

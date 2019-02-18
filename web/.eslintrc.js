@@ -37,7 +37,6 @@ module.exports = {
     'padded-blocks': ['off'],
     'prefer-destructuring': ['off'],
     'prefer-template': ['off'],
-    'react/button-has-type': ['off'],
     'react/destructuring-assignment': ['off'],
     'react/forbid-prop-types': ['off'],
     'react/jsx-boolean-value': ['off'],

@@ -370,6 +370,7 @@ export default class ShowRetroSettingsPage extends React.Component {
 
                 <div className="row">
                   <button className="retro-settings-form-submit button"
+                          type="submit"
                           onClick={this.handleRetroSettingsSubmit.bind(this)}>
                     Save changes
                   </button>

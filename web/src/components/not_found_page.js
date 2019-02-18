@@ -49,8 +49,12 @@ export default class NotFoundPage extends React.Component {
             <h1>Oops... Looks like the page you're looking for doesn't exist.</h1>
             <p>Perhaps you were trying to do this?</p>
             <div className="row">
-              <button className="retro-form-submit expanded button" style={{fontSize: '1.1rem'}}
-                      onClick={this.onCreateNewRetroClicked.bind(this)}>Create a Project
+              <button
+                className="retro-form-submit expanded button"
+                type="button"
+                style={{fontSize: '1.1rem'}}
+                onClick={this.onCreateNewRetroClicked.bind(this)}
+              >Create a Project
               </button>
             </div>
           </div>

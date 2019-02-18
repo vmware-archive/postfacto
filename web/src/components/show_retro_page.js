@@ -209,6 +209,7 @@ export default class ShowRetroPage extends React.Component {
 
     const archiveButton = (
       <button className="archive-dialog__actions--archive"
+              type="button"
               onClick={this.handleArchiveRetroConfirmation.bind(this)}>
         {this.props.retro.send_archive_email && this.props.featureFlags.archiveEmails ? 'Archive & send email' : 'Archive'}
       </button>
@@ -216,6 +217,7 @@ export default class ShowRetroPage extends React.Component {
 
     const cancelButton = (
       <button className="archive-dialog__actions--cancel"
+              type="button"
               onClick={Actions.hideDialog}>
         Cancel
       </button>

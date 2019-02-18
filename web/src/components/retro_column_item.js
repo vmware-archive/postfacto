@@ -239,7 +239,7 @@ export default class RetroColumnItem extends React.Component {
 
     return (
       <div className="item-text">
-        <button>{item.description}</button>
+        <button type="button">{item.description}</button>
       </div>
     );
   }
