@@ -39,6 +39,10 @@ const monthNames = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
 
+function dateToMillis(date) {
+  return new Date(date).getTime();
+}
+
 export default class RetroActionsColumn extends React.Component {
   static propTypes = {
     category: types.string.isRequired,
@@ -72,7 +76,7 @@ export default class RetroActionsColumn extends React.Component {
           }
           return createdAt < lastWeekDate;
         })
-        .sort((a, b) => (b.created_at <= a.created_at ? -1 : 1))
+        .sort((a, b) => (dateToMillis(b.created_at) - dateToMillis(a.created_at)))
         .map((action_item) => (
           <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
         ));
