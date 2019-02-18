@@ -45,9 +45,15 @@ import RetroHeading from './retro_heading';
 import {HotKeys} from 'react-hotkeys';
 
 import EmptyPage from './empty_page';
-import jQuery from 'jquery';
 
 import {DEFAULT_TOGGLE_STYLE} from '../constants';
+
+function getItemArchiveTime(item) {
+  if (!item.archived_at) {
+    return null;
+  }
+  return new Date(item.archived_at).getTime();
+}
 
 export default class ShowRetroPage extends React.Component {
   static propTypes = {
@@ -134,21 +140,24 @@ export default class ShowRetroPage extends React.Component {
   }
 
   filterRetroArchives(retro) {
-    const archivesTimestamps = new Set();
-    this.getArchivesTimestamps(archivesTimestamps, retro.items);
-    this.getArchivesTimestamps(archivesTimestamps, retro.action_items);
-    const orderedArchivesTimestamps = Array.from(archivesTimestamps).sort((a, b) => new Date(b) - new Date(a));
-    if (orderedArchivesTimestamps.length > 0) {
-      const filteredRetro = retro;
-      filteredRetro.items = this.filterItemByTimestamp(retro.items, orderedArchivesTimestamps[0]);
-      filteredRetro.action_items = this.filterItemByTimestamp(retro.action_items, orderedArchivesTimestamps[0]);
-      return filteredRetro;
+    const {items = [], action_items = []} = retro;
+    const archivesTimestamps = [...items, ...action_items]
+      .map(getItemArchiveTime)
+      .filter((time) => (time !== null));
+
+    if (archivesTimestamps.length === 0) {
+      return retro;
     }
-    return retro;
+
+    const latestTimestamp = Math.max(...archivesTimestamps);
+    return Object.assign({}, retro, {
+      items: this.filterItemByTimestamp(items, latestTimestamp),
+      action_items: this.filterItemByTimestamp(action_items, latestTimestamp),
+    });
   }
 
   filterItemByTimestamp(items, timestamp) {
-    return jQuery.grep(items, (item) => item.archived_at === timestamp);
+    return items.filter((item) => getItemArchiveTime(item) === timestamp);
   }
 
   moveToNextItem(event) {
@@ -157,12 +166,6 @@ export default class ShowRetroPage extends React.Component {
     }
     const {retroId} = this.props;
     Actions.nextRetroItem({retro_id: retroId});
-  }
-
-  getArchivesTimestamps(archivesTimestamps, items) {
-    jQuery.each(items, (_, item) => {
-      archivesTimestamps.add(item.archived_at);
-    });
   }
 
   // Handle events

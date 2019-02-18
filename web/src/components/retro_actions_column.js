@@ -32,7 +32,6 @@
 import React from 'react';
 import types from 'prop-types';
 import RetroActionsColumnItem from './retro_actions_column_item';
-import jQuery from 'jquery';
 
 const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -110,24 +109,22 @@ export default class RetroActionsColumn extends React.Component {
   }
 
   getDateOfLatestItemThatIsNotToday() {
-    const {retro: {action_items}} = this.props;
-    const that = this;
-    const timestamps = new Set();
-    jQuery.each(action_items, (_, action_item) => {
-      if (action_item.created_at) {
-        const date = new Date(action_item.created_at);
-        if (date && !that.isToday(date)) {
-          const thing = date.setHours(0, 0, 0, 0);
-          timestamps.add(thing);
-        }
-      }
-    });
-    if (!timestamps.size) {
+    const {retro: {action_items = []}} = this.props;
+
+    const timestamps = action_items
+      .filter((action_item) => action_item.created_at)
+      .map((action_item) => new Date(action_item.created_at))
+      .filter((date) => !this.isToday(date))
+      .map((date) => {
+        date.setHours(0, 0, 0, 0);
+        return date.getTime();
+      });
+
+    if (!timestamps.length) {
       return null;
     }
-    const orderedTimestamps = Array.from(timestamps).sort((a, b) => (b - a));
 
-    return new Date(orderedTimestamps[0]);
+    return new Date(Math.max(...timestamps));
   }
 
   renderDate() {

@@ -3,20 +3,12 @@ module.exports = {
     'react-app',
     'airbnb',
   ],
-  'env': {
-    'jasmine': true,
-  },
-  'globals': {
-    'root': 'readonly',
-    '$': 'readonly',
-  },
   'rules': {
     'camelcase': ['off'],
     'class-methods-use-this': ['off'],
     'global-require': ['off'],
     'import/order': ['off'],
     'import/no-dynamic-require': ['off'],
-    'import/no-extraneous-dependencies': ['off'],
     'import/prefer-default-export': ['off'],
     'jsx-a11y/alt-text': ['off'],
     'jsx-a11y/click-events-have-key-events': ['off'],
@@ -70,4 +62,18 @@ module.exports = {
     }],
     'quote-props': ['error', 'consistent'],
   },
+
+  'overrides': [{
+    'files': ['**/test_support/*', 'spec_helper.*', '*.test.*'],
+    'env': {
+      'jasmine': true,
+    },
+    'globals': {
+      'root': 'readonly',
+      '$': 'readonly',
+    },
+    'rules': {
+      'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
+    },
+  }],
 };
