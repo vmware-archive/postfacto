@@ -92,7 +92,9 @@ describe('Show retro page archives', () => {
                          retro={retro_archives}
                          config={global.Retro.config}
                          featureFlags={{archiveEmails: true}}/>
-        </MuiThemeProvider>, root);
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     afterEach(() => {
@@ -129,7 +131,9 @@ describe('Show retro page archives', () => {
                            retro={retro_archives}
                            config={global.Retro.config}
                            featureFlags={{archiveEmails: true}}/>
-          </MuiThemeProvider>, root);
+          </MuiThemeProvider>,
+          root,
+        );
       });
 
       afterEach(() => {
@@ -161,7 +165,9 @@ describe('Show retro page archives', () => {
                          retro={retro_archives}
                          config={global.Retro.config}
                          featureFlags={{archiveEmails: true}}/>
-        </MuiThemeProvider>, root);
+        </MuiThemeProvider>,
+        root,
+      );
     });
 
     afterEach(() => {

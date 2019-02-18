@@ -230,8 +230,10 @@ describe('RetroCreatePage', () => {
         $('.new-retro-page #retro_is_private').simulate('change');
 
         $('.retro-form-submit').simulate('click');
-        expect('retroCreate').toHaveBeenDispatchedWith(
-          {type: 'retroCreate', data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false}});
+        expect('retroCreate').toHaveBeenDispatchedWith({
+          type: 'retroCreate',
+          data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false},
+        });
       });
     });
   });

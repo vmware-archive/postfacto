@@ -78,7 +78,8 @@ class Application extends React.Component {
   }
 }
 
-export default useStore(useRouter(Application),
+export default useStore(
+  useRouter(Application),
   {
     store,
     actions: [],
