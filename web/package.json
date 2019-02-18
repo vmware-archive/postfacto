@@ -25,6 +25,7 @@
   "devDependencies": {
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
+    "eslint-config-airbnb": "^17.1.0",
     "jasmine-ajax": "^3.4.0",
     "jasmine-core": "^3.3.0",
     "jasmine_dom_matchers": "^1.4.0",
