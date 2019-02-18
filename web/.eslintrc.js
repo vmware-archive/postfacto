@@ -15,7 +15,6 @@ module.exports = {
     'arrow-parens': ['off'],
     'camelcase': ['off'],
     'class-methods-use-this': ['off'],
-    'func-names': ['off'],
     'global-require': ['off'],
     'import/order': ['off'],
     'import/no-dynamic-require': ['off'],

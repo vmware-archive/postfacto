@@ -32,6 +32,8 @@
 import TestUtils from 'react-dom/test-utils';
 import jQuery from 'jquery';
 
+/* eslint-disable func-names */
+
 jQuery.fn.simulate = function (eventName, ...args) {
   if (!this.length) {
     throw new Error(`jQuery Simulate has an empty selection for '${this.selector}'`);
@@ -48,3 +50,5 @@ jQuery.fn.simulate = function (eventName, ...args) {
   });
   return this;
 };
+
+/* eslint-enable func-names */
