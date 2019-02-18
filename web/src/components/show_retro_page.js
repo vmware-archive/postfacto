@@ -186,12 +186,14 @@ export default class ShowRetroPage extends React.Component {
     const {currentMobileCategory, isMobile} = this.state;
 
     if (currentMobileCategory === 'action') {
-      return (<RetroActionPanel
-        retro={retro}
-        retroId={retroId}
-        isMobile={isMobile}
-        archives={archives}
-      />);
+      return (
+        <RetroActionPanel
+          retro={retro}
+          retroId={retroId}
+          isMobile={isMobile}
+          archives={archives}
+        />
+      );
     }
     return (
       <RetroColumn
@@ -240,7 +242,7 @@ export default class ShowRetroPage extends React.Component {
       >
         <p>{message}</p>
         {
-          this.props.featureFlags.archiveEmails ?
+          this.props.featureFlags.archiveEmails ? (
             <div>
               <label className="label" htmlFor="send_archive_email">Send action items to the team via email?</label>
 
@@ -258,8 +260,8 @@ export default class ShowRetroPage extends React.Component {
                 thumbSwitchedStyle={toggle.thumbSwitchedStyle}
                 iconStyle={toggle.iconStyle}
               />
-            </div> :
-            null
+            </div>
+          ) : null
         }
       </Dialog>
     );

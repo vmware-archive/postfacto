@@ -43,7 +43,6 @@ module.exports = {
     'react/jsx-no-bind': ['off'],
     'react/jsx-no-target-blank': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
-    'react/jsx-wrap-multilines': ['off'],
     'react/no-access-state-in-setstate': ['off'],
     'react/no-array-index-key': ['off'],
     'react/no-find-dom-node': ['off'],

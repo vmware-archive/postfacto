@@ -82,11 +82,13 @@ export default class HomePage extends React.Component {
           <div className="row">
             <div className="text-center">
               {
-                global.Retro.config.google_oauth_client_id || global.Retro.config.mock_google_auth ? <GoogleLoginWrapper
-                  onSuccess={this.onSignIn}
-                  onFailure={this.onGoogleLoginFailure}
-                  className="top-start-retro"
-                /> : null
+                global.Retro.config.google_oauth_client_id || global.Retro.config.mock_google_auth ? (
+                  <GoogleLoginWrapper
+                    onSuccess={this.onSignIn}
+                    onFailure={this.onGoogleLoginFailure}
+                    className="top-start-retro"
+                  />
+                ) : null
               }
             </div>
           </div>

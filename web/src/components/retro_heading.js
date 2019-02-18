@@ -121,7 +121,7 @@ export default class RetroHeading extends React.PureComponent {
           </div>
           <div className="retro-heading-buttons">
             {
-              showVideoButton ?
+              showVideoButton ? (
                 <RaisedButton
                   className="retro-heading-button video-button"
                   backgroundColor="#2574a9"
@@ -129,7 +129,8 @@ export default class RetroHeading extends React.PureComponent {
                   href={retro.video_link}
                   target="_blank"
                   label="VIDEO"
-                /> : null
+                />
+              ) : null
             }
             <RetroMenu isMobile={isMobile} items={this.getMenuItems()}/>
           </div>
