@@ -68,7 +68,6 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/self-closing-comp': ['off'],
     'react/sort-comp': ['off'],
-    'space-before-function-paren': ['off'],
 
     'object-curly-newline': ['error', {
       'consistent': true,
