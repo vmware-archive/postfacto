@@ -71,6 +71,8 @@ export default class Alert extends React.Component {
   renderIcon() {
     if (this.props.alert.checkIcon) {
       return <i className="alert__icon fa fa-check"/>;
+    } else {
+      return null;
     }
   }
 
