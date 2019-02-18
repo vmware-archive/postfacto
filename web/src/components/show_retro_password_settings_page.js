@@ -213,28 +213,34 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
                 <div className="row">
                   <label className="label">Current password</label>
-                  <input id="retro_current_password"
-                         type="password"
-                         name="current_password"
-                         onChange={this.handleChange.bind(this)}
-                         className={`form-input ${errors.current_password ? 'input-error' : ''}`}
-                         placeholder="Current password"/>
+                  <input
+                    id="retro_current_password"
+                    type="password"
+                    name="current_password"
+                    onChange={this.handleChange.bind(this)}
+                    className={`form-input ${errors.current_password ? 'input-error' : ''}`}
+                    placeholder="Current password"
+                  />
                   <div className="error-message">{errors.current_password}</div>
 
                   <label className="label">New password</label>
-                  <input id="retro_new_password"
-                         type="password"
-                         name="new_password"
-                         onChange={this.handleChange.bind(this)}
-                         placeholder="New password"/>
+                  <input
+                    id="retro_new_password"
+                    type="password"
+                    name="new_password"
+                    onChange={this.handleChange.bind(this)}
+                    placeholder="New password"
+                  />
 
                   <label className="label">Confirm new password</label>
-                  <input id="retro_confirm_new_password"
-                         type="password"
-                         name="confirm_new_password"
-                         onChange={this.handleChange.bind(this)}
-                         className={`form-input ${errors.confirm_new_password ? 'input-error' : ''}`}
-                         placeholder="New password again"/>
+                  <input
+                    id="retro_confirm_new_password"
+                    type="password"
+                    name="confirm_new_password"
+                    onChange={this.handleChange.bind(this)}
+                    className={`form-input ${errors.confirm_new_password ? 'input-error' : ''}`}
+                    placeholder="New password again"
+                  />
                   <div className="error-message">{errors.confirm_new_password}</div>
                 </div>
 
@@ -251,9 +257,11 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                   >
                     Save new password
                   </button>
-                  <button className="retro-password-settings-cancel button"
-                          type="button"
-                          onClick={this.handleCancelButtonClicked.bind(this)}>Cancel</button>
+                  <button
+                    className="retro-password-settings-cancel button"
+                    type="button"
+                    onClick={this.handleCancelButtonClicked.bind(this)}
+                  >Cancel</button>
                 </div>
               </div>
             </div>

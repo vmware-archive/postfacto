@@ -43,11 +43,13 @@ export default class Header extends React.Component {
     const {config, retro} = this.props;
     const documentTitle = retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title;
     return (
-      <Helmet title={documentTitle}
-              link={[
-                {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
-                {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
-              ]}>
+      <Helmet
+        title={documentTitle}
+        link={[
+          {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
+          {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
+        ]}
+      >
       </Helmet>
     );
   }

@@ -86,12 +86,14 @@ describe('Show retro page archives', () => {
 
       ReactDOM.render(
         <MuiThemeProvider>
-          <ShowRetroPage retro_archives={retro_archives}
-                         retroId="13"
-                         archives={true}
-                         retro={retro_archives}
-                         config={global.Retro.config}
-                         featureFlags={{archiveEmails: true}}/>
+          <ShowRetroPage
+            retro_archives={retro_archives}
+            retroId="13"
+            archives={true}
+            retro={retro_archives}
+            config={global.Retro.config}
+            featureFlags={{archiveEmails: true}}
+          />
         </MuiThemeProvider>,
         root,
       );
@@ -125,12 +127,14 @@ describe('Show retro page archives', () => {
         window.localStorage.setItem('authToken', 'some-token');
         ReactDOM.render(
           <MuiThemeProvider>
-            <ShowRetroPage retro_archives={retro_archives}
-                           retroId="13"
-                           archives={true}
-                           retro={retro_archives}
-                           config={global.Retro.config}
-                           featureFlags={{archiveEmails: true}}/>
+            <ShowRetroPage
+              retro_archives={retro_archives}
+              retroId="13"
+              archives={true}
+              retro={retro_archives}
+              config={global.Retro.config}
+              featureFlags={{archiveEmails: true}}
+            />
           </MuiThemeProvider>,
           root,
         );
@@ -159,12 +163,14 @@ describe('Show retro page archives', () => {
 
       ReactDOM.render(
         <MuiThemeProvider>
-          <ShowRetroPage retro_archives={retro_archives}
-                         retroId="13"
-                         archives={true}
-                         retro={retro_archives}
-                         config={global.Retro.config}
-                         featureFlags={{archiveEmails: true}}/>
+          <ShowRetroPage
+            retro_archives={retro_archives}
+            retroId="13"
+            archives={true}
+            retro={retro_archives}
+            config={global.Retro.config}
+            featureFlags={{archiveEmails: true}}
+          />
         </MuiThemeProvider>,
         root,
       );

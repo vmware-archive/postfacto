@@ -193,38 +193,44 @@ export default class RetroCreatePage extends React.Component {
             <div className="medium-centered small-centered" style={{width: '30rem'}}>
               <div className="row">
                 <label className="label">What's your team called?</label>
-                <input id="retro_name"
-                       value={name}
-                       type="text"
-                       name="name"
-                       className={`form-input ${errors.name ? 'input-error' : ''}`}
-                       onChange={this.change}
-                       placeholder="Team name"/>
+                <input
+                  id="retro_name"
+                  value={name}
+                  type="text"
+                  name="name"
+                  className={`form-input ${errors.name ? 'input-error' : ''}`}
+                  onChange={this.change}
+                  placeholder="Team name"
+                />
                 <div className="error-message">{errors.name}</div>
               </div>
               <div className="row">
                 <label className="label">Choose a team URL</label>
                 <div className="input-group retro-url">
                   <span className="input-group-label retro-url-prefix">{this.getCurrentHost()}/retros/</span>
-                  <input id="retro_url"
-                         value={slug}
-                         type="text"
-                         name="slug"
-                         className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
-                         onChange={this.change}
-                         placeholder="team-name"/>
+                  <input
+                    id="retro_url"
+                    value={slug}
+                    type="text"
+                    name="slug"
+                    className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
+                    onChange={this.change}
+                    placeholder="team-name"
+                  />
                 </div>
                 <div className="error-message">{errors.slug}</div>
               </div>
               <div className="row">
                 <label className="label">Create a team password</label>
-                <input id="retro_password"
-                       value={password}
-                       type="password"
-                       name="password"
-                       className={`form-input ${errors.password ? 'input-error' : ''}`}
-                       onChange={this.change}
-                       placeholder="Create password"/>
+                <input
+                  id="retro_password"
+                  value={password}
+                  type="password"
+                  name="password"
+                  className={`form-input ${errors.password ? 'input-error' : ''}`}
+                  onChange={this.change}
+                  placeholder="Create password"
+                />
                 <div className="error-message">{errors.password}</div>
               </div>
               <div className="row">
@@ -249,9 +255,11 @@ export default class RetroCreatePage extends React.Component {
 
               <div className="row">
                 <div className="medium-6 small-12 columns" style={{paddingLeft: '0', paddingRight: '0'}}>
-                  <input type="submit" className="retro-form-submit expanded button"
-                         id="create_new_retro" value="Create Retro"
-                         onClick={this.submit.bind(this)}/>
+                  <input
+                    type="submit" className="retro-form-submit expanded button"
+                    id="create_new_retro" value="Create Retro"
+                    onClick={this.submit.bind(this)}
+                  />
                 </div>
               </div>
             </div>

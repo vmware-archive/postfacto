@@ -70,34 +70,40 @@ export default class RegistrationPage extends React.Component {
           <div className="medium-centered small-centered" style={{width: '30rem'}}>
             <div className="row">
               <label className="label">Email</label>
-              <input value={this.props.email}
-                     placeholder="Email"
-                     id="email"
-                     name="email"
-                     type="email"
-                     className="form-input"
-                     disabled="true"/>
+              <input
+                value={this.props.email}
+                placeholder="Email"
+                id="email"
+                name="email"
+                type="email"
+                className="form-input"
+                disabled="true"
+              />
             </div>
 
             <div className="row">
               <label className="label">Full Name</label>
-              <input defaultValue={this.props.fullName}
-                     ref="fullNameInput"
-                     placeholder="Full Name"
-                     id="fullName"
-                     name="fullName"
-                     type="text"
-                     className="form-input"/>
+              <input
+                defaultValue={this.props.fullName}
+                ref="fullNameInput"
+                placeholder="Full Name"
+                id="fullName"
+                name="fullName"
+                type="text"
+                className="form-input"
+              />
             </div>
 
             <div className="row">
               <label className="label">Company Name</label>
-              <input ref="companyNameInput"
-                     placeholder="Company Name"
-                     id="companyName"
-                     name="companyName"
-                     type="text"
-                     className="form-input"/>
+              <input
+                ref="companyNameInput"
+                placeholder="Company Name"
+                id="companyName"
+                name="companyName"
+                type="text"
+                className="form-input"
+              />
             </div>
 
             <div className="row terms-text">
@@ -110,9 +116,11 @@ export default class RegistrationPage extends React.Component {
 
             <div className="row">
               <div className="medium-6 small-12 columns" style={{paddingLeft: '0', paddingRight: '0'}}>
-                <input type="submit" className="retro-form-submit expanded button"
-                       id="create_new_retro" value="Next: Make a retro"
-                       onClick={this.register.bind(this)}/>
+                <input
+                  type="submit" className="retro-form-submit expanded button"
+                  id="create_new_retro" value="Next: Make a retro"
+                  onClick={this.register.bind(this)}
+                />
               </div>
             </div>
 

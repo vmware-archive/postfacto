@@ -90,8 +90,10 @@ describe('LoginToRetroPage', () => {
 
     describe('when wrong password is given', () => {
       beforeEach(() => {
-        ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13"
-                                          login_error_message="Oops, wrong password."/>, root);
+        ReactDOM.render(<LoginToRetroPage
+          retro={retro} retroId="13"
+          login_error_message="Oops, wrong password."
+        />, root);
       });
 
       it('displays an error message', () => {

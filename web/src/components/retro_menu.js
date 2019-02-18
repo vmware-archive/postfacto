@@ -74,9 +74,11 @@ export default class RetroMenu extends React.Component {
 
     if (item.button) {
       menuItem = (
-        <button className="retro-menu-item retro-menu-item--button"
-                type="button"
-                onClick={this.onClick.bind(this, item)}>
+        <button
+          className="retro-menu-item retro-menu-item--button"
+          type="button"
+          onClick={this.onClick.bind(this, item)}
+        >
           {item.title}
         </button>
       );
@@ -123,7 +125,8 @@ export default class RetroMenu extends React.Component {
           animated={false}
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose.bind(this)}>
+          onRequestClose={this.handleRequestClose.bind(this)}
+        >
           {this.renderMenuItems()}
         </Popover>
       </div>

@@ -303,13 +303,15 @@ export default class ShowRetroSettingsPage extends React.Component {
 
                 <div className="row">
                   <label className="label">Project name</label>
-                  <input id="retro_name"
-                         value={this.state.name}
-                         type="text"
-                         name="name"
-                         className={`form-input ${errors.name ? 'input-error' : ''}`}
-                         onChange={this.handleChange.bind(this)}
-                         placeholder=""/>
+                  <input
+                    id="retro_name"
+                    value={this.state.name}
+                    type="text"
+                    name="name"
+                    className={`form-input ${errors.name ? 'input-error' : ''}`}
+                    onChange={this.handleChange.bind(this)}
+                    placeholder=""
+                  />
                   <div className="error-message">{errors.name}</div>
                 </div>
 
@@ -317,13 +319,15 @@ export default class ShowRetroSettingsPage extends React.Component {
                   <label className="label">Project URL</label>
                   <div className="input-group retro-url">
                     <span className="input-group-label retro-url-prefix">{this.getCurrentHost()}/retros/</span>
-                    <input id="retro_url"
-                           value={this.state.slug}
-                           type="text"
-                           name="slug"
-                           className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
-                           onChange={this.handleChange.bind(this)}
-                           placeholder=""/>
+                    <input
+                      id="retro_url"
+                      value={this.state.slug}
+                      type="text"
+                      name="slug"
+                      className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
+                      onChange={this.handleChange.bind(this)}
+                      placeholder=""
+                    />
                   </div>
 
                   <div className="error-message">{errors.slug}</div>
@@ -332,13 +336,14 @@ export default class ShowRetroSettingsPage extends React.Component {
 
                 <div className="row">
                   <label className="label">Video URL</label>
-                  <input id="retro_video_link"
-                         name="video_link"
-                         value={this.state.video_link}
-                         type="text"
-                         onChange={this.handleChange.bind(this)}
-                         className="form-input"
-                         placeholder=""
+                  <input
+                    id="retro_video_link"
+                    name="video_link"
+                    value={this.state.video_link}
+                    type="text"
+                    onChange={this.handleChange.bind(this)}
+                    className="form-input"
+                    placeholder=""
                   />
                 </div>
 
@@ -347,8 +352,10 @@ export default class ShowRetroSettingsPage extends React.Component {
                 </div>
 
                 <div className="row">
-                  <label className="label"
-                         htmlFor="retro_is_private">Do people need the password to <strong>access</strong> this retro?</label>
+                  <label
+                    className="label"
+                    htmlFor="retro_is_private"
+                  >Do people need the password to <strong>access</strong> this retro?</label>
 
                   <Toggle
                     id="retro_is_private"
@@ -369,9 +376,11 @@ export default class ShowRetroSettingsPage extends React.Component {
 
 
                 <div className="row">
-                  <button className="retro-settings-form-submit button"
-                          type="submit"
-                          onClick={this.handleRetroSettingsSubmit.bind(this)}>
+                  <button
+                    className="retro-settings-form-submit button"
+                    type="submit"
+                    onClick={this.handleRetroSettingsSubmit.bind(this)}
+                  >
                     Save changes
                   </button>
                 </div>

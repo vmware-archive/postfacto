@@ -108,8 +108,10 @@ export default class RetroColumnInput extends React.Component {
     if (this.state.inputText) {
       return (
         <div className={'input-button-wrapper ' + this.state.multiline}>
-          <div className="input-button"
-               onClick={this.submitRetroItem.bind(this)}>
+          <div
+            className="input-button"
+            onClick={this.submitRetroItem.bind(this)}
+          >
             <i className="fa fa-check" aria-hidden="true"/>
           </div>
         </div>
@@ -136,15 +138,17 @@ export default class RetroColumnInput extends React.Component {
     return (
       <div className="retro-item-list-input">
         <div className={this.resolveInputBoxClass()}>
-          <TextareaAutosize type="text" className={classNames} placeholder={this.resolvePlaceholder(category)}
-                            onFocus={this.inputFocus.bind(this)}
-                            onBlur={this.inputBlur.bind(this)}
-                            onChange={this.onChange.bind(this)}
-                            value={this.state.inputText}
-                            onKeyPress={this.onKeyPress.bind(this)}
-                            onResize={this.onResize.bind(this)}
-                            required={true}
-                            autoComplete="off"/>
+          <TextareaAutosize
+            type="text" className={classNames} placeholder={this.resolvePlaceholder(category)}
+            onFocus={this.inputFocus.bind(this)}
+            onBlur={this.inputBlur.bind(this)}
+            onChange={this.onChange.bind(this)}
+            value={this.state.inputText}
+            onKeyPress={this.onKeyPress.bind(this)}
+            onResize={this.onResize.bind(this)}
+            required={true}
+            autoComplete="off"
+          />
           {
             this.renderButton()
           }

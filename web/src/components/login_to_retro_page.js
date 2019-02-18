@@ -110,16 +110,18 @@ export default class LoginToRetroPage extends React.Component {
             <div className="field row">
               <h1>{this.pageTitle()}</h1>
               <label className="label">Enter the password to access {name}.</label>
-              <input className={`form-input ${inputStyle}`}
-                     placeholder="Password"
-                     type="password"
-                     value={this.state.password}
-                     onFocus={this.onInputFocus.bind(this)}
-                     onChange={this.onInputChange.bind(this)}
-                     onKeyPress={this.onKeyPress.bind(this)}
-                     required={true}
-                     autoFocus={true}
-                     autoComplete="off"/>
+              <input
+                className={`form-input ${inputStyle}`}
+                placeholder="Password"
+                type="password"
+                value={this.state.password}
+                onFocus={this.onInputFocus.bind(this)}
+                onChange={this.onInputChange.bind(this)}
+                onKeyPress={this.onKeyPress.bind(this)}
+                required={true}
+                autoFocus={true}
+                autoComplete="off"
+              />
               <p className="password-terms-text">
                 By logging in, you agree to our
                 {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
@@ -133,7 +135,8 @@ export default class LoginToRetroPage extends React.Component {
                 type="submit"
                 className="retro-form-submit expanded button"
                 style={{fontSize: '1.1rem'}}
-                onClick={this.onLoginClicked.bind(this)}>
+                onClick={this.onLoginClicked.bind(this)}
+              >
                 Login
               </button>
             </div>

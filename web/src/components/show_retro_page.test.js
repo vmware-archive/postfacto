@@ -55,8 +55,10 @@ describe('ShowRetroPage', () => {
         setWindowToMobileSize();
 
         ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                         featureFlags={{archiveEmails: true}}/>
+          <ShowRetroPage
+            retro={retro} retroId="13" archives={false} config={global.Retro.config}
+            featureFlags={{archiveEmails: true}}
+          />
         </MuiThemeProvider>, root);
       });
 
@@ -72,8 +74,10 @@ describe('ShowRetroPage', () => {
         setWindowToDesktopSize();
 
         ReactDOM.render(<MuiThemeProvider>
-          <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config} isMobile={false}
-                         featureFlags={{archiveEmails: true}}/>
+          <ShowRetroPage
+            retro={retro} retroId="13" archives={false} config={global.Retro.config} isMobile={false}
+            featureFlags={{archiveEmails: true}}
+          />
         </MuiThemeProvider>, root);
       });
 
@@ -94,8 +98,10 @@ describe('ShowRetroPage', () => {
       ShowRetroPage.prototype.getIsMobile = () => false;
 
       ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                       featureFlags={{archiveEmails: true}}/>
+        <ShowRetroPage
+          retro={retro} retroId="13" archives={false} config={global.Retro.config}
+          featureFlags={{archiveEmails: true}}
+        />
       </MuiThemeProvider>, root);
     });
 
@@ -121,12 +127,14 @@ describe('ShowRetroPage', () => {
       describe('when dialog exists', () => {
         beforeEach(() => {
           container = ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                           dialog={{
-                             title: 'Some dialog title',
-                             message: 'Some dialog message',
-                           }
-                           } featureFlags={{archiveEmails: true}}/>
+            <ShowRetroPage
+              retro={retro} retroId="13" archives={false} config={global.Retro.config}
+              dialog={{
+                title: 'Some dialog title',
+                message: 'Some dialog message',
+              }}
+              featureFlags={{archiveEmails: true}}
+            />
           </MuiThemeProvider>, root);
         });
 
@@ -148,8 +156,10 @@ describe('ShowRetroPage', () => {
       describe('when showDialog is set to false', () => {
         beforeEach(() => {
           container = ReactDOM.render(<MuiThemeProvider>
-            <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                           dialog={null} featureFlags={{archiveEmails: true}}/>
+            <ShowRetroPage
+              retro={retro} retroId="13" archives={false} config={global.Retro.config}
+              dialog={null} featureFlags={{archiveEmails: true}}
+            />
           </MuiThemeProvider>, root);
         });
 
@@ -171,8 +181,10 @@ describe('ShowRetroPage', () => {
       ShowRetroPage.prototype.getIsMobile = () => true;
 
       ReactDOM.render(<MuiThemeProvider>
-        <ShowRetroPage retro={retro} retroId="13" archives={false} config={global.Retro.config}
-                       featureFlags={{archiveEmails: true}}/>
+        <ShowRetroPage
+          retro={retro} retroId="13" archives={false} config={global.Retro.config}
+          featureFlags={{archiveEmails: true}}
+        />
       </MuiThemeProvider>, root);
     });
     afterEach(() => {

@@ -190,14 +190,17 @@ export default class ShowRetroPage extends React.Component {
         retro={retro}
         retroId={retroId}
         isMobile={isMobile}
-        archives={archives}/>);
+        archives={archives}
+      />);
     }
     return (
-      <RetroColumn category={currentMobileCategory}
-                   retro={retro}
-                   retroId={retroId}
-                   archives={archives}
-                   isMobile={isMobile}/>
+      <RetroColumn
+        category={currentMobileCategory}
+        retro={retro}
+        retroId={retroId}
+        archives={archives}
+        isMobile={isMobile}
+      />
     );
   }
 
@@ -207,28 +210,34 @@ export default class ShowRetroPage extends React.Component {
     const toggle = DEFAULT_TOGGLE_STYLE;
 
     const archiveButton = (
-      <button className="archive-dialog__actions--archive"
-              type="button"
-              onClick={this.handleArchiveRetroConfirmation.bind(this)}>
+      <button
+        className="archive-dialog__actions--archive"
+        type="button"
+        onClick={this.handleArchiveRetroConfirmation.bind(this)}
+      >
         {this.props.retro.send_archive_email && this.props.featureFlags.archiveEmails ? 'Archive & send email' : 'Archive'}
       </button>
     );
 
     const cancelButton = (
-      <button className="archive-dialog__actions--cancel"
-              type="button"
-              onClick={Actions.hideDialog}>
+      <button
+        className="archive-dialog__actions--cancel"
+        type="button"
+        onClick={Actions.hideDialog}
+      >
         Cancel
       </button>
     );
 
     return (
-      <Dialog title={title}
-              actions={[cancelButton, archiveButton]}
-              open={!!this.props.dialog}
-              onRequestClose={Actions.hideDialog}
-              actionsContainerClassName="archive-dialog__actions"
-              contentClassName="archive-dialog">
+      <Dialog
+        title={title}
+        actions={[cancelButton, archiveButton]}
+        open={!!this.props.dialog}
+        onRequestClose={Actions.hideDialog}
+        actionsContainerClassName="archive-dialog__actions"
+        contentClassName="archive-dialog"
+      >
         <p>{message}</p>
         {
           this.props.featureFlags.archiveEmails ?
@@ -270,14 +279,22 @@ export default class ShowRetroPage extends React.Component {
 
           <div className="mobile-tabs">
             <div className="mobile-tabs-list">
-              <div className="mobile-tab-happy"
-                   onClick={() => this.onMobileTabClick('happy')}>Happy</div>
-              <div className="mobile-tab-meh"
-                   onClick={() => this.onMobileTabClick('meh')}>Meh</div>
-              <div className="mobile-tab-sad"
-                   onClick={() => this.onMobileTabClick('sad')}>Sad</div>
-              <div className="mobile-tab-action"
-                   onClick={() => this.onMobileTabClick('action')}>Action</div>
+              <div
+                className="mobile-tab-happy"
+                onClick={() => this.onMobileTabClick('happy')}
+              >Happy</div>
+              <div
+                className="mobile-tab-meh"
+                onClick={() => this.onMobileTabClick('meh')}
+              >Meh</div>
+              <div
+                className="mobile-tab-sad"
+                onClick={() => this.onMobileTabClick('sad')}
+              >Sad</div>
+              <div
+                className="mobile-tab-action"
+                onClick={() => this.onMobileTabClick('action')}
+              >Action</div>
             </div>
           </div>
           {
@@ -315,30 +332,39 @@ export default class ShowRetroPage extends React.Component {
 
             <RetroLegalBanner retro={retro}/>
 
-            <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
-                          showVideoButton={!archives}/>
+            <RetroHeading
+              retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}
+              showVideoButton={!archives}
+            />
             <div className="retro-item-list">
-              <RetroColumn category="happy"
-                           retro={retro}
-                           retroId={retroId}
-                           archives={archives}
-                           isMobile={isMobile}/>
-              <RetroColumn category="meh"
-                           retro={retro}
-                           retroId={retroId}
-                           archives={archives}
-                           isMobile={isMobile}/>
-              <RetroColumn category="sad"
-                           retro={retro}
-                           retroId={retroId}
-                           archives={archives}
-                           isMobile={isMobile}/>
+              <RetroColumn
+                category="happy"
+                retro={retro}
+                retroId={retroId}
+                archives={archives}
+                isMobile={isMobile}
+              />
+              <RetroColumn
+                category="meh"
+                retro={retro}
+                retroId={retroId}
+                archives={archives}
+                isMobile={isMobile}
+              />
+              <RetroColumn
+                category="sad"
+                retro={retro}
+                retroId={retroId}
+                archives={archives}
+                isMobile={isMobile}
+              />
             </div>
             <RetroActionPanel
               retro={retro}
               retroId={retroId}
               isMobile={isMobile}
-              archives={archives}/>
+              archives={archives}
+            />
             <RetroFooter/>
           </div>
         </span>

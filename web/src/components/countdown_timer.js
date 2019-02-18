@@ -95,8 +95,10 @@ export default class CountdownTimer extends React.Component {
       return (
         <div>
           <div className="retro-item-timer">
-            <div className="retro-item-timer-extend"
-                 onClick={this.onExtendTimerClicked.bind(this)}>
+            <div
+              className="retro-item-timer-extend"
+              onClick={this.onExtendTimerClicked.bind(this)}
+            >
               <span className="item-times-up">Time's Up!</span>
               <br/>
               +2 more minutes
