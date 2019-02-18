@@ -36,7 +36,8 @@ import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
 
 describe('ApiDispatcher', () => {
-  let subject, cursorSpy;
+  let subject;
+  let cursorSpy;
   let retro;
   let realDispatchLevels;
 

@@ -36,7 +36,8 @@ import '../spec_helper';
 import RetroItemEditView from './retro_item_edit_view';
 
 describe('RetroItemEditView', () => {
-  let deleteSpy, saveSpy;
+  let deleteSpy;
+  let saveSpy;
 
   beforeEach(() => {
     deleteSpy = jasmine.createSpy('delete');

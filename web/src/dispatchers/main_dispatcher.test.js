@@ -33,7 +33,11 @@ import Cursor from 'pui-cursor';
 import {SpyDispatcher} from '../spec_helper';
 
 describe('MainDispatcher', () => {
-  let subject, cursorSpy, retro, retro_archives, router;
+  let subject;
+  let cursorSpy;
+  let retro;
+  let retro_archives;
+  let router;
 
   beforeEach(() => {
     Cursor.async = false;

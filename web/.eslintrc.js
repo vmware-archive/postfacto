@@ -45,8 +45,6 @@ module.exports = {
     'object-curly-spacing': ['error', 'never'],
     'object-property-newline': ['off'],
     'object-shorthand': ['off'],
-    'one-var': ['off'],
-    'one-var-declaration-per-line': ['off'],
     'operator-linebreak': ['off', 'after'],
     'padded-blocks': ['off'],
     'prefer-destructuring': ['off'],

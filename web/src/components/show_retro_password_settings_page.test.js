@@ -37,7 +37,8 @@ import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('ShowRetroPasswordSettingsPage', () => {
-  let retro, session;
+  let retro;
+  let session;
 
   const sharedRetroPasswordSettingsBehavior = () => {
     beforeEach(() => {
