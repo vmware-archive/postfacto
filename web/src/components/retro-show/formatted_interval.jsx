@@ -32,23 +32,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class FormattedInterval extends React.Component {
-  static propTypes = {
-    secondsRemaining: PropTypes.number.isRequired,
-  };
-
-  formatInterval() {
-    const {secondsRemaining} = this.props;
-    const roundedSeconds = Math.max(Math.floor(secondsRemaining), 0);
-    const minutes = Math.floor(roundedSeconds / 60);
-    const seconds = roundedSeconds % 60;
-    const stringSeconds = seconds + '';
-    return minutes + ':' + '00'.substr(stringSeconds.length) + stringSeconds;
-  }
-
-  render() {
-    return (
-      <div className="formatted-interval">{this.formatInterval()}</div>
-    );
-  }
+function formatInterval(secondsRemaining) {
+  const roundedSeconds = Math.max(Math.floor(secondsRemaining), 0);
+  const minutes = Math.floor(roundedSeconds / 60);
+  const seconds = roundedSeconds % 60;
+  const stringSeconds = seconds + '';
+  return minutes + ':' + '00'.substr(stringSeconds.length) + stringSeconds;
 }
+
+const FormattedInterval = ({secondsRemaining}) => (
+  <div className="formatted-interval">{formatInterval(secondsRemaining)}</div>
+);
+
+FormattedInterval.propTypes = {
+  secondsRemaining: PropTypes.number.isRequired,
+};
+
+export default FormattedInterval;
