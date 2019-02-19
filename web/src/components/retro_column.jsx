@@ -33,6 +33,14 @@ import React from 'react';
 import types from 'prop-types';
 import RetroColumnInput from './retro_column_input';
 import RetroColumnItem from './retro_column_item';
+import happySvg from '../images/happy.svg';
+import mehSvg from '../images/meh.svg';
+import sadSvg from '../images/sad.svg';
+
+const imageMap = new Map();
+imageMap.set('happy', happySvg);
+imageMap.set('meh', mehSvg);
+imageMap.set('sad', sadSvg);
 
 export default class RetroColumn extends React.Component {
   static propTypes = {
@@ -83,7 +91,7 @@ export default class RetroColumn extends React.Component {
     }
     return (
       <div className="retro-item-list-header">
-        <img src={require('../images/' + category + '.svg')} alt={category}/>
+        <img src={imageMap.get(category)} alt={category}/>
       </div>
     );
   }
