@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import LoginToRetroPage from './login_to_retro_page';
 
@@ -54,7 +54,7 @@ describe('LoginToRetroPage', () => {
     });
 
     it('dispatches getRetroLogin', () => {
-      expect('getRetroLogin').toHaveBeenDispatchedWith({type: 'getRetroLogin', data: {retro_id: '13'}});
+      expect(SpyDispatcher).toHaveReceived({type: 'getRetroLogin', data: {retro_id: '13'}});
       expect($('h1').text()).toEqual('Psst... what\'s the password?');
       expect('label').toContainText('Enter the password to access the retro name.');
     });
@@ -68,7 +68,7 @@ describe('LoginToRetroPage', () => {
       it('dispatches loginToRetro', () => {
         $('.form-input').val('pa55word').simulate('change');
         $('.retro-form-submit').simulate('click');
-        expect('loginToRetro').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'loginToRetro',
           data: {retro_id: '13', password: 'pa55word'},
         });
@@ -79,7 +79,7 @@ describe('LoginToRetroPage', () => {
     describe('when hitting the return key in the password input field', () => {
       it('dispatches loginToRetro', () => {
         $('.form-input').val('pa55word').simulate('change').simulate('keyPress', {key: 'Enter'});
-        expect('loginToRetro').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'loginToRetro',
           data: {retro_id: '13', password: 'pa55word'},
         });

@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {combineElementsContent} from '../spec_helper';
+import {combineElementsContent, SpyDispatcher} from '../spec_helper';
 
 import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -61,7 +61,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
     it('goes back to the retro page when the back button is clicked', () => {
       $('button.retro-back').simulate('click');
 
-      expect('backPressedFromSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'backPressedFromSettings',
         data: {retro_id: '13'},
       });
@@ -70,7 +70,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
     it('goes back to the retro settings page when the cancel button is clicked', () => {
       $('button.retro-password-settings-cancel').simulate('click');
 
-      expect('backPressedFromPasswordSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'backPressedFromPasswordSettings',
         data: {retro_id: '13'},
       });
@@ -83,7 +83,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       $('button.retro-settings-form-submit').simulate('click');
 
-      expect('updateRetroPassword').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'updateRetroPassword',
         data: {
           retro_id: '13',
@@ -101,7 +101,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
         $('button.retro-settings-form-submit').simulate('click');
 
-        expect('updateRetroPassword').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'updateRetroPassword',
           data: {
             retro_id: '13',
@@ -119,7 +119,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
         $('button.retro-settings-form-submit').simulate('click');
 
-        expect('updateRetroPassword').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'updateRetroPassword',
           data: {
             retro_id: '13',
@@ -152,7 +152,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
       it('clears out the errors when unmounted', () => {
         ReactDOM.unmountComponentAtNode(root);
 
-        expect('clearErrors').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'clearErrors',
         });
       });

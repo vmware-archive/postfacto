@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import HomePage from './home_page';
 
@@ -42,7 +42,7 @@ describe('HomePage', () => {
     });
 
     it('dispatches showHomePageAnalytics action when home page is loaded', () => {
-      expect('showHomePageAnalytics').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('showHomePageAnalytics');
     });
   });
 });

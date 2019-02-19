@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import CountdownTimer from './countdown_timer';
 
@@ -72,7 +72,7 @@ describe('CountdownTimer', () => {
     describe('when clicking on extend Timer', () => {
       it('adds 2 more minutes to endTime', () => {
         $('.retro-item-timer-extend').simulate('click');
-        expect('extendTimer').toHaveBeenDispatchedWith({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
+        expect(SpyDispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
       });
     });
   });

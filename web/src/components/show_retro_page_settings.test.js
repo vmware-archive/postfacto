@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -82,7 +82,7 @@ describe('Retro settings', () => {
       $('.retro-menu button').simulate('click');
       $($('.retro-menu-item')[1]).simulate('click');
 
-      expect('routeToRetroSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
         data: {retro_id: '13'},
       });
@@ -98,7 +98,7 @@ describe('Retro settings', () => {
       $('.retro-menu button').simulate('click');
       $($('.retro-menu-item')[1]).simulate('click');
 
-      expect('requireRetroLogin').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'requireRetroLogin',
         data: {retro_id: '13'},
       });

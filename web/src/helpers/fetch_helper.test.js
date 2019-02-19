@@ -30,7 +30,7 @@
  */
 
 import {fetchJson} from './fetch_helper';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 describe('fetchJson', () => {
   describe('errors', () => {
@@ -45,7 +45,7 @@ describe('fetchJson', () => {
 
     it('dispatches apiServerNotFound', async () => {
       await fetchJson('http://example.com/some-url');
-      expect('apiServerNotFound').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('apiServerNotFound');
     });
   });
 
@@ -61,7 +61,7 @@ describe('fetchJson', () => {
 
     it('does not dispatch apiServerNotFound', async () => {
       await fetchJson('http://example.com/some-url');
-      expect('apiServerNotFound').not.toHaveBeenDispatched();
+      expect(SpyDispatcher).not.toHaveReceived('apiServerNotFound');
     });
   });
 });

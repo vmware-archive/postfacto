@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import {MuiThemeProvider} from 'material-ui';
 import ListRetrosPage from './list_retros_page';
@@ -53,7 +53,7 @@ describe('List Retros Page', () => {
     ReactDOM.render(<MuiThemeProvider><ListRetrosPage retros={retros}/></MuiThemeProvider>, root);
 
     $('.retro-list-tile:eq(0)').click();
-    expect('routeToShowRetro').toHaveBeenDispatched();
+    expect(SpyDispatcher).toHaveReceived('routeToShowRetro');
   });
 });
 

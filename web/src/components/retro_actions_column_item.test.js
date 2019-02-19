@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import RetroActionsColumnItem from './retro_actions_column_item';
 
@@ -88,7 +88,7 @@ describe('RetroActionsColumnItem', () => {
   describe('when clicking on tick ', () => {
     it('should mark as not done when clicking on the action item which is ticked', () => {
       $('.retro-action .action-tick').simulate('click');
-      expect('doneRetroActionItem').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'doneRetroActionItem',
         data: {retro_id: retroId, action_item_id: 1, done: false},
       });
@@ -108,7 +108,7 @@ describe('RetroActionsColumnItem', () => {
       const sharedUpdateActionBehavior = () => {
         it('updates the action item', () => {
           expect('.retro-action.retro-action-edit').not.toExist();
-          expect('editRetroActionItem').toHaveBeenDispatchedWith(
+          expect(SpyDispatcher).toHaveReceived(
             {
               type: 'editRetroActionItem',
               data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
@@ -137,14 +137,14 @@ describe('RetroActionsColumnItem', () => {
       it('does not allow editing if value is empty', () => {
         $('.retro-action textarea').val('').simulate('change');
         $('.retro-action .edit-save').simulate('click');
-        expect('editRetroActionItem').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('editRetroActionItem');
       });
     });
 
     describe('when clicking on delete ', () => {
       it('should remove the action item', () => {
         $('.retro-action .edit-delete').simulate('click');
-        expect('deleteRetroActionItem').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'deleteRetroActionItem',
           data: {retro_id: retroId, action_item: retro.action_items[0]},
         });

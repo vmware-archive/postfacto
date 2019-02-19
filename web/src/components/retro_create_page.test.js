@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {combineElementsContent} from '../spec_helper';
+import {combineElementsContent, SpyDispatcher} from '../spec_helper';
 
 import RetroCreatePage from './retro_create_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -72,7 +72,7 @@ describe('RetroCreatePage', () => {
         });
 
         it('should not submit create a retro when there is no name', () => {
-          expect('retroCreate').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
         });
 
         it('should clear error message on valid input', () => {
@@ -95,7 +95,7 @@ describe('RetroCreatePage', () => {
         });
 
         it('should not submit create a retro when there is no team URL', () => {
-          expect('retroCreate').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
         });
 
         it('should clear error message on valid input', () => {
@@ -118,7 +118,7 @@ describe('RetroCreatePage', () => {
         it('should not submit create a retro', () => {
           $('.retro-form-submit').simulate('click');
 
-          expect('retroCreate').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
         });
 
         it('should clear error message on valid input', () => {
@@ -152,7 +152,7 @@ describe('RetroCreatePage', () => {
         });
 
         it('should not submit create a retro when there is no team URL', () => {
-          expect('retroCreate').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
         });
 
         it('should clear error message on valid input', () => {
@@ -175,7 +175,7 @@ describe('RetroCreatePage', () => {
         });
 
         it('should not submit create a retro when there is no team URL', () => {
-          expect('retroCreate').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
         });
 
         it('should clear error message on valid input', () => {
@@ -220,7 +220,7 @@ describe('RetroCreatePage', () => {
         it('clears out the errors when unmounted', () => {
           ReactDOM.unmountComponentAtNode(root);
 
-          expect('clearErrors').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'clearErrors',
           });
         });
@@ -233,7 +233,7 @@ describe('RetroCreatePage', () => {
         $('.new-retro-page #retro_is_private').simulate('change');
 
         $('.retro-form-submit').simulate('click');
-        expect('retroCreate').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'retroCreate',
           data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false},
         });
@@ -253,7 +253,7 @@ describe('RetroCreatePage', () => {
     });
 
     it('should redirect to home page when not logged in', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: '/'});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/'});
     });
   });
 });

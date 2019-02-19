@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import Alert from './alert';
 import Router from './router';
@@ -60,7 +60,7 @@ describe('Router', () => {
     });
 
     it('dispatches hide alert', () => {
-      expect('hideAlert').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('hideAlert');
     });
   });
 
@@ -70,7 +70,7 @@ describe('Router', () => {
     });
 
     it('does not dispatch hide alert', () => {
-      expect('hideAlert').not.toHaveBeenDispatched();
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
     });
   });
 

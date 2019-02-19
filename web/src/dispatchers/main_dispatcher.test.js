@@ -139,11 +139,11 @@ describe('MainDispatcher', () => {
     });
 
     it('redirects to the new retro page', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: `/retros/${retro.slug}`});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: `/retros/${retro.slug}`});
     });
 
     it('dispatches created retro analytic', () => {
-      expect('createdRetroAnalytics').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'createdRetroAnalytics',
         data: {retroId: retro.id},
       });
@@ -185,7 +185,7 @@ describe('MainDispatcher', () => {
 
     it('dispatches visited retro analytic', () => {
       subject.dispatch({type: 'retroSuccessfullyFetched', data: {retro}});
-      expect('visitedRetroAnalytics').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'visitedRetroAnalytics',
         data: {retroId: retro.id},
       });
@@ -290,7 +290,7 @@ describe('MainDispatcher', () => {
   describe('requireRetroLogin', () => {
     it('dispatches a set Route', () => {
       subject.dispatch({type: 'requireRetroLogin', data: {retro_id: 1}});
-      expect('setRoute').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'setRoute',
         data: '/retros/1/login',
       });
@@ -300,7 +300,7 @@ describe('MainDispatcher', () => {
   describe('requireRetroRelogin', () => {
     it('dispatches a set Route', () => {
       subject.dispatch({type: 'requireRetroRelogin', data: {retro: {slug: 'retro-slug-1'}}});
-      expect('setRoute').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'setRoute',
         data: '/retros/retro-slug-1/relogin',
       });
@@ -310,7 +310,7 @@ describe('MainDispatcher', () => {
   describe('redirectToRetroCreatePage', () => {
     it('dispatches a set Route to new retro page', () => {
       subject.dispatch({type: 'redirectToRetroCreatePage'});
-      expect('setRoute').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'setRoute',
         data: '/retros/new',
       });
@@ -320,7 +320,7 @@ describe('MainDispatcher', () => {
   describe('retroSuccessfullyLoggedIn', () => {
     it('dispatches a set Route', () => {
       subject.dispatch({type: 'retroSuccessfullyLoggedIn', data: {retro_id: 1}});
-      expect('setRoute').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'setRoute',
         data: '/retros/1',
       });
@@ -348,7 +348,7 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches created retro item analytic', () => {
-      expect('createdRetroItemAnalytics').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'createdRetroItemAnalytics',
         data: {retroId: retro.id, category: 'happy'},
       });
@@ -417,14 +417,14 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches completed retro item analytic', () => {
-      expect('completedRetroItemAnalytics').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'completedRetroItemAnalytics',
         data: {retroId: retro.id, category: 'happy'},
       });
     });
 
     it('checks whether all retro items have been marked as done', () => {
-      expect('checkAllRetroItemsDone').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('checkAllRetroItemsDone');
     });
   });
 
@@ -520,7 +520,7 @@ describe('MainDispatcher', () => {
 
       it('dispatches showDialog', () => {
         subject.dispatch({type: 'checkAllRetroItemsDone'});
-        expect('showDialog').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'showDialog',
           data: {
             title: 'Archive this retro?',
@@ -561,7 +561,7 @@ describe('MainDispatcher', () => {
 
       it('does not dispatch showDialog', () => {
         subject.dispatch({type: 'checkAllRetroItemsDone'});
-        expect('showDialog').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('showDialog');
       });
     });
   });
@@ -607,14 +607,14 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches archived retro analytics', () => {
-      expect('archivedRetroAnalytics').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'archivedRetroAnalytics',
         data: {retroId: retro.id},
       });
     });
 
     it('displays an alert', () => {
-      expect('showAlert').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'showAlert',
         data: {
           message: 'Archived!',
@@ -654,7 +654,7 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect('requireRetroRelogin').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'requireRetroRelogin',
             data: {
               retro: {
@@ -677,7 +677,7 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect('requireRetroRelogin').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('requireRetroRelogin');
         });
       });
     });
@@ -702,7 +702,7 @@ describe('MainDispatcher', () => {
     describe('when action item is marked as done', () => {
       it('dispatches completed retro action item analytic', () => {
         subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: true}}});
-        expect('doneActionItemAnalytics').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'doneActionItemAnalytics',
           data: {retroId: retro.id},
         });
@@ -717,7 +717,7 @@ describe('MainDispatcher', () => {
     describe('when action item is marked as undone', () => {
       it('does not dispatch anything', () => {
         subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 2, done: false}}});
-        expect('undoneActionItemAnalytics').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'undoneActionItemAnalytics',
           data: {retroId: retro.id},
         });
@@ -784,7 +784,7 @@ describe('MainDispatcher', () => {
       subject.dispatch({type: 'backPressedFromArchives', data: {retro_id: '1'}});
     });
     it('sets the route back to the current retro', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: '/retros/1'});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/retros/1'});
     });
   });
 
@@ -793,7 +793,7 @@ describe('MainDispatcher', () => {
       subject.dispatch({type: 'backPressedFromPasswordSettings', data: {retro_id: '1'}});
     });
     it('sets the route back to the current retro', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: '/retros/1/settings'});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/retros/1/settings'});
     });
   });
 
@@ -922,7 +922,7 @@ describe('MainDispatcher', () => {
     });
 
     it('redirects to home page', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: '/'});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/'});
     });
   });
 
@@ -932,7 +932,7 @@ describe('MainDispatcher', () => {
     });
 
     it('routes to the retro password settings page', () => {
-      expect('setRoute').toHaveBeenDispatchedWith({type: 'setRoute', data: '/retros/13/settings/password'});
+      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/retros/13/settings/password'});
     });
   });
 
@@ -1000,7 +1000,7 @@ describe('MainDispatcher', () => {
         data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},
       });
 
-      expect('setRoute').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'setRoute',
         data: '/registration/the-access-token/a@a.a/my full name',
       });

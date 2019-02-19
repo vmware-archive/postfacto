@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import RetroColumnItem from './retro_column_item';
 import Scroll from 'react-scroll';
@@ -75,7 +75,7 @@ describe('RetroColumnItem', () => {
         describe('when clicking delete button', () => {
           it('dispatches a delete action', () => {
             $('.edit-delete i').simulate('click');
-            expect('deleteRetroItem').toHaveBeenDispatchedWith({
+            expect(SpyDispatcher).toHaveReceived({
               type: 'deleteRetroItem',
               data: {retro_id: retroId, item},
             });
@@ -85,7 +85,7 @@ describe('RetroColumnItem', () => {
         describe('when clicking on the item description', () => {
           it('does not highlight the item', () => {
             $('.edit-text').simulate('click');
-            expect('highlightRetroItem').not.toHaveBeenDispatched();
+            expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
           });
         });
 
@@ -96,7 +96,7 @@ describe('RetroColumnItem', () => {
 
           const sharedUpdateItemBehavior = () => {
             it('updates the retro item', () => {
-              expect('updateRetroItem').toHaveBeenDispatchedWith({
+              expect(SpyDispatcher).toHaveReceived({
                 type: 'updateRetroItem',
                 data: {retro_id: retroId, item, description: 'an updated retro item'},
               });
@@ -135,7 +135,7 @@ describe('RetroColumnItem', () => {
 
           it('does not allow item to be updated', () => {
             $('.edit-save').simulate('click');
-            expect('updateRetroItem').not.toHaveBeenDispatched();
+            expect(SpyDispatcher).not.toHaveReceived('updateRetroItem');
           });
         });
       });
@@ -144,7 +144,7 @@ describe('RetroColumnItem', () => {
         it('dispatches a vote action', () => {
           $('.item-vote-submit').simulate('click');
           item.vote_count++;
-          expect('voteRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'voteRetroItem',
             data: {retro_id: retroId, item},
           });
@@ -154,7 +154,7 @@ describe('RetroColumnItem', () => {
       describe('when clicking on item text', () => {
         it('highlights the item', () => {
           $('.item-text button').simulate('click');
-          expect('highlightRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'highlightRetroItem',
             data: {retro_id: retroId, item},
           });
@@ -221,7 +221,7 @@ describe('RetroColumnItem', () => {
       describe('when clicking on item text', () => {
         it('unhighlights the item', () => {
           $('.item-text button').simulate('click');
-          expect('unhighlightRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'unhighlightRetroItem',
             data: {retro_id: retroId},
           });
@@ -231,7 +231,7 @@ describe('RetroColumnItem', () => {
       describe('when clicking on done', () => {
         it('sets the item to discussed', () => {
           $('.item-done').simulate('click');
-          expect('doneRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'doneRetroItem',
             data: {retroId, item: highlightedItem},
           });
@@ -241,7 +241,7 @@ describe('RetroColumnItem', () => {
       describe('when clicking on cancel', () => {
         it('unhighlights the item', () => {
           $('.retro-item-cancel').simulate('click');
-          expect('unhighlightRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'unhighlightRetroItem',
             data: {retro_id: retroId},
           });
@@ -269,7 +269,7 @@ describe('RetroColumnItem', () => {
         it('dispatches undoneRetroItem', () => {
           $('.retro-item-cancel').simulate('click');
 
-          expect('undoneRetroItem').toHaveBeenDispatchedWith({
+          expect(SpyDispatcher).toHaveReceived({
             type: 'undoneRetroItem',
             data: {
               item: {
@@ -293,13 +293,13 @@ describe('RetroColumnItem', () => {
 
       it('does not highlight an item when clicked', () => {
         $('.item-text button').simulate('click');
-        expect('highlightRetroItem').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
       });
 
       describe('when clicking vote button', () => {
         it('does not dispatch a vote action', () => {
           $('.item-vote-submit').simulate('click');
-          expect('voteRetroItem').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('voteRetroItem');
         });
       });
 
@@ -317,7 +317,7 @@ describe('RetroColumnItem', () => {
     describe('when clicking on an item', () => {
       it('does not highlight the item ', () => {
         $('.item-text button').simulate('click');
-        expect('highlightRetroItem').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
       });
     });
 
@@ -327,7 +327,7 @@ describe('RetroColumnItem', () => {
       });
       it('does not done the item ', () => {
         $('.item-done').simulate('click');
-        expect('doneRetroItem').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('doneRetroItem');
       });
     });
   });

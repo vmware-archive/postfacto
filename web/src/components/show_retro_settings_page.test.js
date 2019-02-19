@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {combineElementsContent} from '../spec_helper';
+import {combineElementsContent, SpyDispatcher} from '../spec_helper';
 
 import ShowRetroSettingsPage from './show_retro_settings_page';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -83,7 +83,7 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('does not update the retro settings', () => {
-          expect('updateRetroSettings').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('displays an error message', () => {
@@ -117,7 +117,7 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('does not update the retro settings', () => {
-          expect('updateRetroSettings').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('displays an error message', () => {
@@ -134,7 +134,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('does not update the retro settings', () => {
           $('.retro-settings-form-submit').simulate('click');
-          expect('updateRetroSettings').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
@@ -164,7 +164,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('should not submit create a retro when there is no URL', () => {
           $('.retro-settings-form-submit').simulate('click');
-          expect('updateRetroSettings').not.toHaveBeenDispatched();
+          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
@@ -238,7 +238,7 @@ describe('ShowRetroSettingsPage', () => {
       it('clears out the errors when unmounted', () => {
         ReactDOM.unmountComponentAtNode(root);
 
-        expect('clearErrors').toHaveBeenDispatchedWith({
+        expect(SpyDispatcher).toHaveReceived({
           type: 'clearErrors',
         });
       });
@@ -253,7 +253,7 @@ describe('ShowRetroSettingsPage', () => {
       $('#retro_is_private').simulate('change');
       $('.retro-settings-form-submit').simulate('click');
 
-      expect('updateRetroSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'updateRetroSettings',
         data: {
           retro_id: '13',
@@ -270,7 +270,7 @@ describe('ShowRetroSettingsPage', () => {
     it('routes to retro password settings when change password link is clicked', () => {
       $('#retro-password-settings').simulate('click');
 
-      expect('routeToRetroPasswordSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'routeToRetroPasswordSettings',
         data: {
           retro_id: '13',
@@ -281,7 +281,7 @@ describe('ShowRetroSettingsPage', () => {
     it('goes back to the retro page when the back button is clicked', () => {
       $('button.retro-back').simulate('click');
 
-      expect('backPressedFromSettings').toHaveBeenDispatchedWith({
+      expect(SpyDispatcher).toHaveReceived({
         type: 'backPressedFromSettings',
         data: {retro_id: '13'},
       });

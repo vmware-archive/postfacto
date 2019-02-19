@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import RetroNotFoundPage from './retro_not_found_page';
 
@@ -47,12 +47,12 @@ describe('RetroNotFoundPage', () => {
     });
     it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
       $('button:contains("Create a Project")').simulate('click');
-      expect('redirectToRetroCreatePage').toHaveBeenDispatchedWith({type: 'redirectToRetroCreatePage'});
+      expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
     });
 
     it('dispatches resetRetroNotFound when unmounting', () => {
       subject.componentWillUnmount();
-      expect('resetRetroNotFound').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('resetRetroNotFound');
     });
   });
 });

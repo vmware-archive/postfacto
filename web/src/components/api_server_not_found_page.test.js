@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import ApiServerNotFoundPage from './api_server_not_found_page';
 
@@ -48,7 +48,7 @@ describe('ApiServerNotFoundPage', () => {
 
     it('dispatches resetApiServerNotFound when unmounting', () => {
       subject.componentWillUnmount();
-      expect('resetApiServerNotFound').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('resetApiServerNotFound');
     });
   });
 });

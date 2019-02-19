@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import Alert from './alert';
 
@@ -62,10 +62,10 @@ describe('Alert', () => {
 
     it('should remove alert after 3.5 seconds by default', () => {
       jest.advanceTimersByTime(3499);
-      expect('hideAlert').not.toHaveBeenDispatched();
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
 
       jest.advanceTimersByTime(2);
-      expect('hideAlert').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('hideAlert');
     });
   });
 
@@ -80,10 +80,10 @@ describe('Alert', () => {
 
     it('should remove alert after X seconds by default', () => {
       jest.advanceTimersByTime(9999);
-      expect('hideAlert').not.toHaveBeenDispatched();
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
 
       jest.advanceTimersByTime(2);
-      expect('hideAlert').toHaveBeenDispatched();
+      expect(SpyDispatcher).toHaveReceived('hideAlert');
     });
   });
 
@@ -134,10 +134,10 @@ describe('Alert', () => {
 
       it('should remove alert after 3.5 seconds by default', () => {
         jest.advanceTimersByTime(3499);
-        expect('hideAlert').not.toHaveBeenDispatched();
+        expect(SpyDispatcher).not.toHaveReceived('hideAlert');
 
         jest.advanceTimersByTime(2);
-        expect('hideAlert').toHaveBeenDispatched();
+        expect(SpyDispatcher).toHaveReceived('hideAlert');
       });
     });
 

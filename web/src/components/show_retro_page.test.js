@@ -31,7 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../spec_helper';
+import {SpyDispatcher} from '../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -174,7 +174,7 @@ describe('ShowRetroPage', () => {
 
           $('.archive-dialog__actions--cancel').simulate('click');
 
-          expect('hideDialog').toHaveBeenDispatched();
+          expect(SpyDispatcher).toHaveReceived('hideDialog');
         });
       });
 
