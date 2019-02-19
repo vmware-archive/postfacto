@@ -39,8 +39,8 @@ export default class FormattedInterval extends React.Component {
 
   formatInterval() {
     const {secondsRemaining} = this.props;
-    const roundedSeconds = Math.max(secondsRemaining | 0, 0);
-    const minutes = (roundedSeconds / 60) | 0;
+    const roundedSeconds = Math.max(Math.floor(secondsRemaining), 0);
+    const minutes = Math.floor(roundedSeconds / 60);
     const seconds = roundedSeconds % 60;
     const stringSeconds = seconds + '';
     return minutes + ':' + '00'.substr(stringSeconds.length) + stringSeconds;
