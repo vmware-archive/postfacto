@@ -33,8 +33,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
 
-import {useRouter} from './use_router';
 import PropTypes from 'prop-types';
+import {useRouter} from './use_router';
 
 describe('#useRouter', () => {
   let routeSpy;

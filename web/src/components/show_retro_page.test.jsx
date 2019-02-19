@@ -31,12 +31,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {SpyDispatcher} from '../spec_helper';
 
-import ShowRetroPage from './show_retro_page';
 import ReactTestUtils from 'react-dom/test-utils';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
+import ShowRetroPage from './show_retro_page';
+import {SpyDispatcher} from '../spec_helper';
 
 function setWindowToMobileSize() {
   window.innerWidth = 639;

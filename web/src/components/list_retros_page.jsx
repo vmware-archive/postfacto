@@ -32,9 +32,9 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import {RaisedButton} from 'material-ui';
+import types from 'prop-types';
 import RetroFooter from './footer';
 import RetroTile from './retro_tile';
-import types from 'prop-types';
 
 export default class ListRetrosPage extends React.Component {
   static propTypes = {

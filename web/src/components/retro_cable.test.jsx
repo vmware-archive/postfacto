@@ -31,10 +31,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ActionCable from 'actioncable';
 import {SpyDispatcher} from '../spec_helper';
 
 import RetroCable from './retro_cable';
-import ActionCable from 'actioncable';
 
 describe('RetroCable', () => {
   describe('rendering a RetroCable', () => {

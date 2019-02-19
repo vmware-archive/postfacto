@@ -29,11 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {SpyDispatcher} from '../spec_helper';
 import '../test_support/fetch_matchers';
 import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
+import {SpyDispatcher} from '../spec_helper';
 
 describe('ApiDispatcher', () => {
   let subject;

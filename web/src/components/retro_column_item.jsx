@@ -32,9 +32,9 @@
 import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
+import Scroll from 'react-scroll';
 import CountdownTimer from './countdown_timer';
 import RetroItemEditView from './retro_item_edit_view';
-import Scroll from 'react-scroll';
 
 export default class RetroColumnItem extends React.Component {
   static propTypes = {

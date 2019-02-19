@@ -31,9 +31,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {MuiThemeProvider} from 'material-ui';
 import {SpyDispatcher} from '../spec_helper';
 
-import {MuiThemeProvider} from 'material-ui';
 import RetroHeading from './retro_heading';
 
 describe('RetroHeading', () => {

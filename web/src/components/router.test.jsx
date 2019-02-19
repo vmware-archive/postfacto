@@ -31,6 +31,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import TestUtils from 'react-dom/test-utils';
 import {SpyDispatcher} from '../spec_helper';
 
 import Alert from './alert';
@@ -38,7 +39,6 @@ import Router from './router';
 import EmptyPage from './empty_page';
 import HomePage from './home_page';
 import ApiServerNotFoundPage from './api_server_not_found_page';
-import TestUtils from 'react-dom/test-utils';
 
 describe('Router', () => {
   let rendered;

@@ -30,10 +30,10 @@
  */
 
 import React from 'react';
-import Header from './header';
 import {configure, mount} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Helmet from 'react-helmet';
+import Header from './header';
 
 configure({adapter: new Adapter()});
 

@@ -31,10 +31,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {combineElementsContent, SpyDispatcher} from '../spec_helper';
 
 import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('ShowRetroPasswordSettingsPage', () => {
   let retro;

@@ -30,9 +30,9 @@
  */
 
 import React from 'react';
-import RetroMenu from './retro_menu';
 import {FlatButton, FontIcon, RaisedButton} from 'material-ui';
 import {Actions} from 'p-flux';
+import RetroMenu from './retro_menu';
 
 export default class RetroHeading extends React.PureComponent {
   constructor(props, context) {

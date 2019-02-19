@@ -31,10 +31,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Scroll from 'react-scroll';
 import {SpyDispatcher} from '../spec_helper';
 
 import RetroColumnItem from './retro_column_item';
-import Scroll from 'react-scroll';
 
 describe('RetroColumnItem', () => {
   const retroId = 'retro-slug-123';

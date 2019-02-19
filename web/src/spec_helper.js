@@ -29,13 +29,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Application from './components/Application'; // Load dispatchers (sets global state in p-flux Actions)
 import 'jasmine_dom_matchers';
 import './test_support/dispatcher_matchers';
 import './test_support/react_helper';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
 import ReactDOM from 'react-dom';
+import Application from './components/Application'; // Load dispatchers (sets global state in p-flux Actions)
 
 global.$ = jQuery;
 

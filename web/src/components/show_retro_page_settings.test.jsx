@@ -31,10 +31,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {SpyDispatcher} from '../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 describe('Retro settings', () => {
   let originalGetIsMobile;

@@ -32,11 +32,11 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import moment from 'moment';
-import RetroFooter from './footer';
-import RetroMenu from './retro_menu';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import types from 'prop-types';
+import RetroMenu from './retro_menu';
+import RetroFooter from './footer';
 
 export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {

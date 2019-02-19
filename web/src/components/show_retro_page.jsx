@@ -36,13 +36,13 @@ import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 
+import {HotKeys} from 'react-hotkeys';
 import RetroColumn from './retro_column';
 import RetroActionPanel from './retro_action_panel';
 import RetroWebsocket from './retro_websocket';
 import RetroFooter from './footer';
 import {RetroLegalBanner} from './retro_legal_banner';
 import RetroHeading from './retro_heading';
-import {HotKeys} from 'react-hotkeys';
 
 import EmptyPage from './empty_page';
 

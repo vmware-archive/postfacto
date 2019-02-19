@@ -31,8 +31,8 @@
 
 import React from 'react';
 import types from 'prop-types';
-import SessionCable from './session_cable';
 import ActionCable from 'actioncable';
+import SessionCable from './session_cable';
 
 export default class SessionWebsocket extends React.Component {
   static propTypes = {

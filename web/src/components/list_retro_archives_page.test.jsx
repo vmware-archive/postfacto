@@ -31,9 +31,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {SpyDispatcher} from '../spec_helper';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ListRetroArchivesPage from './list_retro_archives_page';
 
 describe('ListRetroArchivesPage', () => {

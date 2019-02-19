@@ -31,8 +31,8 @@
 
 import React from 'react';
 import types from 'prop-types';
-import RetroCable from './retro_cable';
 import ActionCable from 'actioncable';
+import RetroCable from './retro_cable';
 
 export default class RetroWebsocket extends React.Component {
   static propTypes = {

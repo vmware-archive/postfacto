@@ -33,8 +33,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../spec_helper';
 
-import RetroMenu from './retro_menu';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RetroMenu from './retro_menu';
 
 describe('RetroMenu', () => {
   let testCallback;
