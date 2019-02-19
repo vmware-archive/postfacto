@@ -44,6 +44,10 @@ export default class RetroCreatePage extends React.Component {
     }),
   };
 
+  static defaultProps = {
+    errors: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

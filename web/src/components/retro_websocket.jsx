@@ -37,7 +37,7 @@ import RetroCable from './retro_cable';
 export default class RetroWebsocket extends React.Component {
   static propTypes = {
     url: types.string.isRequired,
-    retro_id: types.string,
+    retro_id: types.string.isRequired,
   };
 
   constructor(props) {

@@ -50,6 +50,10 @@ export default class RetroActionsColumn extends React.Component {
     archives: types.bool,
   };
 
+  static defaultProps = {
+    archives: false,
+  };
+
   renderActionItems() {
     const {category, archives, retroId, retro: {action_items}} = this.props;
     const that = this;

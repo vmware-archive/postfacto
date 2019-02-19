@@ -57,19 +57,23 @@ function getItemArchiveTime(item) {
 
 export default class ShowRetroPage extends React.Component {
   static propTypes = {
-    retro: types.object,
+    retro: types.object.isRequired,
     retro_archives: types.object,
-    retroId: types.string,
+    retroId: types.string.isRequired,
     config: types.object.isRequired,
     archives: types.bool.isRequired,
     archiveId: types.string,
     featureFlags: types.object.isRequired,
-    dialog: types.shape(
-      {
-        title: types.string,
-        message: types.string,
-      },
-    ),
+    dialog: types.shape({
+      title: types.string,
+      message: types.string,
+    }),
+  };
+
+  static defaultProps = {
+    retro_archives: null,
+    archiveId: null,
+    dialog: null,
   };
 
   // Component Lifecycle

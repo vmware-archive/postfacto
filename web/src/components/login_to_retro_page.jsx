@@ -41,6 +41,11 @@ export default class LoginToRetroPage extends React.Component {
     force_relogin: types.bool,
   };
 
+  static defaultProps = {
+    login_error_message: '',
+    force_relogin: false,
+  };
+
   constructor(props) {
     super(props);
 

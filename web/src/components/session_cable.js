@@ -35,7 +35,7 @@ import {Actions} from 'p-flux';
 
 export default class SessionCable extends React.Component {
   static propTypes = {
-    cable: types.object,
+    cable: types.object.isRequired,
   };
 
   constructor(props) {

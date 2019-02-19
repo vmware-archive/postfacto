@@ -36,7 +36,7 @@ import RetroColumnInput from './retro_column_input';
 
 export default class RetroActionPanel extends React.Component {
   static propTypes = {
-    retro: types.object,
+    retro: types.object.isRequired,
     retroId: types.string.isRequired,
     isMobile: types.bool.isRequired,
     archives: types.bool.isRequired,

@@ -46,9 +46,17 @@ export default class ShowRetroSettingsPage extends React.Component {
     errors: types.object,
     name: types.string,
     retro: types.object,
-    retroId: types.string,
+    retroId: types.string.isRequired,
     session: types.object,
     slug: types.string,
+  };
+
+  static defaultProps = {
+    errors: null,
+    name: null,
+    retro: null,
+    session: null,
+    slug: null,
   };
 
   // Component Lifecycle

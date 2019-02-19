@@ -43,6 +43,10 @@ export default class RetroColumn extends React.Component {
     isMobile: types.bool.isRequired,
   };
 
+  static defaultProps = {
+    archives: false,
+  };
+
   renderRetroItems() {
     const {
       archives,

@@ -37,11 +37,15 @@ import RetroMenu from './retro_menu';
 
 export default class RetroHeading extends React.PureComponent {
   static propTypes = {
-    retro: types.object,
-    retroId: types.string,
-    archives: types.bool,
-    isMobile: types.bool,
+    retro: types.object.isRequired,
+    retroId: types.string.isRequired,
+    archives: types.bool.isRequired,
+    isMobile: types.bool.isRequired,
     showVideoButton: types.bool,
+  };
+
+  static defaultProps = {
+    showVideoButton: false,
   };
 
   constructor(props, context) {

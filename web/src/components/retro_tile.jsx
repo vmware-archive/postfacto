@@ -37,6 +37,10 @@ export default function RetroTile({callback, retro}) {
 }
 
 RetroTile.propTypes = {
-  retro: PropTypes.object,
+  retro: PropTypes.object.isRequired,
   callback: PropTypes.func,
+};
+
+RetroTile.defaultProps = {
+  callback: null,
 };

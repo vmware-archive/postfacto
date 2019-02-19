@@ -43,6 +43,10 @@ export default class RetroActionsColumnItem extends React.Component {
     archives: types.bool,
   };
 
+  static defaultProps = {
+    archives: false,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

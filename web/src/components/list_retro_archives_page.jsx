@@ -44,6 +44,10 @@ export default class ListRetroArchivesPage extends React.Component {
     retroId: types.string.isRequired,
   };
 
+  static defaultProps = {
+    archives: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

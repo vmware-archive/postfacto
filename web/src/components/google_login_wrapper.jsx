@@ -37,7 +37,7 @@ export default class GoogleLoginWrapper extends React.Component {
   static propTypes = {
     onSuccess: types.func.isRequired,
     onFailure: types.func.isRequired,
-    className: types.string,
+    className: types.string.isRequired,
   };
 
   constructor(props) {

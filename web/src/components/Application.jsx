@@ -56,7 +56,7 @@ class Application extends React.Component {
   static propTypes = {
     config: types.object.isRequired,
     store: types.object.isRequired,
-    router: types.oneOfType([types.object, types.func]),
+    router: types.oneOfType([types.object, types.func]).isRequired,
   };
 
   componentDidMount() {

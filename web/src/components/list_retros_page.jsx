@@ -38,7 +38,7 @@ import RetroTile from './retro_tile';
 
 export default class ListRetrosPage extends React.Component {
   static propTypes = {
-    retros: types.array,
+    retros: types.array.isRequired,
   };
 
   constructor(props) {

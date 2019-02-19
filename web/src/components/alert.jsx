@@ -38,8 +38,14 @@ export default class Alert extends React.Component {
   static propTypes = {
     alert: types.shape({
       checkIcon: types.bool,
+      message: types.string,
     }),
     className: types.string,
+  };
+
+  static defaultProps = {
+    alert: null,
+    className: '',
   };
 
   componentDidMount() {
@@ -81,7 +87,7 @@ export default class Alert extends React.Component {
 
     if (alert && (alert.message && alert.message.length > 0)) {
       return (
-        <div className={`alert ${className || ''}`}>
+        <div className={`alert ${className}`}>
           {this.renderIcon()}
           <span className="alert__text">{alert.message}</span>
         </div>

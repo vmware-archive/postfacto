@@ -36,7 +36,7 @@ import Logger from '../helpers/logger';
 
 export default class RetroCable extends React.Component {
   static propTypes = {
-    cable: types.object,
+    cable: types.object.isRequired,
     retro_id: types.string.isRequired,
   };
 

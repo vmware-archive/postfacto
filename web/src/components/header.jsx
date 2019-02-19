@@ -35,7 +35,7 @@ import Helmet from 'react-helmet';
 
 const Header = ({config, retro}) => (
   <Helmet
-    title={retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title}
+    title={retro.name ? retro.name + ' - ' + config.title : config.title}
     link={[
       {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
       {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
@@ -44,8 +44,8 @@ const Header = ({config, retro}) => (
 );
 
 Header.propTypes = {
-  retro: types.object,
-  config: types.object,
+  retro: types.object.isRequired,
+  config: types.object.isRequired,
 };
 
 export default Header;

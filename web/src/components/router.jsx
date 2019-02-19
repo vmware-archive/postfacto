@@ -84,11 +84,18 @@ const routes = {
 
 export default class Router extends React.Component {
   static propTypes = {
-    router: types.oneOfType([types.object, types.func]),
+    router: types.oneOfType([types.object, types.func]).isRequired,
     retro: types.object,
     config: types.object,
     alert: types.object,
     featureFlags: types.object,
+  };
+
+  static defaultProps = {
+    retro: null,
+    config: null,
+    alert: null,
+    featureFlags: {},
   };
 
   constructor(props) {

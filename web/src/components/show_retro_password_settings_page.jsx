@@ -40,11 +40,17 @@ import EmptyPage from './empty_page';
 export default class ShowRetroPasswordSettingsPage extends React.Component {
   static propTypes = {
     retro: types.object,
-    retroId: types.string,
+    retroId: types.string.isRequired,
     session: types.object,
     errors: types.shape({
       current_password: types.string,
     }),
+  };
+
+  static defaultProps = {
+    retro: null,
+    session: null,
+    errors: null,
   };
 
   constructor(props) {

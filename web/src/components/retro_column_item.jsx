@@ -42,8 +42,13 @@ export default class RetroColumnItem extends React.Component {
     retroId: types.string.isRequired,
     highlighted_item_id: types.number,
     retro_item_end_time: types.string,
-    archives: types.bool,
+    archives: types.bool.isRequired,
     isMobile: types.bool.isRequired,
+  };
+
+  static defaultProps = {
+    highlighted_item_id: null,
+    retro_item_end_time: '',
   };
 
   constructor(props) {
