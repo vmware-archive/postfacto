@@ -51,7 +51,7 @@ export default class RetroCreatePage extends React.Component {
       },
     };
 
-    this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.togglePrivate = this.togglePrivate.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -130,10 +130,10 @@ export default class RetroCreatePage extends React.Component {
   };
 
   change = (e) => {
-    const errors = Object.assign({}, this.state.errors);
-
     const elementName = e.currentTarget.name;
     const elementValue = e.currentTarget.value;
+
+    const errors = {};
 
     if (elementName === 'name') {
       errors.name = this.validateName(elementValue);
@@ -147,11 +147,16 @@ export default class RetroCreatePage extends React.Component {
       errors.password = this.validatePassword(elementValue);
     }
 
-    this.setState({[elementName]: elementValue, errors});
+    this.setState((oldState) => ({
+      [elementName]: elementValue,
+      errors: Object.assign({}, oldState.errors, errors),
+    }));
   };
 
-  toggleCheckbox = (e) => {
-    this.setState({[e.currentTarget.name]: !this.state.isPrivate});
+  togglePrivate = () => {
+    this.setState((oldState) => ({
+      isPrivate: !oldState.isPrivate,
+    }));
   };
 
   renderAccessInstruction() {
@@ -245,7 +250,7 @@ export default class RetroCreatePage extends React.Component {
                   label={isPrivate ? 'Yes' : 'No'}
                   labelPosition="right"
                   toggled={isPrivate}
-                  onToggle={this.toggleCheckbox}
+                  onToggle={this.togglePrivate}
                   trackStyle={toggle.trackStyle}
                   trackSwitchedStyle={toggle.trackSwitchedStyle}
                   labelStyle={toggle.labelStyle}

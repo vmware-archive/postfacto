@@ -111,7 +111,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   handleSubmitButtonClicked() {
-    const errors = Object.assign({}, this.state.errors);
+    const errors = {};
 
     if (this.state.new_password !== this.state.confirm_new_password) {
       errors.confirm_new_password = 'Your passwords do not match!';
@@ -125,7 +125,10 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         request_uuid: this.props.session.request_uuid,
       });
     }
-    this.setState({errors});
+
+    this.setState((oldState) => ({
+      errors: Object.assign({}, oldState.errors, errors),
+    }));
   }
 
   handleChange(e) {

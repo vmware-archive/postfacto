@@ -70,7 +70,7 @@ export default class ShowRetroSettingsPage extends React.Component {
     this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangePasswordClick = this.handleChangePasswordClick.bind(this);
-    this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.togglePrivate = this.togglePrivate.bind(this);
     this.handleRetroSettingsSubmit = this.handleRetroSettingsSubmit.bind(this);
   }
 
@@ -143,10 +143,10 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   handleChange(e) {
-    const errors = Object.assign({}, this.state.errors);
-
     const elementName = e.currentTarget.name;
     const elementValue = e.currentTarget.value;
+
+    const errors = {};
 
     if (elementName === 'name') {
       errors.name = this.validateName(elementValue);
@@ -156,7 +156,10 @@ export default class ShowRetroSettingsPage extends React.Component {
       errors.slug = this.validateSlug(elementValue);
     }
 
-    this.setState({[elementName]: elementValue, errors});
+    this.setState((oldState) => ({
+      [elementName]: elementValue,
+      errors: Object.assign({}, oldState.errors, errors),
+    }));
   }
 
   handleRetroSettingsSubmit() {
@@ -213,9 +216,11 @@ export default class ShowRetroSettingsPage extends React.Component {
     );
   }
 
-  toggleCheckbox(e) {
-    this.setState({[e.currentTarget.name]: !this.state.isPrivate});
-  }
+  togglePrivate = () => {
+    this.setState((oldState) => ({
+      isPrivate: !oldState.isPrivate,
+    }));
+  };
 
   renderAccessInstruction() {
     const accessPrivate = (
@@ -349,7 +354,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                     label={this.state.isPrivate ? 'Yes' : 'No'}
                     toggled={this.state.isPrivate}
                     labelPosition="right"
-                    onToggle={this.toggleCheckbox}
+                    onToggle={this.togglePrivate}
                     trackStyle={toggle.trackStyle}
                     trackSwitchedStyle={toggle.trackSwitchedStyle}
                     labelStyle={toggle.labelStyle}
