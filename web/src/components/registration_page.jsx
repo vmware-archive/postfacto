@@ -32,7 +32,6 @@
 import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
-import ReactDOM from 'react-dom';
 
 export default class RegistrationPage extends React.Component {
   static propTypes = {
@@ -44,12 +43,27 @@ export default class RegistrationPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      fullName: props.fullName,
+      companyName: '',
+    };
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleCompanyNameChange = this.handleCompanyNameChange.bind(this);
     this.register = this.register.bind(this);
   }
 
+  handleNameChange(e) {
+    this.setState({fullName: e.target.value});
+  }
+
+  handleCompanyNameChange(e) {
+    this.setState({companyName: e.target.value});
+  }
+
   register() {
-    const companyName = ReactDOM.findDOMNode(this.refs.companyNameInput).value;
-    const fullName = ReactDOM.findDOMNode(this.refs.fullNameInput).value;
+    const {fullName, companyName} = this.state;
+
     Actions.createUser({
       access_token: this.props.accessToken,
       company_name: companyName,
@@ -85,8 +99,8 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <label className="label">Full Name</label>
               <input
-                defaultValue={this.props.fullName}
-                ref="fullNameInput"
+                value={this.state.fullName}
+                onChange={this.handleNameChange}
                 placeholder="Full Name"
                 id="fullName"
                 name="fullName"
@@ -98,7 +112,8 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <label className="label">Company Name</label>
               <input
-                ref="companyNameInput"
+                value={this.state.companyName}
+                onChange={this.handleCompanyNameChange}
                 placeholder="Company Name"
                 id="companyName"
                 name="companyName"
@@ -126,7 +141,6 @@ export default class RegistrationPage extends React.Component {
                 />
               </div>
             </div>
-
           </div>
         </div>
       </div>

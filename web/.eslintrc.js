@@ -20,8 +20,6 @@ module.exports = {
     'react/forbid-prop-types': ['off'],
     'react/jsx-no-target-blank': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
-    'react/no-find-dom-node': ['off'],
-    'react/no-string-refs': ['off'],
     'react/no-unescaped-entities': ['off'],
     'react/sort-comp': ['off'],
 
