@@ -52,15 +52,12 @@ describe('Alert', () => {
     beforeEach(() => {
       const alert = {
         message: 'Alert Message',
-        linkMessage: 'Link Message',
-        linkUrl: 'http://url/',
       };
       ReactDOM.render(<Alert alert={alert}/>, root);
     });
 
     it('should render alert', () => {
       expect('.alert .alert__text').toContainText('Alert Message');
-      expect('.alert .alert__link').toContainText('Link Message');
     });
 
     it('should remove alert after 3.5 seconds by default', () => {
@@ -76,8 +73,6 @@ describe('Alert', () => {
     beforeEach(() => {
       const alert = {
         message: 'Alert Message',
-        linkMessage: 'Link Message',
-        linkUrl: 'http://url/',
         duration: 10000,
       };
       ReactDOM.render(<Alert alert={alert}/>, root);
@@ -92,30 +87,11 @@ describe('Alert', () => {
     });
   });
 
-  describe('when the alert is set to sticky', () => {
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-        linkMessage: 'Link Message',
-        linkUrl: 'http://url/',
-        sticky: true,
-        duration: 500,
-      };
-      ReactDOM.render(<Alert alert={alert}/>, root);
-    });
-
-    it('should not remove the alert', () => {
-      jest.advanceTimersByTime(501);
-      expect('hideAlert').not.toHaveBeenDispatched();
-    });
-  });
-
   describe('when the checkIcon is set to true', () => {
     beforeEach(() => {
       const alert = {
         message: 'Alert Message',
         checkIcon: true,
-        sticky: true,
       };
       ReactDOM.render(<Alert alert={alert}/>, root);
     });
@@ -130,7 +106,6 @@ describe('Alert', () => {
       const alert = {
         message: 'Alert Message',
         checkIcon: false,
-        sticky: true,
       };
       ReactDOM.render(<Alert alert={alert}/>, root);
     });
@@ -148,9 +123,6 @@ describe('Alert', () => {
     beforeEach(() => {
       const alert = {
         message: 'Alert Message',
-        linkMessage: 'Link Message',
-        linkUrl: 'http://url/',
-        sticky: false,
       };
       component = renderAlert(alert);
     });
@@ -158,7 +130,6 @@ describe('Alert', () => {
     describe('and alert is not null', () => {
       it('should render alert', () => {
         expect('.alert .alert__text').toContainText('Alert Message');
-        expect('.alert .alert__link').toContainText('Link Message');
       });
 
       it('should remove alert after 3.5 seconds by default', () => {

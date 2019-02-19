@@ -804,8 +804,6 @@ describe('MainDispatcher', () => {
         type: 'showAlert',
         data: {
           message: 'this is a message',
-          linkMessage: 'link message',
-          linkUrl: 'http://url/',
         },
       });
     });
@@ -813,8 +811,6 @@ describe('MainDispatcher', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
         alert: {
           message: 'this is a message',
-          linkMessage: 'link message',
-          linkUrl: 'http://url/',
         },
       });
     });

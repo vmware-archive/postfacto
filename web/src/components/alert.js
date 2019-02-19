@@ -60,7 +60,7 @@ export default class Alert extends React.Component {
   initialize(props) {
     const {alert} = props;
 
-    if (alert && (alert.message && alert.message.length > 0) && !alert.sticky) {
+    if (alert && (alert.message && alert.message.length > 0)) {
       this.startHideTimer(alert.duration);
     } else if (this.timeout) {
       clearTimeout(this.timeout);
@@ -83,7 +83,6 @@ export default class Alert extends React.Component {
         <div className={`alert ${className || ''}`}>
           {this.renderIcon()}
           <span className="alert__text">{alert.message}</span>
-          <span className="alert__link" onClick={alert.linkClick}>{alert.linkMessage}</span>
         </div>
       );
     }

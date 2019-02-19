@@ -933,15 +933,6 @@ button:focus {
     color: #599E93;
   }
 
-  .alert__link {
-    margin-left: 0.5rem;
-    color: $happy;
-  }
-
-  .alert__link:hover {
-    cursor: pointer;
-  }
-
   @include breakpoint(small only) {
     top: 10px;
   }
