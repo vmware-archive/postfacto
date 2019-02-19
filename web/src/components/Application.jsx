@@ -34,7 +34,7 @@ import types from 'prop-types';
 import {useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {useRouter} from './use_router';
+import useRouter from './use_router';
 import Router from './router';
 import Header from './header';
 import Logger from '../helpers/logger';

@@ -34,7 +34,7 @@ import ReactDOM from 'react-dom';
 import '../spec_helper';
 
 import PropTypes from 'prop-types';
-import {useRouter} from './use_router';
+import useRouter from './use_router';
 
 describe('#useRouter', () => {
   let routeSpy;

@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {fetchJson} from '../helpers/fetch_helper';
+import fetchJson from '../helpers/fetch_helper';
 
 export default {
   apiBaseUrl() {

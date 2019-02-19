@@ -33,7 +33,7 @@ import React from 'react';
 import Grapnel from 'grapnel';
 import {Dispatcher} from 'p-flux';
 
-export const useRouter = (Component) => class extends React.Component {
+export default (Component) => class extends React.Component {
   constructor(props) {
     super(props);
     const {state} = this;

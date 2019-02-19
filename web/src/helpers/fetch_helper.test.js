@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {fetchJson} from './fetch_helper';
+import fetchJson from './fetch_helper';
 import {SpyDispatcher} from '../spec_helper';
 
 describe('fetchJson', () => {

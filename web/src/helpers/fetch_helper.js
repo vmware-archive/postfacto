@@ -31,7 +31,7 @@
 
 import {Actions} from 'p-flux';
 
-export function fetchJson(url, {accessToken, headers, ...options} = {}) {
+export default function fetchJson(url, {accessToken, headers, ...options} = {}) {
   const acceptHeaders = {'accept': 'application/json', 'Content-Type': 'application/json'};
   const authorizationHeaders = accessToken ? {authorization: `Bearer ${accessToken}`} : {};
   const augmentedOptions = {
