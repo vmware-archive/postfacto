@@ -32,21 +32,21 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import types from 'prop-types';
-import RetroCreatePage from './retro_create_page';
-import ListRetrosPage from './list_retros_page';
-import ShowRetroPage from './show_retro_page';
-import ShowRetroSettingsPage from './show_retro_settings_page';
-import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
-import LoginToRetroPage from './login_to_retro_page';
-import ApiServerNotFoundPage from './api_server_not_found_page';
-import RetroNotFoundPage from './retro_not_found_page';
-import NotFoundPage from './not_found_page';
-import NewTermsPage from './new_terms_page';
-import EmptyPage from './empty_page';
-import HomePage from './home_page';
-import ListRetroArchivesPage from './list_retro_archives_page';
-import Alert from './alert';
-import RegistrationPage from './registration_page';
+import RetroCreatePage from './retro-create/retro_create_page';
+import ListRetrosPage from './retros-list/list_retros_page';
+import ShowRetroPage from './retro-show/show_retro_page';
+import ShowRetroSettingsPage from './retro-settings/show_retro_settings_page';
+import ShowRetroPasswordSettingsPage from './retro-settings/show_retro_password_settings_page';
+import LoginToRetroPage from './retro-login/login_to_retro_page';
+import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
+import RetroNotFoundPage from './retro-not-found/retro_not_found_page';
+import NotFoundPage from './not-found/not_found_page';
+import NewTermsPage from './terms/new_terms_page';
+import EmptyPage from './shared/empty_page';
+import HomePage from './home/home_page';
+import ListRetroArchivesPage from './retro-archives/list_retro_archives_page';
+import Alert from './shared/alert';
+import RegistrationPage from './registration/registration_page';
 
 function isObject(obj) {
   return typeof obj === 'object';

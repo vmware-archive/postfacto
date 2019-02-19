@@ -35,7 +35,7 @@ import './test_support/react_helper';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
 import ReactDOM from 'react-dom';
-import Application from './components/Application'; // Load dispatchers (sets global state in p-flux Actions)
+import Application from './Application'; // Load dispatchers (sets global state in p-flux Actions)
 
 global.$ = jQuery;
 

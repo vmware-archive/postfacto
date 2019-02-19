@@ -32,7 +32,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './stylesheets/application.scss';
-import EnhancedApplication from './components/Application';
+import EnhancedApplication from './Application';
 import * as serviceWorker from './serviceWorker';
 
 const {config} = global.Retro;

@@ -34,11 +34,11 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
 import {SpyDispatcher} from '../spec_helper';
 
-import Alert from './alert';
+import Alert from './shared/alert';
 import Router from './router';
-import EmptyPage from './empty_page';
-import HomePage from './home_page';
-import ApiServerNotFoundPage from './api_server_not_found_page';
+import EmptyPage from './shared/empty_page';
+import HomePage from './home/home_page';
+import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 
 describe('Router', () => {
   let rendered;
