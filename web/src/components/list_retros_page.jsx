@@ -65,10 +65,8 @@ export default class ListRetrosPage extends React.Component {
   }
 
   render() {
-    const retroListItems = this.props.retros.map((retro, index) => (
-      <RetroTile key={index} callback={() => this.handleRetroListItemClicked(retro)} retro={retro}>
-        {retro.name}
-      </RetroTile>
+    const retroListItems = this.props.retros.map((retro) => (
+      <RetroTile key={retro.slug} callback={() => this.handleRetroListItemClicked(retro)} retro={retro}/>
     ));
 
     return (
