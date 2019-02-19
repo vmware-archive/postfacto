@@ -79,7 +79,7 @@ export default class RetroColumn extends React.Component {
     }
     return (
       <div className="retro-item-list-header">
-        <img src={require('../images/' + category + '.svg')}/>
+        <img src={require('../images/' + category + '.svg')} alt={category}/>
       </div>
     );
   }

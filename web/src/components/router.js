@@ -91,8 +91,8 @@ export default class Router extends React.Component {
     featureFlags: types.object,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     const {state} = this;
     this.state = {...state, Page: EmptyPage};
   }

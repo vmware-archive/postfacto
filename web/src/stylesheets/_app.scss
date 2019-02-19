@@ -29,8 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@charset 'utf-8';
-
 @import 'settings';
 @import 'palette';
 @import 'dimensions';
@@ -305,7 +303,7 @@ ol ol > li:before {
     .retro-whats-new {
       margin-top: 8px;
       text-transform: uppercase;
-      font-family: Karla;
+      font-family: Karla, sans-serif;
       font-size: 16px;
       white-space: nowrap;
       position: absolute;
@@ -1058,14 +1056,14 @@ button:focus {
 
 .floating-video {
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: 0;
+  right: 0;
 }
 
 .hide-button {
   position: absolute;
   top: -40px;
-  right: 0px;
+  right: 0;
   height: 40px;
 }
 

@@ -113,9 +113,10 @@ describe('RetroActionsColumn Current', () => {
 
   describe('when retro has action items', () => {
     it('should render current items in descending order', () => {
-      expect($('.retro-action .action-text').length).toEqual(2);
-      expect($('.retro-action .action-text')[0].innerHTML).toEqual('action item 2');
-      expect($('.retro-action .action-text')[1].innerHTML).toEqual('action item 1');
+      const actions = $('.retro-action .action-text');
+      expect(actions.length).toEqual(2);
+      expect(actions[0].innerHTML).toEqual('action item 2');
+      expect(actions[1].innerHTML).toEqual('action item 1');
     });
   });
 });

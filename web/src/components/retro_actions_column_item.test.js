@@ -128,8 +128,7 @@ describe('RetroActionsColumnItem', () => {
 
       describe('when enter key is pressed', () => {
         beforeEach(() => {
-          $('.retro-action textarea').val('some other value').simulate('change');
-          $('.retro-action textarea').simulate('keyPress', {key: 'Enter'});
+          $('.retro-action textarea').val('some other value').simulate('change').simulate('keyPress', {key: 'Enter'});
         });
 
         sharedUpdateActionBehavior();

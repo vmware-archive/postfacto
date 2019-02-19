@@ -41,8 +41,8 @@ export default class LoginToRetroPage extends React.Component {
     force_relogin: types.bool,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.state = {
       password: '',

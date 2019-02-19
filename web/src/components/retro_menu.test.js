@@ -62,10 +62,11 @@ describe('RetroMenu', () => {
   describe('within retro menu', () => {
     it('has the menu items', () => {
       $('.retro-menu button').simulate('click');
+      const items = $('.retro-menu-item');
       expect('.retro-menu-item').toHaveLength(3);
-      expect($('.retro-menu-item')[0]).toContainText('Menu Item 1');
-      expect($('.retro-menu-item')[1]).toContainText('Menu Item 2');
-      expect($('.retro-menu-item')[2]).toContainText('Menu Item 3');
+      expect(items[0]).toContainText('Menu Item 1');
+      expect(items[1]).toContainText('Menu Item 2');
+      expect(items[2]).toContainText('Menu Item 3');
     });
 
     it('invokes the callback on click of menu item', () => {

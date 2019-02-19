@@ -33,8 +33,8 @@ import React from 'react';
 import {Actions} from 'p-flux';
 
 export default class RetroNotFoundPage extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onCreateNewRetroClicked = this.onCreateNewRetroClicked.bind(this);
   }

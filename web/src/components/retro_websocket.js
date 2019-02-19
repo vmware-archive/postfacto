@@ -40,8 +40,8 @@ export default class RetroWebsocket extends React.Component {
     retro_id: types.string,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {cable: null};
   }
 

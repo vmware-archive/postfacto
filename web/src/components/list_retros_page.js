@@ -41,8 +41,8 @@ export default class ListRetrosPage extends React.Component {
     retros: types.array,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.handleNewRetroButtonClicked = this.handleNewRetroButtonClicked.bind(this);
     this.handleSignOutButtonClicked = this.handleSignOutButtonClicked.bind(this);

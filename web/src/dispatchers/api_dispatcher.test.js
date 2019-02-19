@@ -1070,7 +1070,7 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'getRetroArchive', data: {retro_id: '1', archive_id: '1'}});
     });
 
-    it('makes an api GET to /rertros/:retro_id/archives/:archive_id', () => {
+    it('makes an api GET to /retros/:retro_id/archives/:archive_id', () => {
       expect('/retros/1/archives/1').toHaveBeenRequestedWith({
         requestHeaders: {
           'accept': 'application/json',

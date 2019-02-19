@@ -39,8 +39,8 @@ export default class SessionWebsocket extends React.Component {
     url: types.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {cable: null};
   }
 

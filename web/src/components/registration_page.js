@@ -41,8 +41,8 @@ export default class RegistrationPage extends React.Component {
     fullName: types.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.register = this.register.bind(this);
   }

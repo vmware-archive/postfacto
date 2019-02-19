@@ -40,8 +40,8 @@ export default class GoogleLoginWrapper extends React.Component {
     className: types.string,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.handleClickCapture = this.handleClickCapture.bind(this);
   }

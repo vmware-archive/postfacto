@@ -79,7 +79,8 @@ describe('RetroColumn', () => {
   });
 
   it('should order items by time', () => {
-    expect($('.column-happy .retro-item .item-text').get(0).textContent).toEqual('the happy retro item');
-    expect($('.column-happy .retro-item .item-text').get(1).textContent).toEqual('the 2nd happy retro item');
+    const happyItems = $('.column-happy .retro-item .item-text');
+    expect(happyItems.get(0).textContent).toEqual('the happy retro item');
+    expect(happyItems.get(1).textContent).toEqual('the 2nd happy retro item');
   });
 });

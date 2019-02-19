@@ -78,8 +78,7 @@ describe('LoginToRetroPage', () => {
 
     describe('when hitting the return key in the password input field', () => {
       it('dispatches loginToRetro', () => {
-        $('.form-input').val('pa55word').simulate('change');
-        $('.form-input').simulate('keyPress', {key: 'Enter'});
+        $('.form-input').val('pa55word').simulate('change').simulate('keyPress', {key: 'Enter'});
         expect('loginToRetro').toHaveBeenDispatchedWith({
           type: 'loginToRetro',
           data: {retro_id: '13', password: 'pa55word'},

@@ -41,8 +41,8 @@ export default class RetroMenu extends React.Component {
     items: types.array.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       anchorEl: null,
       open: false,

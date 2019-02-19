@@ -44,8 +44,8 @@ export default class ListRetroArchivesPage extends React.Component {
     retroId: types.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       isMobile: false,
     };

@@ -43,17 +43,11 @@ Object.assign(XMLHttpRequest.prototype, {
   succeed(data = {}, options = {}) {
     this.respondWith(Object.assign({status: 200, responseText: data ? JSON.stringify(data) : '{}'}, options));
   },
-  fail(data, options = {}) {
-    this.respondWith(Object.assign({status: 400, responseText: JSON.stringify(data)}, options));
-  },
   forbidden(data, options = {}) {
     this.respondWith(Object.assign({status: 403, responseText: data ? JSON.stringify(data) : '{}'}, options));
   },
   notFound() {
     this.respondWith(Object.assign({status: 404, responseText: '{}'}));
-  },
-  noContent() {
-    this.respondWith(Object.assign({status: 204, responseText: ''}));
   },
 });
 

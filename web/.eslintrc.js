@@ -10,7 +10,6 @@ module.exports = {
     'import/order': ['off'],
     'import/no-dynamic-require': ['off'],
     'import/prefer-default-export': ['off'],
-    'jsx-a11y/alt-text': ['off'],
     'jsx-a11y/click-events-have-key-events': ['off'],
     'jsx-a11y/label-has-associated-control': ['off'],
     'jsx-a11y/label-has-for': ['off'],

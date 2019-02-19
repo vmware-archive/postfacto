@@ -54,7 +54,7 @@ jest.useFakeTimers();
 beforeEach(() => {
   global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
 
-  global.root = jQuery('<div id="root" />').get(0);
+  global.root = jQuery('<div id="root"></div>').get(0);
   jQuery('body')
     .find('#root')
     .remove()

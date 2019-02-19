@@ -54,8 +54,9 @@ describe('ListRetroArchivesPage', () => {
   });
 
   it('shows all archived retros', () => {
-    expect($('.archives .archive-link a')[0].innerHTML).toEqual('28 October 2016');
-    expect($('.archives .archive-link a')[1].innerHTML).toEqual('03 September 2016');
+    const links = $('.archives .archive-link a');
+    expect(links[0].innerHTML).toEqual('28 October 2016');
+    expect(links[1].innerHTML).toEqual('03 September 2016');
   });
 
   it('shows the footer', () => {

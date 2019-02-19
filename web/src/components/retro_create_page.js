@@ -37,8 +37,8 @@ import iconLockedSvg from '../images/icon-locked.svg';
 import iconEyeSvg from '../images/icon-eye.svg';
 
 export default class RetroCreatePage extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       name: '',
       slug: '',
@@ -157,13 +157,13 @@ export default class RetroCreatePage extends React.Component {
   renderAccessInstruction() {
     const accessPrivate = (
       <div>
-        <img className="icon-locked" src={iconLockedSvg}/>
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/>
         {' '}The password is needed to view or participate.
       </div>
     );
     const accessPublic = (
       <div>
-        <img className="icon-locked" src={iconEyeSvg}/>
+        <img className="icon-locked" src={iconEyeSvg} alt="Unlocked"/>
         {' '}Anyone can view or participate <strong>without</strong> entering password.
       </div>
     );
@@ -174,8 +174,8 @@ export default class RetroCreatePage extends React.Component {
 
         <br/>
         Password is always required to: <br/>
-        <img className="icon-locked" src={iconLockedSvg}/> Access archives<br/>
-        <img className="icon-locked" src={iconLockedSvg}/> Edit settings
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/> Access archives<br/>
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/> Edit settings
 
       </div>
     );

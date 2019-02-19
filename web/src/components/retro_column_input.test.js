@@ -45,11 +45,12 @@ describe('inputting a retro item', () => {
     ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="happy"/>, root);
   });
   it('adds an retro item when pressing enter', () => {
-    expect($('textarea').attr('placeholder')).toEqual('I\'m glad that...');
-    $('textarea').val('a new retro item').simulate('change');
-    $('textarea').simulate('keyPress', {key: 'a'});
+    const textarea = $('textarea');
+    expect(textarea.attr('placeholder')).toEqual('I\'m glad that...');
+    textarea.val('a new retro item').simulate('change');
+    textarea.simulate('keyPress', {key: 'a'});
     expect('textarea').toHaveValue('a new retro item');
-    $('textarea').simulate('keyPress', {key: 'Enter'});
+    textarea.simulate('keyPress', {key: 'Enter'});
     expect('createRetroItem').toHaveBeenDispatchedWith({
       type: 'createRetroItem',
       data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
@@ -58,9 +59,7 @@ describe('inputting a retro item', () => {
   });
 
   it('adds an retro item when clicking button', () => {
-    $('textarea').val('a new retro item').simulate('change');
-
-    $('textarea').simulate('focus');
+    $('textarea').val('a new retro item').simulate('change').simulate('focus');
     $('.input-button').simulate('click');
     expect('createRetroItem').toHaveBeenDispatchedWith({
       type: 'createRetroItem',
@@ -70,8 +69,7 @@ describe('inputting a retro item', () => {
   });
 
   it('doesn\'t add an item when pressing enter on an empty input field', () => {
-    $('textarea').val('').simulate('change');
-    $('textarea').simulate('keyPress', {key: 'Enter'});
+    $('textarea').val('').simulate('change').simulate('keyPress', {key: 'Enter'});
     expect('createRetroItem').not.toHaveBeenDispatched();
   });
 });
@@ -83,11 +81,11 @@ describe('inputting an action item', () => {
   });
 
   it('adds an action item when pressing enter', () => {
-    expect($('textarea').attr('placeholder')).toEqual('Add an action item');
-    $('textarea').val('a new action item').simulate('change');
-    $('textarea').simulate('keyPress', {key: 'a'});
+    const textarea = $('textarea');
+    expect(textarea.attr('placeholder')).toEqual('Add an action item');
+    textarea.val('a new action item').simulate('change').simulate('keyPress', {key: 'a'});
     expect('textarea').toHaveValue('a new action item');
-    $('textarea').simulate('keyPress', {key: 'Enter'});
+    textarea.simulate('keyPress', {key: 'Enter'});
     expect('createRetroActionItem').toHaveBeenDispatchedWith({
       type: 'createRetroActionItem',
       data: {retro_id: retroId, description: 'a new action item'},
@@ -96,15 +94,12 @@ describe('inputting an action item', () => {
   });
 
   it('does not submit when pressing shift + enter so new line is added', () => {
-    $('textarea').val('a new action item').simulate('change');
-
-    $('textarea').simulate('keyPress', {key: 'Enter', shiftKey: true});
+    $('textarea').val('a new action item').simulate('change').simulate('keyPress', {key: 'Enter', shiftKey: true});
     expect('createRetroActionItem').not.toHaveBeenDispatched();
   });
 
   it('doesn\'t add an item when pressing enter on an empty input field', () => {
-    $('textarea').val('').simulate('change');
-    $('textarea').simulate('keyPress', {key: 'Enter'});
+    $('textarea').val('').simulate('change').simulate('keyPress', {key: 'Enter'});
     expect('createRetroActionItem').not.toHaveBeenDispatched();
   });
 

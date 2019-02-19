@@ -38,8 +38,8 @@ export default class SessionCable extends React.Component {
     cable: types.object,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {subscription: null};
   }
 

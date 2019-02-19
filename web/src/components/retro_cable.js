@@ -40,8 +40,8 @@ export default class RetroCable extends React.Component {
     retro_id: types.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {subscription: null};
   }
 

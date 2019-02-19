@@ -55,8 +55,8 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   // Component Lifecycle
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       isMobile: false,
       isPrivate: false,
@@ -213,24 +213,6 @@ export default class ShowRetroSettingsPage extends React.Component {
     );
   }
 
-  renderMobileHeading() {
-    const {isMobile} = this.state;
-    const {retro} = this.props;
-    const menuItems = this.getMenuItems();
-
-    return (
-      <div className="retro-heading row">
-        {
-          this.renderBackButton()
-        }
-        <div className="retro-name">
-          <h1>{retro.name}</h1>
-        </div>
-        <RetroMenu isMobile={isMobile} items={menuItems}/>
-      </div>
-    );
-  }
-
   toggleCheckbox(e) {
     this.setState({[e.currentTarget.name]: !this.state.isPrivate});
   }
@@ -238,13 +220,13 @@ export default class ShowRetroSettingsPage extends React.Component {
   renderAccessInstruction() {
     const accessPrivate = (
       <div>
-        <img className="icon-locked" src={iconLockedSvg}/>
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/>
         {' '}The password is needed to view or participate.
       </div>
     );
     const accessPublic = (
       <div>
-        <img className="icon-locked" src={iconEyeSvg}/>
+        <img className="icon-locked" src={iconEyeSvg} alt="Unlocked"/>
         {' '}Anyone can view or participate <strong>without</strong> entering password.
       </div>
     );
@@ -255,8 +237,8 @@ export default class ShowRetroSettingsPage extends React.Component {
 
         <br/>
         Password is always required to: <br/>
-        <img className="icon-locked" src={iconLockedSvg}/> Access archives<br/>
-        <img className="icon-locked" src={iconLockedSvg}/> Edit settings
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/> Access archives<br/>
+        <img className="icon-locked" src={iconLockedSvg} alt="Locked"/> Edit settings
 
       </div>
     );

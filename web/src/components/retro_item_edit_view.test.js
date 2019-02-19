@@ -75,17 +75,14 @@ describe('RetroItemEditView', () => {
 
     describe('when enter key is pressed', () => {
       beforeEach(() => {
-        $('textarea').val('some other value').simulate('change');
-        $('textarea').simulate('keyPress', {key: 'Enter'});
+        $('textarea').val('some other value').simulate('change').simulate('keyPress', {key: 'Enter'});
       });
 
       sharedUpdateActionBehavior();
     });
 
     it('does not submit when pressing shift + enter so new line is added', () => {
-      $('textarea').val('a new action item').simulate('change');
-
-      $('textarea').simulate('keyPress', {key: 'Enter', shiftKey: true});
+      $('textarea').val('a new action item').simulate('change').simulate('keyPress', {key: 'Enter', shiftKey: true});
       expect(saveSpy).not.toHaveBeenCalled();
     });
 

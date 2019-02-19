@@ -33,8 +33,8 @@ import React from 'react';
 import types from 'prop-types';
 
 class LegalBanner extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.okClicked = this.okClicked.bind(this);
   }

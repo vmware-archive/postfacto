@@ -40,8 +40,8 @@ export default class CountdownTimer extends React.Component {
     endTimestampInMs: types.number.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       remainingTimeInMs: 0,
       interval: null,

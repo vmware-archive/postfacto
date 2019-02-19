@@ -75,8 +75,8 @@ export default class ShowRetroPage extends React.Component {
 
   // Component Lifecycle
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       isMobile: false,
       currentMobileCategory: 'happy',
@@ -171,11 +171,6 @@ export default class ShowRetroPage extends React.Component {
   // Handle events
   onMobileTabClick(category) {
     this.setState({currentMobileCategory: category});
-  }
-
-  onArchivesButtonClicked() {
-    const {retroId} = this.props;
-    Actions.routeToRetroArchives({retro_id: retroId});
   }
 
   handleArchiveRetroConfirmation() {

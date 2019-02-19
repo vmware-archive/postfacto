@@ -46,8 +46,8 @@ export default class RetroColumnItem extends React.Component {
     isMobile: types.bool.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       isEditing: false,
     };

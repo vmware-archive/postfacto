@@ -29,6 +29,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import 'palette';
+@import 'settings';
+
 .new-retro-page, .error-page, .password-page {
   background-color: $white;
 
