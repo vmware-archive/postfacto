@@ -28,7 +28,6 @@ module.exports = {
     'react/no-string-refs': ['off'],
     'react/no-unescaped-entities': ['off'],
     'react/no-unused-prop-types': ['off'],
-    'react/prefer-stateless-function': ['off'],
     'react/prop-types': ['off'],
     'react/require-default-props': ['off'],
     'react/sort-comp': ['off'],

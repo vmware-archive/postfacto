@@ -33,23 +33,19 @@ import React from 'react';
 import types from 'prop-types';
 import Helmet from 'react-helmet';
 
-export default class Header extends React.Component {
-  static propTypes = {
-    retro: types.object,
-    config: types.object,
-  };
+const Header = ({config, retro}) => (
+  <Helmet
+    title={retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title}
+    link={[
+      {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
+      {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
+    ]}
+  />
+);
 
-  render() {
-    const {config, retro} = this.props;
-    const documentTitle = retro.name.length > 0 ? retro.name + ' - ' + config.title : config.title;
-    return (
-      <Helmet
-        title={documentTitle}
-        link={[
-          {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
-          {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
-        ]}
-      />
-    );
-  }
-}
+Header.propTypes = {
+  retro: types.object,
+  config: types.object,
+};
+
+export default Header;
