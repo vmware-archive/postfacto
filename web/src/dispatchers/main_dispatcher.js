@@ -106,8 +106,8 @@ export default {
   },
   retroItemSuccessfullyVoted({data}) {
     const items = this.$store.refine('retro', 'items').get();
-    const item = items.find((item) => item.id === data.item.id);
-    this.$store.refine('retro', 'items', item).merge(data.item);
+    const votedItem = items.find((item) => item.id === data.item.id);
+    this.$store.refine('retro', 'items', votedItem).merge(data.item);
   },
   retroItemSuccessfullyDone({data}) {
     const retro = this.$store.refine('retro').get();

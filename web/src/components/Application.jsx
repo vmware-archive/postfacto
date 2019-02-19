@@ -42,7 +42,7 @@ import Logger from '../helpers/logger';
 
 import SessionWebsocket from './session_websocket';
 
-import store from './store';
+import rootStore from './store';
 
 import apiDispatcher from '../dispatchers/api_dispatcher';
 import mainDispatcher from '../dispatchers/main_dispatcher';
@@ -81,7 +81,7 @@ class Application extends React.Component {
 export default useStore(
   useRouter(Application),
   {
-    store,
+    store: rootStore,
     actions: [],
     dispatcherHandlers: [
       mainDispatcher,
