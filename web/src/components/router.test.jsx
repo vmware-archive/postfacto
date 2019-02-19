@@ -30,8 +30,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-dom/test-utils';
+import {mount} from 'enzyme';
 import {SpyDispatcher} from '../spec_helper';
 
 import Alert from './shared/alert';
@@ -45,11 +44,15 @@ describe('Router', () => {
   const fakeRouter = {get: () => {}};
 
   beforeEach(() => {
-    rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter}/>, root);
+    rendered = mount(<Router alert={{}} router={fakeRouter}/>);
+  });
+
+  afterEach(() => {
+    rendered.unmount();
   });
 
   it('renders alert', () => {
-    const results = TestUtils.scryRenderedComponentsWithType(rendered, Alert);
+    const results = rendered.find(Alert);
 
     expect(results.length).toEqual(1);
   });
@@ -76,16 +79,16 @@ describe('Router', () => {
 
   describe('when api server not found prop', () => {
     it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
-      rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found/>, root);
+      rendered.setProps({api_server_not_found: true});
 
-      const pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
+      const pages = rendered.find(ApiServerNotFoundPage);
       expect(pages.length).toEqual(1);
     });
 
     it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
-      rendered = ReactDOM.render(<Router alert={{}} router={fakeRouter} api_server_not_found={false}/>, root);
+      rendered.setProps({api_server_not_found: false});
 
-      const pages = TestUtils.scryRenderedComponentsWithType(rendered, ApiServerNotFoundPage);
+      const pages = rendered.find(ApiServerNotFoundPage);
       expect(pages.length).toEqual(0);
     });
   });

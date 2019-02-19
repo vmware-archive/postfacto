@@ -35,7 +35,11 @@ import './test_support/react_helper';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
 import ReactDOM from 'react-dom';
+import {configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import Application from './Application'; // Load dispatchers (sets global state in p-flux Actions)
+
+configure({adapter: new Adapter()});
 
 global.$ = jQuery;
 

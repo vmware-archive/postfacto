@@ -38,6 +38,9 @@ function pushIfUniqueId(newItem) {
   };
 }
 
+const ALERT_DURATION = 3500;
+let alertTimeout = null;
+
 export default {
   setRoute({data}) {
     this.router.navigate(data);
@@ -216,9 +219,15 @@ export default {
     this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
   },
   showAlert({data}) {
+    clearTimeout(alertTimeout);
+    alertTimeout = setTimeout(() => this.dispatch({type: 'hideAlert'}), ALERT_DURATION);
+
     this.$store.merge({alert: data});
   },
   hideAlert() {
+    clearTimeout(alertTimeout);
+    alertTimeout = null;
+
     this.$store.merge({alert: null});
   },
   showDialog({data}) {

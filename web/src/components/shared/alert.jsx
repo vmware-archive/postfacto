@@ -30,70 +30,32 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import types from 'prop-types';
 
-const DEFAULT_DURATION = 3500;
-export default class Alert extends React.Component {
-  static propTypes = {
-    alert: types.shape({
-      checkIcon: types.bool,
-      message: types.string,
-    }),
-    className: types.string,
-  };
-
-  static defaultProps = {
-    alert: null,
-    className: '',
-  };
-
-  componentDidMount() {
-    this.initialize(this.props);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.alert !== nextProps.alert;
-  }
-
-  componentDidUpdate() {
-    this.initialize(this.props);
-  }
-
-  startHideTimer(duration = DEFAULT_DURATION) {
-    this.timeout = setTimeout(Actions.hideAlert, duration);
-  }
-
-  initialize(props) {
-    const {alert} = props;
-
-    if (alert && (alert.message && alert.message.length > 0)) {
-      this.startHideTimer(alert.duration);
-    } else if (this.timeout) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-  }
-
-  renderIcon() {
-    if (this.props.alert.checkIcon) {
-      return <i className="alert__icon fa fa-check"/>;
-    }
+const Alert = ({alert, className}) => {
+  if (!alert || !alert.message) {
     return null;
   }
 
-  render() {
-    const {alert, className} = this.props;
+  return (
+    <div className={`alert ${className}`}>
+      {alert.checkIcon ? (<i className="alert__icon fa fa-check"/>) : null}
+      <span className="alert__text">{alert.message}</span>
+    </div>
+  );
+};
 
-    if (alert && (alert.message && alert.message.length > 0)) {
-      return (
-        <div className={`alert ${className}`}>
-          {this.renderIcon()}
-          <span className="alert__text">{alert.message}</span>
-        </div>
-      );
-    }
+Alert.propTypes = {
+  alert: types.shape({
+    checkIcon: types.bool,
+    message: types.string,
+  }),
+  className: types.string,
+};
 
-    return null;
-  }
-}
+Alert.defaultProps = {
+  alert: null,
+  className: '',
+};
+
+export default Alert;

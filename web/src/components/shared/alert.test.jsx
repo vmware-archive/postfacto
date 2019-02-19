@@ -31,13 +31,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {SpyDispatcher} from '../../spec_helper';
+import '../../spec_helper';
 
 import Alert from './alert';
 
 describe('Alert', () => {
-  let component;
-
   describe('when message is empty', () => {
     beforeEach(() => {
       ReactDOM.render(<Alert alert={null}/>, root);
@@ -58,32 +56,6 @@ describe('Alert', () => {
 
     it('should render alert', () => {
       expect('.alert .alert__text').toContainText('Alert Message');
-    });
-
-    it('should remove alert after 3.5 seconds by default', () => {
-      jest.advanceTimersByTime(3499);
-      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
-
-      jest.advanceTimersByTime(2);
-      expect(SpyDispatcher).toHaveReceived('hideAlert');
-    });
-  });
-
-  describe('when a duration has been specified', () => {
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-        duration: 10000,
-      };
-      ReactDOM.render(<Alert alert={alert}/>, root);
-    });
-
-    it('should remove alert after X seconds by default', () => {
-      jest.advanceTimersByTime(9999);
-      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
-
-      jest.advanceTimersByTime(2);
-      expect(SpyDispatcher).toHaveReceived('hideAlert');
     });
   });
 
@@ -112,41 +84,6 @@ describe('Alert', () => {
 
     it('displays the check icon', () => {
       expect('.alert i.fa-check').toHaveLength(0);
-    });
-  });
-
-  describe('when component is updated', () => {
-    /* eslint-disable react/no-render-return-value */ // There are bigger problems to worry about here
-    const renderAlert = (alert) => ReactDOM.render(<Alert alert={alert}/>, root);
-    /* eslint-enable react/no-render-return-value */
-
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-      };
-      component = renderAlert(alert);
-    });
-
-    describe('and alert is not null', () => {
-      it('should render alert', () => {
-        expect('.alert .alert__text').toContainText('Alert Message');
-      });
-
-      it('should remove alert after 3.5 seconds by default', () => {
-        jest.advanceTimersByTime(3499);
-        expect(SpyDispatcher).not.toHaveReceived('hideAlert');
-
-        jest.advanceTimersByTime(2);
-        expect(SpyDispatcher).toHaveReceived('hideAlert');
-      });
-    });
-
-    describe('and alert is null', () => {
-      it('resets timeout to null', () => {
-        expect(component.timeout).toBeDefined();
-        renderAlert(null);
-        expect(component.timeout).toBeNull();
-      });
     });
   });
 });

@@ -807,12 +807,35 @@ describe('MainDispatcher', () => {
         },
       });
     });
+
     it('adds the alert message to the store', () => {
       expect(cursorSpy).toHaveBeenCalledWith({
-        alert: {
-          message: 'this is a message',
-        },
+        alert: {message: 'this is a message'},
       });
+    });
+
+    it('schedules removal of the message after a delay', () => {
+      jest.advanceTimersByTime(2000);
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
+
+      jest.advanceTimersByTime(2000);
+      expect(SpyDispatcher).toHaveReceived('hideAlert');
+    });
+
+    it('resets the removal countdown if the message updates', () => {
+      jest.advanceTimersByTime(2000);
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
+
+      subject.dispatch({
+        type: 'showAlert',
+        data: {message: 'a new message'},
+      });
+
+      jest.advanceTimersByTime(2000);
+      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
+
+      jest.advanceTimersByTime(2000);
+      expect(SpyDispatcher).toHaveReceived('hideAlert');
     });
   });
 
