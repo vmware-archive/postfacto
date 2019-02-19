@@ -143,7 +143,7 @@ describe('RetroColumnItem', () => {
       describe('when clicking vote button', () => {
         it('dispatches a vote action', () => {
           $('.item-vote-submit').simulate('click');
-          item.vote_count++;
+          item.vote_count += 1;
           expect(SpyDispatcher).toHaveReceived({
             type: 'voteRetroItem',
             data: {retro_id: retroId, item},

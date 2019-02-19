@@ -52,7 +52,7 @@ describe('ApiDispatcher', () => {
     let dispatchCount = 0;
     realDispatchLevels = 1;
     subject.dispatch.and.callFake((action) => {
-      dispatchCount++;
+      dispatchCount += 1;
       if (dispatchCount <= realDispatchLevels) {
         // Call through for first (potentially several) dispatches ONLY
         // Later dispatches are recorded but not invoked

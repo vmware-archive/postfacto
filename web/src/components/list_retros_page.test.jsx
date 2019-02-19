@@ -60,7 +60,7 @@ describe('List Retros Page', () => {
 function createRetros(count = 1) {
   const retros = [];
 
-  for (let x = 0; x < count; x++) {
+  for (let x = 0; x < count; x += 1) {
     retros.push({
       id: 13 + x,
       name: `the retro name ${x + 1}`,
