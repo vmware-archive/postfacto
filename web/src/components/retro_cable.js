@@ -46,11 +46,13 @@ export default class RetroCable extends React.Component {
   }
 
   componentWillMount() {
-    this.initialize(this.props);
+    const {cable, retro_id} = this.props;
+    this.initialize(cable, retro_id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.initialize(nextProps);
+    const {cable, retro_id} = nextProps;
+    this.initialize(cable, retro_id);
   }
 
   componentWillUnmount() {
@@ -59,8 +61,7 @@ export default class RetroCable extends React.Component {
     cable.subscriptions.remove(this.state.subscription);
   }
 
-  initialize(props) {
-    const {cable, retro_id} = props;
+  initialize(cable, retro_id) {
     const {subscription} = this.state;
     if (cable && !subscription) {
       this.subscribe(cable, retro_id, localStorage.getItem('apiToken-' + retro_id));

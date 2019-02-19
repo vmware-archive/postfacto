@@ -46,38 +46,27 @@ export default class RetroWebsocket extends React.Component {
   }
 
   componentWillMount() {
-    this.initialize(this.props);
+    const {url} = this.props;
+    this.initialize(url);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.initialize(nextProps);
+    const {url} = nextProps;
+    this.initialize(url);
   }
 
-  initialize(props) {
-    const {cable} = this.state;
-    const {url} = props;
-    if (!cable) {
-      this.createCable(url);
-    }
+  initialize(url) {
+    this.setState((oldState) => ({
+      cable: oldState.cable || ActionCable.createConsumer(url),
+    }));
   }
 
-  createCable(url) {
-    const cable = ActionCable.createConsumer(url);
-    this.setState({cable});
-  }
-
-  renderCable() {
+  render() {
     const {cable} = this.state;
     const {retro_id} = this.props;
     if (cable) {
       return <RetroCable cable={cable} retro_id={retro_id}/>;
     }
     return null;
-  }
-
-  render() {
-    return (
-      this.renderCable()
-    );
   }
 }

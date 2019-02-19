@@ -46,7 +46,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
       session = {request_uuid: 'blah'};
       ReactDOM.render(
         <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" retro={retro} config={global.Retro.config} session={session}/>
+          <ShowRetroPasswordSettingsPage retroId="13" retro={retro} session={session}/>
         </MuiThemeProvider>,
         root,
       );
@@ -164,7 +164,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
       ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => false;
       ReactDOM.render(
         <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" config={global.Retro.config} session={session}/>
+          <ShowRetroPasswordSettingsPage retroId="13" session={session}/>
         </MuiThemeProvider>,
         root,
       );
@@ -178,7 +178,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
       ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => true;
       ReactDOM.render(
         <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" config={global.Retro.config} session={session}/>
+          <ShowRetroPasswordSettingsPage retroId="13" session={session}/>
         </MuiThemeProvider>,
         root,
       );

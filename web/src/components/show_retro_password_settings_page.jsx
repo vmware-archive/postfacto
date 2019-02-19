@@ -41,9 +41,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   static propTypes = {
     retro: types.object,
     retroId: types.string,
-    config: types.object,
     session: types.object,
-    alert: types.object,
   };
 
   constructor(props) {

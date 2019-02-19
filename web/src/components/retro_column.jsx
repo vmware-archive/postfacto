@@ -85,11 +85,11 @@ export default class RetroColumn extends React.Component {
   }
 
   renderInput() {
-    const {category, retro, retroId, archives} = this.props;
+    const {category, retroId, archives} = this.props;
     if (archives) {
       return null;
     }
-    return <RetroColumnInput retro={retro} retroId={retroId} category={category}/>;
+    return <RetroColumnInput retroId={retroId} category={category}/>;
   }
 
   render() {

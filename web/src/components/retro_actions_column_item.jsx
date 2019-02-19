@@ -38,7 +38,6 @@ import actionTickUncheckedSvg from '../images/action-tick-unchecked.svg';
 
 export default class RetroActionsColumnItem extends React.Component {
   static propTypes = {
-    retro: types.object.isRequired,
     retroId: types.string.isRequired,
     action_item: types.object.isRequired,
     archives: types.bool,

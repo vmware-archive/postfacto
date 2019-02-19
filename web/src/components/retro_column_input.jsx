@@ -37,7 +37,6 @@ import TextareaAutosize from 'react-autosize-textarea';
 export default class RetroColumnInput extends React.Component {
   static propTypes = {
     category: types.string.isRequired,
-    retro: types.object.isRequired,
     retroId: types.string.isRequired,
   };
 

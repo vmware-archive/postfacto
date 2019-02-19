@@ -61,7 +61,6 @@ export default class ShowRetroPage extends React.Component {
     retro_archives: types.object,
     retroId: types.string,
     config: types.object.isRequired,
-    alert: types.object,
     archives: types.bool.isRequired,
     archiveId: types.string,
     featureFlags: types.object.isRequired,
@@ -90,8 +89,10 @@ export default class ShowRetroPage extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchRetros(this.props);
-    this.initializeArchivesState(this.props);
+    const {retroId, archiveId, retro_archives, archives} = this.props;
+
+    this.fetchRetros(retroId, archives, archiveId);
+    this.initializeArchivesState(retro_archives, archives);
     this.handleResize();
   }
 
@@ -100,10 +101,12 @@ export default class ShowRetroPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.archives !== nextProps.archives) {
-      this.fetchRetros(nextProps);
+    const {retroId, archiveId, retro_archives, archives} = nextProps;
+
+    if (archives !== this.props.archives) {
+      this.fetchRetros(retroId, archives, archiveId);
     }
-    this.initializeArchivesState(nextProps);
+    this.initializeArchivesState(retro_archives, archives);
   }
 
   componentWillUnmount() {
@@ -122,8 +125,7 @@ export default class ShowRetroPage extends React.Component {
 
   // Fetch Retro or archive data
 
-  fetchRetros(props) {
-    const {retroId, archives, archiveId} = props;
+  fetchRetros(retroId, archives, archiveId) {
     if (archives) {
       Actions.getRetroArchive({retro_id: retroId, archive_id: archiveId});
     } else {
@@ -132,8 +134,7 @@ export default class ShowRetroPage extends React.Component {
   }
 
   // Filter archive data
-  initializeArchivesState(props) {
-    const {retro_archives, archives} = props;
+  initializeArchivesState(retro_archives, archives) {
     if (archives) {
       this.setState({filtered_retro_archive: this.filterRetroArchives(retro_archives)});
     }

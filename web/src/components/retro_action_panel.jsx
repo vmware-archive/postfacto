@@ -51,11 +51,11 @@ export default class RetroActionPanel extends React.Component {
   }
 
   renderInput() {
-    const {retro, retroId, archives} = this.props;
+    const {retroId, archives} = this.props;
     if (archives) {
       return null;
     }
-    return (<RetroColumnInput retro={retro} retroId={retroId} category="action"/>);
+    return (<RetroColumnInput retroId={retroId} category="action"/>);
   }
 
   render() {

@@ -51,7 +51,7 @@ export default class RetroActionsColumn extends React.Component {
   };
 
   renderActionItems() {
-    const {category, archives, retro, retroId, retro: {action_items}} = this.props;
+    const {category, archives, retroId, retro: {action_items}} = this.props;
     const that = this;
 
     if (!action_items) {
@@ -80,7 +80,7 @@ export default class RetroActionsColumn extends React.Component {
       })
       .sort((a, b) => (dateToMillis(b.created_at) - dateToMillis(a.created_at)))
       .map((action_item) => (
-        <RetroActionsColumnItem key={action_item.id} retro={retro} retroId={retroId} action_item={action_item} archives={archives}/>
+        <RetroActionsColumnItem key={action_item.id} retroId={retroId} action_item={action_item} archives={archives}/>
       ));
   }
 

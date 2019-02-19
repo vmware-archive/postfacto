@@ -70,7 +70,7 @@ const retro = {
 };
 describe('RetroActionsColumnItem', () => {
   beforeEach(() => {
-    ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]}/>, root);
+    ReactDOM.render(<RetroActionsColumnItem retroId={retroId} action_item={retro.action_items[0]}/>, root);
   });
 
   describe('when retro has action items', () => {
@@ -157,7 +157,7 @@ describe('RetroActionsColumnItem', () => {
     // See http://stackoverflow.com/a/30616091
     it('updates displayed text value', () => {
       retro.action_items[0].description = 'changed';
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[0]}/>, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} action_item={retro.action_items[0]}/>, root);
 
       expect('.retro-action .action-text').toContainText('changed');
     });
@@ -165,7 +165,7 @@ describe('RetroActionsColumnItem', () => {
 
   describe('when action item is not done', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[1]}/>, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} action_item={retro.action_items[1]}/>, root);
     });
     it('should not be checked', () => {
       expect('.action-tick .action-tick-unchecked').toExist();
@@ -174,7 +174,7 @@ describe('RetroActionsColumnItem', () => {
 
   describe('when archived', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} retro={retro} action_item={retro.action_items[2]} archives/>, root);
+      ReactDOM.render(<RetroActionsColumnItem retroId={retroId} action_item={retro.action_items[2]} archives/>, root);
     });
     it('should not have a edit', () => {
       expect('.action-edit').toHaveLength(0);

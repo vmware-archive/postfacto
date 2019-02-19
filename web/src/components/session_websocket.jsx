@@ -45,35 +45,26 @@ export default class SessionWebsocket extends React.Component {
   }
 
   componentDidMount() {
-    this.initialize(this.props);
+    const {url} = this.props;
+    this.initialize(url);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.initialize(nextProps);
+    const {url} = nextProps;
+    this.initialize(url);
   }
 
-  initialize(props) {
-    const {cable} = this.state;
-    const {url} = props;
-    if (!cable) {
-      this.createCable(url);
-    }
+  initialize(url) {
+    this.setState((oldState) => ({
+      cable: oldState.cable || ActionCable.createConsumer(url),
+    }));
   }
 
-  createCable(url) {
-    const cable = ActionCable.createConsumer(url);
-    this.setState({cable});
-  }
-
-  renderCable() {
+  render() {
     const {cable} = this.state;
     if (cable) {
       return <SessionCable cable={cable}/>;
     }
     return null;
-  }
-
-  render() {
-    return this.renderCable();
   }
 }

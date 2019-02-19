@@ -36,13 +36,10 @@ import {SpyDispatcher} from '../spec_helper';
 import RetroColumnInput from './retro_column_input';
 
 const retroId = 'retro-slug-123';
-const retro = {
-  id: 123,
-};
 
 describe('inputting a retro item', () => {
   beforeEach(() => {
-    ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="happy"/>, root);
+    ReactDOM.render(<RetroColumnInput retroId={retroId} category="happy"/>, root);
   });
   it('adds an retro item when pressing enter', () => {
     const textarea = $('textarea');
@@ -77,7 +74,7 @@ describe('inputting a retro item', () => {
 describe('inputting an action item', () => {
   let subject;
   beforeEach(() => {
-    subject = ReactDOM.render(<RetroColumnInput retroId={retroId} retro={retro} category="action"/>, root);
+    subject = ReactDOM.render(<RetroColumnInput retroId={retroId} category="action"/>, root);
   });
 
   it('adds an action item when pressing enter', () => {

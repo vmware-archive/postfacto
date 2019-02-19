@@ -43,9 +43,7 @@ import iconEyeSvg from '../images/icon-eye.svg';
 
 export default class ShowRetroSettingsPage extends React.Component {
   static propTypes = {
-    alert: types.object,
     errors: types.object,
-    isPrivate: types.bool,
     name: types.string,
     retro: types.object,
     retroId: types.string,
