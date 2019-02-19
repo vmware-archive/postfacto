@@ -27,7 +27,6 @@ module.exports = {
     'react/no-find-dom-node': ['off'],
     'react/no-string-refs': ['off'],
     'react/no-unescaped-entities': ['off'],
-    'react/prop-types': ['off'],
     'react/require-default-props': ['off'],
     'react/sort-comp': ['off'],
 

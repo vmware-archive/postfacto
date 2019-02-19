@@ -39,6 +39,7 @@ export default class Alert extends React.Component {
     alert: types.shape({
       checkIcon: types.bool,
     }),
+    className: types.string,
   };
 
   componentDidMount() {

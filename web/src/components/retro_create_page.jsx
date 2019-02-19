@@ -32,11 +32,18 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
+import types from 'prop-types';
 import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../constants';
 import iconLockedSvg from '../images/icon-locked.svg';
 import iconEyeSvg from '../images/icon-eye.svg';
 
 export default class RetroCreatePage extends React.Component {
+  static propTypes = {
+    errors: types.shape({
+      slug: types.string,
+    }),
+  };
+
   constructor(props) {
     super(props);
     this.state = {

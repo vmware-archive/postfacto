@@ -42,6 +42,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     retro: types.object,
     retroId: types.string,
     session: types.object,
+    errors: types.shape({
+      current_password: types.string,
+    }),
   };
 
   constructor(props) {
@@ -65,7 +68,8 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   componentWillMount() {
-    this.getSettings(this.props);
+    const {retroId} = this.props;
+    Actions.getRetroSettings({id: retroId});
     this.handleResize();
   }
 
@@ -134,12 +138,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     const elementValue = e.currentTarget.value;
 
     this.setState({[elementName]: elementValue});
-  }
-
-  // Fetch Retro
-  getSettings(props) {
-    const {retroId} = props;
-    Actions.getRetroSettings({id: retroId});
   }
 
   // Render

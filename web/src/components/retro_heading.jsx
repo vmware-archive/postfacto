@@ -32,9 +32,18 @@
 import React from 'react';
 import {FlatButton, FontIcon, RaisedButton} from 'material-ui';
 import {Actions} from 'p-flux';
+import types from 'prop-types';
 import RetroMenu from './retro_menu';
 
 export default class RetroHeading extends React.PureComponent {
+  static propTypes = {
+    retro: types.object,
+    retroId: types.string,
+    archives: types.bool,
+    isMobile: types.bool,
+    showVideoButton: types.bool,
+  };
+
   constructor(props, context) {
     super(props, context);
 
