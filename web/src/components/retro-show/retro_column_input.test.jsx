@@ -30,87 +30,131 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import {mount} from 'enzyme';
+import TextareaAutosize from 'react-autosize-textarea';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import RetroColumnInput from './retro_column_input';
 
 const retroId = 'retro-slug-123';
 
 describe('inputting a retro item', () => {
+  let dom;
+
   beforeEach(() => {
-    ReactDOM.render(<RetroColumnInput retroId={retroId} category="happy"/>, root);
+    dom = mount(<RetroColumnInput retroId={retroId} category="happy"/>);
   });
-  it('adds an retro item when pressing enter', () => {
-    const textarea = $('textarea');
-    expect(textarea.attr('placeholder')).toEqual('I\'m glad that...');
-    textarea.val('a new retro item').simulate('change');
+
+  it('does not display submit button until text is entered', () => {
+    expect(dom.find('.input-button')).not.toExist();
+
+    dom.find('textarea').simulate('change', {target: {value: 'a new retro item'}});
+
+    expect(dom.find('.input-button')).toExist();
+  });
+
+  it('adds a retro item when pressing enter', () => {
+    const textarea = dom.find('textarea');
+    expect(textarea.prop('placeholder')).toEqual('I\'m glad that...');
+
+    textarea.simulate('change', {target: {value: 'a new retro item'}});
     textarea.simulate('keyPress', {key: 'a'});
-    expect('textarea').toHaveValue('a new retro item');
+
+    expect(dom.find('textarea')).toHaveValue('a new retro item');
+
     textarea.simulate('keyPress', {key: 'Enter'});
+
     expect(SpyDispatcher).toHaveReceived({
       type: 'createRetroItem',
       data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
-    expect('textarea').toHaveValue('');
+
+    expect(dom.find('textarea')).toHaveValue('');
   });
 
-  it('adds an retro item when clicking button', () => {
-    $('textarea').val('a new retro item').simulate('change').simulate('focus');
-    $('.input-button').simulate('click');
+  it('adds a retro item when clicking button', () => {
+    const textarea = dom.find('textarea');
+    textarea.simulate('change', {target: {value: 'a new retro item'}});
+    textarea.simulate('focus');
+
+    dom.find('.input-button').simulate('click');
+
     expect(SpyDispatcher).toHaveReceived({
       type: 'createRetroItem',
       data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
-    expect('textarea').toHaveValue('');
+
+    expect(dom.find('textarea')).toHaveValue('');
   });
 
-  it('doesn\'t add an item when pressing enter on an empty input field', () => {
-    $('textarea').val('').simulate('change').simulate('keyPress', {key: 'Enter'});
+  it('does not add empty items', () => {
+    const textarea = dom.find('textarea');
+    textarea.simulate('change', {target: {value: ''}});
+    textarea.simulate('keyPress', {key: 'Enter'});
+
     expect(SpyDispatcher).not.toHaveReceived('createRetroItem');
   });
 });
 
 describe('inputting an action item', () => {
   let subject;
+
   beforeEach(() => {
-    subject = ReactDOM.render(<RetroColumnInput retroId={retroId} category="action"/>, root);
+    subject = mount(<RetroColumnInput retroId={retroId} category="action"/>);
+  });
+
+  it('does not display submit button until text is entered', () => {
+    expect(subject.find('.input-button')).not.toExist();
+
+    const textarea = subject.find('textarea');
+    textarea.simulate('change', {target: {value: 'a new retro item'}});
+
+    expect(subject.find('.input-button')).toExist();
   });
 
   it('adds an action item when pressing enter', () => {
-    const textarea = $('textarea');
-    expect(textarea.attr('placeholder')).toEqual('Add an action item');
-    textarea.val('a new action item').simulate('change').simulate('keyPress', {key: 'a'});
-    expect('textarea').toHaveValue('a new action item');
+    const textarea = subject.find('textarea');
+    expect(textarea.prop('placeholder')).toEqual('Add an action item');
+
+    textarea.simulate('change', {target: {value: 'a new action item'}});
+    textarea.simulate('keyPress', {key: 'a'});
+
+    expect(subject.find('textarea')).toHaveValue('a new action item');
+
     textarea.simulate('keyPress', {key: 'Enter'});
+
     expect(SpyDispatcher).toHaveReceived({
       type: 'createRetroActionItem',
       data: {retro_id: retroId, description: 'a new action item'},
     });
-    expect('textarea').toHaveValue('');
+
+    expect(subject.find('textarea')).toHaveValue('');
   });
 
-  it('does not submit when pressing shift + enter so new line is added', () => {
-    $('textarea').val('a new action item').simulate('change').simulate('keyPress', {key: 'Enter', shiftKey: true});
+  it('allows entering literal newlines using shift+enter', () => {
+    const textarea = subject.find('textarea');
+    textarea.simulate('change', {target: {value: 'a new action item'}});
+    textarea.simulate('keyPress', {key: 'Enter', shiftKey: true});
+
     expect(SpyDispatcher).not.toHaveReceived('createRetroActionItem');
   });
 
-  it('doesn\'t add an item when pressing enter on an empty input field', () => {
-    $('textarea').val('').simulate('change').simulate('keyPress', {key: 'Enter'});
+  it('does not allow empty items', () => {
+    const textarea = subject.find('textarea');
+    textarea.simulate('change', {target: {value: ''}});
+    textarea.simulate('keyPress', {key: 'Enter'});
+
     expect(SpyDispatcher).not.toHaveReceived('createRetroActionItem');
   });
 
-  describe('when the textarea is resized', () => {
-    it('adds moves the submit button to the next line', () => {
-      $('textarea').val('a new action item').simulate('change');
-      const mockEvent = {target: {value: 'a new action items'}};
-      subject.onResize(mockEvent); // resize event could not be simulated, so working around this
+  it('moves submit button when textarea is resized', () => {
+    const event = {target: {value: 'anything'}};
 
-      expect($('.input-box').attr('class')).toContain('multiline');
-      expect($('.input-button-wrapper').attr('class')).toContain('multiline');
-    });
+    subject.find('textarea').simulate('change', event);
+    subject.find(TextareaAutosize).prop('onResize')(event);
+    subject.update();
+
+    expect(subject.find('.input-box')).toHaveClassName('multiline');
+    expect(subject.find('.input-button-wrapper')).toHaveClassName('multiline');
   });
 });

@@ -35,16 +35,6 @@ import {SpyDispatcher} from '../../spec_helper';
 
 import LoginToRetroPage from './login_to_retro_page';
 
-function isFocused(wrapper) {
-  // Waiting for https://github.com/airbnb/enzyme/pull/1965
-  // return wrapper.is(':focus');
-  return document.activeElement === wrapper.instance();
-}
-
-function getValue(wrapper) {
-  return wrapper.instance().value;
-}
-
 describe('LoginToRetroPage', () => {
   const retro = {
     id: 13,
@@ -72,7 +62,7 @@ describe('LoginToRetroPage', () => {
     });
 
     it('focuses the password input field', () => {
-      expect(isFocused(dom.find('.form-input'))).toEqual(true);
+      expect(dom.find('.form-input')).toBeFocused();
     });
 
     it('dispatches loginToRetro when clicking on the login button', () => {
@@ -83,7 +73,7 @@ describe('LoginToRetroPage', () => {
         type: 'loginToRetro',
         data: {retro_id: '13', password: 'pa55word'},
       });
-      expect(getValue(dom.find('.form-input'))).toEqual('');
+      expect(dom.find('.form-input')).toHaveValue('');
     });
 
     it('dispatches loginToRetro when pressing return', () => {
@@ -95,7 +85,7 @@ describe('LoginToRetroPage', () => {
         type: 'loginToRetro',
         data: {retro_id: '13', password: 'pa55word'},
       });
-      expect(getValue(dom.find('.form-input'))).toEqual('');
+      expect(dom.find('.form-input')).toHaveValue('');
     });
 
     it('displays error messages dynamically', () => {

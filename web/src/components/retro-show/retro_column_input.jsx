@@ -99,6 +99,7 @@ export default class RetroColumnInput extends React.Component {
   }
 
   onResize(event) {
+    // store value as well to work around https://github.com/buildo/react-autosize-textarea/issues/109
     this.setState({multiline: 'multiline', inputText: event.target.value});
   }
 

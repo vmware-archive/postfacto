@@ -29,31 +29,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import './enzyme_matchers';
+import 'jest-enzyme';
 
-Enzyme.configure({adapter: new Adapter()});
-
-// Automatically unmount all mounted components before and after each test
-
-const enzymeMounted = [];
-
-const mount = Enzyme.mount.bind(Enzyme);
-Enzyme.mount = (...args) => {
-  const mounted = mount(...args);
-  enzymeMounted.push(mounted);
-  return mounted;
-};
-
-function clearEnzymeMounted() {
-  enzymeMounted.forEach((mounted) => {
-    if (mounted.length) {
-      mounted.unmount();
-    }
-  });
-  enzymeMounted.length = 0;
+function checkEnzymeWrapper(wrappedElement) {
+  if (
+    !wrappedElement ||
+    typeof wrappedElement !== 'object' ||
+    typeof wrappedElement.instance !== 'function'
+  ) {
+    throw new Error(`Expected enzyme wrapper, but saw ${wrappedElement}`);
+  }
+  if (!wrappedElement.length) {
+    throw new Error(`No elements found in ${wrappedElement}`);
+  }
 }
 
-beforeEach(clearEnzymeMounted);
-afterEach(clearEnzymeMounted);
+expect.extend({
+  toBeFocused(wrappedElement) {
+    checkEnzymeWrapper(wrappedElement);
+
+    // Waiting for https://github.com/airbnb/enzyme/pull/1965
+    // const focused = wrappedElement.is(':focus');
+    const focused = (document.activeElement === wrappedElement.instance());
+
+    return {
+      pass: focused,
+      message: () => `Expected ${wrappedElement} ${focused ? 'not ' : ''}to be focused`,
+    };
+  },
+});
