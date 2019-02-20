@@ -32,6 +32,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../../spec_helper';
+import 'jasmine_dom_matchers';
+import $ from 'jquery';
+import '../../test_support/jquery_simulate_react';
 
 import RetroTile from './retro_tile';
 

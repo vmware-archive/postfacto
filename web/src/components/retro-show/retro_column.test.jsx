@@ -32,6 +32,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../../spec_helper';
+import $ from 'jquery';
+import 'jasmine_dom_matchers';
 
 import RetroColumn from './retro_column';
 

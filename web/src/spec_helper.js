@@ -29,29 +29,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'jasmine_dom_matchers';
 import './test_support/dispatcher_matchers';
-import './test_support/jquery_simulate_react';
 import './test_support/enzyme';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
 import ReactDOM from 'react-dom';
 import Application from './Application'; // Load dispatchers (sets global state in p-flux Actions)
 
-global.$ = jQuery;
-
 // Capture original dispatch so that we can selectively call it later
 const nonFakeDispatch = Dispatcher.dispatch.bind(Dispatcher);
 
+/* eslint-disable import/prefer-default-export */
 export const SpyDispatcher = Dispatcher;
-
-export function combineElementsContent(className) {
-  let message = '';
-  $(className).each((i, e) => {
-    message += e.textContent;
-  });
-  return message;
-}
+/* eslint-enable import/prefer-default-export */
 
 jest.useFakeTimers();
 

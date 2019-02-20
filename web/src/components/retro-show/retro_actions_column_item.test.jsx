@@ -140,6 +140,6 @@ describe('RetroActionsColumnItem', () => {
 
   it('does not allow editing if archived', () => {
     dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemDone} archives/>);
-    expect('.action-edit').toHaveLength(0);
+    expect(dom.find('.action-edit')).not.toExist();
   });
 });

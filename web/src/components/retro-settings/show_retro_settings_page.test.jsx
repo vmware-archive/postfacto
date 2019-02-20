@@ -32,9 +32,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {combineElementsContent, SpyDispatcher} from '../../spec_helper';
+import $ from 'jquery';
+import {SpyDispatcher} from '../../spec_helper';
+import 'jasmine_dom_matchers';
+import '../../test_support/jquery_simulate_react';
 
 import ShowRetroSettingsPage from './show_retro_settings_page';
+
+function combineElementsContent(className) {
+  let message = '';
+  $(className).each((i, e) => {
+    message += e.textContent;
+  });
+  return message;
+}
 
 describe('ShowRetroSettingsPage', () => {
   let retro;

@@ -31,7 +31,10 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
+import 'jasmine_dom_matchers';
+import '../../test_support/jquery_simulate_react';
 
 import RetroColumnInput from './retro_column_input';
 

@@ -32,7 +32,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
+import 'jasmine_dom_matchers';
+import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPage from './show_retro_page';
 

@@ -32,11 +32,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './spec_helper';
+import 'jasmine_dom_matchers';
+import $ from 'jquery';
+import './test_support/jquery_simulate_react';
 
 import PropTypes from 'prop-types';
 import useRouter from './use_router';
 
-describe('#useRouter', () => {
+describe('useRouter', () => {
   let routeSpy;
 
   beforeEach(() => {

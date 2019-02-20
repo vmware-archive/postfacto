@@ -35,8 +35,12 @@ import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import ShowRetroPage from './show_retro_page';
+import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
+import 'jasmine_dom_matchers';
+import '../../test_support/jquery_simulate_react';
+
+import ShowRetroPage from './show_retro_page';
 
 function setWindowToMobileSize() {
   window.innerWidth = 639;

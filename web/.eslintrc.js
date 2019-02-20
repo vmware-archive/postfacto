@@ -51,7 +51,6 @@ module.exports = {
     },
     'globals': {
       'root': 'readonly',
-      '$': 'readonly',
     },
     'rules': {
       'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
