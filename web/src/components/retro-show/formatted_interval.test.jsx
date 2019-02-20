@@ -30,29 +30,29 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {shallow} from 'enzyme';
 import '../../spec_helper';
 
 import FormattedInterval from './formatted_interval';
 
 describe('FormattedInterval', () => {
-  it('should render the time remaining', () => {
-    ReactDOM.render(<FormattedInterval secondsRemaining={65}/>, root);
-    expect('.formatted-interval').toHaveText('1:05');
+  it('renders the given time in M:SS format', () => {
+    const dom = shallow(<FormattedInterval secondsRemaining={65}/>);
+    expect(dom.find('.formatted-interval')).toIncludeText('1:05');
   });
 
-  it('uses rounded seconds', () => {
-    ReactDOM.render(<FormattedInterval secondsRemaining={65.2}/>, root);
-    expect('.formatted-interval').toHaveText('1:05');
+  it('uses floored seconds', () => {
+    const dom = shallow(<FormattedInterval secondsRemaining={65.8}/>);
+    expect(dom.find('.formatted-interval')).toIncludeText('1:05');
   });
 
   it('shows zero correctly', () => {
-    ReactDOM.render(<FormattedInterval secondsRemaining={0}/>, root);
-    expect('.formatted-interval').toHaveText('0:00');
+    const dom = shallow(<FormattedInterval secondsRemaining={0}/>);
+    expect(dom.find('.formatted-interval')).toIncludeText('0:00');
   });
 
   it('shows zero when secondsRemaining is negative', () => {
-    ReactDOM.render(<FormattedInterval secondsRemaining={-10}/>, root);
-    expect('.formatted-interval').toHaveText('0:00');
+    const dom = shallow(<FormattedInterval secondsRemaining={-10}/>);
+    expect(dom.find('.formatted-interval')).toIncludeText('0:00');
   });
 });
