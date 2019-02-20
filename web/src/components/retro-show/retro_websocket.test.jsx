@@ -30,24 +30,15 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {shallow} from 'enzyme';
 import '../../spec_helper';
 
 import RetroWebsocket from './retro_websocket';
 
 describe('RetroWebsocket', () => {
-  describe('rendering a RetroWebsocket', () => {
-    describe('when websocket url has been fetched', () => {
-      let webSocketDOM;
-
-      beforeEach(() => {
-        webSocketDOM = ReactDOM.render(<RetroWebsocket url="wss://websocket/url" retro_id="retro-slug-123"/>, root);
-      });
-
-      it('should create setup cable', () => {
-        const {cable} = webSocketDOM.state;
-        expect(cable.url).toEqual('wss://websocket/url');
-      });
-    });
+  it('creates a setup cable', () => {
+    const webSocketDOM = shallow(<RetroWebsocket url="wss://websocket/url" retro_id="retro-slug-123"/>);
+    const {cable} = webSocketDOM.state();
+    expect(cable.url).toEqual('wss://websocket/url');
   });
 });
