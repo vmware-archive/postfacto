@@ -30,20 +30,15 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import './spec_helper';
-import 'jasmine_dom_matchers';
-import $ from 'jquery';
-import './test_support/jquery_simulate_react';
 
 import PropTypes from 'prop-types';
 import useRouter from './use_router';
 
 describe('useRouter', () => {
-  let routeSpy;
-
-  beforeEach(() => {
-    routeSpy = jasmine.createSpy('route');
+  it('routes', () => {
+    const routeSpy = jasmine.createSpy('route');
 
     const Application = ({router}) => {
       router.get('/test', routeSpy);
@@ -58,11 +53,9 @@ describe('useRouter', () => {
     };
 
     const TestRouter = useRouter(Application);
-    ReactDOM.render(<TestRouter/>, root);
-  });
+    const dom = mount(<TestRouter/>);
 
-  it('routes', () => {
-    $('.application button').simulate('click');
+    dom.find('.application button').simulate('click');
     expect(routeSpy).toHaveBeenCalled();
   });
 });
