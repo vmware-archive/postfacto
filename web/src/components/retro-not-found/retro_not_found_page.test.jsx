@@ -30,32 +30,35 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import {shallow} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import RetroNotFoundPage from './retro_not_found_page';
 
 describe('RetroNotFoundPage', () => {
   let subject;
+
   beforeEach(() => {
-    subject = ReactDOM.render(<RetroNotFoundPage/>, root);
+    subject = shallow(<RetroNotFoundPage/>);
   });
 
-  describe('When retro is not found', () => {
-    it('displays error details', () => {
-      expect($('h1').text()).toContain('Project not found.');
-    });
-    it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
-      $('button:contains("Create a Project")').simulate('click');
-      expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
-    });
+  it('displays error details', () => {
+    expect(subject.find('h1')).toHaveText('Project not found.');
+  });
 
-    it('dispatches resetRetroNotFound when unmounting', () => {
-      subject.componentWillUnmount();
-      expect(SpyDispatcher).toHaveReceived('resetRetroNotFound');
-    });
+  it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
+    const button = subject.find('button');
+    expect(button).toHaveText('Create a Project');
+    button.simulate('click');
+
+    expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
+  });
+
+  it('dispatches resetRetroNotFound when unmounting', () => {
+    expect(SpyDispatcher).not.toHaveReceived('resetRetroNotFound');
+
+    subject.unmount();
+
+    expect(SpyDispatcher).toHaveReceived('resetRetroNotFound');
   });
 });
