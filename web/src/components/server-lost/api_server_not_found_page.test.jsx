@@ -30,25 +30,21 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount, shallow} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
 
 import ApiServerNotFoundPage from './api_server_not_found_page';
 
 describe('ApiServerNotFoundPage', () => {
-  let subject;
-  beforeEach(() => {
-    subject = ReactDOM.render(<ApiServerNotFoundPage/>, root);
+  it('displays error details', () => {
+    const subject = shallow(<ApiServerNotFoundPage/>);
+    expect(subject.find('h1')).toIncludeText('Oh no! It\'s broken');
   });
 
-  describe('When api server is not found', () => {
-    it('displays error details', () => {
-      expect($('h1').text()).toContain('Oh no! It\'s broken');
-    });
-
-    it('dispatches resetApiServerNotFound when unmounting', () => {
-      subject.componentWillUnmount();
-      expect(SpyDispatcher).toHaveReceived('resetApiServerNotFound');
-    });
+  it('dispatches resetApiServerNotFound when unmounting', () => {
+    const subject = mount(<ApiServerNotFoundPage/>);
+    expect(SpyDispatcher).not.toHaveReceived('resetApiServerNotFound');
+    subject.unmount();
+    expect(SpyDispatcher).toHaveReceived('resetApiServerNotFound');
   });
 });
