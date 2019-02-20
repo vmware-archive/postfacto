@@ -30,12 +30,9 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import Scroll from 'react-scroll';
-import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import RetroColumnItem from './retro_column_item';
 
@@ -56,282 +53,233 @@ describe('RetroColumnItem', () => {
     done: true,
   };
 
-  describe('when opening the app on desktop', () => {
+  describe('on desktop', () => {
+    let dom;
+
     beforeEach(() => {
-      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile={false}/>, root);
-    });
-    describe('when rendering a RetroColumnItem', () => {
-      it('item has all its data', () => {
-        expect('.vote-count').toHaveText(1);
-        expect('.item-text').toHaveText('the happy retro item');
-      });
-
-      describe('when clicking edit button', () => {
-        beforeEach(() => {
-          $('.item-edit i').simulate('click');
-        });
-
-        it('displays an edit menu', () => {
-          expect($('.retro-item').attr('class')).toContain('editing');
-        });
-
-        describe('when clicking delete button', () => {
-          it('dispatches a delete action', () => {
-            $('.edit-delete i').simulate('click');
-            expect(SpyDispatcher).toHaveReceived({
-              type: 'deleteRetroItem',
-              data: {retro_id: retroId, item},
-            });
-          });
-        });
-
-        describe('when clicking on the item description', () => {
-          it('does not highlight the item', () => {
-            $('.edit-text').simulate('click');
-            expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
-          });
-        });
-
-        describe('when editing the description with non empty value', () => {
-          beforeEach(() => {
-            $('.edit-text textarea').val('an updated retro item').simulate('change');
-          });
-
-          const sharedUpdateItemBehavior = () => {
-            it('updates the retro item', () => {
-              expect(SpyDispatcher).toHaveReceived({
-                type: 'updateRetroItem',
-                data: {retro_id: retroId, item, description: 'an updated retro item'},
-              });
-            });
-
-            it('hides the edit menu on done button click', () => {
-              expect($('.retro-item').attr('class')).not.toContain('editing');
-            });
-          };
-
-          describe('when save button is clicked', () => {
-            beforeEach(() => {
-              $('.edit-save').simulate('click');
-            });
-
-            sharedUpdateItemBehavior();
-          });
-
-          describe('when enter key is pressed', () => {
-            beforeEach(() => {
-              $('.edit-text textarea').simulate('keyPress', {key: 'Enter'});
-            });
-
-            sharedUpdateItemBehavior();
-          });
-        });
-
-        describe('when editing the description with empty value', () => {
-          beforeEach(() => {
-            $('.edit-text textarea').val('').simulate('change');
-          });
-
-          it('disables the Save button', () => {
-            expect($('.edit-save').attr('class')).toContain('disabled');
-          });
-
-          it('does not allow item to be updated', () => {
-            $('.edit-save').simulate('click');
-            expect(SpyDispatcher).not.toHaveReceived('updateRetroItem');
-          });
-        });
-      });
-
-      describe('when clicking vote button', () => {
-        it('dispatches a vote action', () => {
-          $('.item-vote-submit').simulate('click');
-          item.vote_count += 1;
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'voteRetroItem',
-            data: {retro_id: retroId, item},
-          });
-        });
-      });
-
-      describe('when clicking on item text', () => {
-        it('highlights the item', () => {
-          $('.item-text button').simulate('click');
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'highlightRetroItem',
-            data: {retro_id: retroId, item},
-          });
-        });
-      });
+      dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile={false}/>);
     });
 
-    describe('when a different item is highlighted', () => {
+    it('shows vote count and message', () => {
+      expect(dom.find('.vote-count')).toIncludeText('1');
+      expect(dom.find('.item-text')).toHaveText('the happy retro item');
+    });
+
+    describe('editing', () => {
       beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={5} archives={false} isMobile={false}/>, root);
+        dom.find('.item-edit i').simulate('click');
       });
+
+      it('displays an edit menu', () => {
+        expect(dom.find('.retro-item')).toHaveClassName('editing');
+      });
+
+      it('dispatches a delete action when delete button clicked', () => {
+        dom.find('.edit-delete i').simulate('click');
+
+        expect(SpyDispatcher).toHaveReceived({
+          type: 'deleteRetroItem',
+          data: {retro_id: retroId, item},
+        });
+      });
+
+      it('does not highlight the item when clicking on the item description', () => {
+        dom.find('.edit-text').simulate('click');
+
+        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
+      });
+
+      describe('setting a non-empty value', () => {
+        beforeEach(() => {
+          dom.find('.edit-text textarea').simulate('change', {target: {value: 'an updated retro item'}});
+        });
+
+        it('updates the retro item when save button is clicked', () => {
+          dom.find('.edit-save').simulate('click');
+
+          expect(dom.find('.retro-item')).not.toHaveClassName('editing');
+          expect(SpyDispatcher).toHaveReceived({
+            type: 'updateRetroItem',
+            data: {retro_id: retroId, item, description: 'an updated retro item'},
+          });
+        });
+
+        it('updates the retro item when enter key is pressed', () => {
+          dom.find('.edit-text textarea').simulate('keyPress', {key: 'Enter'});
+
+          expect(dom.find('.retro-item')).not.toHaveClassName('editing');
+          expect(SpyDispatcher).toHaveReceived({
+            type: 'updateRetroItem',
+            data: {retro_id: retroId, item, description: 'an updated retro item'},
+          });
+        });
+      });
+
+      describe('setting an empty value', () => {
+        beforeEach(() => {
+          dom.find('.edit-text textarea').simulate('change', {target: {value: ''}});
+        });
+
+        it('disables the Save button', () => {
+          expect(dom.find('.edit-save')).toHaveClassName('disabled');
+        });
+
+        it('does not allow item to be updated', () => {
+          dom.find('.edit-save').simulate('click');
+
+          expect(SpyDispatcher).not.toHaveReceived('updateRetroItem');
+        });
+      });
+    });
+
+    it('dispatches a vote action when voted on', () => {
+      dom.find('.item-vote-submit').simulate('click');
+
+      expect(SpyDispatcher).toHaveReceived({
+        type: 'voteRetroItem',
+        data: {retro_id: retroId, item},
+      });
+    });
+
+    it('highlights the item when text is clicked', () => {
+      dom.find('.item-text button').simulate('click');
+
+      expect(SpyDispatcher).toHaveReceived({
+        type: 'highlightRetroItem',
+        data: {retro_id: retroId, item},
+      });
+    });
+
+    describe('another item is highlighted', () => {
+      beforeEach(() => {
+        dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={5} archives={false} isMobile={false}/>);
+      });
+
       it('contains additional class lowlight', () => {
-        expect($('.retro-item').attr('class')).toContain('lowlight');
+        expect(dom.find('.retro-item')).toHaveClassName('lowlight');
       });
 
       it('hides edit button', () => {
-        expect('.item-edit i').toHaveLength(0);
+        expect(dom.find('.item-edit i')).not.toExist();
       });
     });
 
-    describe('when the item becomes highlighted', () => {
-      it('changes class and scrolls to the centre of the screen', () => {
-        const $item = $('.retro-item');
-        expect($item.attr('class')).not.toContain('highlight');
-        spyOn(Scroll.scroller, 'scrollTo');
+    it('scrolls to the centre of the screen when highlighted', () => {
+      spyOn(Scroll.scroller, 'scrollTo');
 
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
+      expect(dom.find('.retro-item')).not.toHaveClassName('highlight');
 
-        expect($item.attr('class')).toContain('highlight');
+      dom.setProps({highlighted_item_id: 2});
 
-        expect(Scroll.scroller.scrollTo).toHaveBeenCalledWith('retro-item-2', jasmine.objectContaining({
-          delay: 0,
-          duration: 300,
-        }));
-      });
+      expect(dom.find('.retro-item')).toHaveClassName('highlight');
+      expect(Scroll.scroller.scrollTo).toHaveBeenCalledWith('retro-item-2', jasmine.objectContaining({
+        delay: 0,
+        duration: 300,
+      }));
     });
 
-    describe('when the item is already highlighted', () => {
-      let highlightedItem;
-
+    describe('highlighted items', () => {
       beforeEach(() => {
-        // Set highlightedItem before each test to guard against leaks from previous tests
-        highlightedItem = {
-          id: 2,
-          description: 'the happy retro item',
-          vote_count: 1,
-          category: 'happy',
-          done: false,
-        };
-
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={highlightedItem} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
+        dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile={false}/>);
       });
 
-      it('contains additional class highlight', () => {
-        expect($('.retro-item').attr('class')).toContain('highlight');
+      it('is marked as highlight', () => {
+        expect(dom.find('.retro-item')).toHaveClassName('highlight');
       });
 
       it('does not scroll when highlighted again', () => {
         spyOn(Scroll.scroller, 'scrollTo');
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={highlightedItem} highlighted_item_id={2} archives={false} isMobile={false}/>, root);
+        dom.setProps({highlighted_item_id: 2});
         expect(Scroll.scroller.scrollTo).not.toHaveBeenCalled();
       });
 
-      describe('when clicking on item text', () => {
-        it('unhighlights the item', () => {
-          $('.item-text button').simulate('click');
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'unhighlightRetroItem',
-            data: {retro_id: retroId},
-          });
+      it('unhighlights when text is clicked', () => {
+        dom.find('.item-text button').simulate('click');
+
+        expect(SpyDispatcher).toHaveReceived({
+          type: 'unhighlightRetroItem',
+          data: {retro_id: retroId},
         });
       });
 
-      describe('when clicking on done', () => {
-        it('sets the item to discussed', () => {
-          $('.item-done').simulate('click');
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'doneRetroItem',
-            data: {retroId, item: highlightedItem},
-          });
+      it('sets to discussed when done is clicked', () => {
+        dom.find('.item-done').simulate('click');
+
+        expect(SpyDispatcher).toHaveReceived({
+          type: 'doneRetroItem',
+          data: {retroId, item},
         });
       });
 
-      describe('when clicking on cancel', () => {
-        it('unhighlights the item', () => {
-          $('.retro-item-cancel').simulate('click');
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'unhighlightRetroItem',
-            data: {retro_id: retroId},
-          });
+      it('unhighlights when cancel is clicked', () => {
+        dom.find('.retro-item-cancel').simulate('click');
+
+        expect(SpyDispatcher).toHaveReceived({
+          type: 'unhighlightRetroItem',
+          data: {retro_id: retroId},
         });
       });
     });
 
-    describe('when this item is discussed', () => {
+    describe('done items', () => {
       beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item_done} highlighted_item_id={null} archives={false} isMobile={false}/>, root);
+        dom = mount(<RetroColumnItem retroId={retroId} item={item_done} highlighted_item_id={null} archives={false} isMobile={false}/>);
       });
-      it('contains additional class discussed', () => {
-        expect($('.retro-item').attr('class')).toContain('discussed');
+
+      it('is marked discussed', () => {
+        expect(dom.find('.retro-item')).toHaveClassName('discussed');
       });
 
       it('hides the edit button', () => {
-        expect('.item-edit').toHaveLength(0);
+        expect(dom.find('.item-edit')).not.toExist();
       });
 
-      describe('when the item is highlighted and the cancel button is clicked', () => {
-        beforeEach(() => {
-          ReactDOM.render(<RetroColumnItem retroId={retroId} item={item_done} highlighted_item_id={20} archives={false} isMobile={false}/>, root);
+      it('dispatches undoneRetroItem when cancel is clicked', () => {
+        dom = mount(<RetroColumnItem retroId={retroId} item={item_done} highlighted_item_id={20} archives={false} isMobile={false}/>);
+
+        dom.find('.retro-item-cancel').simulate('click');
+
+        expect(SpyDispatcher).toHaveReceived({
+          type: 'undoneRetroItem',
+          data: {item: item_done, retroId},
         });
-
-        it('dispatches undoneRetroItem', () => {
-          $('.retro-item-cancel').simulate('click');
-
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'undoneRetroItem',
-            data: {
-              item: {
-                id: 20,
-                description: 'the discussed retro item',
-                vote_count: 10,
-                category: 'happy',
-                done: false,
-              },
-              retroId,
-            },
-          });
-        });
-      });
-    });
-
-    describe('when rendering an ARCHIVES RetroColumnItem', () => {
-      beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives isMobile={false}/>, root);
-      });
-
-      it('does not highlight an item when clicked', () => {
-        $('.item-text button').simulate('click');
-        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
-      });
-
-      describe('when clicking vote button', () => {
-        it('does not dispatch a vote action', () => {
-          $('.item-vote-submit').simulate('click');
-          expect(SpyDispatcher).not.toHaveReceived('voteRetroItem');
-        });
-      });
-
-      it('should not have a delete', () => {
-        expect('.item-delete').toHaveLength(0);
       });
     });
   });
 
-  describe('when opening the app on mobile', () => {
+  describe('archive mode', () => {
+    let dom;
+
     beforeEach(() => {
-      ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={1} archives={false} isMobile/>, root);
+      dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives isMobile={false}/>);
     });
 
-    describe('when clicking on an item', () => {
-      it('does not highlight the item ', () => {
-        $('.item-text button').simulate('click');
-        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
-      });
+    it('does not highlight clicked items', () => {
+      dom.find('.item-text button').simulate('click');
+      expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
     });
 
-    describe('when clicking on done', () => {
-      beforeEach(() => {
-        ReactDOM.render(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile/>, root);
-      });
-      it('does not done the item ', () => {
-        $('.item-done').simulate('click');
-        expect(SpyDispatcher).not.toHaveReceived('doneRetroItem');
-      });
+    it('does not record votes', () => {
+      dom.find('.item-vote-submit').simulate('click');
+      expect(SpyDispatcher).not.toHaveReceived('voteRetroItem');
+    });
+
+    it('does not allow deletion', () => {
+      expect(dom.find('.item-delete')).not.toExist();
+    });
+  });
+
+  describe('on mobile', () => {
+    it('does not highlight clicked items', () => {
+      const dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile/>);
+      dom.find('.item-text button').simulate('click');
+      expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
+    });
+
+    it('does not mark items as done', () => {
+      const dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile/>);
+      dom.find('.item-done').simulate('click');
+      expect(SpyDispatcher).not.toHaveReceived('doneRetroItem');
     });
   });
 });

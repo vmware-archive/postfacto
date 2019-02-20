@@ -30,6 +30,7 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import Scroll from 'react-scroll';
@@ -67,19 +68,20 @@ export default class RetroColumnItem extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    /* eslint-disable react/no-find-dom-node */
     const {item, highlighted_item_id} = prevProps;
     const wasHighlighted = (highlighted_item_id && highlighted_item_id === item.id);
     if (this.isHighlighted() && !wasHighlighted) {
-      const id = this.domId();
       const windowH = document.body.getBoundingClientRect().height;
-      const itemH = document.getElementById(id).offsetHeight;
-      Scroll.scroller.scrollTo(id, {
+      const itemH = ReactDOM.findDOMNode(this).offsetHeight;
+      Scroll.scroller.scrollTo(this.domId(), {
         offset: -(windowH - itemH) / 2,
         delay: 0,
         smooth: !document.hidden,
         duration: 300,
       });
     }
+    /* eslint-enable react/no-find-dom-node */
   }
 
   domId = () => {
@@ -125,8 +127,10 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && !isMobile) {
-      item.done = true;
-      Actions.doneRetroItem({item, retroId});
+      Actions.doneRetroItem({
+        item,
+        retroId,
+      });
     }
   }
 
@@ -134,8 +138,10 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && this.isDone() && !isMobile) {
-      item.done = false;
-      Actions.undoneRetroItem({item, retroId});
+      Actions.undoneRetroItem({
+        item,
+        retroId,
+      });
     } else {
       this.toggleHighlight();
     }
