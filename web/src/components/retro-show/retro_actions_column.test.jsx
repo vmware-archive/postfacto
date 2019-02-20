@@ -30,7 +30,7 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import '../../spec_helper';
 
 import RetroActionsColumn from './retro_actions_column';
@@ -100,47 +100,47 @@ function mockDate(date) {
 }
 
 describe('RetroActionsColumn Current', () => {
+  let dom;
+
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="current"/>, root);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current"/>);
   });
 
-  describe('column header', () => {
-    it('Has the correct date displayed', () => {
-      expect('.retro-action-list-header').toContainText('Today (August 18)');
-    });
+  it('displays the current date in column header', () => {
+    expect(dom.find('.retro-action-list-header')).toIncludeText('Today (August 18)');
   });
 
-  describe('when retro has action items', () => {
-    it('should render current items in descending order', () => {
-      const actions = $('.retro-action .action-text');
-      expect(actions.length).toEqual(2);
-      expect(actions[0].innerHTML).toEqual('action item 2');
-      expect(actions[1].innerHTML).toEqual('action item 1');
-    });
+  it('renders current items in descending order', () => {
+    const actions = dom.find('.retro-action .action-text');
+    expect(actions.length).toEqual(2);
+    expect(actions.at(0)).toIncludeText('action item 2');
+    expect(actions.at(1)).toIncludeText('action item 1');
   });
 });
 
 describe('RetroActionsColumn last-week', () => {
+  let dom;
+
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
   });
 
-  describe('when having multiple action items from different dates', () => {
+  describe('multiple action items from different dates', () => {
     beforeEach(() => {
-      ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week"/>, root);
+      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week"/>);
     });
 
-    it('has the correct date displayed', () => {
-      expect('.retro-action-list-header').toContainText('August 11');
+    it('displays the last week date in column header', () => {
+      expect(dom.find('.retro-action-list-header')).toIncludeText('August 11');
     });
 
-    it('should render each item', () => {
-      expect($('.retro-action').length).toEqual(1);
+    it('renders items from the time period', () => {
+      expect(dom.find('.retro-action').length).toEqual(1);
     });
   });
 
-  describe('when all action items on the same day', () => {
+  describe('all action items on the same day', () => {
     const retro_without_older = {
       id: 123,
       name: 'the retro name',
@@ -170,60 +170,59 @@ describe('RetroActionsColumn last-week', () => {
       ],
     };
 
-    beforeEach(() => {
+    it('renders no items', () => {
       mockDate(new Date(2016, 7, 18));
-      ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro_without_older} category="last-week"/>, root);
-    });
-
-    it('should render no items', () => {
-      expect($('.retro-action').length).toEqual(0);
+      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro_without_older} category="last-week"/>);
+      expect(dom.find('.retro-action').length).toEqual(0);
     });
   });
 });
 
 describe('RetroActionsColumn older', () => {
+  let dom;
+
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="older"/>, root);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="older"/>);
   });
 
-  describe('column header', () => {
-    it('Has the correct date displayed', () => {
-      expect('.retro-action-list-header').toContainText('Older');
-    });
+  it('displays a column header', () => {
+    expect(dom.find('.retro-action-list-header')).toIncludeText('Older');
   });
 
-  describe('when retro has action items', () => {
-    it('should render each item', () => {
-      expect($('.retro-action').length).toEqual(4);
-    });
+  it('renders items from the time period', () => {
+    expect(dom.find('.retro-action').length).toEqual(4);
   });
 });
 
-
 describe('RetroActionsColumn Current Archive', () => {
+  let dom;
+
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives/>, root);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives/>);
   });
 
   describe('column header', () => {
-    it('Has the correct title displayed', () => {
-      expect('.retro-action-list-header').toContainText('Completed action items');
+    it('displays a column header', () => {
+      expect(dom.find('.retro-action-list-header')).toIncludeText('Completed action items');
     });
-    it('should not have a delete or input', () => {
-      expect('.action-delete').toHaveLength(0);
+
+    it('does not allow modifications', () => {
+      expect(dom.find('.action-delete').length).toEqual(0);
     });
   });
 });
 
 describe('RetroActionsColumn last-week Archive', () => {
+  let dom;
+
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    ReactDOM.render(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives/>, root);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives/>);
   });
 
   it('is empty', () => {
-    expect($('.retro-action').length).toEqual(0);
+    expect(dom.find('.retro-action').length).toEqual(0);
   });
 });
