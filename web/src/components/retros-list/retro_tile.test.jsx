@@ -30,11 +30,8 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import $ from 'jquery';
-import '../../test_support/jquery_simulate_react';
 
 import RetroTile from './retro_tile';
 
@@ -45,15 +42,17 @@ describe('Retro Tile', () => {
   };
 
   it('should show a retro name', () => {
-    ReactDOM.render(<RetroTile retro={retro}/>, root);
-    expect('.retro-list-tile').toContainText('Cool Retro');
+    const dom = mount(<RetroTile retro={retro}/>);
+
+    expect(dom.find('.retro-list-tile')).toIncludeText('Cool Retro');
   });
 
   it('should call the callback when clicked', () => {
     const callbackFn = jasmine.createSpy('callbackFn');
 
-    ReactDOM.render(<RetroTile retro={retro} callback={callbackFn}/>, root);
-    $('.retro-list-tile').click();
+    const dom = mount(<RetroTile retro={retro} callback={callbackFn}/>);
+    dom.find('.retro-list-tile').simulate('click');
+
     expect(callbackFn).toHaveBeenCalled();
   });
 });
