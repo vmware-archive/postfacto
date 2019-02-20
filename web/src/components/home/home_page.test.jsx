@@ -30,19 +30,14 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
 
 import HomePage from './home_page';
 
 describe('HomePage', () => {
-  describe('When page loaded', () => {
-    beforeEach(() => {
-      ReactDOM.render(<HomePage/>, root);
-    });
-
-    it('dispatches showHomePageAnalytics action when home page is loaded', () => {
-      expect(SpyDispatcher).toHaveReceived('showHomePageAnalytics');
-    });
+  it('dispatches showHomePageAnalytics when mounted', () => {
+    mount(<HomePage/>);
+    expect(SpyDispatcher).toHaveReceived('showHomePageAnalytics');
   });
 });
