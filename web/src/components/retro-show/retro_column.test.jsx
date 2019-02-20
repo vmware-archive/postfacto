@@ -30,10 +30,8 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import '../../spec_helper';
-import $ from 'jquery';
-import 'jasmine_dom_matchers';
 
 import RetroColumn from './retro_column';
 
@@ -69,20 +67,24 @@ const retro = {
   ],
 };
 describe('RetroColumn', () => {
+  let dom;
+
   beforeEach(() => {
-    ReactDOM.render(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false}/>, root);
+    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false}/>);
   });
 
-  describe('creating a retro', () => {
-    it('column has all its items', () => {
-      expect($('.column-happy .retro-item-add-input').attr('placeholder')).toEqual('I\'m glad that...');
-      expect('.column-happy .retro-item').toHaveLength(2);
-    });
+  it('assigns a class name based on category', () => {
+    expect(dom.find('.column-happy')).toExist();
   });
 
-  it('should order items by time', () => {
-    const happyItems = $('.column-happy .retro-item .item-text');
-    expect(happyItems.get(0).textContent).toEqual('the happy retro item');
-    expect(happyItems.get(1).textContent).toEqual('the 2nd happy retro item');
+  it('displays all items', () => {
+    expect(dom.find('textarea.retro-item-add-input').prop('placeholder')).toEqual('I\'m glad that...');
+    expect(dom.find('.retro-item')).toHaveLength(2);
+  });
+
+  it('displays items ordered by time', () => {
+    const happyItems = dom.find('.retro-item .item-text');
+    expect(happyItems.at(0)).toHaveText('the happy retro item');
+    expect(happyItems.at(1)).toHaveText('the 2nd happy retro item');
   });
 });
