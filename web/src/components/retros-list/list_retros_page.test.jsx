@@ -30,29 +30,25 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import {MuiThemeProvider} from 'material-ui';
 import {SpyDispatcher} from '../../spec_helper';
 
 import ListRetrosPage from './list_retros_page';
 
 describe('List Retros Page', () => {
-  let retros;
+  let dom;
 
   beforeEach(() => {
-    retros = createRetros(2);
+    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)}/></MuiThemeProvider>);
   });
 
-  it('should show multiple retros', () => {
-    ReactDOM.render(<MuiThemeProvider><ListRetrosPage retros={retros}/></MuiThemeProvider>, root);
-
-    expect('.retro-list-tile').toHaveLength(2);
+  it('shows multiple retros', () => {
+    expect(dom.find('.retro-list-tile').length).toEqual(2);
   });
 
-  it('should have a link to show retro page', () => {
-    ReactDOM.render(<MuiThemeProvider><ListRetrosPage retros={retros}/></MuiThemeProvider>, root);
-
-    $('.retro-list-tile:eq(0)').click();
+  it('includes a link to the show retro page', () => {
+    dom.find('.retro-list-tile').at(0).simulate('click');
     expect(SpyDispatcher).toHaveReceived('routeToShowRetro');
   });
 });
