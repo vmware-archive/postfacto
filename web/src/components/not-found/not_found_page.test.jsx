@@ -30,28 +30,31 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount, shallow} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
 
 import NotFoundPage from './not_found_page';
 
 describe('NotFoundPage', () => {
-  let subject;
-  beforeEach(() => {
-    subject = ReactDOM.render(<NotFoundPage/>, root);
+  it('displays error details', () => {
+    const subject = shallow(<NotFoundPage/>);
+    expect(subject.find('h1')).toIncludeText('Oops...');
   });
 
-  describe('When page is not found', () => {
-    it('displays error details', () => {
-      expect($('h1').text()).toContain('Oops...');
-    });
-    it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
-      $('button:contains("Create a Project")').simulate('click');
-      expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
-    });
-    it('dispatches resetNotFound when willUnMount', () => {
-      subject.componentWillUnmount();
-      expect(SpyDispatcher).toHaveReceived('resetNotFound');
-    });
+  it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
+    const subject = shallow(<NotFoundPage/>);
+    const button = subject.find('button');
+
+    expect(button).toIncludeText('Create a Project');
+    button.simulate('click');
+
+    expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
+  });
+
+  it('dispatches resetNotFound when willUnMount', () => {
+    const subject = mount(<NotFoundPage/>);
+    expect(SpyDispatcher).not.toHaveReceived('resetNotFound');
+    subject.unmount();
+    expect(SpyDispatcher).toHaveReceived('resetNotFound');
   });
 });
