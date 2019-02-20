@@ -78,4 +78,5 @@ beforeEach(() => {
 afterEach(() => {
   ReactDOM.unmountComponentAtNode(global.root);
   Dispatcher.reset();
+  global.localStorage.clear();
 });

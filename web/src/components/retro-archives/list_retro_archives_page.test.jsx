@@ -30,11 +30,12 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {SpyDispatcher} from '../../spec_helper';
 
 import ListRetroArchivesPage from './list_retro_archives_page';
+import RetroMenu from '../shared/retro_menu';
 
 describe('ListRetroArchivesPage', () => {
   const archives = [
@@ -48,54 +49,50 @@ describe('ListRetroArchivesPage', () => {
     },
   ];
 
+  let dom;
+
   beforeEach(() => {
     window.innerWidth = 1084;
-    ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives}/></MuiThemeProvider>, root);
+    dom = mount(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives}/></MuiThemeProvider>);
   });
 
   it('shows all archived retros', () => {
-    const links = $('.archives .archive-link a');
-    expect(links[0].innerHTML).toEqual('28 October 2016');
-    expect(links[1].innerHTML).toEqual('03 September 2016');
+    const links = dom.find('.archives .archive-link');
+    expect(links.at(0)).toIncludeText('28 October 2016');
+    expect(links.at(1)).toIncludeText('03 September 2016');
   });
 
   it('shows the footer', () => {
-    expect('.footer').toExist();
+    expect(dom.find('.footer')).toExist();
   });
 
-  describe('when user is signed in', () => {
-    beforeEach(() => {
-      window.localStorage.setItem('authToken', 'some-token');
-      ReactDOM.render(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives}/></MuiThemeProvider>, root);
-    });
+  it('returns to the current retro page when back is clicked', () => {
+    const back = dom.find('button.retro-back');
 
-    afterEach(() => {
-      window.localStorage.clear();
-    });
+    expect(back).toIncludeText('Current retro');
+    back.simulate('click');
 
-    it('should have sign out menu item', () => {
-      expect('.retro-menu').toHaveLength(1);
-      $('.retro-menu button').simulate('click');
-      expect('.retro-menu-item').toContainText('Sign out');
-    });
-  });
-
-  it('Current retro button links to the current retro page', () => {
-    expect('.retro-back').toContainText('Current retro');
-    $('.retro-back').simulate('click');
     expect(SpyDispatcher).toHaveReceived({
       type: 'backPressedFromArchives',
       data: {retro_id: '789'},
     });
   });
 
-  describe('clicking an archive', () => {
-    it('navigates to that archive', () => {
-      $($('.archives .archive-link a')[0]).simulate('click');
-      expect(SpyDispatcher).toHaveReceived({
-        type: 'routeToRetroArchive',
-        data: {retro_id: '789', archive_id: 123},
-      });
+  it('navigates to archives when clicked', () => {
+    dom.find('.archives .archive-link a').at(0).simulate('click');
+
+    expect(SpyDispatcher).toHaveReceived({
+      type: 'routeToRetroArchive',
+      data: {retro_id: '789', archive_id: 123},
     });
+  });
+
+  it('shows a sign out menu item if logged in', () => {
+    window.localStorage.setItem('authToken', 'some-token');
+    dom = shallow(<ListRetroArchivesPage retroId="789" archives={archives}/>);
+
+    const menuItems = dom.find(RetroMenu).props().items;
+    expect(menuItems.length).toEqual(1);
+    expect(menuItems[0].title).toEqual('Sign out');
   });
 });
