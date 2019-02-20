@@ -30,20 +30,24 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import $ from 'jquery';
-import '../../test_support/jquery_simulate_react';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RetroMenu from './retro_menu';
 
+function getMenuItems() {
+  // <Popover> renders separately, so hacks are needed:
+  return document.body.getElementsByClassName('retro-menu-item');
+}
+
 describe('RetroMenu', () => {
   let testCallback;
+  let dom;
 
   beforeEach(() => {
     testCallback = jasmine.createSpy('testCallback');
+
     const menuItems = [
       {
         title: 'Menu Item 1',
@@ -59,30 +63,33 @@ describe('RetroMenu', () => {
         button: true,
       },
     ];
-    ReactDOM.render(<MuiThemeProvider><RetroMenu isMobile={false} items={menuItems}/></MuiThemeProvider>, root);
+    dom = mount(<MuiThemeProvider><RetroMenu isMobile={false} items={menuItems}/></MuiThemeProvider>);
   });
 
-  describe('within retro menu', () => {
-    it('has the menu items', () => {
-      $('.retro-menu button').simulate('click');
-      const items = $('.retro-menu-item');
-      expect('.retro-menu-item').toHaveLength(3);
-      expect(items[0]).toContainText('Menu Item 1');
-      expect(items[1]).toContainText('Menu Item 2');
-      expect(items[2]).toContainText('Menu Item 3');
-    });
+  it('shows the menu items', () => {
+    dom.find('.retro-menu button').simulate('click');
+    const items = getMenuItems();
 
-    it('invokes the callback on click of menu item', () => {
-      $('.retro-menu button').simulate('click');
-      $('.retro-menu-item').simulate('click');
-      expect(testCallback).toHaveBeenCalled();
-    });
+    expect(items.length).toEqual(3);
+    expect(items[0].innerHTML).toMatch(/\bMenu Item 1\b/);
+    expect(items[1].innerHTML).toMatch(/\bMenu Item 2\b/);
+    expect(items[2].innerHTML).toMatch(/\bMenu Item 3\b/);
+  });
 
-    describe('when button is set to true', () => {
-      it('displays the menu item as a button', () => {
-        $('.retro-menu button').simulate('click');
-        expect($('button.retro-menu-item').length).toEqual(1);
-      });
-    });
+  it('invokes the callback on click of menu item', () => {
+    dom.find('.retro-menu button').simulate('click');
+    const items = getMenuItems();
+
+    items[0].click();
+
+    expect(testCallback).toHaveBeenCalled();
+  });
+
+  it('displays the menu item as a button if requested', () => {
+    dom.find('.retro-menu button').simulate('click');
+    const items = getMenuItems();
+
+    expect(items[0].tagName.toLowerCase()).not.toEqual('button');
+    expect(items[2].tagName.toLowerCase()).toEqual('button');
   });
 });
