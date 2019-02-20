@@ -40,6 +40,9 @@ import Application from './Application'; // Load dispatchers (sets global state 
 
 global.$ = jQuery;
 
+// Capture original dispatch so that we can selectively call it later
+const nonFakeDispatch = Dispatcher.dispatch.bind(Dispatcher);
+
 export const SpyDispatcher = Dispatcher;
 
 export function combineElementsContent(className) {
@@ -64,8 +67,6 @@ beforeEach(() => {
 
   Application.reset(); // set global state such as p-flux.Actions
 
-  // Capture original dispatch so that we can selectively call it later
-  const nonFakeDispatch = Dispatcher.dispatch.bind(Dispatcher);
   spyOn(Dispatcher, 'dispatch');
   Dispatcher.nonFakeDispatch = nonFakeDispatch;
 
