@@ -29,28 +29,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import {mount} from 'enzyme';
-import Helmet from 'react-helmet';
-import Header from './header';
-import '../../spec_helper';
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-describe('Header', () => {
-  const config = {
-    title: 'Retro Title',
-  };
+Enzyme.configure({adapter: new Adapter()});
 
-  describe('when retro is available', () => {
-    it('includes the retro name in the document title', () => {
-      mount(<Header retro={{name: 'My Retro Name'}} config={config}/>);
-      expect(Helmet.peek().title).toEqual('My Retro Name - Retro Title');
-    });
+// Automatically unmount all mounted components before and after each test
+
+const enzymeMounted = [];
+
+const mount = Enzyme.mount.bind(Enzyme);
+Enzyme.mount = (...args) => {
+  const mounted = mount(...args);
+  enzymeMounted.push(mounted);
+  return mounted;
+};
+
+function clearEnzymeMounted() {
+  enzymeMounted.forEach((mounted) => {
+    if (mounted.length) {
+      mounted.unmount();
+    }
   });
+  enzymeMounted.length = 0;
+}
 
-  describe('when retro is unavailable', () => {
-    it('uses a generic document title', () => {
-      mount(<Header retro={{name: ''}} config={config}/>);
-      expect(Helmet.peek().title).toEqual('Retro Title');
-    });
-  });
-});
+beforeEach(clearEnzymeMounted);
+afterEach(clearEnzymeMounted);

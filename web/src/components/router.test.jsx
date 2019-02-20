@@ -30,7 +30,7 @@
  */
 
 import React from 'react';
-import {mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {SpyDispatcher} from '../spec_helper';
 
 import Alert from './shared/alert';
@@ -44,11 +44,7 @@ describe('Router', () => {
   const fakeRouter = {get: () => {}};
 
   beforeEach(() => {
-    rendered = mount(<Router alert={{}} router={fakeRouter}/>);
-  });
-
-  afterEach(() => {
-    rendered.unmount();
+    rendered = shallow(<Router alert={{}} router={fakeRouter}/>);
   });
 
   it('renders alert', () => {
@@ -77,19 +73,17 @@ describe('Router', () => {
     });
   });
 
-  describe('when api server not found prop', () => {
-    it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
-      rendered.setProps({api_server_not_found: true});
+  it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
+    rendered.setProps({api_server_not_found: true});
 
-      const pages = rendered.find(ApiServerNotFoundPage);
-      expect(pages.length).toEqual(1);
-    });
+    const pages = rendered.find(ApiServerNotFoundPage);
+    expect(pages.length).toEqual(1);
+  });
 
-    it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
-      rendered.setProps({api_server_not_found: false});
+  it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
+    rendered.setProps({api_server_not_found: false});
 
-      const pages = rendered.find(ApiServerNotFoundPage);
-      expect(pages.length).toEqual(0);
-    });
+    const pages = rendered.find(ApiServerNotFoundPage);
+    expect(pages.length).toEqual(0);
   });
 });
