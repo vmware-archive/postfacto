@@ -30,105 +30,101 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount, shallow} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
 
 import LoginToRetroPage from './login_to_retro_page';
 
+function isFocused(wrapper) {
+  // Waiting for https://github.com/airbnb/enzyme/pull/1965
+  // return wrapper.is(':focus');
+  return document.activeElement === wrapper.instance();
+}
+
+function getValue(wrapper) {
+  return wrapper.instance().value;
+}
+
 describe('LoginToRetroPage', () => {
-  describe('When the retro has not yet been fetched', () => {
+  const retro = {
+    id: 13,
+    name: 'the retro name',
+  };
+
+  let dom;
+
+  describe('while retro is loading', () => {
     it('renders nothing', () => {
-      ReactDOM.render(<LoginToRetroPage retro={{name: ''}} retroId="13"/>, root);
-      expect('h1').not.toExist();
+      dom = shallow(<LoginToRetroPage retro={{name: ''}} retroId="13"/>);
+      expect(dom.find('h1')).not.toExist();
     });
   });
 
-  describe('When page is shown', () => {
-    const retro = {
-      id: 13,
-      name: 'the retro name',
-    };
-
+  describe('with a retro', () => {
     beforeEach(() => {
-      ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13"/>, root);
+      dom = mount(<LoginToRetroPage retro={retro} retroId="13"/>);
     });
 
     it('dispatches getRetroLogin', () => {
       expect(SpyDispatcher).toHaveReceived({type: 'getRetroLogin', data: {retro_id: '13'}});
-      expect($('h1').text()).toEqual('Psst... what\'s the password?');
-      expect('label').toContainText('Enter the password to access the retro name.');
+      expect(dom.find('h1')).toIncludeText('Psst... what\'s the password?');
+      expect(dom.find('label')).toIncludeText('Enter the password to access the retro name.');
     });
 
     it('focuses the password input field', () => {
-      expect('.form-input').toBeFocused();
+      expect(isFocused(dom.find('.form-input'))).toEqual(true);
     });
 
+    it('dispatches loginToRetro when clicking on the login button', () => {
+      dom.find('.form-input').simulate('change', {target: {value: 'pa55word'}});
+      dom.find('.retro-form-submit').simulate('click');
 
-    describe('when clicking on the login button', () => {
-      it('dispatches loginToRetro', () => {
-        $('.form-input').val('pa55word').simulate('change');
-        $('.retro-form-submit').simulate('click');
-        expect(SpyDispatcher).toHaveReceived({
-          type: 'loginToRetro',
-          data: {retro_id: '13', password: 'pa55word'},
-        });
-        expect('.form-input').toHaveValue('');
+      expect(SpyDispatcher).toHaveReceived({
+        type: 'loginToRetro',
+        data: {retro_id: '13', password: 'pa55word'},
       });
+      expect(getValue(dom.find('.form-input'))).toEqual('');
     });
 
-    describe('when hitting the return key in the password input field', () => {
-      it('dispatches loginToRetro', () => {
-        $('.form-input').val('pa55word').simulate('change').simulate('keyPress', {key: 'Enter'});
-        expect(SpyDispatcher).toHaveReceived({
-          type: 'loginToRetro',
-          data: {retro_id: '13', password: 'pa55word'},
-        });
-        expect('.form-input').toHaveValue('');
+    it('dispatches loginToRetro when pressing return', () => {
+      const input = dom.find('.form-input');
+      input.simulate('change', {target: {value: 'pa55word'}});
+      input.simulate('keyPress', {key: 'Enter'});
+
+      expect(SpyDispatcher).toHaveReceived({
+        type: 'loginToRetro',
+        data: {retro_id: '13', password: 'pa55word'},
       });
+      expect(getValue(dom.find('.form-input'))).toEqual('');
     });
 
-    describe('when wrong password is given', () => {
-      beforeEach(() => {
-        ReactDOM.render(<LoginToRetroPage
-          retro={retro}
-          retroId="13"
-          login_error_message="Oops, wrong password."
-        />, root);
+    it('displays error messages dynamically', () => {
+      dom.setProps({
+        login_error_message: 'uh-oh',
       });
 
-      it('displays an error message', () => {
-        $('.form-input').val('lolwut').simulate('change');
-        $('.retro-form-submit').simulate('click');
-
-        expect('.error-message').toContainText('Oops, wrong password.');
-      });
+      expect(dom.find('.error-message')).toIncludeText('uh-oh');
     });
   });
 
-  describe('pageTitle', () => {
-    let component;
-    const retro = {
-      id: 13,
-      name: 'the retro name',
-    };
+  describe('title', () => {
+    function setupRetro({force_relogin}) {
+      return shallow(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin}/>);
+    }
 
-    const setupRetro = ({force_relogin}) => {
-      component = ReactDOM.render(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin}/>, root);
-    };
-
-    it('returns login required message when force_relogin is false', () => {
-      setupRetro({force_relogin: false});
-      expect(component.pageTitle()).toEqual('Psst... what\'s the password?');
+    it('shows login required message when force_relogin is false', () => {
+      dom = setupRetro({force_relogin: false});
+      expect(dom.find('h1')).toIncludeText('Psst... what\'s the password?');
     });
 
-    it('returns login required message when force_relogin is missing', () => {
-      setupRetro({force_relogin: undefined});
-      expect(component.pageTitle()).toEqual('Psst... what\'s the password?');
+    it('shows login required message when force_relogin is missing', () => {
+      dom = setupRetro({force_relogin: undefined});
+      expect(dom.find('h1')).toIncludeText('Psst... what\'s the password?');
     });
 
-    it('returns password changed message when force_relogin is true', () => {
-      setupRetro({force_relogin: true});
-      expect(component.pageTitle()).toEqual('The owner of this retro has chosen to protect it with a password.');
+    it('shows password changed message when force_relogin is true', () => {
+      dom = setupRetro({force_relogin: true});
+      expect(dom.find('h1')).toIncludeText('The owner of this retro has chosen to protect it with a password.');
     });
   });
 });
