@@ -41,9 +41,10 @@ import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 
 describe('Router', () => {
   let rendered;
-  const fakeRouter = {get: () => {}};
 
   beforeEach(() => {
+    const fakeRouter = {get: () => {}};
+
     rendered = shallow(<Router alert={{}} router={fakeRouter}/>);
   });
 
@@ -51,37 +52,27 @@ describe('Router', () => {
     expect(rendered.find(Alert)).toExist();
   });
 
-  describe('when changed to a different page', () => {
-    beforeEach(() => {
-      rendered.setState({Page: HomePage});
-    });
+  it('dispatches hide alert when changed to a different page', () => {
+    rendered.setState({Page: HomePage});
 
-    it('dispatches hide alert', () => {
-      expect(SpyDispatcher).toHaveReceived('hideAlert');
-    });
+    expect(SpyDispatcher).toHaveReceived('hideAlert');
   });
 
-  describe('when changed to the same page', () => {
-    beforeEach(() => {
-      rendered.setState({Page: EmptyPage});
-    });
+  it('does not dispatch hide alert when changed to the same page', () => {
+    rendered.setState({Page: EmptyPage});
 
-    it('does not dispatch hide alert', () => {
-      expect(SpyDispatcher).not.toHaveReceived('hideAlert');
-    });
+    expect(SpyDispatcher).not.toHaveReceived('hideAlert');
   });
 
   it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
     rendered.setProps({api_server_not_found: true});
 
-    const pages = rendered.find(ApiServerNotFoundPage);
-    expect(pages.length).toEqual(1);
+    expect(rendered.find(ApiServerNotFoundPage)).toExist();
   });
 
   it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
     rendered.setProps({api_server_not_found: false});
 
-    const pages = rendered.find(ApiServerNotFoundPage);
-    expect(pages.length).toEqual(0);
+    expect(rendered.find(ApiServerNotFoundPage)).not.toExist();
   });
 });

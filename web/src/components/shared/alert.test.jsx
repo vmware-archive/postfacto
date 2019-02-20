@@ -30,60 +30,45 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {shallow} from 'enzyme';
 import '../../spec_helper';
 
 import Alert from './alert';
 
 describe('Alert', () => {
-  describe('when message is empty', () => {
-    beforeEach(() => {
-      ReactDOM.render(<Alert alert={null}/>, root);
-    });
-
-    it('should render nothing', () => {
-      expect('.alert').toHaveLength(0);
-    });
+  it('displays a given message', () => {
+    const alert = {
+      message: 'Alert Message',
+    };
+    const dom = shallow(<Alert alert={alert}/>);
+    expect(dom.find('.alert .alert__text')).toIncludeText('Alert Message');
   });
 
-  describe('when message is not empty', () => {
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-      };
-      ReactDOM.render(<Alert alert={alert}/>, root);
-    });
-
-    it('should render alert', () => {
-      expect('.alert .alert__text').toContainText('Alert Message');
-    });
+  it('displays a check icon if requested', () => {
+    const alert = {
+      message: 'Alert Message',
+      checkIcon: true,
+    };
+    const dom = shallow(<Alert alert={alert}/>);
+    expect(dom.find('.alert i.fa-check')).toExist();
   });
 
-  describe('when the checkIcon is set to true', () => {
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-        checkIcon: true,
-      };
-      ReactDOM.render(<Alert alert={alert}/>, root);
-    });
-
-    it('displays the check icon', () => {
-      expect('.alert i.fa-check').toHaveLength(1);
-    });
+  it('displays no check icon if not requested', () => {
+    const alert = {
+      message: 'Alert Message',
+      checkIcon: false,
+    };
+    const dom = shallow(<Alert alert={alert}/>);
+    expect(dom.find('.alert i.fa-check')).not.toExist();
   });
 
-  describe('when the checkIcon is set to false', () => {
-    beforeEach(() => {
-      const alert = {
-        message: 'Alert Message',
-        checkIcon: false,
-      };
-      ReactDOM.render(<Alert alert={alert}/>, root);
-    });
+  it('renders nothing when message is empty', () => {
+    const dom = shallow(<Alert alert={null}/>);
+    expect(dom.find('.alert')).not.toExist();
+  });
 
-    it('displays the check icon', () => {
-      expect('.alert i.fa-check').toHaveLength(0);
-    });
+  it('defaults to displaying no alert', () => {
+    const dom = shallow(<Alert/>);
+    expect(dom.find('.alert')).not.toExist();
   });
 });
