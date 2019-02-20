@@ -29,6 +29,7 @@
     "jasmine-ajax": "^3.4.0",
     "jasmine-core": "^3.3.0",
     "jasmine_dom_matchers": "^1.4.0",
+    "jest-enzyme": "^7.0.1",
     "jquery": "^3.3.1",
     "pivotal-js-jasmine-matchers": "^0.1.1",
     "promise-mock": "^2.1.0",

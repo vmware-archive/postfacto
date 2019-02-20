@@ -48,9 +48,7 @@ describe('Router', () => {
   });
 
   it('renders alert', () => {
-    const results = rendered.find(Alert);
-
-    expect(results.length).toEqual(1);
+    expect(rendered.find(Alert)).toExist();
   });
 
   describe('when changed to a different page', () => {
