@@ -30,50 +30,52 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import {SpyDispatcher} from '../../spec_helper';
 
 import CountdownTimer from './countdown_timer';
 
 describe('CountdownTimer', () => {
+  let dom;
+
   beforeEach(() => {
     global.Date.now = () => 0;
   });
 
-  describe('when end time in the future', () => {
+  describe('with time remaining', () => {
     beforeEach(() => {
       const FOUR_MINS_FIVE_SECS = 245000;
-      ReactDOM.render(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123"/>, root);
+      dom = mount(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123"/>);
     });
 
-    it('renders a formatted time component', () => {
-      expect('.retro-item-timer-clock .formatted-interval').toExist();
-      expect('.retro-item-timer-clock .formatted-interval').toHaveText('4:05');
+    it('displays the remaining time in MM:SS format', () => {
+      expect(dom).toIncludeText('4:05');
     });
 
-    it('updates remaining time when time ticks', () => {
+    it('updates the countdown as time passes', () => {
       global.Date.now = () => 1000;
       jest.advanceTimersByTime(1000);
 
-      expect('.retro-item-timer-clock .formatted-interval').toHaveText('4:04');
+      expect(dom).toIncludeText('4:04');
     });
   });
 
-  describe('when end time in the past', () => {
+  describe('with no time remaining', () => {
     beforeEach(() => {
-      ReactDOM.render(<CountdownTimer endTimestampInMs={0} retroId="retro-slug-123"/>, root);
+      dom = mount(<CountdownTimer endTimestampInMs={0} retroId="retro-slug-123"/>);
     });
 
-    it('displays +2 more minutes and Time\'s Up!', () => {
-      expect('.retro-item-timer-extend').toHaveText('Time\'s Up!+2 more minutes');
-      expect($('.retro-item-timer-clock').length).toEqual(0);
+    it('displays +2 more minutes and no countdown', () => {
+      expect(dom.find('.retro-item-timer-extend')).toIncludeText('+2 more minutes');
+
+      expect(dom).not.toIncludeText(':');
+      expect(dom.find('.retro-item-timer-clock')).not.toExist();
+      expect(dom).toIncludeText('Time\'s Up!');
     });
 
-    describe('when clicking on extend Timer', () => {
-      it('adds 2 more minutes to endTime', () => {
-        $('.retro-item-timer-extend').simulate('click');
-        expect(SpyDispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
-      });
+    it('dispatches extendTimer when extend button clicked', () => {
+      dom.find('.retro-item-timer-extend').simulate('click');
+      expect(SpyDispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
     });
   });
 });
