@@ -30,34 +30,32 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import $ from 'jquery';
-import '../../test_support/jquery_simulate_react';
 
 import RetroItemEditView from './retro_item_edit_view';
 
 describe('RetroItemEditView', () => {
   let deleteSpy;
   let saveSpy;
+  let dom;
 
   beforeEach(() => {
     deleteSpy = jasmine.createSpy('delete');
     saveSpy = jasmine.createSpy('save');
-    ReactDOM.render(
+    dom = mount((
       <RetroItemEditView
         originalText="item text"
         deleteItem={deleteSpy}
         saveItem={saveSpy}
-      />, root,
-    );
+      />
+    ));
   });
 
   it('should display edit view', () => {
-    expect('textarea').toHaveValue('item text');
-    expect('.edit-delete').toExist();
-    expect('.edit-save').toExist();
+    expect(dom.find('textarea')).toHaveValue('item text');
+    expect(dom.find('.edit-delete')).toExist();
+    expect(dom.find('.edit-save')).toExist();
   });
 
   describe('when typing in the text field ', () => {
@@ -69,8 +67,8 @@ describe('RetroItemEditView', () => {
 
     describe('when save button is clicked', () => {
       beforeEach(() => {
-        $('textarea').val('some other value').simulate('change');
-        $('.edit-save').simulate('click');
+        dom.find('textarea').simulate('change', {target: {value: 'some other value'}});
+        dom.find('.edit-save').simulate('click');
       });
 
       sharedUpdateActionBehavior();
@@ -78,27 +76,29 @@ describe('RetroItemEditView', () => {
 
     describe('when enter key is pressed', () => {
       beforeEach(() => {
-        $('textarea').val('some other value').simulate('change').simulate('keyPress', {key: 'Enter'});
+        dom.find('textarea').simulate('change', {target: {value: 'some other value'}});
+        dom.find('textarea').simulate('keyPress', {key: 'Enter'});
       });
 
       sharedUpdateActionBehavior();
     });
 
     it('does not submit when pressing shift + enter so new line is added', () => {
-      $('textarea').val('a new action item').simulate('change').simulate('keyPress', {key: 'Enter', shiftKey: true});
+      dom.find('textarea').simulate('change', {target: {value: 'a new action item'}});
+      dom.find('textarea').simulate('keyPress', {key: 'Enter', shiftKey: true});
       expect(saveSpy).not.toHaveBeenCalled();
     });
 
     it('does not allow editing if value is empty', () => {
-      $('textarea').val('').simulate('change');
-      $('.edit-save').simulate('click');
+      dom.find('textarea').simulate('change', {target: {value: ''}});
+      dom.find('.edit-save').simulate('click');
       expect(saveSpy).not.toHaveBeenCalled();
     });
   });
 
   describe('when clicking on delete ', () => {
     it('should remove the action item', () => {
-      $('.edit-delete').simulate('click');
+      dom.find('.edit-delete').simulate('click');
       expect(deleteSpy).toHaveBeenCalled();
     });
   });
