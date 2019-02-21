@@ -38,7 +38,7 @@ import RetroMenu from './retro_menu';
 
 function getMenuItems() {
   // <Popover> renders separately, so hacks are needed:
-  return document.body.getElementsByClassName('retro-menu-item');
+  return document.getElementsByClassName('retro-menu-item');
 }
 
 describe('RetroMenu', () => {

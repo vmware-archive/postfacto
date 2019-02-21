@@ -38,7 +38,7 @@ import ShowRetroPage from './show_retro_page';
 
 function getMenuItems() {
   // <Popover> renders separately, so hacks are needed:
-  return document.body.getElementsByClassName('retro-menu-item');
+  return document.getElementsByClassName('retro-menu-item');
 }
 
 const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};

@@ -30,16 +30,18 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPage from './show_retro_page';
 
 const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+
+function getMenuItems() {
+  // <Popover> renders separately, so hacks are needed:
+  return document.getElementsByClassName('retro-menu-item');
+}
 
 describe('Show retro page archives', () => {
   const retro_archives = {
@@ -82,14 +84,25 @@ describe('Show retro page archives', () => {
     ],
   };
 
+  let originalGetIsMobile;
+  let shouldBeMobile;
+
+  beforeEach(() => {
+    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
+    ShowRetroPage.prototype.getIsMobile = () => shouldBeMobile;
+  });
+
+  afterEach(() => {
+    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+  });
+
   describe('on desktop', () => {
-    let originalGetIsMobile;
+    let dom;
 
     beforeEach(() => {
-      originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-      ShowRetroPage.prototype.getIsMobile = () => false;
+      shouldBeMobile = false;
 
-      ReactDOM.render(
+      dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
             retro_archives={retro_archives}
@@ -99,74 +112,51 @@ describe('Show retro page archives', () => {
             config={config}
             featureFlags={{archiveEmails: true}}
           />
-        </MuiThemeProvider>,
-        root,
-      );
+        </MuiThemeProvider>
+      ));
     });
 
-    afterEach(() => {
-      ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+    it('renders archived items', () => {
+      expect(dom.find('button.retro-back')).toIncludeText('Archives');
+      expect(dom.find('.column-sad .item-text').at(0)).toIncludeText('archived item 3');
+      expect(dom.find('.retro-action .action-text').at(0)).toHaveText('archived action 2');
     });
 
-    it('should render archived items', () => {
-      expect('.retro-back').toContainText('Archives');
-      expect($('.column-sad .item-text')[0]).toContainText('archived item 3');
-      expect($('.retro-action .action-text')[0].innerHTML).toEqual('archived action 2');
+    it('does not offer deletion or input', () => {
+      expect(dom.find('.action-delete')).not.toExist();
+      expect(dom.find('input')).not.toExist();
     });
 
-    it('should not have a delete or input', () => {
-      expect('.action-delete').toHaveLength(0);
-      expect('input').toHaveLength(0);
-    });
+    it('redirects to list archives page of current retro when clicking Archived retros', () => {
+      dom.find('button.retro-back').simulate('click');
 
-    it('should redirect to list archives page of current retro when clicking Archived retros', () => {
-      $('.retro-back').simulate('click');
       expect(SpyDispatcher).toHaveReceived({
         type: 'routeToRetroArchives',
         data: {retro_id: '13'},
       });
     });
 
-    describe('when user is signed in', () => {
-      beforeEach(() => {
-        window.localStorage.setItem('authToken', 'some-token');
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <ShowRetroPage
-              retro_archives={retro_archives}
-              retroId="13"
-              archives
-              retro={retro_archives}
-              config={config}
-              featureFlags={{archiveEmails: true}}
-            />
-          </MuiThemeProvider>,
-          root,
-        );
-      });
+    it('shows a menu with "Sign out" if logged in', () => {
+      window.localStorage.setItem('authToken', 'some-token');
+      dom.update();
 
-      afterEach(() => {
-        window.localStorage.clear();
-      });
+      const button = dom.find('.retro-menu button');
+      expect(button).toExist();
 
-      it('should have menu', () => {
-        expect('.retro-menu').toHaveLength(1);
-      });
-
-      it('should have sign out menu item', () => {
-        $('.retro-menu button').simulate('click');
-        expect($('.retro-menu-item').last()).toContainText('Sign out');
-      });
+      button.simulate('click');
+      const items = getMenuItems();
+      const lastItem = items[items.length - 1];
+      expect(lastItem.innerHTML).toMatch(/\bSign out\b/);
     });
   });
 
   describe('on mobile', () => {
-    let originalGetIsMobile;
-    beforeEach(() => {
-      originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-      ShowRetroPage.prototype.getIsMobile = () => true;
+    let dom;
 
-      ReactDOM.render(
+    beforeEach(() => {
+      shouldBeMobile = true;
+
+      dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
             retro_archives={retro_archives}
@@ -176,21 +166,17 @@ describe('Show retro page archives', () => {
             config={config}
             featureFlags={{archiveEmails: true}}
           />
-        </MuiThemeProvider>,
-        root,
-      );
+        </MuiThemeProvider>
+      ));
     });
 
-    afterEach(() => {
-      ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+    it('does not show a desktop menu', () => {
+      expect(dom.find('.retro-menu')).not.toExist();
     });
 
-    it('should not have menu', () => {
-      expect('.retro-menu').toHaveLength(0);
-    });
+    it('redirects to list archives page when clicking back', () => {
+      dom.find('button.retro-back').simulate('click');
 
-    it('should redirect to list archives page when clicking back', () => {
-      $('.retro-back').simulate('click');
       expect(SpyDispatcher).toHaveReceived({
         type: 'routeToRetroArchives',
         data: {retro_id: '13'},
