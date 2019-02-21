@@ -45,7 +45,7 @@ describe('MainDispatcher', () => {
     subject = SpyDispatcher;
 
     // dispatch is spied on in spec_helper
-    subject.dispatch.and.callThrough();
+    subject.dispatch.mockCallThrough();
 
     // prevent console logs
     spyOn(subject, 'onDispatch');

@@ -34,10 +34,8 @@ import './test_support/enzyme';
 import {Dispatcher} from 'p-flux';
 import jQuery from 'jquery';
 import ReactDOM from 'react-dom';
+import jestSpyOnAugmented from './test_support/jest_spy_augmented';
 import Application from './Application'; // Load dispatchers (sets global state in p-flux Actions)
-
-// Capture original dispatch so that we can selectively call it later
-const nonFakeDispatch = Dispatcher.dispatch.bind(Dispatcher);
 
 /* eslint-disable import/prefer-default-export */
 export const SpyDispatcher = Dispatcher;
@@ -57,8 +55,7 @@ beforeEach(() => {
 
   Application.reset(); // set global state such as p-flux.Actions
 
-  spyOn(Dispatcher, 'dispatch');
-  Dispatcher.nonFakeDispatch = nonFakeDispatch;
+  jestSpyOnAugmented(Dispatcher, 'dispatch').mockReturnValue(null);
 
   global.localStorage.clear();
 
@@ -67,6 +64,7 @@ beforeEach(() => {
 
 afterEach(() => {
   ReactDOM.unmountComponentAtNode(global.root);
+  Dispatcher.dispatch.mockRestore();
   Dispatcher.reset();
   global.localStorage.clear();
 });

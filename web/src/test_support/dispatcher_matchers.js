@@ -41,8 +41,8 @@ expect.extend({
       expectedContent = expectedAction;
     }
 
-    const observedActions = spyDispatcher.dispatch.calls.all()
-      .map((dispatchCall) => dispatchCall.args[0]);
+    const observedActions = spyDispatcher.dispatch.mock.calls
+      .map((dispatchCall) => dispatchCall[0]);
 
     if (!observedActions.length) {
       return {

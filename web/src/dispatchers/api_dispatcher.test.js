@@ -51,13 +51,11 @@ describe('ApiDispatcher', () => {
     // dispatch is spied on in spec_helper
     let dispatchCount = 0;
     realDispatchLevels = 1;
-    subject.dispatch.and.callFake((action) => {
+    subject.dispatch.mockConditionalCallThrough(() => {
+      // Call through for first (potentially several) dispatches ONLY
+      // Later dispatches are recorded but not invoked
       dispatchCount += 1;
-      if (dispatchCount <= realDispatchLevels) {
-        // Call through for first (potentially several) dispatches ONLY
-        // Later dispatches are recorded but not invoked
-        subject.nonFakeDispatch(action);
-      }
+      return dispatchCount <= realDispatchLevels;
     });
 
     // prevent console logs
