@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import RetroActionsColumnItem from './retro_actions_column_item';
 
@@ -65,7 +66,7 @@ describe('RetroActionsColumnItem', () => {
   it('marks items as not done when clicking pre-ticked box', () => {
     dom.find('.retro-action .action-tick').simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'doneRetroActionItem',
       data: {retro_id: retroId, action_item_id: 1, done: false},
     });
@@ -86,7 +87,7 @@ describe('RetroActionsColumnItem', () => {
 
       expect(dom.find('.retro-action.retro-action-edit')).not.toExist();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'editRetroActionItem',
         data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
       });
@@ -98,7 +99,7 @@ describe('RetroActionsColumnItem', () => {
 
       expect(dom.find('.retro-action.retro-action-edit')).not.toExist();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'editRetroActionItem',
         data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
       });
@@ -108,13 +109,13 @@ describe('RetroActionsColumnItem', () => {
       dom.find('.retro-action textarea').simulate('change', {target: {value: ''}});
       dom.find('.retro-action .edit-save').simulate('click');
 
-      expect(SpyDispatcher).not.toHaveReceived('editRetroActionItem');
+      expect(Dispatcher).not.toHaveReceived('editRetroActionItem');
     });
 
     it('removes the action item when delete is clicked', () => {
       dom.find('.retro-action .edit-delete').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'deleteRetroActionItem',
         data: {retro_id: retroId, action_item: itemDone},
       });

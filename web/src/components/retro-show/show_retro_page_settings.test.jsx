@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
@@ -95,7 +96,7 @@ describe('Retro settings', () => {
 
       button.click();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
         data: {retro_id: '13'},
       });
@@ -104,7 +105,7 @@ describe('Retro settings', () => {
     it('redirects to retro login page if not logged in', () => {
       button.click();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'requireRetroLogin',
         data: {retro_id: '13'},
       });

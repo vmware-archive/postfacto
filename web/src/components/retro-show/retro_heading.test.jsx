@@ -33,7 +33,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {MuiThemeProvider} from 'material-ui';
 import $ from 'jquery';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 import 'jasmine_dom_matchers';
 import '../../test_support/jquery_simulate_react';
 
@@ -141,7 +142,7 @@ describe('RetroHeading', () => {
           $('.retro-menu button').simulate('click');
           $($('.retro-menu-item')[0]).simulate('click');
 
-          expect(SpyDispatcher).toHaveReceived(
+          expect(Dispatcher).toHaveReceived(
             {
               type: 'showDialog',
               data: {
@@ -201,7 +202,7 @@ describe('RetroHeading', () => {
           $('.retro-menu button').simulate('click');
           $($('.retro-menu-item')[0]).simulate('click');
 
-          expect(SpyDispatcher).toHaveReceived(
+          expect(Dispatcher).toHaveReceived(
             {
               type: 'showDialog',
               data: {

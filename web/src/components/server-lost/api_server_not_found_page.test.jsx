@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ApiServerNotFoundPage from './api_server_not_found_page';
 
@@ -43,8 +44,8 @@ describe('ApiServerNotFoundPage', () => {
 
   it('dispatches resetApiServerNotFound when unmounting', () => {
     const subject = mount(<ApiServerNotFoundPage/>);
-    expect(SpyDispatcher).not.toHaveReceived('resetApiServerNotFound');
+    expect(Dispatcher).not.toHaveReceived('resetApiServerNotFound');
     subject.unmount();
-    expect(SpyDispatcher).toHaveReceived('resetApiServerNotFound');
+    expect(Dispatcher).toHaveReceived('resetApiServerNotFound');
   });
 });

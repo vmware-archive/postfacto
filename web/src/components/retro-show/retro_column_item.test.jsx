@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import Scroll from 'react-scroll';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import RetroColumnItem from './retro_column_item';
 
@@ -77,7 +78,7 @@ describe('RetroColumnItem', () => {
       it('dispatches a delete action when delete button clicked', () => {
         dom.find('.edit-delete i').simulate('click');
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'deleteRetroItem',
           data: {retro_id: retroId, item},
         });
@@ -86,7 +87,7 @@ describe('RetroColumnItem', () => {
       it('does not highlight the item when clicking on the item description', () => {
         dom.find('.edit-text').simulate('click');
 
-        expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
+        expect(Dispatcher).not.toHaveReceived('highlightRetroItem');
       });
 
       describe('setting a non-empty value', () => {
@@ -98,7 +99,7 @@ describe('RetroColumnItem', () => {
           dom.find('.edit-save').simulate('click');
 
           expect(dom.find('.retro-item')).not.toHaveClassName('editing');
-          expect(SpyDispatcher).toHaveReceived({
+          expect(Dispatcher).toHaveReceived({
             type: 'updateRetroItem',
             data: {retro_id: retroId, item, description: 'an updated retro item'},
           });
@@ -108,7 +109,7 @@ describe('RetroColumnItem', () => {
           dom.find('.edit-text textarea').simulate('keyPress', {key: 'Enter'});
 
           expect(dom.find('.retro-item')).not.toHaveClassName('editing');
-          expect(SpyDispatcher).toHaveReceived({
+          expect(Dispatcher).toHaveReceived({
             type: 'updateRetroItem',
             data: {retro_id: retroId, item, description: 'an updated retro item'},
           });
@@ -127,7 +128,7 @@ describe('RetroColumnItem', () => {
         it('does not allow item to be updated', () => {
           dom.find('.edit-save').simulate('click');
 
-          expect(SpyDispatcher).not.toHaveReceived('updateRetroItem');
+          expect(Dispatcher).not.toHaveReceived('updateRetroItem');
         });
       });
     });
@@ -135,7 +136,7 @@ describe('RetroColumnItem', () => {
     it('dispatches a vote action when voted on', () => {
       dom.find('.item-vote-submit').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'voteRetroItem',
         data: {retro_id: retroId, item},
       });
@@ -144,7 +145,7 @@ describe('RetroColumnItem', () => {
     it('highlights the item when text is clicked', () => {
       dom.find('.item-text button').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'highlightRetroItem',
         data: {retro_id: retroId, item},
       });
@@ -196,7 +197,7 @@ describe('RetroColumnItem', () => {
       it('unhighlights when text is clicked', () => {
         dom.find('.item-text button').simulate('click');
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'unhighlightRetroItem',
           data: {retro_id: retroId},
         });
@@ -205,7 +206,7 @@ describe('RetroColumnItem', () => {
       it('sets to discussed when done is clicked', () => {
         dom.find('.item-done').simulate('click');
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'doneRetroItem',
           data: {retroId, item},
         });
@@ -214,7 +215,7 @@ describe('RetroColumnItem', () => {
       it('unhighlights when cancel is clicked', () => {
         dom.find('.retro-item-cancel').simulate('click');
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'unhighlightRetroItem',
           data: {retro_id: retroId},
         });
@@ -239,7 +240,7 @@ describe('RetroColumnItem', () => {
 
         dom.find('.retro-item-cancel').simulate('click');
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'undoneRetroItem',
           data: {item: item_done, retroId},
         });
@@ -256,12 +257,12 @@ describe('RetroColumnItem', () => {
 
     it('does not highlight clicked items', () => {
       dom.find('.item-text button').simulate('click');
-      expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
+      expect(Dispatcher).not.toHaveReceived('highlightRetroItem');
     });
 
     it('does not record votes', () => {
       dom.find('.item-vote-submit').simulate('click');
-      expect(SpyDispatcher).not.toHaveReceived('voteRetroItem');
+      expect(Dispatcher).not.toHaveReceived('voteRetroItem');
     });
 
     it('does not allow deletion', () => {
@@ -273,13 +274,13 @@ describe('RetroColumnItem', () => {
     it('does not highlight clicked items', () => {
       const dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={null} archives={false} isMobile/>);
       dom.find('.item-text button').simulate('click');
-      expect(SpyDispatcher).not.toHaveReceived('highlightRetroItem');
+      expect(Dispatcher).not.toHaveReceived('highlightRetroItem');
     });
 
     it('does not mark items as done', () => {
       const dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile/>);
       dom.find('.item-done').simulate('click');
-      expect(SpyDispatcher).not.toHaveReceived('doneRetroItem');
+      expect(Dispatcher).not.toHaveReceived('doneRetroItem');
     });
   });
 });

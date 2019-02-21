@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {MuiThemeProvider} from 'material-ui';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ListRetrosPage from './list_retros_page';
 
@@ -49,7 +50,7 @@ describe('List Retros Page', () => {
 
   it('includes a link to the show retro page', () => {
     dom.find('.retro-list-tile').at(0).simulate('click');
-    expect(SpyDispatcher).toHaveReceived('routeToShowRetro');
+    expect(Dispatcher).toHaveReceived('routeToShowRetro');
   });
 });
 

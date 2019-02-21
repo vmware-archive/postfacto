@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
@@ -130,7 +131,7 @@ describe('Show retro page archives', () => {
     it('redirects to list archives page of current retro when clicking Archived retros', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroArchives',
         data: {retro_id: '13'},
       });
@@ -177,7 +178,7 @@ describe('Show retro page archives', () => {
     it('redirects to list archives page when clicking back', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroArchives',
         data: {retro_id: '13'},
       });

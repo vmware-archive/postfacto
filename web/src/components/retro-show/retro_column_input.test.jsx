@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import TextareaAutosize from 'react-autosize-textarea';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import RetroColumnInput from './retro_column_input';
 
@@ -64,7 +65,7 @@ describe('inputting a retro item', () => {
 
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'createRetroItem',
       data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
@@ -79,7 +80,7 @@ describe('inputting a retro item', () => {
 
     dom.find('.input-button').simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'createRetroItem',
       data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
     });
@@ -92,7 +93,7 @@ describe('inputting a retro item', () => {
     textarea.simulate('change', {target: {value: ''}});
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(SpyDispatcher).not.toHaveReceived('createRetroItem');
+    expect(Dispatcher).not.toHaveReceived('createRetroItem');
   });
 });
 
@@ -123,7 +124,7 @@ describe('inputting an action item', () => {
 
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'createRetroActionItem',
       data: {retro_id: retroId, description: 'a new action item'},
     });
@@ -136,7 +137,7 @@ describe('inputting an action item', () => {
     textarea.simulate('change', {target: {value: 'a new action item'}});
     textarea.simulate('keyPress', {key: 'Enter', shiftKey: true});
 
-    expect(SpyDispatcher).not.toHaveReceived('createRetroActionItem');
+    expect(Dispatcher).not.toHaveReceived('createRetroActionItem');
   });
 
   it('does not allow empty items', () => {
@@ -144,7 +145,7 @@ describe('inputting an action item', () => {
     textarea.simulate('change', {target: {value: ''}});
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(SpyDispatcher).not.toHaveReceived('createRetroActionItem');
+    expect(Dispatcher).not.toHaveReceived('createRetroActionItem');
   });
 
   it('moves submit button when textarea is resized', () => {

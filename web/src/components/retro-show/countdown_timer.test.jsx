@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import CountdownTimer from './countdown_timer';
 
@@ -75,7 +76,7 @@ describe('CountdownTimer', () => {
 
     it('dispatches extendTimer when extend button clicked', () => {
       dom.find('.retro-item-timer-extend').simulate('click');
-      expect(SpyDispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
+      expect(Dispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
     });
   });
 });

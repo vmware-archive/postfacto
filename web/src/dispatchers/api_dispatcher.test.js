@@ -33,7 +33,8 @@ import '../test_support/fetch_matchers';
 import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
-import {SpyDispatcher} from '../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../spec_helper';
 
 describe('ApiDispatcher', () => {
   let subject;
@@ -46,7 +47,7 @@ describe('ApiDispatcher', () => {
 
     Cursor.async = false;
     cursorSpy = jasmine.createSpy('callback');
-    subject = SpyDispatcher;
+    subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
     let dispatchCount = 0;
@@ -134,7 +135,7 @@ describe('ApiDispatcher', () => {
       request.succeed({retro, token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
-      expect(SpyDispatcher).toHaveReceived('retroSuccessfullyCreated');
+      expect(Dispatcher).toHaveReceived('retroSuccessfullyCreated');
     });
 
     describe('when unprocessable entity is received', () => {
@@ -145,7 +146,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroUnsuccessfullyCreated', () => {
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroUnsuccessfullyCreated',
           data: {errors: ['some error']},
         });
@@ -210,7 +211,7 @@ describe('ApiDispatcher', () => {
         },
       });
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSettingsSuccessfullyUpdated',
         data: {
           retro: {
@@ -224,7 +225,7 @@ describe('ApiDispatcher', () => {
       expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual(null);
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'showAlert',
         data: {
           checkIcon: true,
@@ -244,7 +245,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches requireRetroLogin', () => {
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
           data: {retro_id: 13},
         });
@@ -265,7 +266,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroSettingsUnsuccessfullyUpdated',
           data: {errors: ['some error']},
         });
@@ -292,7 +293,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroSettingsSuccessfullyUpdated', () => {
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroSettingsSuccessfullyUpdated',
           data: {
             retro: {
@@ -347,7 +348,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'new-api-token'});
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroPasswordSuccessfullyUpdated',
         data: {
           retro_id: '13',
@@ -355,14 +356,14 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
         data: {
           retro_id: '13',
         },
       });
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'showAlert',
         data: {
           checkIcon: true,
@@ -379,7 +380,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroPasswordUnsuccessfullyUpdated',
           data: {errors: ['some error']},
         });
@@ -405,7 +406,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro});
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSuccessfullyFetched',
         data: {retro},
       });
@@ -416,7 +417,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
           data: {retro_id: 1},
         });
@@ -428,7 +429,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroNotFound',
         });
       });
@@ -454,7 +455,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retros: [retro]});
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retrosSuccessfullyFetched',
         data: {retros: [retro]},
       });
@@ -477,7 +478,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'getRetroLoginSuccessfullyReceived',
         data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}},
       });
@@ -488,7 +489,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroNotFound',
         });
       });
@@ -517,7 +518,7 @@ describe('ApiDispatcher', () => {
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
         request.succeed(response);
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'getRetroSettingsSuccessfullyReceived',
           data: response,
         });
@@ -536,7 +537,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
           data: {retro_id: 'retro-slug-123'},
         });
@@ -559,7 +560,7 @@ describe('ApiDispatcher', () => {
       request.succeed({token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSuccessfullyLoggedIn',
         data: {retro_id: 15},
       });
@@ -570,7 +571,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroLoginFailed',
         });
       });
@@ -594,7 +595,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDeleted',
         data: {retro_id: 1, item},
       });
@@ -627,7 +628,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({item: {id: 1, category: 'happy', description: 'this is an item'}});
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyCreated',
         data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1},
       });
@@ -675,7 +676,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDeleted',
         data: {retro_id: 1, item},
       });
@@ -704,7 +705,7 @@ describe('ApiDispatcher', () => {
       request.succeed({item});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyVoted',
         data: {item},
       });
@@ -734,7 +735,7 @@ describe('ApiDispatcher', () => {
       request.succeed({retro});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'checkAllRetroItemsDone',
       });
     });
@@ -763,7 +764,7 @@ describe('ApiDispatcher', () => {
       request.succeed({retro});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyHighlighted',
         data: {retro},
       });
@@ -785,7 +786,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(SpyDispatcher).toHaveReceived('retroItemSuccessfullyUnhighlighted');
+      expect(Dispatcher).toHaveReceived('retroItemSuccessfullyUnhighlighted');
     });
   });
 
@@ -813,7 +814,7 @@ describe('ApiDispatcher', () => {
       request.succeed({item});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDone',
         data: {retroId: 1, itemId: item.id},
       });
@@ -847,7 +848,7 @@ describe('ApiDispatcher', () => {
       request.respondWith({status: 204});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyUndone',
         data: {retroId: 1, item},
       });
@@ -875,7 +876,7 @@ describe('ApiDispatcher', () => {
       request.succeed({retro});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'extendTimerSuccessfullyDone',
         data: {retro},
       });
@@ -906,7 +907,7 @@ describe('ApiDispatcher', () => {
       request.succeed({retro});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'archiveRetroSuccessfullyDone',
         data: {retro},
       });
@@ -962,7 +963,7 @@ describe('ApiDispatcher', () => {
       request.succeed({action_item});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'doneRetroActionItemSuccessfullyToggled',
         data: {action_item},
       });
@@ -987,7 +988,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroActionItemSuccessfullyDeleted',
         data: {action_item},
       });
@@ -1021,7 +1022,7 @@ describe('ApiDispatcher', () => {
       request.succeed({action_item});
       Promise.runAll();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroActionItemSuccessfullyEdited',
         data: {action_item},
       });
@@ -1046,7 +1047,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived('retroArchivesSuccessfullyFetched');
+      expect(Dispatcher).toHaveReceived('retroArchivesSuccessfullyFetched');
     });
 
     describe('when retro does not exist', () => {
@@ -1054,7 +1055,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroNotFound',
         });
       });
@@ -1079,7 +1080,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived('retroArchiveSuccessfullyFetched');
+      expect(Dispatcher).toHaveReceived('retroArchiveSuccessfullyFetched');
     });
 
     describe('when archives do not exist', () => {
@@ -1087,7 +1088,7 @@ describe('ApiDispatcher', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
         Promise.runAll();
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'notFound',
         });
       });
@@ -1119,7 +1120,7 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived('redirectToRetroCreatePage');
+      expect(Dispatcher).toHaveReceived('redirectToRetroCreatePage');
     });
 
     it('stores the auth token in local storage', () => {
@@ -1154,14 +1155,14 @@ describe('ApiDispatcher', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived('loggedInSuccessfully');
+      expect(Dispatcher).toHaveReceived('loggedInSuccessfully');
     });
 
     it('if the server returns a 404 because the user does not exist', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.notFound();
       Promise.runAll();
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'redirectToRegistration',
         data: {
           'access_token': 'the-access-token',

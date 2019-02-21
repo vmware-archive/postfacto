@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import NotFoundPage from './not_found_page';
 
@@ -48,13 +49,13 @@ describe('NotFoundPage', () => {
     expect(button).toIncludeText('Create a Project');
     button.simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
+    expect(Dispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
   });
 
   it('dispatches resetNotFound when willUnMount', () => {
     const subject = mount(<NotFoundPage/>);
-    expect(SpyDispatcher).not.toHaveReceived('resetNotFound');
+    expect(Dispatcher).not.toHaveReceived('resetNotFound');
     subject.unmount();
-    expect(SpyDispatcher).toHaveReceived('resetNotFound');
+    expect(Dispatcher).toHaveReceived('resetNotFound');
   });
 });

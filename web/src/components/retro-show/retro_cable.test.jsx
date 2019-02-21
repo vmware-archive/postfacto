@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import ActionCable from 'actioncable';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import RetroCable from './retro_cable';
 
@@ -71,7 +72,7 @@ describe('RetroCable', () => {
       },
     };
     retroCableDOM.instance().onReceived(websocketData);
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'websocketRetroDataReceived',
       data: websocketData,
     });

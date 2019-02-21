@@ -29,37 +29,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import {shallow} from 'enzyme';
+import jQuery from 'jquery';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import ReactDOM from 'react-dom';
+import jestSpyOnAugmented from './jest_spy_augmented';
+import Application from '../Application'; // Load dispatchers (sets global state in p-flux Actions)
 
-import RetroNotFoundPage from './retro_not_found_page';
+beforeEach(() => {
+  global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
 
-describe('RetroNotFoundPage', () => {
-  let subject;
+  global.root = jQuery('<div id="root"></div>').get(0);
+  jQuery('body')
+    .find('#root')
+    .remove()
+    .end()
+    .append(global.root);
 
-  beforeEach(() => {
-    subject = shallow(<RetroNotFoundPage/>);
-  });
+  Application.reset(); // set global state such as p-flux.Actions
 
-  it('displays error details', () => {
-    expect(subject.find('h1')).toHaveText('Project not found.');
-  });
+  jestSpyOnAugmented(Dispatcher, 'dispatch').mockReturnValue(null);
 
-  it('dispatches redirectToRetroCreatePage when the create retro button is clicked', () => {
-    const button = subject.find('button');
-    expect(button).toHaveText('Create a Project');
-    button.simulate('click');
+  global.localStorage.clear();
+});
 
-    expect(Dispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
-  });
-
-  it('dispatches resetRetroNotFound when unmounting', () => {
-    expect(Dispatcher).not.toHaveReceived('resetRetroNotFound');
-
-    subject.unmount();
-
-    expect(Dispatcher).toHaveReceived('resetRetroNotFound');
-  });
+afterEach(() => {
+  ReactDOM.unmountComponentAtNode(global.root);
+  Dispatcher.dispatch.mockRestore();
+  Dispatcher.reset();
+  global.localStorage.clear();
 });

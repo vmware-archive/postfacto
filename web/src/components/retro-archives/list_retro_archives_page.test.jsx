@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ListRetroArchivesPage from './list_retro_archives_page';
 import RetroMenu from '../shared/retro_menu';
@@ -72,7 +73,7 @@ describe('ListRetroArchivesPage', () => {
     expect(back).toIncludeText('Current retro');
     back.simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'backPressedFromArchives',
       data: {retro_id: '789'},
     });
@@ -81,7 +82,7 @@ describe('ListRetroArchivesPage', () => {
   it('navigates to archives when clicked', () => {
     dom.find('.archives .archive-link a').at(0).simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'routeToRetroArchive',
       data: {retro_id: '789', archive_id: 123},
     });

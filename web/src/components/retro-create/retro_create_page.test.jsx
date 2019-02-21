@@ -32,7 +32,8 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import RetroCreatePage from './retro_create_page';
 
@@ -63,12 +64,6 @@ describe('RetroCreatePage', () => {
     fieldRetroPassword.simulate('change', {target: {value: 'retroPass'}});
   });
 
-  afterEach(() => {
-    if (dom.length) {
-      dom.unmount();
-    }
-  });
-
   it('has a title', () => {
     expect(dom.find('.new-retro-page')).toIncludeText('Time to make your team retro!');
   });
@@ -80,7 +75,7 @@ describe('RetroCreatePage', () => {
     });
 
     it('does not submit', () => {
-      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+      expect(Dispatcher).not.toHaveReceived('retroCreate');
     });
 
     it('clears error on valid input', () => {
@@ -99,7 +94,7 @@ describe('RetroCreatePage', () => {
     });
 
     it('does not submit', () => {
-      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+      expect(Dispatcher).not.toHaveReceived('retroCreate');
     });
 
     it('clears error on valid input', () => {
@@ -120,7 +115,7 @@ describe('RetroCreatePage', () => {
     it('does not submit', () => {
       dom.find('.retro-form-submit').simulate('click');
 
-      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+      expect(Dispatcher).not.toHaveReceived('retroCreate');
     });
 
     it('clears error message on valid input', () => {
@@ -147,7 +142,7 @@ describe('RetroCreatePage', () => {
     });
 
     it('does not submit', () => {
-      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+      expect(Dispatcher).not.toHaveReceived('retroCreate');
     });
 
     it('clears error message on valid input', () => {
@@ -166,7 +161,7 @@ describe('RetroCreatePage', () => {
     });
 
     it('does not submit', () => {
-      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+      expect(Dispatcher).not.toHaveReceived('retroCreate');
     });
 
     it('clears error message on valid input', () => {
@@ -218,7 +213,7 @@ describe('RetroCreatePage', () => {
     it('clears out the errors when unmounted', () => {
       dom.unmount();
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'clearErrors',
       });
     });
@@ -228,7 +223,7 @@ describe('RetroCreatePage', () => {
     dom.find('.new-retro-page input#retro_is_private').simulate('change');
     dom.find('.retro-form-submit').simulate('click');
 
-    expect(SpyDispatcher).toHaveReceived({
+    expect(Dispatcher).toHaveReceived({
       type: 'retroCreate',
       data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false},
     });
@@ -238,6 +233,6 @@ describe('RetroCreatePage', () => {
     localStorage.setItem('authToken', '');
     shallow(<RetroCreatePage/>);
 
-    expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/'});
+    expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/'});
   });
 });

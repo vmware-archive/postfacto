@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import LoginToRetroPage from './login_to_retro_page';
 
@@ -56,7 +57,7 @@ describe('LoginToRetroPage', () => {
     });
 
     it('dispatches getRetroLogin', () => {
-      expect(SpyDispatcher).toHaveReceived({type: 'getRetroLogin', data: {retro_id: '13'}});
+      expect(Dispatcher).toHaveReceived({type: 'getRetroLogin', data: {retro_id: '13'}});
       expect(dom.find('h1')).toIncludeText('Psst... what\'s the password?');
       expect(dom.find('label')).toIncludeText('Enter the password to access the retro name.');
     });
@@ -69,7 +70,7 @@ describe('LoginToRetroPage', () => {
       dom.find('.form-input').simulate('change', {target: {value: 'pa55word'}});
       dom.find('.retro-form-submit').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'loginToRetro',
         data: {retro_id: '13', password: 'pa55word'},
       });
@@ -81,7 +82,7 @@ describe('LoginToRetroPage', () => {
       input.simulate('change', {target: {value: 'pa55word'}});
       input.simulate('keyPress', {key: 'Enter'});
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'loginToRetro',
         data: {retro_id: '13', password: 'pa55word'},
       });

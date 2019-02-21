@@ -33,7 +33,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import $ from 'jquery';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 import 'jasmine_dom_matchers';
 import '../../test_support/jquery_simulate_react';
 
@@ -94,7 +95,7 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('does not update the retro settings', () => {
-          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('displays an error message', () => {
@@ -128,7 +129,7 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('does not update the retro settings', () => {
-          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('displays an error message', () => {
@@ -145,7 +146,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('does not update the retro settings', () => {
           $('.retro-settings-form-submit').simulate('click');
-          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
@@ -175,7 +176,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('should not submit create a retro when there is no URL', () => {
           $('.retro-settings-form-submit').simulate('click');
-          expect(SpyDispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
@@ -249,7 +250,7 @@ describe('ShowRetroSettingsPage', () => {
       it('clears out the errors when unmounted', () => {
         ReactDOM.unmountComponentAtNode(root);
 
-        expect(SpyDispatcher).toHaveReceived({
+        expect(Dispatcher).toHaveReceived({
           type: 'clearErrors',
         });
       });
@@ -264,7 +265,7 @@ describe('ShowRetroSettingsPage', () => {
       $('#retro_is_private').simulate('change');
       $('.retro-settings-form-submit').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'updateRetroSettings',
         data: {
           retro_id: '13',
@@ -281,7 +282,7 @@ describe('ShowRetroSettingsPage', () => {
     it('routes to retro password settings when change password link is clicked', () => {
       $('#retro-password-settings').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroPasswordSettings',
         data: {
           retro_id: '13',
@@ -292,7 +293,7 @@ describe('ShowRetroSettingsPage', () => {
     it('goes back to the retro page when the back button is clicked', () => {
       $('button.retro-back').simulate('click');
 
-      expect(SpyDispatcher).toHaveReceived({
+      expect(Dispatcher).toHaveReceived({
         type: 'backPressedFromSettings',
         data: {retro_id: '13'},
       });

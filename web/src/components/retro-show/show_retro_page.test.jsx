@@ -33,7 +33,8 @@ import React from 'react';
 import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import {SpyDispatcher} from '../../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
@@ -185,7 +186,7 @@ describe('ShowRetroPage', () => {
 
       const dialog = dom.find(Dialog);
       dialog.props().onRequestClose();
-      expect(SpyDispatcher).toHaveReceived('hideDialog');
+      expect(Dispatcher).toHaveReceived('hideDialog');
     });
 
     it('does not display a dialog by default', () => {

@@ -30,41 +30,11 @@
  */
 
 import './test_support/dispatcher_matchers';
+import './test_support/application_globals';
 import './test_support/enzyme';
-import {Dispatcher} from 'p-flux';
-import jQuery from 'jquery';
-import ReactDOM from 'react-dom';
-import jestSpyOnAugmented from './test_support/jest_spy_augmented';
-import Application from './Application'; // Load dispatchers (sets global state in p-flux Actions)
-
-/* eslint-disable import/prefer-default-export */
-export const SpyDispatcher = Dispatcher;
-/* eslint-enable import/prefer-default-export */
 
 jest.useFakeTimers();
 
 beforeEach(() => {
-  global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
-
-  global.root = jQuery('<div id="root"></div>').get(0);
-  jQuery('body')
-    .find('#root')
-    .remove()
-    .end()
-    .append(global.root);
-
-  Application.reset(); // set global state such as p-flux.Actions
-
-  jestSpyOnAugmented(Dispatcher, 'dispatch').mockReturnValue(null);
-
-  global.localStorage.clear();
-
   jest.clearAllTimers();
-});
-
-afterEach(() => {
-  ReactDOM.unmountComponentAtNode(global.root);
-  Dispatcher.dispatch.mockRestore();
-  Dispatcher.reset();
-  global.localStorage.clear();
 });

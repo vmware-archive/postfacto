@@ -29,8 +29,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import {Dispatcher} from 'p-flux';
 import fetchJson from './fetch_helper';
-import {SpyDispatcher} from '../spec_helper';
+import '../spec_helper';
 
 describe('fetchJson', () => {
   describe('errors', () => {
@@ -45,7 +46,7 @@ describe('fetchJson', () => {
 
     it('dispatches apiServerNotFound', async () => {
       await fetchJson('http://example.com/some-url');
-      expect(SpyDispatcher).toHaveReceived('apiServerNotFound');
+      expect(Dispatcher).toHaveReceived('apiServerNotFound');
     });
   });
 
@@ -61,7 +62,7 @@ describe('fetchJson', () => {
 
     it('does not dispatch apiServerNotFound', async () => {
       await fetchJson('http://example.com/some-url');
-      expect(SpyDispatcher).not.toHaveReceived('apiServerNotFound');
+      expect(Dispatcher).not.toHaveReceived('apiServerNotFound');
     });
   });
 });

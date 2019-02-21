@@ -31,7 +31,8 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import {SpyDispatcher} from '../spec_helper';
+import {Dispatcher} from 'p-flux';
+import '../spec_helper';
 
 import Alert from './shared/alert';
 import Router from './router';
@@ -55,13 +56,13 @@ describe('Router', () => {
   it('dispatches hide alert when changed to a different page', () => {
     rendered.setState({Page: HomePage});
 
-    expect(SpyDispatcher).toHaveReceived('hideAlert');
+    expect(Dispatcher).toHaveReceived('hideAlert');
   });
 
   it('does not dispatch hide alert when changed to the same page', () => {
     rendered.setState({Page: EmptyPage});
 
-    expect(SpyDispatcher).not.toHaveReceived('hideAlert');
+    expect(Dispatcher).not.toHaveReceived('hideAlert');
   });
 
   it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
