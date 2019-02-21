@@ -30,231 +30,88 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {MuiThemeProvider} from 'material-ui';
-import $ from 'jquery';
+import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import RetroHeading from './retro_heading';
+import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
+
+const defaultRetro = {
+  id: 13,
+  name: 'the retro name',
+  is_private: false,
+  video_link: 'http://the/video/link',
+  items: [],
+  action_items: [],
+};
+
+function createShallowRetroHeading(retroOverrides = {}, propOverrides = {}) {
+  const retro = Object.assign(defaultRetro, retroOverrides);
+
+  return shallow(<RetroHeading retro={retro} retroId="13" archives={false} isMobile={false} {...propOverrides}/>);
+}
 
 describe('RetroHeading', () => {
-  let retro;
+  describe('viewing a current retro', () => {
+    it('does not display a back button', () => {
+      const dom = createShallowRetroHeading({});
 
-  describe('Back Button', () => {
-    describe('when on an archived retro', () => {
-      beforeEach(() => {
-        retro = createRetro();
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <RetroHeading retro={retro} retroId="13" archives isMobile={false}/>
-          </MuiThemeProvider>, root,
-        );
-      });
-
-      it('shows the back button', () => {
-        expect('.retro-back').toExist();
-      });
+      expect(dom.find('.retro-back')).not.toExist();
     });
 
-    describe('when not on an archived retro', () => {
-      beforeEach(() => {
-        retro = createRetro();
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-          </MuiThemeProvider>, root,
-        );
-      });
+    it('includes a link to the archives if they exist', () => {
+      const dom = createShallowRetroHeading({archives: [{id: 1}]});
 
-      it('does not show the back button', () => {
-        expect('.retro-back').not.toExist();
+      expect(getMenuLabels(dom)).toContain('View archives');
+    });
+
+    it('omits a link to the archives if none exist', () => {
+      const dom = createShallowRetroHeading({archives: []});
+
+      expect(getMenuLabels(dom)).not.toContain('View archives');
+    });
+
+    it('includes an option to archive if there are items', () => {
+      const dom = createShallowRetroHeading({items: [{id: 1}]});
+
+      expect(getMenuLabels(dom)).toContain('Archive this retro');
+    });
+
+    it('omits an option to archive if there are no items', () => {
+      const dom = createShallowRetroHeading({items: []});
+
+      expect(getMenuLabels(dom)).not.toContain('Archive this retro');
+    });
+
+    it('dispatches showDialog when the archive link is clicked', () => {
+      const dom = createShallowRetroHeading({items: [{id: 1}]});
+
+      invokeMenuOption(dom, 'Archive this retro');
+
+      expect(Dispatcher).toHaveReceived({
+        type: 'showDialog',
+        data: {
+          title: 'You\'re about to archive this retro.',
+          message: 'Are you sure?',
+        },
       });
     });
   });
 
-  describe('Menu', () => {
-    describe('when a retro has archives', () => {
-      describe('when on an archived retro', () => {
-        beforeEach(() => {
-          retro = createRetro();
-          retro.items = [];
-          retro.archives = [{id: 1}, {id: 2}, {id: 13}];
-          ReactDOM.render(
-            <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives isMobile={false}/>
-            </MuiThemeProvider>, root,
-          );
-          $('.retro-menu button').simulate('click');
-        });
+  describe('viewing an archived retro', () => {
+    let dom;
 
-        it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro');
-        });
-
-        it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('View archives');
-        });
-      });
-
-      describe('when a retro has no retro items', () => {
-        beforeEach(() => {
-          retro = createRetro();
-          retro.items = [];
-          retro.archives = [{id: 1}, {id: 2}];
-          ReactDOM.render(
-            <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root,
-          );
-          $('.retro-menu button').simulate('click');
-        });
-
-        it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toContainText('Archive this retro');
-        });
-
-        it('shows the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).toContainText('View archives');
-        });
-      });
-
-      describe('when a retro has retro items', () => {
-        beforeEach(() => {
-          retro = createRetro();
-          retro.archives = [{id: 1}, {id: 2}];
-          ReactDOM.render(
-            <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root,
-          );
-          $('.retro-menu button').simulate('click');
-        });
-
-        // Uses toEqual as 'Archive this retro' returns a pure string as it is a button which behaves differently
-        it('shows the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro');
-        });
-
-        it('dispatches showDialog when the archive link is clicked', () => {
-          $('.retro-menu button').simulate('click');
-          $($('.retro-menu-item')[0]).simulate('click');
-
-          expect(Dispatcher).toHaveReceived(
-            {
-              type: 'showDialog',
-              data: {
-                title: 'You\'re about to archive this retro.',
-                message: 'Are you sure?',
-              },
-            },
-          );
-        });
-
-        it('shows the link to view archives', () => {
-          expect($('.retro-menu-item')[1]).toHaveText('View archives');
-        });
-      });
+    beforeEach(() => {
+      dom = createShallowRetroHeading({}, {archives: true});
     });
 
-    describe('when a retro has no archives', () => {
-      describe('when a retro has no retro items', () => {
-        beforeEach(() => {
-          retro = createRetro();
-          retro.items = [];
+    it('displays a back button', () => {
+      expect(dom.find('.retro-back')).toExist();
+    });
 
-          ReactDOM.render(
-            <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root,
-          );
-          $('.retro-menu button').simulate('click');
-        });
-
-        it('does not show the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0]).not.toHaveText('Archive this retro');
-        });
-
-        it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[0]).not.toHaveText('View archives');
-        });
-      });
-
-      describe('when a retro has retro items', () => {
-        beforeEach(() => {
-          retro = createRetro();
-          ReactDOM.render(
-            <MuiThemeProvider>
-              <RetroHeading retro={retro} retroId="13" archives={false} isMobile={false}/>
-            </MuiThemeProvider>, root,
-          );
-          $('.retro-menu button').simulate('click');
-        });
-
-        // Uses toEqual as 'Archive this retro' returns a pure string as it is a button which behaves differently
-        it('shows the link to archive the retro', () => {
-          expect($('.retro-menu-item')[0].innerHTML).toEqual('Archive this retro');
-        });
-
-        it('dispatches showDialog when the archive link is clicked', () => {
-          $('.retro-menu button').simulate('click');
-          $($('.retro-menu-item')[0]).simulate('click');
-
-          expect(Dispatcher).toHaveReceived(
-            {
-              type: 'showDialog',
-              data: {
-                title: 'You\'re about to archive this retro.',
-                message: 'Are you sure?',
-              },
-            },
-          );
-        });
-
-        it('does not show the link to view archives', () => {
-          expect($('.retro-menu-item')[1]).not.toHaveText('View archives');
-        });
-      });
+    it('displays a restricted menu', () => {
+      expect(getMenuLabels(dom)).toEqual(['Retro settings']);
     });
   });
 });
-
-function createRetro(isPrivate = false) {
-  return {
-    id: 13,
-    name: 'the retro name',
-    is_private: isPrivate,
-    video_link: 'http://the/video/link',
-    items: [
-      {
-        id: 1,
-        description: 'the happy retro item',
-        category: 'happy',
-      },
-      {
-        id: 2,
-        description: 'the meh retro item',
-        category: 'meh',
-      },
-      {
-        id: 3,
-        description: 'the sad retro item',
-        category: 'sad',
-      },
-    ],
-    action_items: [
-      {
-        id: 1,
-        description: 'action item 1',
-        done: true,
-      },
-      {
-        id: 2,
-        description: 'action item 2',
-        done: false,
-      },
-    ],
-  };
-}
