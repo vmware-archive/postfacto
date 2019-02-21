@@ -39,6 +39,8 @@ import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPage from './show_retro_page';
 
+const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+
 describe('Show retro page archives', () => {
   const retro_archives = {
     id: 13,
@@ -94,7 +96,7 @@ describe('Show retro page archives', () => {
             retroId="13"
             archives
             retro={retro_archives}
-            config={global.Retro.config}
+            config={config}
             featureFlags={{archiveEmails: true}}
           />
         </MuiThemeProvider>,
@@ -135,7 +137,7 @@ describe('Show retro page archives', () => {
               retroId="13"
               archives
               retro={retro_archives}
-              config={global.Retro.config}
+              config={config}
               featureFlags={{archiveEmails: true}}
             />
           </MuiThemeProvider>,
@@ -171,7 +173,7 @@ describe('Show retro page archives', () => {
             retroId="13"
             archives
             retro={retro_archives}
-            config={global.Retro.config}
+            config={config}
             featureFlags={{archiveEmails: true}}
           />
         </MuiThemeProvider>,

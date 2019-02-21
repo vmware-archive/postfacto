@@ -41,6 +41,8 @@ function getMenuItems() {
   return document.body.getElementsByClassName('retro-menu-item');
 }
 
+const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+
 describe('Retro settings', () => {
   let originalGetIsMobile;
   let dom;
@@ -64,7 +66,7 @@ describe('Retro settings', () => {
           retro={retro}
           retroId="13"
           archives={false}
-          config={global.Retro.config}
+          config={config}
           featureFlags={{archiveEmails: true}}
         />
       </MuiThemeProvider>,
