@@ -30,220 +30,213 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-import ReactTestUtils from 'react-dom/test-utils';
+import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPage from './show_retro_page';
 
-function setWindowToMobileSize() {
-  window.innerWidth = 639;
-}
-
-function setWindowToDesktopSize() {
-  window.innerWidth = 641;
-}
+const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
 
 describe('ShowRetroPage', () => {
-  describe('for a private retro', () => {
-    describe('on mobile', () => {
-      beforeEach(() => {
-        const retro = createRetro(true);
+  let originalGetIsMobile;
+  let shouldBeMobile;
 
-        setWindowToMobileSize();
-
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <ShowRetroPage
-              retro={retro}
-              retroId="13"
-              archives={false}
-              config={global.Retro.config}
-              featureFlags={{archiveEmails: true}}
-            />
-          </MuiThemeProvider>,
-          root,
-        );
-      });
-
-      it('does not show the privacy and terms banner', () => {
-        expect($('.banner').length).toBe(0);
-      });
-    });
-
-    describe('on desktop', () => {
-      beforeEach(() => {
-        const retro = createRetro(true);
-
-        setWindowToDesktopSize();
-
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <ShowRetroPage
-              retro={retro}
-              retroId="13"
-              archives={false}
-              config={global.Retro.config}
-              isMobile={false}
-              featureFlags={{archiveEmails: true}}
-            />
-          </MuiThemeProvider>,
-          root,
-        );
-      });
-
-      it('does not show the privacy and terms banner', () => {
-        expect($('.banner').length).toBe(0);
-      });
-    });
+  beforeEach(() => {
+    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
+    ShowRetroPage.prototype.getIsMobile = () => shouldBeMobile;
   });
 
-  describe('when showing retro items on desktop ', () => {
-    let retro;
-    let originalGetIsMobile;
+  afterEach(() => {
+    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+  });
 
-    beforeEach(() => {
-      retro = createRetro();
+  describe('private retro', () => {
+    const retro = createRetro(true);
 
-      originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-      ShowRetroPage.prototype.getIsMobile = () => false;
+    it('does not show the privacy and terms banner on mobile', () => {
+      shouldBeMobile = true;
 
-      ReactDOM.render(
+      const dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
-            config={global.Retro.config}
+            config={config}
             featureFlags={{archiveEmails: true}}
           />
-        </MuiThemeProvider>,
-        root,
-      );
+        </MuiThemeProvider>
+      ));
+
+      expect(dom.find('.banner')).not.toExist();
     });
 
-    afterEach(() => {
-      ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
-    });
+    it('does not show the privacy and terms banner on desktop', () => {
+      shouldBeMobile = false;
 
-    it('has title and all its items', () => {
-      expect('.retro-name').toContainText('the retro name');
-      expect($('.column-happy .item-text')[0]).toContainText('the happy retro item');
-      expect($('.column-happy .retro-item-add-input').attr('placeholder')).toEqual('I\'m glad that...');
-      expect($('.column-meh .item-text')[0]).toContainText('the meh retro item');
-      expect($('.column-meh .retro-item-add-input').attr('placeholder')).toEqual('I\'m wondering about...');
-      expect($('.column-sad .item-text')[0]).toContainText('the sad retro item');
-      expect($('.column-sad .retro-item-add-input').attr('placeholder')).toEqual('It wasn\'t so great that...');
-      expect('.retro-menu').toContainText('MENU');
-      expect('.retro-back').toHaveLength(0);
-    });
-
-    describe('dialog', () => {
-      let container;
-
-      describe('when dialog exists', () => {
-        beforeEach(() => {
-          container = ReactDOM.render(
-            <MuiThemeProvider>
-              <ShowRetroPage
-                retro={retro}
-                retroId="13"
-                archives={false}
-                config={global.Retro.config}
-                dialog={{
-                  title: 'Some dialog title',
-                  message: 'Some dialog message',
-                }}
-                featureFlags={{archiveEmails: true}}
-              />
-            </MuiThemeProvider>,
-            root,
-          );
-        });
-
-        it('opens the dialog and hides it when the cancel button is clicked', () => {
-          const dialog = ReactTestUtils.findRenderedComponentWithType(container, Dialog);
-
-          expect(dialog.props.title).toEqual('Some dialog title');
-          expect(dialog.props.open).toEqual(true);
-          expect($('.archive-dialog h3')[0]).toContainText('Some dialog title');
-          expect($('.archive-dialog p')[0]).toContainText('Some dialog message');
-          expect($('.archive-dialog div label')[0]).toContainText('Send action items to the team via email?');
-
-          $('.archive-dialog__actions--cancel').simulate('click');
-
-          expect(SpyDispatcher).toHaveReceived('hideDialog');
-        });
-      });
-
-      describe('when showDialog is set to false', () => {
-        beforeEach(() => {
-          container = ReactDOM.render(
-            <MuiThemeProvider>
-              <ShowRetroPage
-                retro={retro}
-                retroId="13"
-                archives={false}
-                config={global.Retro.config}
-                dialog={null}
-                featureFlags={{archiveEmails: true}}
-              />
-            </MuiThemeProvider>,
-            root,
-          );
-        });
-
-        it('does not open the archive confirmation dialog', () => {
-          const dialog = ReactTestUtils.findRenderedComponentWithType(container, Dialog);
-
-          expect(dialog.props.open).toEqual(false);
-        });
-      });
-    });
-  });
-
-  describe('when showing retro items on mobile', () => {
-    let retro;
-    let originalGetIsMobile;
-    beforeEach(() => {
-      retro = createRetro();
-      originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-      ShowRetroPage.prototype.getIsMobile = () => true;
-
-      ReactDOM.render(
+      const dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
-            config={global.Retro.config}
+            config={config}
             featureFlags={{archiveEmails: true}}
           />
-        </MuiThemeProvider>,
-        root,
-      );
+        </MuiThemeProvider>
+      ));
+
+      expect(dom.find('.banner')).not.toExist();
     });
-    afterEach(() => {
-      ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+  });
+
+  describe('on desktop', () => {
+    let retro;
+    let dom;
+
+    beforeEach(() => {
+      shouldBeMobile = false;
+      retro = createRetro();
+
+      dom = mount((
+        <MuiThemeProvider>
+          <ShowRetroPage
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={config}
+            featureFlags={{archiveEmails: true}}
+          />
+        </MuiThemeProvider>
+      ));
     });
 
-    it('has title and 4 tabs', () => {
-      expect('.retro-name').toContainText('the retro name');
-      expect('.mobile-tab-happy').toContainText('Happy');
-      expect('.mobile-tab-meh').toContainText('Meh');
-      expect('.mobile-tab-sad').toContainText('Sad');
-      expect('.mobile-tab-action').toContainText('Action');
-      expect($('.column-happy .item-text')[0]).toContainText('the happy retro item');
-      expect($('.column-happy .retro-item-add-input').attr('placeholder')).toEqual('I\'m glad that...');
-      expect('.retro-menu-mobile').toContainText('MENU');
-      expect('.retro-back').toHaveLength(0);
-      expect('.retro-item-list-header').toHaveLength(0);
+    it('displays title', () => {
+      expect(dom.find('.retro-name')).toIncludeText('the retro name');
+    });
+
+    it('displays columns', () => {
+      const happy = dom.find('.column-happy');
+      expect(happy.find('.item-text').at(0)).toIncludeText('the happy retro item');
+      expect(happy.find('textarea')).toHaveProp({placeholder: 'I\'m glad that...'});
+
+      const meh = dom.find('.column-meh');
+      expect(meh.find('.item-text').at(0)).toIncludeText('the meh retro item');
+      expect(meh.find('textarea')).toHaveProp({placeholder: 'I\'m wondering about...'});
+
+      const sad = dom.find('.column-sad');
+      expect(sad.find('.item-text').at(0)).toIncludeText('the sad retro item');
+      expect(sad.find('textarea')).toHaveProp({placeholder: 'It wasn\'t so great that...'});
+    });
+
+    it('displays a menu', () => {
+      expect(dom.find('.retro-menu')).toIncludeText('MENU');
+    });
+
+    it('does not display a back button', () => {
+      expect(dom.find('.retro-back')).not.toExist();
+    });
+
+    it('displays a dialog if requested', () => {
+      dom = mount((
+        <MuiThemeProvider>
+          <ShowRetroPage
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={config}
+            dialog={{
+              title: 'Some dialog title',
+              message: 'Some dialog message',
+            }}
+            featureFlags={{archiveEmails: true}}
+          />
+        </MuiThemeProvider>
+      ));
+      const dialog = dom.find(Dialog);
+
+      expect(dialog).toHaveProp({open: true});
+      expect(dialog).toHaveProp({title: 'Some dialog title'});
+
+      // Dialog renders outside usual flow, so must use hacks:
+      const popupDialog = document.getElementsByClassName('archive-dialog')[0];
+
+      expect(popupDialog.querySelector('h3').innerHTML).toEqual('Some dialog title');
+      expect(popupDialog.querySelector('p').innerHTML).toEqual('Some dialog message');
+      expect(popupDialog.querySelector('div label').innerHTML).toEqual('Send action items to the team via email?');
+    });
+
+    it('hides the dialog when requested', () => {
+      dom = shallow((
+        <ShowRetroPage
+          retro={retro}
+          retroId="13"
+          archives={false}
+          config={config}
+          dialog={{
+            title: 'Some dialog title',
+            message: 'Some dialog message',
+          }}
+          featureFlags={{archiveEmails: true}}
+        />
+      ));
+
+      const dialog = dom.find(Dialog);
+      dialog.props().onRequestClose();
+      expect(SpyDispatcher).toHaveReceived('hideDialog');
+    });
+
+    it('does not display a dialog by default', () => {
+      expect(dom.find(Dialog)).toHaveProp({open: false});
+    });
+  });
+
+  describe('on mobile', () => {
+    let retro;
+    let dom;
+
+    beforeEach(() => {
+      shouldBeMobile = true;
+      retro = createRetro();
+
+      dom = mount((
+        <MuiThemeProvider>
+          <ShowRetroPage
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={config}
+            featureFlags={{archiveEmails: true}}
+          />
+        </MuiThemeProvider>
+      ));
+    });
+
+    it('displays title', () => {
+      expect(dom.find('.retro-name')).toIncludeText('the retro name');
+    });
+
+    it('displays tabs', () => {
+      expect(dom.find('.mobile-tab-happy')).toIncludeText('Happy');
+      expect(dom.find('.mobile-tab-meh')).toIncludeText('Meh');
+      expect(dom.find('.mobile-tab-sad')).toIncludeText('Sad');
+      expect(dom.find('.mobile-tab-action')).toIncludeText('Action');
+      expect(dom.find('.retro-item-list-header')).not.toExist();
+    });
+
+    it('displays the happy tab by default', () => {
+      expect(dom.find('.column-happy .item-text').at(0)).toIncludeText('the happy retro item');
+      expect(dom.find('.column-happy textarea')).toHaveProp({placeholder: 'I\'m glad that...'});
+    });
+
+    it('displays a menu with a mobile class name', () => {
+      expect(dom.find('.retro-menu-mobile')).toIncludeText('MENU');
+    });
+
+    it('does not display a back button', () => {
+      expect(dom.find('.retro-back')).not.toExist();
     });
   });
 });
