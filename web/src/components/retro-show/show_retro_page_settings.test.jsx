@@ -33,14 +33,10 @@ import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
+import {invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
-
-function getMenuItems() {
-  // <Popover> renders separately, so hacks are needed:
-  return document.getElementsByClassName('retro-menu-item');
-}
 
 const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
 
@@ -61,7 +57,7 @@ describe('Retro settings', () => {
     ShowRetroPage.prototype.getIsMobile = () => false;
     window.localStorage.setItem('authToken', 'some-token');
 
-    dom = mount(
+    dom = mount((
       <MuiThemeProvider>
         <ShowRetroPage
           retro={retro}
@@ -70,8 +66,8 @@ describe('Retro settings', () => {
           config={config}
           featureFlags={{archiveEmails: true}}
         />
-      </MuiThemeProvider>,
-    );
+      </MuiThemeProvider>
+    ));
   });
 
   afterEach(() => {
@@ -79,22 +75,10 @@ describe('Retro settings', () => {
   });
 
   describe('retro settings menu item', () => {
-    let button;
-
-    beforeEach(() => {
-      dom.find('.retro-menu button').simulate('click');
-      const items = getMenuItems();
-      button = items[0];
-    });
-
-    it('has a label', () => {
-      expect(button.innerHTML).toMatch(/\bRetro settings\b/);
-    });
-
     it('redirects to retro settings page if logged in', () => {
       window.localStorage.setItem('apiToken-13', 'some-token');
 
-      button.click();
+      invokeMenuOption(dom, 'Retro settings');
 
       expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
@@ -103,7 +87,7 @@ describe('Retro settings', () => {
     });
 
     it('redirects to retro login page if not logged in', () => {
-      button.click();
+      invokeMenuOption(dom, 'Retro settings');
 
       expect(Dispatcher).toHaveReceived({
         type: 'requireRetroLogin',

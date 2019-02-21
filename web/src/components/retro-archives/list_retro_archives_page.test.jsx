@@ -33,10 +33,10 @@ import React from 'react';
 import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
+import {getMenuLabels} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
 import ListRetroArchivesPage from './list_retro_archives_page';
-import RetroMenu from '../shared/retro_menu';
 
 describe('ListRetroArchivesPage', () => {
   const archives = [
@@ -92,8 +92,6 @@ describe('ListRetroArchivesPage', () => {
     window.localStorage.setItem('authToken', 'some-token');
     dom = shallow(<ListRetroArchivesPage retroId="789" archives={archives}/>);
 
-    const menuItems = dom.find(RetroMenu).props().items;
-    expect(menuItems.length).toEqual(1);
-    expect(menuItems[0].title).toEqual('Sign out');
+    expect(getMenuLabels(dom)).toEqual(['Sign out']);
   });
 });

@@ -36,7 +36,7 @@ import '../../spec_helper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RetroMenu from './retro_menu';
 
-function getMenuItems() {
+function getMenuItemElements() {
   // <Popover> renders separately, so hacks are needed:
   return document.getElementsByClassName('retro-menu-item');
 }
@@ -68,7 +68,7 @@ describe('RetroMenu', () => {
 
   it('shows the menu items', () => {
     dom.find('.retro-menu button').simulate('click');
-    const items = getMenuItems();
+    const items = getMenuItemElements();
 
     expect(items.length).toEqual(3);
     expect(items[0].innerHTML).toMatch(/\bMenu Item 1\b/);
@@ -78,7 +78,7 @@ describe('RetroMenu', () => {
 
   it('invokes the callback on click of menu item', () => {
     dom.find('.retro-menu button').simulate('click');
-    const items = getMenuItems();
+    const items = getMenuItemElements();
 
     items[0].click();
 
@@ -87,7 +87,7 @@ describe('RetroMenu', () => {
 
   it('displays the menu item as a button if requested', () => {
     dom.find('.retro-menu button').simulate('click');
-    const items = getMenuItems();
+    const items = getMenuItemElements();
 
     expect(items[0].tagName.toLowerCase()).not.toEqual('button');
     expect(items[2].tagName.toLowerCase()).toEqual('button');

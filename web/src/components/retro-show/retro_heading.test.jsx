@@ -32,10 +32,10 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
+import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
 import RetroHeading from './retro_heading';
-import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
 
 const defaultRetro = {
   id: 13,

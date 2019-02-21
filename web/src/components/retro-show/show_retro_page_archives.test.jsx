@@ -33,16 +33,12 @@ import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
+import {getMenuLabels} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
 const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
-
-function getMenuItems() {
-  // <Popover> renders separately, so hacks are needed:
-  return document.getElementsByClassName('retro-menu-item');
-}
 
 describe('Show retro page archives', () => {
   const retro_archives = {
@@ -141,13 +137,9 @@ describe('Show retro page archives', () => {
       window.localStorage.setItem('authToken', 'some-token');
       dom.update();
 
-      const button = dom.find('.retro-menu button');
-      expect(button).toExist();
-
-      button.simulate('click');
-      const items = getMenuItems();
-      const lastItem = items[items.length - 1];
-      expect(lastItem.innerHTML).toMatch(/\bSign out\b/);
+      const menuLabels = getMenuLabels(dom);
+      const lastMenuLabel = menuLabels[menuLabels.length - 1];
+      expect(lastMenuLabel).toEqual('Sign out');
     });
   });
 

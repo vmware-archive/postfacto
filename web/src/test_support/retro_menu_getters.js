@@ -5,13 +5,15 @@ export function getMenuItems(dom) {
 }
 
 export function getMenuLabels(dom) {
-  return getMenuItems(dom).map((item) => item.title);
+  return getMenuItems(dom).map((i) => i.title);
 }
 
 export function invokeMenuOption(dom, label) {
-  const item = getMenuItems(dom).filter((i) => (i.title === label))[0];
+  const items = getMenuItems(dom);
+  const item = items.filter((i) => (i.title === label))[0];
   if (!item) {
-    throw new Error(`Failed to find menu item ${label}`);
+    const all = items.map((i) => `'${i.title}'`);
+    throw new Error(`Failed to find menu item '${label}' (saw ${all.join(', ')})`);
   }
   item.callback();
 }
