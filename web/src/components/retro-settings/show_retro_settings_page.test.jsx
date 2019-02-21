@@ -30,68 +30,69 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import $ from 'jquery';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import ShowRetroSettingsPage from './show_retro_settings_page';
 
-function combineElementsContent(className) {
-  let message = '';
-  $(className).each((i, e) => {
-    message += e.textContent;
-  });
-  return message;
+function getAllErrors(dom) {
+  return dom.find('.error-message').map((o) => o.text());
 }
 
 describe('ShowRetroSettingsPage', () => {
-  let retro;
+  const sharedRetroSettingsBehavior = (isMobile) => {
+    const retro = {
+      id: 13,
+      name: 'the retro name',
+      slug: 'the-retro-123',
+      is_private: false,
+      video_link: 'http://the/video/link',
+      items: [],
+      action_items: [],
+    };
 
-  const sharedRetroSettingsBehavior = () => {
-    let $retro_name;
-    let $retro_url;
-    let $retro_video_link;
-    let session;
+    let dom;
+
+    let fieldRetroName;
+    let fieldRetroURL;
+    let fieldRetroVideo;
 
     beforeEach(() => {
-      retro = createRetro();
-      session = {request_uuid: 'some-request-uuid'};
-      ReactDOM.render(
+      ShowRetroSettingsPage.prototype.getIsMobile = () => isMobile;
+
+      const session = {request_uuid: 'some-request-uuid'};
+      dom = mount((
         <MuiThemeProvider>
           <ShowRetroSettingsPage retroId="13" retro={retro} session={session}/>
-        </MuiThemeProvider>,
-        root,
-      );
-      $retro_name = $('input#retro_name');
-      $retro_url = $('input#retro_url');
-      $retro_video_link = $('input#retro_video_link');
+        </MuiThemeProvider>
+      ));
+
+      fieldRetroName = dom.find('input#retro_name');
+      fieldRetroURL = dom.find('input#retro_url');
+      fieldRetroVideo = dom.find('input#retro_video_link');
     });
 
-    describe('header', () => {
-      it('displays the project name', () => {
-        expect('.retro-name').toContainText(retro.name);
-      });
+    it('displays the project name', () => {
+      expect(dom.find('.retro-name')).toIncludeText(retro.name);
     });
 
     describe('project name field', () => {
       it('populates the project name field', () => {
-        expect('input#retro_name').toHaveValue('the retro name');
+        expect(dom.find('input#retro_name')).toHaveValue('the retro name');
       });
 
       it('updates the project name field when typed into', () => {
-        $retro_name.val('the new retro name').simulate('change');
-        expect('input#retro_name').toHaveValue('the new retro name');
+        fieldRetroName.simulate('change', {target: {value: 'the new retro name'}});
+        expect(dom.find('input#retro_name')).toHaveValue('the new retro name');
       });
 
       describe('is empty', () => {
         beforeEach(() => {
-          $retro_name.val('').simulate('change');
-          $retro_url.val('some-url').simulate('change');
-          $('.retro-settings-form-submit').simulate('click');
+          fieldRetroName.simulate('change', {target: {value: ''}});
+          fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
+          dom.find('.retro-settings-form-submit').simulate('click');
         });
 
         it('does not update the retro settings', () => {
@@ -99,33 +100,32 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('displays an error message', () => {
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a name!');
+          expect(getAllErrors(dom).join('')).toEqual('Your project needs a name!');
         });
       });
     });
 
     describe('video link field', () => {
       it('populates the video link field', () => {
-        expect('input#retro_video_link').toHaveValue(retro.video_link);
+        expect(dom.find('input#retro_video_link')).toHaveValue(retro.video_link);
       });
     });
 
     describe('project URL field', () => {
       it('populates the project URL field with the slug', () => {
-        expect('input#retro_url').toHaveValue('the-retro-123');
+        expect(dom.find('input#retro_url')).toHaveValue('the-retro-123');
       });
 
       it('updates the project URL field when typed into', () => {
-        $retro_url.val('another-retro-name').simulate('change');
-        expect('input#retro_url').toHaveValue('another-retro-name');
+        fieldRetroURL.simulate('change', {target: {value: 'another-retro-name'}});
+        expect(dom.find('input#retro_url')).toHaveValue('another-retro-name');
       });
 
       describe('is empty', () => {
         beforeEach(() => {
-          $retro_name.val('The Retro Name').simulate('change');
-          $retro_url.val('').simulate('change');
-          $('.retro-settings-form-submit').simulate('click');
+          fieldRetroName.simulate('change', {target: {value: 'The Retro Name'}});
+          fieldRetroURL.simulate('change', {target: {value: ''}});
+          dom.find('.retro-settings-form-submit').simulate('click');
         });
 
         it('does not update the retro settings', () => {
@@ -133,137 +133,123 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('displays an error message', () => {
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a URL!');
+          expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
         });
       });
 
       describe('has more than 236 characters', () => {
         beforeEach(() => {
           const moreThan236Characters = 'a'.repeat(236 + 1);
-          $retro_url.val(moreThan236Characters).simulate('change');
+          fieldRetroURL.simulate('change', {target: {value: moreThan236Characters}});
         });
 
         it('does not update the retro settings', () => {
-          $('.retro-settings-form-submit').simulate('click');
+          dom.find('.retro-settings-form-submit').simulate('click');
           expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your URL is too long!');
+          expect(getAllErrors(dom).join('')).toEqual('Your URL is too long!');
 
-          $retro_url.val('a'.repeat(236));
-          $retro_url.simulate('change');
+          fieldRetroURL.simulate('change', {target: {value: 'a'.repeat(236)}});
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
+          expect(getAllErrors(dom).join('')).toEqual('');
         });
 
         it('submitting should preserve the errors', () => {
-          $('.retro-settings-form-submit').simulate('click');
+          dom.find('.retro-settings-form-submit').simulate('click');
 
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toContain('Your URL is too long!');
+          expect(getAllErrors(dom).join('')).toContain('Your URL is too long!');
         });
       });
 
       describe('has unrecognized characters', () => {
         beforeEach(() => {
           const unrecognizedCharacters = 'foo*';
-          $retro_url.val(unrecognizedCharacters).simulate('change');
+          fieldRetroURL.simulate('change', {target: {value: unrecognizedCharacters}});
         });
 
         it('should not submit create a retro when there is no URL', () => {
-          $('.retro-settings-form-submit').simulate('click');
+          dom.find('.retro-settings-form-submit').simulate('click');
           expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
         it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your URL should only contain letters, numbers or hyphens!');
+          expect(getAllErrors(dom).join('')).toEqual('Your URL should only contain letters, numbers or hyphens!');
 
-          $retro_url.val('some-url').simulate('change');
+          fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
+          expect(getAllErrors(dom).join('')).toEqual('');
         });
       });
 
       describe('has errors', () => {
         beforeEach(() => {
-          ReactDOM.render(
+          dom = mount((
             <MuiThemeProvider>
               <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
-            </MuiThemeProvider>,
-            root,
-          );
+            </MuiThemeProvider>
+          ));
         });
 
         it('displays an error message', () => {
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Something went wrong!');
+          expect(getAllErrors(dom).join('')).toEqual('Something went wrong!');
         });
       });
     });
 
-    describe('project is_private field', () => {
-      beforeEach(() => {
-        retro.is_private = true;
-        ReactDOM.render(
-          <MuiThemeProvider>
-            <ShowRetroSettingsPage retroId="13" retro={retro}/>
-          </MuiThemeProvider>,
-          root,
-        );
-      });
+    it('privacy defaults to the current setting', () => {
+      const privateRetro = Object.assign({}, retro, {is_private: true});
+      dom = mount((
+        <MuiThemeProvider>
+          <ShowRetroSettingsPage retroId="13" retro={privateRetro}/>
+        </MuiThemeProvider>
+      ));
 
-      it('sets the is_private field', () => {
-        expect('input#retro_is_private').toBeChecked();
-      });
+      expect(dom.find('input#retro_is_private')).toBeChecked();
+
+      dom.find('input#retro_is_private').simulate('change');
+      expect(dom.find('input#retro_is_private')).not.toBeChecked();
     });
 
     describe('all fields are empty', () => {
       beforeEach(() => {
-        $retro_name.val('').simulate('change');
-        $retro_url.val('').simulate('change');
-        $('.retro-settings-form-submit').simulate('click');
+        fieldRetroName.simulate('change', {target: {value: ''}});
+        fieldRetroURL.simulate('change', {target: {value: ''}});
+        dom.find('.retro-settings-form-submit').simulate('click');
       });
 
       it('displays error messages on all of the fields', () => {
-        const errorMessage = combineElementsContent('.error-message');
-        expect(errorMessage).toEqual('Your project needs a name!Your project needs a URL!');
+        expect(getAllErrors(dom).join('')).toEqual('Your project needs a name!Your project needs a URL!');
       });
 
       it('clears out error message for only name field when it is valid', () => {
-        $retro_name.val('name').simulate('change');
-        const errorMessage = combineElementsContent('.error-message');
-        expect(errorMessage).toEqual('Your project needs a URL!');
+        fieldRetroName.simulate('change', {target: {value: 'name'}});
+        expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
       });
 
       it('clears out error message for only url field when it is valid', () => {
-        $retro_url.val('some-url').simulate('change');
-        const errorMessage = combineElementsContent('.error-message');
-        expect(errorMessage).toEqual('Your project needs a name!');
+        fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
+        expect(getAllErrors(dom).join('')).toEqual('Your project needs a name!');
       });
 
       it('clears out the errors when unmounted', () => {
-        ReactDOM.unmountComponentAtNode(root);
+        dom.unmount();
 
-        expect(Dispatcher).toHaveReceived({
-          type: 'clearErrors',
-        });
+        expect(Dispatcher).toHaveReceived({type: 'clearErrors'});
       });
     });
 
     it('updates the retro settings when the save button is clicked', () => {
       const new_video_url = 'newurl.com';
-      $retro_name.val('the new retro name').simulate('change');
-      $retro_url.val('the-new-retro-slug').simulate('change');
-      $retro_video_link.val(new_video_url).simulate('change');
+      fieldRetroName.simulate('change', {target: {value: 'the new retro name'}});
+      fieldRetroURL.simulate('change', {target: {value: 'the-new-retro-slug'}});
+      fieldRetroVideo.simulate('change', {target: {value: new_video_url}});
 
-      $('#retro_is_private').simulate('change');
-      $('.retro-settings-form-submit').simulate('click');
+      expect(dom.find('input#retro_is_private')).not.toBeChecked();
+      dom.find('input#retro_is_private').simulate('change');
+
+      dom.find('.retro-settings-form-submit').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'updateRetroSettings',
@@ -280,7 +266,7 @@ describe('ShowRetroSettingsPage', () => {
     });
 
     it('routes to retro password settings when change password link is clicked', () => {
-      $('#retro-password-settings').simulate('click');
+      dom.find('#retro-password-settings').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroPasswordSettings',
@@ -291,7 +277,7 @@ describe('ShowRetroSettingsPage', () => {
     });
 
     it('goes back to the retro page when the back button is clicked', () => {
-      $('button.retro-back').simulate('click');
+      dom.find('button.retro-back').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'backPressedFromSettings',
@@ -301,69 +287,10 @@ describe('ShowRetroSettingsPage', () => {
   };
 
   describe('on web', () => {
-    beforeEach(() => {
-      ShowRetroSettingsPage.prototype.getIsMobile = () => false;
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13"/>
-        </MuiThemeProvider>,
-        root,
-      );
-    });
-
-    sharedRetroSettingsBehavior();
+    sharedRetroSettingsBehavior(false);
   });
 
   describe('on mobile', () => {
-    beforeEach(() => {
-      ShowRetroSettingsPage.prototype.getIsMobile = () => true;
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13"/>
-        </MuiThemeProvider>,
-        root,
-      );
-    });
-
-    sharedRetroSettingsBehavior();
+    sharedRetroSettingsBehavior(true);
   });
 });
-
-function createRetro() {
-  return {
-    id: 13,
-    name: 'the retro name',
-    slug: 'the-retro-123',
-    is_private: false,
-    video_link: 'http://the/video/link',
-    items: [
-      {
-        id: 1,
-        description: 'the happy retro item',
-        category: 'happy',
-      },
-      {
-        id: 2,
-        description: 'the meh retro item',
-        category: 'meh',
-      },
-      {
-        id: 3,
-        description: 'the sad retro item',
-        category: 'sad',
-      },
-    ],
-    action_items: [
-      {
-        id: 1,
-        description: 'action item 1',
-        done: true,
-      },
-      {
-        id: 2,
-        description: 'action item 2',
-        done: false,
-      },
-    ],
-  };
-}

@@ -49,9 +49,6 @@ module.exports = {
     'env': {
       'jasmine': true,
     },
-    'globals': {
-      'root': 'readonly',
-    },
     'rules': {
       'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
     },

@@ -41,40 +41,64 @@ import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../shared
 import iconLockedSvg from '../../images/icon-locked.svg';
 import iconEyeSvg from '../../images/icon-eye.svg';
 
+function getStateUpdateFor(retro, errors) {
+  const stateUpdate = {};
+  if (retro) {
+    stateUpdate.name = retro.name;
+    stateUpdate.slug = retro.slug;
+    stateUpdate.isPrivate = retro.is_private;
+    stateUpdate.video_link = retro.video_link;
+  }
+
+  if (errors) {
+    stateUpdate.errors = {
+      name: errors.name,
+      slug: errors.slug,
+    };
+  } else {
+    stateUpdate.errors = {};
+  }
+
+  return stateUpdate;
+}
+
 export default class ShowRetroSettingsPage extends React.Component {
   static propTypes = {
     errors: types.object,
-    name: types.string,
     retro: types.object,
     retroId: types.string.isRequired,
     session: types.object,
-    slug: types.string,
   };
 
   static defaultProps = {
     errors: null,
-    name: null,
     retro: null,
     session: null,
-    slug: null,
   };
 
   // Component Lifecycle
 
   constructor(props) {
     super(props);
-    this.state = {
-      isMobile: false,
-      isPrivate: false,
-      name: '',
-      slug: '',
-      video_link: '',
-      errors: {},
-    };
+
+    const {retro, errors} = props;
+    this.state = Object.assign(
+      {
+        isMobile: false,
+        isPrivate: false,
+        name: '',
+        slug: '',
+        video_link: '',
+        errors: {},
+      },
+      getStateUpdateFor(retro, errors),
+    );
 
     this.handleResize = this.handleResize.bind(this);
     this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.onChangeName = this.onChange.bind(this, 'name');
+    this.onChangeSlug = this.onChange.bind(this, 'slug');
+    this.onChangeVideo = this.onChange.bind(this, 'video_link');
     this.handleChangePasswordClick = this.handleChangePasswordClick.bind(this);
     this.togglePrivate = this.togglePrivate.bind(this);
     this.handleRetroSettingsSubmit = this.handleRetroSettingsSubmit.bind(this);
@@ -90,25 +114,8 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.retro) {
-      this.setState({
-        name: nextProps.retro.name,
-        slug: nextProps.retro.slug,
-        isPrivate: nextProps.retro.is_private,
-        video_link: nextProps.retro.video_link,
-      });
-    }
-
-    if (nextProps.errors) {
-      this.setState({
-        errors: {
-          name: nextProps.errors.name,
-          slug: nextProps.errors.slug,
-        },
-      });
-    } else {
-      this.setState({errors: {}});
-    }
+    const {retro, errors} = nextProps;
+    this.setState(getStateUpdateFor(retro, errors));
   }
 
   componentWillUnmount() {
@@ -148,22 +155,21 @@ export default class ShowRetroSettingsPage extends React.Component {
     return '';
   }
 
-  handleChange(e) {
-    const elementName = e.currentTarget.name;
-    const elementValue = e.currentTarget.value;
+  onChange(field, e) {
+    const value = e.target.value;
 
     const errors = {};
 
-    if (elementName === 'name') {
-      errors.name = this.validateName(elementValue);
+    if (field === 'name') {
+      errors.name = this.validateName(value);
     }
 
-    if (elementName === 'slug') {
-      errors.slug = this.validateSlug(elementValue);
+    if (field === 'slug') {
+      errors.slug = this.validateSlug(value);
     }
 
     this.setState((oldState) => ({
-      [elementName]: elementValue,
+      [field]: value,
       errors: Object.assign({}, oldState.errors, errors),
     }));
   }
@@ -307,7 +313,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                     type="text"
                     name="name"
                     className={`form-input ${errors.name ? 'input-error' : ''}`}
-                    onChange={this.handleChange}
+                    onChange={this.onChangeName}
                     placeholder=""
                   />
                   <div className="error-message">{errors.name}</div>
@@ -323,7 +329,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                       type="text"
                       name="slug"
                       className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
-                      onChange={this.handleChange}
+                      onChange={this.onChangeSlug}
                       placeholder=""
                     />
                   </div>
@@ -339,7 +345,7 @@ export default class ShowRetroSettingsPage extends React.Component {
                     name="video_link"
                     value={this.state.video_link}
                     type="text"
-                    onChange={this.handleChange}
+                    onChange={this.onChangeVideo}
                     className="form-input"
                     placeholder=""
                   />

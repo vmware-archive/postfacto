@@ -29,21 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import jQuery from 'jquery';
 import {Dispatcher} from 'p-flux';
-import ReactDOM from 'react-dom';
 import jestSpyOnAugmented from './jest_spy_augmented';
 import Application from '../Application'; // Load dispatchers (sets global state in p-flux Actions)
 
 beforeEach(() => {
   global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
-
-  global.root = jQuery('<div id="root"></div>').get(0);
-  jQuery('body')
-    .find('#root')
-    .remove()
-    .end()
-    .append(global.root);
 
   Application.reset(); // set global state such as p-flux.Actions
 
@@ -53,7 +44,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  ReactDOM.unmountComponentAtNode(global.root);
   Dispatcher.dispatch.mockRestore();
   Dispatcher.reset();
   global.localStorage.clear();
