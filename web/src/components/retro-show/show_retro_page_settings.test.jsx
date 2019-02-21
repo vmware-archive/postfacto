@@ -30,26 +30,35 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPage from './show_retro_page';
 
+function getMenuItems() {
+  // <Popover> renders separately, so hacks are needed:
+  return document.body.getElementsByClassName('retro-menu-item');
+}
+
 describe('Retro settings', () => {
   let originalGetIsMobile;
+  let dom;
 
   beforeEach(() => {
-    const retro = createRetro();
+    const retro = {
+      id: 13,
+      name: 'the retro name',
+      video_link: 'http://the/video/link',
+      items: [],
+      action_items: [],
+    };
 
     originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
     ShowRetroPage.prototype.getIsMobile = () => false;
     window.localStorage.setItem('authToken', 'some-token');
 
-    ReactDOM.render(
+    dom = mount(
       <MuiThemeProvider>
         <ShowRetroPage
           retro={retro}
@@ -59,7 +68,6 @@ describe('Retro settings', () => {
           featureFlags={{archiveEmails: true}}
         />
       </MuiThemeProvider>,
-      root,
     );
   });
 
@@ -67,39 +75,32 @@ describe('Retro settings', () => {
     ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
   });
 
-  it('should have retro settings menu item', () => {
-    $('.retro-menu button').simulate('click');
-    expect($('.retro-menu-item')[1]).toContainText('Retro settings');
-  });
+  describe('retro settings menu item', () => {
+    let button;
 
-  describe('when user has an api token', () => {
     beforeEach(() => {
+      dom.find('.retro-menu button').simulate('click');
+      const items = getMenuItems();
+      button = items[0];
+    });
+
+    it('has a label', () => {
+      expect(button.innerHTML).toMatch(/\bRetro settings\b/);
+    });
+
+    it('redirects to retro settings page if logged in', () => {
       window.localStorage.setItem('apiToken-13', 'some-token');
-    });
 
-    afterEach(() => {
-      window.localStorage.clear();
-    });
-
-    it('should redirect to retro settings page', () => {
-      $('.retro-menu button').simulate('click');
-      $($('.retro-menu-item')[1]).simulate('click');
+      button.click();
 
       expect(SpyDispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
         data: {retro_id: '13'},
       });
     });
-  });
 
-  describe('when user is not signed in', () => {
-    beforeEach(() => {
-      window.localStorage.clear();
-    });
-
-    it('should redirect to the retro login page', () => {
-      $('.retro-menu button').simulate('click');
-      $($('.retro-menu-item')[1]).simulate('click');
+    it('redirects to retro login page if not logged in', () => {
+      button.click();
 
       expect(SpyDispatcher).toHaveReceived({
         type: 'requireRetroLogin',
@@ -108,40 +109,3 @@ describe('Retro settings', () => {
     });
   });
 });
-
-function createRetro() {
-  return {
-    id: 13,
-    name: 'the retro name',
-    video_link: 'http://the/video/link',
-    items: [
-      {
-        id: 1,
-        description: 'the happy retro item',
-        category: 'happy',
-      },
-      {
-        id: 2,
-        description: 'the meh retro item',
-        category: 'meh',
-      },
-      {
-        id: 3,
-        description: 'the sad retro item',
-        category: 'sad',
-      },
-    ],
-    action_items: [
-      {
-        id: 1,
-        description: 'action item 1',
-        done: true,
-      },
-      {
-        id: 2,
-        description: 'action item 2',
-        done: false,
-      },
-    ],
-  };
-}
