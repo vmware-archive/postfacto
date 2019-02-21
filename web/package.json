@@ -9,7 +9,6 @@
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
     "moment": "^2.23.0",
-    "motion-ui": "^2.0.3",
     "node-sass": "^4.11.0",
     "p-flux": "^1.1.1",
     "prop-types": "^15.6.2",

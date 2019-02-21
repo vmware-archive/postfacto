@@ -34,7 +34,6 @@
 @import 'dimensions';
 @import 'new-retro-page';
 @import '~foundation-sites/scss/foundation';
-@import '~motion-ui/src/motion-ui';
 @import 'home';
 
 @include foundation-global-styles;
@@ -78,9 +77,6 @@
 @include foundation-visibility-classes;
 @include foundation-float-classes;
 // @include foundation-flex-classes;
-
-@include motion-ui-transitions;
-@include motion-ui-animations;
 
 
 /* ----------------------------------------- Terms Pages --------------------------------------------*/
