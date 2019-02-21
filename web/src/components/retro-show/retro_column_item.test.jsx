@@ -166,14 +166,14 @@ describe('RetroColumnItem', () => {
     });
 
     it('scrolls to the centre of the screen when highlighted', () => {
-      spyOn(Scroll.scroller, 'scrollTo');
+      jest.spyOn(Scroll.scroller, 'scrollTo').mockReturnValue(null);
 
       expect(dom.find('.retro-item')).not.toHaveClassName('highlight');
 
       dom.setProps({highlighted_item_id: 2});
 
       expect(dom.find('.retro-item')).toHaveClassName('highlight');
-      expect(Scroll.scroller.scrollTo).toHaveBeenCalledWith('retro-item-2', jasmine.objectContaining({
+      expect(Scroll.scroller.scrollTo).toHaveBeenCalledWith('retro-item-2', expect.objectContaining({
         delay: 0,
         duration: 300,
       }));
@@ -189,7 +189,8 @@ describe('RetroColumnItem', () => {
       });
 
       it('does not scroll when highlighted again', () => {
-        spyOn(Scroll.scroller, 'scrollTo');
+        jest.spyOn(Scroll.scroller, 'scrollTo').mockReturnValue(null);
+
         dom.setProps({highlighted_item_id: 2});
         expect(Scroll.scroller.scrollTo).not.toHaveBeenCalled();
       });

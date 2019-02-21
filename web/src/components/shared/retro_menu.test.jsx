@@ -46,7 +46,7 @@ describe('RetroMenu', () => {
   let dom;
 
   beforeEach(() => {
-    testCallback = jasmine.createSpy('testCallback');
+    testCallback = jest.fn().mockName('testCallback');
 
     const menuItems = [
       {

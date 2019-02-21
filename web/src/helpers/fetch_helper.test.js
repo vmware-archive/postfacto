@@ -36,7 +36,7 @@ import '../spec_helper';
 describe('fetchJson', () => {
   describe('errors', () => {
     beforeEach(() => {
-      spyOn(window, 'fetch').and.callFake(() => Promise.reject(new Error('some error')));
+      jest.spyOn(window, 'fetch').mockRejectedValue(new Error('some error'));
     });
 
     it('returns empty array', async () => {
@@ -52,7 +52,7 @@ describe('fetchJson', () => {
 
   describe('HTTP 204 no content', () => {
     beforeEach(() => {
-      spyOn(window, 'fetch').and.returnValue(Promise.resolve({status: 204, json: () => Promise.resolve('')}));
+      jest.spyOn(window, 'fetch').mockResolvedValue({status: 204, json: () => Promise.resolve('ignored content')});
     });
 
     it('returns the status code and empty response string', async () => {

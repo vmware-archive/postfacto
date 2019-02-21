@@ -45,9 +45,6 @@ module.exports = {
 
   'overrides': [{
     'files': ['**/test_support/*', 'spec_helper.*', '*.test.*'],
-    'env': {
-      'jasmine': true,
-    },
     'rules': {
       'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
     },

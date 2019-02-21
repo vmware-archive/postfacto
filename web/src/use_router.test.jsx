@@ -38,7 +38,7 @@ import useRouter from './use_router';
 
 describe('useRouter', () => {
   it('routes', () => {
-    const routeSpy = jasmine.createSpy('route');
+    const routeSpy = jest.fn().mockName('route');
 
     const Application = ({router}) => {
       router.get('/test', routeSpy);

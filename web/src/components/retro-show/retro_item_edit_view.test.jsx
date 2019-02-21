@@ -41,8 +41,9 @@ describe('RetroItemEditView', () => {
   let dom;
 
   beforeEach(() => {
-    deleteSpy = jasmine.createSpy('delete');
-    saveSpy = jasmine.createSpy('save');
+    deleteSpy = jest.fn().mockName('deleteSpy');
+    saveSpy = jest.fn().mockName('saveSpy');
+
     dom = mount((
       <RetroItemEditView
         originalText="item text"

@@ -33,6 +33,11 @@ import Cursor from 'pui-cursor';
 import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 
+function latestCall(spy) {
+  const calls = spy.mock.calls;
+  return calls[calls.length - 1];
+}
+
 describe('MainDispatcher', () => {
   let subject;
   let cursorSpy;
@@ -42,20 +47,20 @@ describe('MainDispatcher', () => {
 
   beforeEach(() => {
     Cursor.async = false;
-    cursorSpy = jasmine.createSpy('callback');
+    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
     subject.dispatch.mockCallThrough();
 
     // prevent console logs
-    spyOn(subject, 'onDispatch');
+    jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
 
     router = {
       navigate: () => {},
     };
     subject.router = router;
-    spyOn(router, 'navigate');
+    jest.spyOn(router, 'navigate').mockReturnValue(null);
 
     retro = {
       id: 1,
@@ -128,8 +133,7 @@ describe('MainDispatcher', () => {
   describe('setRoute', () => {
     it('calls the router navigate', () => {
       subject.dispatch({type: 'setRoute', data: '/url/path'});
-      expect(router.navigate.calls.count()).toEqual(1);
-      expect(router.navigate.calls.argsFor(0)).toEqual(['/url/path']);
+      expect(router.navigate.mock.calls).toEqual([['/url/path']]);
     });
   });
 
@@ -264,8 +268,7 @@ describe('MainDispatcher', () => {
     });
 
     it('redirects to the retro page url with the new slug', () => {
-      expect(router.navigate.calls.count()).toEqual(1);
-      expect(router.navigate.calls.argsFor(0)).toEqual(['/retros/new-retro-slug']);
+      expect(router.navigate.mock.calls).toEqual([['/retros/new-retro-slug']]);
     });
   });
 
@@ -377,7 +380,7 @@ describe('MainDispatcher', () => {
 
     it('deletes the retro item', () => {
       subject.dispatch({type: 'retroItemSuccessfullyDeleted', data: {retro_id: 1, item: retro.items[0]}});
-      expect(cursorSpy.calls.mostRecent().args[0].retro.items).not.toContain(retro.items[0]);
+      expect(latestCall(cursorSpy)[0].retro.items).not.toContain(retro.items[0]);
     });
   });
 
@@ -455,7 +458,7 @@ describe('MainDispatcher', () => {
       retro.highlighted_item_id = 2;
       subject.dispatch({type: 'retroItemSuccessfullyHighlighted', data: {retro}});
       expect(cursorSpy).toHaveBeenCalledWith({
-        retro: jasmine.objectContaining({
+        retro: expect.objectContaining({
           highlighted_item_id: 2,
         }),
       });
@@ -465,7 +468,7 @@ describe('MainDispatcher', () => {
       retro.retro_item_end_time = 123;
       subject.dispatch({type: 'retroItemSuccessfullyHighlighted', data: {retro}});
       expect(cursorSpy).toHaveBeenCalledWith({
-        retro: jasmine.objectContaining({
+        retro: expect.objectContaining({
           retro_item_end_time: 123,
         }),
       });
@@ -482,7 +485,7 @@ describe('MainDispatcher', () => {
     it('removes the highlight of the currently highlighted retro item', () => {
       subject.dispatch({type: 'retroItemSuccessfullyUnhighlighted'});
       expect(cursorSpy).toHaveBeenCalledWith({
-        retro: jasmine.objectContaining({
+        retro: expect.objectContaining({
           highlighted_item_id: null,
         }),
       });
@@ -578,7 +581,7 @@ describe('MainDispatcher', () => {
       retro.retro_item_end_time = 321;
       subject.dispatch({type: 'extendTimerSuccessfullyDone', data: {retro}});
       expect(cursorSpy).toHaveBeenCalledWith({
-        retro: jasmine.objectContaining({
+        retro: expect.objectContaining({
           retro_item_end_time: 321,
         }),
       });
@@ -711,7 +714,7 @@ describe('MainDispatcher', () => {
 
       it('updates the store', () => {
         subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: true}}});
-        expect(cursorSpy.calls.mostRecent().args[0].retro.action_items[0].done).toBeTruthy();
+        expect(latestCall(cursorSpy)[0].retro.action_items[0].done).toBeTruthy();
       });
     });
 
@@ -726,7 +729,7 @@ describe('MainDispatcher', () => {
 
       it('updates the store', () => {
         subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: false}}});
-        expect(cursorSpy.calls.mostRecent().args[0].retro.action_items[0].done).toBeFalsy();
+        expect(latestCall(cursorSpy)[0].retro.action_items[0].done).toBeFalsy();
       });
     });
   });
@@ -741,7 +744,7 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the store and removes the retro action item', () => {
-      expect(cursorSpy.calls.mostRecent().args[0].retro.action_items).not.toContain(action_item);
+      expect(latestCall(cursorSpy)[0].retro.action_items).not.toContain(action_item);
     });
   });
 
@@ -756,7 +759,7 @@ describe('MainDispatcher', () => {
 
     it('updates description of the action item', () => {
       action_item.description = 'description for action item 1 has been changed';
-      expect(cursorSpy.calls.mostRecent().args[0].retro.action_items).toContain(action_item);
+      expect(latestCall(cursorSpy)[0].retro.action_items).toContain(action_item);
     });
   });
 
@@ -1028,8 +1031,7 @@ describe('MainDispatcher', () => {
         type: 'setRoute',
         data: '/registration/the-access-token/a@a.a/my full name',
       });
-      expect(router.navigate.calls.count()).toEqual(1);
-      expect(router.navigate.calls.argsFor(0)).toEqual(['/registration/the-access-token/a@a.a/my full name']);
+      expect(router.navigate.mock.calls).toEqual([['/registration/the-access-token/a@a.a/my full name']]);
     });
   });
 

@@ -36,6 +36,8 @@ import Grapnel from 'grapnel';
 import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 
+/* global jasmine */
+
 describe('ApiDispatcher', () => {
   let subject;
   let cursorSpy;
@@ -46,7 +48,7 @@ describe('ApiDispatcher', () => {
     PromiseMock.install();
 
     Cursor.async = false;
-    cursorSpy = jasmine.createSpy('callback');
+    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
@@ -60,7 +62,7 @@ describe('ApiDispatcher', () => {
     });
 
     // prevent console logs
-    spyOn(subject, 'onDispatch');
+    jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
     retro = {
       id: 1,
       name: 'retro name',

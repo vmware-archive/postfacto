@@ -48,7 +48,7 @@ describe('Retro Tile', () => {
   });
 
   it('should call the callback when clicked', () => {
-    const callbackFn = jasmine.createSpy('callbackFn');
+    const callbackFn = jest.fn().mockName('callbackFn');
 
     const dom = mount(<RetroTile retro={retro} callback={callbackFn}/>);
     dom.find('.retro-list-tile').simulate('click');

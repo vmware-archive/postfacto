@@ -33,6 +33,8 @@ import {Dispatcher} from 'p-flux';
 import jestSpyOnAugmented from './jest_spy_augmented';
 import Application from '../Application'; // Load dispatchers (sets global state in p-flux Actions)
 
+jest.useFakeTimers();
+
 beforeEach(() => {
   global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
 
@@ -44,7 +46,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  Dispatcher.dispatch.mockRestore();
+  jest.restoreAllMocks();
   Dispatcher.reset();
+  jest.clearAllTimers();
   global.localStorage.clear();
 });
