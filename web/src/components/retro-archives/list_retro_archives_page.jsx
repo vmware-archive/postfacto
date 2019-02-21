@@ -31,12 +31,20 @@
 
 import React from 'react';
 import {Actions} from 'p-flux';
-import moment from 'moment';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import types from 'prop-types';
 import RetroMenu from '../shared/retro_menu';
 import RetroFooter from '../shared/footer';
+
+function makeDateString(date) {
+  const year = date.getFullYear();
+  const day = date.toLocaleDateString('en', {day: '2-digit'});
+  const monthName = date.toLocaleDateString('en', {month: 'long'});
+
+  // Ensure consistent ordering in all browsers: (eventually this should just conform to user locale anyway though)
+  return `${day} ${monthName} ${year}`;
+}
 
 export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {
@@ -79,7 +87,7 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   sortedArchives(archives) {
-    return archives.sort((a, b) => (moment(b.created_at) - moment(a.created_at)));
+    return archives.sort((a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
   }
 
   onCurrentRetroClicked() {
@@ -138,7 +146,7 @@ export default class ListRetroArchivesPage extends React.Component {
                 <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
                   <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
                     <a href={`/retros/${retroId}/archives/${a.id}`}>
-                      {moment(a.created_at).local().format('DD MMMM YYYY')}
+                      {makeDateString(new Date(a.created_at))}
                     </a>
                   </div>
                 </div>
