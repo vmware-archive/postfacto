@@ -64,6 +64,9 @@ export default class RetroCreatePage extends React.Component {
 
     this.togglePrivate = this.togglePrivate.bind(this);
     this.submit = this.submit.bind(this);
+    this.onChangeName = this.onChange.bind(this, 'name');
+    this.onChangeSlug = this.onChange.bind(this, 'slug');
+    this.onChangePassword = this.onChange.bind(this, 'password');
   }
 
   componentWillMount() {
@@ -140,29 +143,28 @@ export default class RetroCreatePage extends React.Component {
     return '';
   };
 
-  change = (e) => {
-    const elementName = e.currentTarget.name;
-    const elementValue = e.currentTarget.value;
+  onChange(field, e) {
+    const value = e.target.value;
 
     const errors = {};
 
-    if (elementName === 'name') {
-      errors.name = this.validateName(elementValue);
+    if (field === 'name') {
+      errors.name = this.validateName(value);
     }
 
-    if (elementName === 'slug') {
-      errors.slug = this.validateSlug(elementValue);
+    if (field === 'slug') {
+      errors.slug = this.validateSlug(value);
     }
 
-    if (elementName === 'password') {
-      errors.password = this.validatePassword(elementValue);
+    if (field === 'password') {
+      errors.password = this.validatePassword(value);
     }
 
     this.setState((oldState) => ({
-      [elementName]: elementValue,
+      [field]: value,
       errors: Object.assign({}, oldState.errors, errors),
     }));
-  };
+  }
 
   togglePrivate = () => {
     this.setState((oldState) => ({
@@ -218,7 +220,7 @@ export default class RetroCreatePage extends React.Component {
                   type="text"
                   name="name"
                   className={`form-input ${errors.name ? 'input-error' : ''}`}
-                  onChange={this.change}
+                  onChange={this.onChangeName}
                   placeholder="Team name"
                 />
                 <div className="error-message">{errors.name}</div>
@@ -233,7 +235,7 @@ export default class RetroCreatePage extends React.Component {
                     type="text"
                     name="slug"
                     className={`input-group-field form-input ${errors.slug ? 'input-error' : ''}`}
-                    onChange={this.change}
+                    onChange={this.onChangeSlug}
                     placeholder="team-name"
                   />
                 </div>
@@ -247,7 +249,7 @@ export default class RetroCreatePage extends React.Component {
                   type="password"
                   name="password"
                   className={`form-input ${errors.password ? 'input-error' : ''}`}
-                  onChange={this.change}
+                  onChange={this.onChangePassword}
                   placeholder="Create password"
                 />
                 <div className="error-message">{errors.password}</div>

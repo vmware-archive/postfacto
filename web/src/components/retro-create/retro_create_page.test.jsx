@@ -30,241 +30,214 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import $ from 'jquery';
 import {SpyDispatcher} from '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import RetroCreatePage from './retro_create_page';
 
-function combineElementsContent(className) {
-  let message = '';
-  $(className).each((i, e) => {
-    message += e.textContent;
-  });
-  return message;
+function getAllErrors(dom) {
+  return dom.find('.error-message').map((o) => o.text());
 }
 
 describe('RetroCreatePage', () => {
-  describe('when logged in', () => {
+  let dom;
+  let fieldRetroName;
+  let fieldRetroURL;
+  let fieldRetroPassword;
+
+  beforeEach(() => {
+    localStorage.setItem('authToken', 'some-token');
+    dom = mount((
+      <MuiThemeProvider>
+        <RetroCreatePage/>
+      </MuiThemeProvider>
+    ));
+
+    fieldRetroName = dom.find('#retro_name');
+    fieldRetroURL = dom.find('#retro_url');
+    fieldRetroPassword = dom.find('#retro_password');
+
+    fieldRetroName.simulate('change', {target: {value: 'newRetro'}});
+    fieldRetroURL.simulate('change', {target: {value: 'new-retro'}});
+    fieldRetroPassword.simulate('change', {target: {value: 'retroPass'}});
+  });
+
+  afterEach(() => {
+    if (dom.length) {
+      dom.unmount();
+    }
+  });
+
+  it('has a title', () => {
+    expect(dom.find('.new-retro-page')).toIncludeText('Time to make your team retro!');
+  });
+
+  describe('name field is empty', () => {
     beforeEach(() => {
-      localStorage.setItem('authToken', 'some-token');
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <RetroCreatePage/>
-        </MuiThemeProvider>,
-        root,
-      );
+      fieldRetroName.simulate('change', {target: {value: ''}});
+      dom.find('.retro-form-submit').simulate('click');
     });
 
-    describe('creating a retro', () => {
-      let $retro_name;
-      let $retro_url;
-      let $retro_password;
+    it('does not submit', () => {
+      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+    });
 
-      beforeEach(() => {
-        $retro_name = $('.new-retro-page #retro_name');
-        $retro_url = $('.new-retro-page #retro_url');
-        $retro_password = $('.new-retro-page #retro_password');
-      });
+    it('clears error on valid input', () => {
+      expect(getAllErrors(dom).join('')).toEqual('Your project needs a team name!');
 
-      it('has a title', () => {
-        expect('.new-retro-page').toContainText('Time to make your team retro!');
-      });
+      fieldRetroName.simulate('change', {target: {value: 'name'}});
 
-      describe('name field is empty', () => {
-        beforeEach(() => {
-          $retro_name.val('').simulate('change');
-          $retro_url.val('slug').simulate('change');
-          $retro_password.val('password').simulate('change');
-          $('.retro-form-submit').simulate('click');
-        });
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
+  });
 
-        it('should not submit create a retro when there is no name', () => {
-          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
-        });
+  describe('slug field is empty', () => {
+    beforeEach(() => {
+      fieldRetroURL.simulate('change', {target: {value: ''}});
+      dom.find('.retro-form-submit').simulate('click');
+    });
 
-        it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a team name!');
+    it('does not submit', () => {
+      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+    });
 
-          $retro_name.val('name').simulate('change');
+    it('clears error on valid input', () => {
+      expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
-        });
-      });
+      fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
 
-      describe('slug field is empty', () => {
-        beforeEach(() => {
-          $retro_name.val('name').simulate('change');
-          $retro_url.val('').simulate('change');
-          $retro_password.val('password').simulate('change');
-          $('.retro-form-submit').simulate('click');
-        });
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
+  });
 
-        it('should not submit create a retro when there is no team URL', () => {
-          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
-        });
+  describe('slug field has more than 236 characters', () => {
+    beforeEach(() => {
+      const moreThan236Characters = 'a'.repeat(236 + 1);
+      fieldRetroURL.simulate('change', {target: {value: moreThan236Characters}});
+    });
 
-        it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a URL!');
+    it('does not submit', () => {
+      dom.find('.retro-form-submit').simulate('click');
 
-          $retro_url.val('some-url').simulate('change');
+      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+    });
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
-        });
-      });
+    it('clears error message on valid input', () => {
+      expect(getAllErrors(dom).join('')).toEqual('Your URL is too long!');
 
-      describe('slug field has more than 236 characters', () => {
-        beforeEach(() => {
-          const moreThan236Characters = 'a'.repeat(236 + 1);
-          $retro_url.val(moreThan236Characters).simulate('change');
-        });
+      fieldRetroURL.simulate('change', {target: {value: 'ok'}});
 
-        it('should not submit create a retro', () => {
-          $('.retro-form-submit').simulate('click');
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
 
-          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
-        });
+    it('preserves error when submitting', () => {
+      dom.find('.retro-form-submit').simulate('click');
 
-        it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your URL is too long!');
+      expect(getAllErrors(dom).join('')).toEqual('Your URL is too long!');
+    });
+  });
 
-          $retro_url.val('a'.repeat(236));
-          $retro_url.simulate('change');
+  describe('slug field has unrecognized characters', () => {
+    beforeEach(() => {
+      const unrecognizedCharacters = 'foo*';
+      fieldRetroURL.simulate('change', {target: {value: unrecognizedCharacters}});
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
-        });
+      dom.find('.retro-form-submit').simulate('click');
+    });
 
-        it('submitting should preserve the errors', () => {
-          $('.retro-form-submit').simulate('click');
+    it('does not submit', () => {
+      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+    });
 
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toContain('Your URL is too long!');
-        });
-      });
+    it('clears error message on valid input', () => {
+      expect(getAllErrors(dom).join('')).toEqual('Your URL should only contain letters, numbers or hyphens!');
 
-      describe('slug field has unrecognized characters', () => {
-        beforeEach(() => {
-          $retro_name.val('name').simulate('change');
+      fieldRetroURL.simulate('change', {target: {value: 'ok-now'}});
 
-          const unrecognizedCharacters = 'foo*';
-          $retro_url.val(unrecognizedCharacters).simulate('change');
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
+  });
 
-          $retro_password.val('password').simulate('change');
-          $('.retro-form-submit').simulate('click');
-        });
+  describe('password field is empty', () => {
+    beforeEach(() => {
+      fieldRetroPassword.simulate('change', {target: {value: ''}});
+      dom.find('.retro-form-submit').simulate('click');
+    });
 
-        it('should not submit create a retro when there is no team URL', () => {
-          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
-        });
+    it('does not submit', () => {
+      expect(SpyDispatcher).not.toHaveReceived('retroCreate');
+    });
 
-        it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your URL should only contain letters, numbers or hyphens!');
+    it('clears error message on valid input', () => {
+      expect(getAllErrors(dom).join('')).toEqual('Your project needs a password!');
 
-          $retro_url.val('some-url').simulate('change');
+      fieldRetroPassword.simulate('change', {target: {value: 'password'}});
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
-        });
-      });
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
+  });
 
-      describe('password field is empty', () => {
-        beforeEach(() => {
-          $retro_name.val('name').simulate('change');
-          $retro_url.val('slug').simulate('change');
-          $retro_password.val('').simulate('change');
-          $('.retro-form-submit').simulate('click');
-        });
+  describe('all fields are empty', () => {
+    beforeEach(() => {
+      fieldRetroName.simulate('change', {target: {value: ''}});
+      fieldRetroURL.simulate('change', {target: {value: ''}});
+      fieldRetroPassword.simulate('change', {target: {value: ''}});
+      dom.find('.retro-form-submit').simulate('click');
+    });
 
-        it('should not submit create a retro when there is no team URL', () => {
-          expect(SpyDispatcher).not.toHaveReceived('retroCreate');
-        });
+    it('displays error messages on all of the fields', () => {
+      expect(getAllErrors(dom)).toEqual([
+        'Your project needs a team name!',
+        'Your project needs a URL!',
+        'Your project needs a password!',
+      ]);
+    });
 
-        it('should clear error message on valid input', () => {
-          let errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a password!');
+    it('clears out error message for only name field when it is valid', () => {
+      fieldRetroName.simulate('change', {target: {value: 'name'}});
+      expect(getAllErrors(dom)).not.toContain('Your project needs a team name!');
+      expect(getAllErrors(dom)).toContain('Your project needs a URL!');
+      expect(getAllErrors(dom)).toContain('Your project needs a password!');
+    });
 
-          $retro_password.val('password').simulate('change');
+    it('clears out error message for only URL field when it is valid', () => {
+      fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
+      expect(getAllErrors(dom)).toContain('Your project needs a team name!');
+      expect(getAllErrors(dom)).not.toContain('Your project needs a URL!');
+      expect(getAllErrors(dom)).toContain('Your project needs a password!');
+    });
 
-          errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('');
-        });
-      });
+    it('clears out error message for only password field when it is valid', () => {
+      fieldRetroPassword.simulate('change', {target: {value: 'password'}});
+      expect(getAllErrors(dom)).toContain('Your project needs a team name!');
+      expect(getAllErrors(dom)).toContain('Your project needs a URL!');
+      expect(getAllErrors(dom)).not.toContain('Your project needs a password!');
+    });
 
-      describe('all fields are empty', () => {
-        beforeEach(() => {
-          $('.retro-form-submit').simulate('click');
-        });
+    it('clears out the errors when unmounted', () => {
+      dom.unmount();
 
-        it('displays error messages on all of the fields', () => {
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a team name!Your project needs a URL!Your project needs a password!');
-        });
-
-        it('clears out error message for only name field when it is valid', () => {
-          $retro_name.val('name').simulate('change');
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a URL!Your project needs a password!');
-        });
-
-        it('clears out error message for only URL field when it is valid', () => {
-          $retro_url.val('some-url').simulate('change');
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a team name!Your project needs a password!');
-        });
-
-        it('clears out error message for only password field when it is valid', () => {
-          $retro_password.val('password').simulate('change');
-          const errorMessage = combineElementsContent('.error-message');
-          expect(errorMessage).toEqual('Your project needs a team name!Your project needs a URL!');
-        });
-
-        it('clears out the errors when unmounted', () => {
-          ReactDOM.unmountComponentAtNode(root);
-
-          expect(SpyDispatcher).toHaveReceived({
-            type: 'clearErrors',
-          });
-        });
-      });
-
-      it('should submit creating a retro when clicking submit', () => {
-        $retro_name.val('newRetro').simulate('change');
-        $retro_url.val('new-retro').simulate('change');
-        $retro_password.val('retroPass').simulate('change');
-        $('.new-retro-page #retro_is_private').simulate('change');
-
-        $('.retro-form-submit').simulate('click');
-        expect(SpyDispatcher).toHaveReceived({
-          type: 'retroCreate',
-          data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false},
-        });
+      expect(SpyDispatcher).toHaveReceived({
+        type: 'clearErrors',
       });
     });
   });
 
-  describe('when not logged in', () => {
-    beforeEach(() => {
-      localStorage.setItem('authToken', '');
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <RetroCreatePage/>
-        </MuiThemeProvider>,
-        root,
-      );
-    });
+  it('submits when clicking submit if all fields are valid', () => {
+    dom.find('.new-retro-page input#retro_is_private').simulate('change');
+    dom.find('.retro-form-submit').simulate('click');
 
-    it('should redirect to home page when not logged in', () => {
-      expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/'});
+    expect(SpyDispatcher).toHaveReceived({
+      type: 'retroCreate',
+      data: {name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false},
     });
+  });
+
+  it('redirects to home page when not logged in', () => {
+    localStorage.setItem('authToken', '');
+    shallow(<RetroCreatePage/>);
+
+    expect(SpyDispatcher).toHaveReceived({type: 'setRoute', data: '/'});
   });
 });
