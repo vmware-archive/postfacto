@@ -30,48 +30,48 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import $ from 'jquery';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
-import 'jasmine_dom_matchers';
-import '../../test_support/jquery_simulate_react';
 
 import ShowRetroPasswordSettingsPage from './show_retro_password_settings_page';
 
-function combineElementsContent(className) {
-  let message = '';
-  $(className).each((i, e) => {
-    message += e.textContent;
-  });
-  return message;
+function getAllErrors(dom) {
+  return dom.find('.error-message').map((o) => o.text());
 }
 
 describe('ShowRetroPasswordSettingsPage', () => {
-  let retro;
-  let session;
+  const retro = {
+    id: 13,
+    name: 'the retro name',
+    slug: 'the-retro-123',
+    video_link: 'http://the/video/link',
+    items: [],
+    action_items: [],
+  };
 
-  const sharedRetroPasswordSettingsBehavior = () => {
+  const session = {request_uuid: 'blah'};
+
+  const sharedRetroPasswordSettingsBehavior = (isMobile) => {
+    let dom;
+
     beforeEach(() => {
-      retro = createRetro();
-      session = {request_uuid: 'blah'};
-      ReactDOM.render(
+      ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => isMobile;
+
+      dom = mount((
         <MuiThemeProvider>
           <ShowRetroPasswordSettingsPage retroId="13" retro={retro} session={session}/>
-        </MuiThemeProvider>,
-        root,
-      );
+        </MuiThemeProvider>
+      ));
     });
 
-    describe('header', () => {
-      it('displays the project name', () => {
-        expect('.retro-name').toContainText(retro.name);
-      });
+    it('displays the project name', () => {
+      expect(dom.find('.retro-name')).toIncludeText(retro.name);
     });
 
     it('goes back to the retro page when the back button is clicked', () => {
-      $('button.retro-back').simulate('click');
+      dom.find('button.retro-back').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'backPressedFromSettings',
@@ -80,7 +80,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
     });
 
     it('goes back to the retro settings page when the cancel button is clicked', () => {
-      $('button.retro-password-settings-cancel').simulate('click');
+      dom.find('button.retro-password-settings-cancel').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'backPressedFromPasswordSettings',
@@ -89,11 +89,11 @@ describe('ShowRetroPasswordSettingsPage', () => {
     });
 
     it('dispatches updateRetroPassword', () => {
-      $('#retro_current_password').val('current password').simulate('change');
-      $('#retro_new_password').val('new password').simulate('change');
-      $('#retro_confirm_new_password').val('new password').simulate('change');
+      dom.find('#retro_current_password').simulate('change', {target: {value: 'current password'}});
+      dom.find('#retro_new_password').simulate('change', {target: {value: 'new password'}});
+      dom.find('#retro_confirm_new_password').simulate('change', {target: {value: 'new password'}});
 
-      $('button.retro-settings-form-submit').simulate('click');
+      dom.find('button.retro-settings-form-submit').simulate('click');
 
       expect(Dispatcher).toHaveReceived({
         type: 'updateRetroPassword',
@@ -106,134 +106,64 @@ describe('ShowRetroPasswordSettingsPage', () => {
       });
     });
 
-    describe('when current retro password is blank', () => {
-      it('dispatches updateRetroPassword with empty string', () => {
-        $('#retro_new_password').val('new password').simulate('change');
-        $('#retro_confirm_new_password').val('new password').simulate('change');
+    it('allows blank old passwords', () => {
+      dom.find('#retro_new_password').simulate('change', {target: {value: 'new password'}});
+      dom.find('#retro_confirm_new_password').simulate('change', {target: {value: 'new password'}});
 
-        $('button.retro-settings-form-submit').simulate('click');
+      dom.find('button.retro-settings-form-submit').simulate('click');
 
-        expect(Dispatcher).toHaveReceived({
-          type: 'updateRetroPassword',
-          data: {
-            retro_id: '13',
-            current_password: '',
-            new_password: 'new password',
-            request_uuid: 'blah',
-          },
-        });
+      expect(Dispatcher).toHaveReceived({
+        type: 'updateRetroPassword',
+        data: {
+          retro_id: '13',
+          current_password: '',
+          new_password: 'new password',
+          request_uuid: 'blah',
+        },
       });
     });
 
-    describe('when new retro password is blank', () => {
-      it('dispatches updateRetroPassword with empty string', () => {
-        $('#retro_current_password').val('current password').simulate('change');
+    it('allows blank new passwords', () => {
+      dom.find('#retro_current_password').simulate('change', {target: {value: 'current password'}});
 
-        $('button.retro-settings-form-submit').simulate('click');
+      dom.find('button.retro-settings-form-submit').simulate('click');
 
-        expect(Dispatcher).toHaveReceived({
-          type: 'updateRetroPassword',
-          data: {
-            retro_id: '13',
-            current_password: 'current password',
-            new_password: '',
-            request_uuid: 'blah',
-          },
-        });
+      expect(Dispatcher).toHaveReceived({
+        type: 'updateRetroPassword',
+        data: {
+          retro_id: '13',
+          current_password: 'current password',
+          new_password: '',
+          request_uuid: 'blah',
+        },
       });
     });
 
-    describe('validations', () => {
-      it('displays an error message if new password and confirmation do not match', () => {
-        $('#retro_new_password').val('password').simulate('change');
-        $('#retro_confirm_new_password').val('lolwut').simulate('change');
+    it('displays an error message if new password and confirmation do not match', () => {
+      dom.find('#retro_new_password').simulate('change', {target: {value: 'password'}});
+      dom.find('#retro_confirm_new_password').simulate('change', {target: {value: 'nope'}});
+      dom.find('.retro-settings-form-submit').simulate('click');
 
-        $('.retro-settings-form-submit').simulate('click');
+      expect(getAllErrors(dom).join('')).toEqual('Your passwords do not match!');
 
-        let errorMessage = combineElementsContent('.error-message');
-        expect(errorMessage).toEqual('Your passwords do not match!');
+      dom.find('#retro_confirm_new_password').simulate('change', {target: {value: 'password'}});
+      dom.find('.retro-settings-form-submit').simulate('click');
 
-        $('#retro_confirm_new_password').val('password').simulate('change');
+      expect(getAllErrors(dom).join('')).toEqual('');
+    });
 
-        $('.retro-settings-form-submit').simulate('click');
+    it('clears errors when unmounted', () => {
+      dom.unmount();
 
-        errorMessage = combineElementsContent('.error-message');
-        expect(errorMessage).toEqual('');
-      });
-
-      it('clears out the errors when unmounted', () => {
-        ReactDOM.unmountComponentAtNode(root);
-
-        expect(Dispatcher).toHaveReceived({
-          type: 'clearErrors',
-        });
-      });
+      expect(Dispatcher).toHaveReceived({type: 'clearErrors'});
     });
   };
 
   describe('on web', () => {
-    beforeEach(() => {
-      ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => false;
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" session={session}/>
-        </MuiThemeProvider>,
-        root,
-      );
-    });
-
-    sharedRetroPasswordSettingsBehavior();
+    sharedRetroPasswordSettingsBehavior(false);
   });
 
   describe('on mobile', () => {
-    beforeEach(() => {
-      ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => true;
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" session={session}/>
-        </MuiThemeProvider>,
-        root,
-      );
-    });
-
-    sharedRetroPasswordSettingsBehavior();
+    sharedRetroPasswordSettingsBehavior(true);
   });
 });
-
-function createRetro() {
-  return {
-    id: 13,
-    name: 'the retro name',
-    slug: 'the-retro-123',
-    video_link: 'http://the/video/link',
-    items: [
-      {
-        id: 1,
-        description: 'the happy retro item',
-        category: 'happy',
-      },
-      {
-        id: 2,
-        description: 'the meh retro item',
-        category: 'meh',
-      },
-      {
-        id: 3,
-        description: 'the sad retro item',
-        category: 'sad',
-      },
-    ],
-    action_items: [
-      {
-        id: 1,
-        description: 'action item 1',
-        done: true,
-      },
-      {
-        id: 2,
-        description: 'action item 2',
-        done: false,
-      },
-    ],
-  };
-}
