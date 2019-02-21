@@ -12,7 +12,6 @@ module.exports = {
     'jsx-a11y/no-autofocus': ['off'],
     'jsx-a11y/no-static-element-interactions': ['off'],
     'max-len': ['off'],
-    'no-use-before-define': ['off'],
     'prefer-destructuring': ['off'],
     'prefer-template': ['off'],
     'react/destructuring-assignment': ['off'],

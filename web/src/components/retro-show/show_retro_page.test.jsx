@@ -40,6 +40,34 @@ import ShowRetroPage from './show_retro_page';
 
 const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
 
+function createRetro(isPrivate = false) {
+  return {
+    id: 13,
+    name: 'the retro name',
+    is_private: isPrivate,
+    video_link: 'http://the/video/link',
+    send_archive_email: false,
+    items: [
+      {
+        id: 1,
+        description: 'the happy retro item',
+        category: 'happy',
+      },
+      {
+        id: 2,
+        description: 'the meh retro item',
+        category: 'meh',
+      },
+      {
+        id: 3,
+        description: 'the sad retro item',
+        category: 'sad',
+      },
+    ],
+    action_items: [],
+  };
+}
+
 describe('ShowRetroPage', () => {
   let originalGetIsMobile;
   let shouldBeMobile;
@@ -241,42 +269,3 @@ describe('ShowRetroPage', () => {
     });
   });
 });
-
-function createRetro(isPrivate = false) {
-  return {
-    id: 13,
-    name: 'the retro name',
-    is_private: isPrivate,
-    video_link: 'http://the/video/link',
-    send_archive_email: false,
-    items: [
-      {
-        id: 1,
-        description: 'the happy retro item',
-        category: 'happy',
-      },
-      {
-        id: 2,
-        description: 'the meh retro item',
-        category: 'meh',
-      },
-      {
-        id: 3,
-        description: 'the sad retro item',
-        category: 'sad',
-      },
-    ],
-    action_items: [
-      {
-        id: 1,
-        description: 'action item 1',
-        done: true,
-      },
-      {
-        id: 2,
-        description: 'action item 2',
-        done: false,
-      },
-    ],
-  };
-}
