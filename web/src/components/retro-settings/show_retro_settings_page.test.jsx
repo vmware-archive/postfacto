@@ -121,20 +121,13 @@ describe('ShowRetroSettingsPage', () => {
         expect(dom.find('input#retro_url')).toHaveValue('another-retro-name');
       });
 
-      describe('is empty', () => {
-        beforeEach(() => {
-          fieldRetroName.simulate('change', {target: {value: 'The Retro Name'}});
-          fieldRetroURL.simulate('change', {target: {value: ''}});
-          dom.find('.retro-settings-form-submit').simulate('click');
-        });
+      it('displays an error message if empty', () => {
+        fieldRetroName.simulate('change', {target: {value: 'The Retro Name'}});
+        fieldRetroURL.simulate('change', {target: {value: ''}});
+        dom.find('.retro-settings-form-submit').simulate('click');
 
-        it('does not update the retro settings', () => {
-          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
-        });
-
-        it('displays an error message', () => {
-          expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
-        });
+        expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
+        expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
       });
 
       describe('has more than 236 characters', () => {
@@ -143,12 +136,12 @@ describe('ShowRetroSettingsPage', () => {
           fieldRetroURL.simulate('change', {target: {value: moreThan236Characters}});
         });
 
-        it('does not update the retro settings', () => {
+        it('does not allow submission', () => {
           dom.find('.retro-settings-form-submit').simulate('click');
           expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
-        it('should clear error message on valid input', () => {
+        it('clears error message on valid input', () => {
           expect(getAllErrors(dom).join('')).toEqual('Your URL is too long!');
 
           fieldRetroURL.simulate('change', {target: {value: 'a'.repeat(236)}});
@@ -156,7 +149,7 @@ describe('ShowRetroSettingsPage', () => {
           expect(getAllErrors(dom).join('')).toEqual('');
         });
 
-        it('submitting should preserve the errors', () => {
+        it('submitting preserves the errors', () => {
           dom.find('.retro-settings-form-submit').simulate('click');
 
           expect(getAllErrors(dom).join('')).toContain('Your URL is too long!');
@@ -169,12 +162,12 @@ describe('ShowRetroSettingsPage', () => {
           fieldRetroURL.simulate('change', {target: {value: unrecognizedCharacters}});
         });
 
-        it('should not submit create a retro when there is no URL', () => {
+        it('does not allow submission', () => {
           dom.find('.retro-settings-form-submit').simulate('click');
           expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
         });
 
-        it('should clear error message on valid input', () => {
+        it('clears error message on valid input', () => {
           expect(getAllErrors(dom).join('')).toEqual('Your URL should only contain letters, numbers or hyphens!');
 
           fieldRetroURL.simulate('change', {target: {value: 'some-url'}});
@@ -183,18 +176,14 @@ describe('ShowRetroSettingsPage', () => {
         });
       });
 
-      describe('has errors', () => {
-        beforeEach(() => {
-          dom = mount((
-            <MuiThemeProvider>
-              <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
-            </MuiThemeProvider>
-          ));
-        });
+      it('displays an error message if provided', () => {
+        dom = mount((
+          <MuiThemeProvider>
+            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
+          </MuiThemeProvider>
+        ));
 
-        it('displays an error message', () => {
-          expect(getAllErrors(dom).join('')).toEqual('Something went wrong!');
-        });
+        expect(getAllErrors(dom).join('')).toEqual('Something went wrong!');
       });
     });
 
