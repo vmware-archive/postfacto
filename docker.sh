@@ -5,4 +5,4 @@ docker run -it \
   -p 3000:3000 \
   -p 4000:4000 \
   -v "$(pwd)":/postfacto \
-  postfacto/postfacto:node11
+  postfacto/postfacto
