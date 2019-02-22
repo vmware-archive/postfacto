@@ -3,4 +3,5 @@ package.zip
 .idea/
 .DS_Store
 node_modules/
+docker_node_modules/
 *.log
