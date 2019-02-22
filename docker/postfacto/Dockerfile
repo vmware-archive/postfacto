@@ -38,3 +38,5 @@ RUN apt-get update && apt-get install libsqlite3-dev
 
 # Install zip for packaging
 RUN apt-get update && apt-get install zip
+
+RUN apt install -y tmux

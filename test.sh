@@ -13,6 +13,12 @@ pushd "$BASE_DIR/api" >/dev/null
   bundle exec rake
 popd >/dev/null
 
+# Frontend Linting
+echo
+echo "Frontend Lint:"
+echo
+CI=true npm --prefix="$BASE_DIR/web" run lint
+
 # Frontend Unit Tests
 echo
 echo "Frontend Unit Tests:"

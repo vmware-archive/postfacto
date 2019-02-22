@@ -9,16 +9,18 @@ BASE_DIR="$(dirname "$0")"
 ADMIN_USER="${ADMIN_USER:-email@example.com}"
 ADMIN_PASS="${ADMIN_PASS:-password}"
 
+INFO=""
+
 USE_MOCK_GOOGLE=false
 if [[ " $* " == *' --no-auth '* ]]; then
-  echo "Disabling login capability (create retros via admin interface)"
+  INFO+="Disabling login capability (create retros via admin interface)"$'\n'
   GOOGLE_OAUTH_CLIENT_ID=""
 elif [[ -n "$GOOGLE_OAUTH_CLIENT_ID" ]]; then
-  echo "Using Google OAuth authentication"
+  echo "Using Google OAuth authentication"$'\n'
 else
-  echo "Using mock Google authentication server"
-  echo " - specify --no-auth to disable login"
-  echo " - set GOOGLE_OAUTH_CLIENT_ID to use real Google OAuth"
+  INFO+="Using mock Google authentication server"$'\n'
+  INFO+=" - specify --no-auth to disable login"$'\n'
+  INFO+=" - set GOOGLE_OAUTH_CLIENT_ID to use real Google OAuth"$'\n'
   USE_MOCK_GOOGLE=true
 fi
 
@@ -30,52 +32,35 @@ pushd "$BASE_DIR/api" >/dev/null
   ADMIN_EMAIL="$ADMIN_USER" ADMIN_PASSWORD="$ADMIN_PASS" rake admin:create_user
 popd >/dev/null
 
+export BASE_DIR
+export RAILS_ENV
 export USE_MOCK_GOOGLE
 export GOOGLE_OAUTH_CLIENT_ID
 
-# Set up trap to ensure spawned processes are killed in all situations
+# Launch content server for frontend
 
-SPAWNED_PIDS="";
-kill_spawned() {
-  if [[ -n "$SPAWNED_PIDS" ]]; then
-    echo "Shutting down child processes $SPAWNED_PIDS"
-    for PID in $SPAWNED_PIDS; do
-      kill -SIGINT "$PID" >/dev/null || true
-    done
-    pkill -P $$ >/dev/null # try really hard to kill everything
-    kill 0 >/dev/null # why won't you die?
-    SPAWNED_PIDS=""
-  fi
-}
-register_spawned() {
-  SPAWNED_PIDS="$SPAWNED_PIDS $1"
-}
+TMUX_COMMAND="tmux new-session -s postfacto_run npm --prefix=\"\$BASE_DIR/web\" start"
 
-trap "kill_spawned; sleep 1; echo 'Shutdown complete.';" INT TERM EXIT
+# Launch API
+
+TMUX_COMMAND+=" \; split-window -v /bin/bash -c 'cd \"\$BASE_DIR/api\" && echo \"API\" && bundle exec rails server -b 0.0.0.0 -p 4000 -e \"\$RAILS_ENV\"'"
 
 # Launch mock auth server if needed
 
 if [[ "$USE_MOCK_GOOGLE" == "true" ]]; then
   export GOOGLE_AUTH_ENDPOINT="http://localhost:3100/auth"
-  npm --prefix="$BASE_DIR/mock-google-server" start &
-  register_spawned $!
+  TMUX_COMMAND+=" \; split-window -v npm --prefix=\"\$BASE_DIR/mock-google-server\" start"
 fi
 
-# Launch API
+INFO+=$'\n'
+INFO+="Created admin user '$ADMIN_USER' with password '$ADMIN_PASS'"$'\n'
+INFO+="Log in to http://localhost:4000/admin to administer"$'\n'
+INFO+="App will be available at http://localhost:3000/"$'\n'
+INFO+="Press 'q' to stop all services"
+export INFO
 
-pushd "$BASE_DIR/api" >/dev/null
-  bundle exec rails server -b 0.0.0.0 -p 4000 -e "$RAILS_ENV" &
-  register_spawned $!
-popd >/dev/null
+clear
 
-echo
-echo "Created admin user '$ADMIN_USER' with password '$ADMIN_PASS'"
-echo "Log in to http://localhost:4000/admin to administer"
-echo "App will be available at http://localhost:3000/"
-echo "Press Ctrl+C to stop"
-echo
-
-# Launch content server for frontend
-
-# react-scripts clears console history so the above message disappears :(
-npm --prefix="$BASE_DIR/web" start
+TMUX_COMMAND+=" \; split-window -v /bin/bash -c 'echo \"\$INFO\" | less; tmux kill-session -t postfacto_run'"
+TMUX_COMMAND+=" \; select-layout even-vertical"
+/bin/bash -c "$TMUX_COMMAND"

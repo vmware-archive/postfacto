@@ -30,21 +30,21 @@
  */
 import Mixpanel from 'mixpanel-browser';
 
-const POSTFACTO_TEAM_ANALYTICS_TOKEN = "d4de349453cc697734eced9ebedcdb22";
+const POSTFACTO_TEAM_ANALYTICS_TOKEN = 'd4de349453cc697734eced9ebedcdb22';
 
 export default class Analytics {
   static initialized = false;
 
-  static track(event, options) {
+  static track(event, options = {}) {
     if (global.Retro.config.enable_analytics) {
       if (!Analytics.initialized) {
         Mixpanel.init(POSTFACTO_TEAM_ANALYTICS_TOKEN);
         Analytics.initialized = true;
       }
 
-      options = options || {};
-      options.timestamp = (new Date()).toJSON();
-      Mixpanel.track(event, options);
+      Mixpanel.track(event, Object.assign({
+        timestamp: (new Date()).toJSON(),
+      }, options));
     }
   }
 }

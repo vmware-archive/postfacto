@@ -29,29 +29,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../spec_helper';
 import '../test_support/fetch_matchers';
-
-import MockPromises from 'mock-promises';
+import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
+import {Dispatcher} from 'p-flux';
+import '../spec_helper';
+
+/* global jasmine */
 
 describe('ApiDispatcher', () => {
-  let subject, cursorSpy;
+  let subject;
+  let cursorSpy;
   let retro;
+  let realDispatchLevels;
 
   beforeEach(() => {
-    Promise = MockPromises.getMockPromise(Promise);
+    PromiseMock.install();
 
     Cursor.async = false;
-    cursorSpy = jasmine.createSpy('callback');
+    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
-    //dispatch is spied on in spec_helper
-    subject.dispatch.and.callThrough();
+    // dispatch is spied on in spec_helper
+    let dispatchCount = 0;
+    realDispatchLevels = 1;
+    subject.dispatch.mockConditionalCallThrough(() => {
+      // Call through for first (potentially several) dispatches ONLY
+      // Later dispatches are recorded but not invoked
+      dispatchCount += 1;
+      return dispatchCount <= realDispatchLevels;
+    });
 
-    //prevent console logs
-    spyOn(subject, 'onDispatch');
+    // prevent console logs
+    jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
     retro = {
       id: 1,
       name: 'retro name',
@@ -61,19 +72,19 @@ describe('ApiDispatcher', () => {
           id: 2,
           description: 'happy description',
           vote_count: 1,
-          created_at: '2016-01-01T00:00:00.000Z'
+          created_at: '2016-01-01T00:00:00.000Z',
         },
         {
           id: 3,
           description: '2nd description',
           vote_count: 3,
-          created_at: '2016-01-02T00:00:00.000Z'
+          created_at: '2016-01-02T00:00:00.000Z',
         },
         {
           id: 4,
           description: '2nd description',
           vote_count: 2,
-          created_at: '2016-01-03T00:00:00.000Z'
+          created_at: '2016-01-03T00:00:00.000Z',
         },
       ],
       action_items: [
@@ -81,15 +92,15 @@ describe('ApiDispatcher', () => {
           id: 1,
           description: 'action item 1',
           done: false,
-        }
-      ]
+        },
+      ],
     };
 
     jasmine.Ajax.install();
   });
 
   afterEach(() => {
-    Promise = MockPromises.getOriginalPromise();
+    PromiseMock.uninstall();
     jasmine.Ajax.uninstall();
   });
 
@@ -101,8 +112,8 @@ describe('ApiDispatcher', () => {
         data: {
           name: 'the retro name',
           slug: 'the-retro-name',
-          password: 'the-retro-password'
-        }
+          password: 'the-retro-password',
+        },
       });
     });
 
@@ -112,34 +123,34 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token'
+          'x-auth-token': 'the-auth-token',
         },
         data: {
           retro: {
             name: 'the retro name',
             slug: 'the-retro-name',
             password: 'the-retro-password',
-          }
-        }
+          },
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro, token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      request.succeed({retro, token: 'the-token'});
+      Promise.runAll();
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
-      expect('retroSuccessfullyCreated').toHaveBeenDispatched();
+      expect(Dispatcher).toHaveReceived('retroSuccessfullyCreated');
     });
 
     describe('when unprocessable entity is received', () => {
       beforeEach(() => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroUnsuccessfullyCreated', () => {
-        expect('retroUnsuccessfullyCreated').toHaveBeenDispatchedWith({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroUnsuccessfullyCreated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
 
@@ -151,20 +162,20 @@ describe('ApiDispatcher', () => {
 
   describe('updateRetroSettings', () => {
     function dispatchRetroData(new_slug, old_slug, is_private, request_uuid) {
-      let data = {
+      const data = {
         retro_id: 13,
         retro_name: 'the new retro name',
-        new_slug: new_slug,
-        old_slug: old_slug,
-        is_private: is_private,
-        request_uuid: request_uuid,
+        new_slug,
+        old_slug,
+        is_private,
+        request_uuid,
       };
 
-      subject.dispatch({type: 'updateRetroSettings', data: data});
+      subject.dispatch({type: 'updateRetroSettings', data});
     }
 
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       // test appears to be set up badly and requires both retro ID types:
       // (previously responded to all getItem calls with the token)
       localStorage.setItem('apiToken-retro-slug-123', 'the-auth-token');
@@ -181,15 +192,16 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token'
-        }, data: {
+          'authorization': 'Bearer the-auth-token',
+        },
+        data: {
           retro: {
             name: 'the new retro name',
             slug: 'the-new-slug-123',
             is_private: true,
           },
-          request_uuid: 'some-uuid'
-        }
+          request_uuid: 'some-uuid',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
@@ -197,31 +209,31 @@ describe('ApiDispatcher', () => {
         retro: {
           name: 'the new retro name',
           slug: 'the-new-slug-123',
-          is_private: true
-        }
+          is_private: true,
+        },
       });
-      MockPromises.tickAllTheWay();
-      expect('retroSettingsSuccessfullyUpdated').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSettingsSuccessfullyUpdated',
         data: {
           retro: {
             name: 'the new retro name',
             slug: 'the-new-slug-123',
-            is_private: true
-          }
-        }
+            is_private: true,
+          },
+        },
       });
 
       expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual(null);
 
-      expect('showAlert').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'showAlert',
         data: {
           checkIcon: true,
           message: 'Settings saved!',
           className: 'alert-with-back-button',
-        }
+        },
       });
     });
 
@@ -231,13 +243,13 @@ describe('ApiDispatcher', () => {
 
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches requireRetroLogin', () => {
-        expect('requireRetroLogin').toHaveBeenDispatchedWith({
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
-          data: {retro_id: 13}
+          data: {retro_id: 13},
         });
       });
 
@@ -252,13 +264,13 @@ describe('ApiDispatcher', () => {
 
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
-        expect('retroSettingsUnsuccessfullyUpdated').toHaveBeenDispatchedWith({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroSettingsUnsuccessfullyUpdated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
 
@@ -276,22 +288,22 @@ describe('ApiDispatcher', () => {
           retro: {
             name: 'the new retro name',
             slug: 'retro-slug-123',
-            is_private: false
-          }
+            is_private: false,
+          },
         });
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroSettingsSuccessfullyUpdated', () => {
-        expect('retroSettingsSuccessfullyUpdated').toHaveBeenDispatchedWith({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroSettingsSuccessfullyUpdated',
           data: {
             retro: {
               name: 'the new retro name',
               slug: 'retro-slug-123',
-              is_private: false
-            }
-          }
+              is_private: false,
+            },
+          },
         });
       });
 
@@ -303,7 +315,7 @@ describe('ApiDispatcher', () => {
 
   describe('updateRetroPassword', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-13', 'the-auth-token');
 
       subject.dispatch({
@@ -312,8 +324,8 @@ describe('ApiDispatcher', () => {
           retro_id: '13',
           current_password: 'current password',
           new_password: 'new password',
-          request_uuid: 'some-request-uuid'
-        }
+          request_uuid: 'some-request-uuid',
+        },
       });
 
       subject.router = new Grapnel({pushState: true});
@@ -326,33 +338,34 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token'
-        }, data: {
+          'authorization': 'Bearer the-auth-token',
+        },
+        data: {
           current_password: 'current password',
           new_password: 'new password',
           request_uuid: 'some-request-uuid',
-        }
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'new-api-token'});
-      MockPromises.tickAllTheWay();
-      expect('retroPasswordSuccessfullyUpdated').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'retroPasswordSuccessfullyUpdated',
         data: {
           retro_id: '13',
           token: 'new-api-token',
-        }
+        },
       });
 
-      expect('routeToRetroSettings').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'routeToRetroSettings',
         data: {
           retro_id: '13',
         },
       });
 
-      expect('showAlert').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'showAlert',
         data: {
           checkIcon: true,
@@ -365,13 +378,13 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
-        MockPromises.tickAllTheWay();
+        Promise.runAll();
       });
 
       it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
-        expect('retroPasswordUnsuccessfullyUpdated').toHaveBeenDispatchedWith({
+        expect(Dispatcher).toHaveReceived({
           type: 'retroPasswordUnsuccessfullyUpdated',
-          data: {errors: ['some error']}
+          data: {errors: ['some error']},
         });
       });
     });
@@ -379,7 +392,7 @@ describe('ApiDispatcher', () => {
 
   describe('getRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-1', 'the-token');
       subject.dispatch({type: 'getRetro', data: {id: 1}});
     });
@@ -389,15 +402,15 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro});
-      MockPromises.tickAllTheWay();
-      expect('retroSuccessfullyFetched').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSuccessfullyFetched',
-        data: {retro}
+        data: {retro},
       });
     });
 
@@ -405,10 +418,10 @@ describe('ApiDispatcher', () => {
       it('dispatches requireRetroLogin', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
-        expect('requireRetroLogin').toHaveBeenDispatchedWith({
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
-          data: {retro_id: 1}
+          data: {retro_id: 1},
         });
       });
     });
@@ -417,9 +430,9 @@ describe('ApiDispatcher', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
-        expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'retroNotFound',
         });
       });
     });
@@ -437,18 +450,17 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token'
-        }
+          'x-auth-token': 'the-auth-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retros: [retro]});
-      MockPromises.tickAllTheWay();
-      expect('retrosSuccessfullyFetched').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'retrosSuccessfullyFetched',
-        data: {retros: [retro]}
+        data: {retros: [retro]},
       });
-
     });
   });
 
@@ -463,14 +475,14 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-        }
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
-      MockPromises.tickAllTheWay();
-      expect('getRetroLoginSuccessfullyReceived').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'getRetroLoginSuccessfullyReceived',
-        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}}
+        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}},
       });
     });
 
@@ -478,9 +490,9 @@ describe('ApiDispatcher', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
-        expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'retroNotFound',
         });
       });
     });
@@ -488,7 +500,7 @@ describe('ApiDispatcher', () => {
 
   describe('getRetroSettings', () => {
     const doSetup = () => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroSettings', data: {id: 'retro-slug-123'}});
     };
 
@@ -501,16 +513,16 @@ describe('ApiDispatcher', () => {
           requestHeaders: {
             'accept': 'application/json',
             'content-type': 'application/json',
-            'authorization': 'Bearer the-token'
-          }
+            'authorization': 'Bearer the-token',
+          },
         });
         const request = jasmine.Ajax.requests.mostRecent();
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
         request.succeed(response);
-        MockPromises.tickAllTheWay();
-        expect('getRetroSettingsSuccessfullyReceived').toHaveBeenDispatchedWith({
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
           type: 'getRetroSettingsSuccessfullyReceived',
-          data: response
+          data: response,
         });
       });
 
@@ -522,14 +534,14 @@ describe('ApiDispatcher', () => {
           requestHeaders: {
             'accept': 'application/json',
             'content-type': 'application/json',
-          }
+          },
         });
         const request = jasmine.Ajax.requests.mostRecent();
         request.forbidden();
-        MockPromises.tickAllTheWay();
-        expect('requireRetroLogin').toHaveBeenDispatchedWith({
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
           type: 'requireRetroLogin',
-          data: {retro_id: 'retro-slug-123'}
+          data: {retro_id: 'retro-slug-123'},
         });
       });
     });
@@ -537,22 +549,22 @@ describe('ApiDispatcher', () => {
 
   describe('loginToRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'loginToRetro', data: {retro_id: 15, password: 'pa55word'}});
     });
 
     it('makes an api PUT to /retros/:id/login', () => {
       expect('/retros/15/login').toHaveBeenRequestedWith({
         method: 'PUT',
-        data: {retro: {password: 'pa55word'}}
+        data: {retro: {password: 'pa55word'}},
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
-      expect('retroSuccessfullyLoggedIn').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroSuccessfullyLoggedIn',
-        data: {retro_id: 15}
+        data: {retro_id: 15},
       });
     });
 
@@ -560,22 +572,21 @@ describe('ApiDispatcher', () => {
       it('dispatches retroLoginFailed', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
-        expect('retroLoginFailed').toHaveBeenDispatchedWith({
-          type: 'retroLoginFailed'
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'retroLoginFailed',
         });
       });
     });
-
   });
 
   describe('deleteRetroItem', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item: item}});
+      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
       expect('/retros/1/items/2').toHaveBeenRequestedWith({
@@ -583,12 +594,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
-      expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item}
+        data: {retro_id: 1, item},
       });
     });
   });
@@ -596,7 +607,7 @@ describe('ApiDispatcher', () => {
   describe('createRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroItem', data: {retro_id: 1, description: 'happy item', category: 'happy'}});
     });
 
@@ -606,22 +617,22 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
           description: 'happy item',
-          category: 'happy'
-        }
+          category: 'happy',
+        },
       });
     });
 
     it('dispatches retroItemSuccessfullyCreated with the response', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({item: {id: 1, category: 'happy', description: 'this is an item'}});
-      MockPromises.tickAllTheWay();
-      expect('retroItemSuccessfullyCreated').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyCreated',
-        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1}
+        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1},
       });
     });
   });
@@ -631,7 +642,7 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
       item = retro.items[0];
-      subject.dispatch({type: 'updateRetroItem', data: {retro_id: 1, item: item, description: 'updated description'}});
+      subject.dispatch({type: 'updateRetroItem', data: {retro_id: 1, item, description: 'updated description'}});
     });
 
     it('makes an api PATCH to /retros/:retro_id/items/:id', () => {
@@ -640,11 +651,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
           description: 'updated description',
-        }
+        },
       });
     });
   });
@@ -653,9 +664,9 @@ describe('ApiDispatcher', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item: item}});
+      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
 
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
@@ -664,12 +675,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
-      expect('retroItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item: item}
+        data: {retro_id: 1, item},
       });
     });
   });
@@ -679,8 +690,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/items/:item_id/vote', () => {
       expect('/retros/1/items/2/vote').toHaveBeenRequestedWith({
@@ -688,26 +699,28 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item: item});
-      MockPromises.tickAllTheWay();
+      request.succeed({item});
+      Promise.runAll();
 
-      expect('retroItemSuccessfullyVoted').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyVoted',
-        data: {item: item}
+        data: {item},
       });
     });
   });
 
   describe('nextRetroItem', () => {
     it('makes an API POST to /retros/:id/discussion/transition', () => {
+      realDispatchLevels = 2; // allow nextRetroItem and retroItemSuccessfullyDone
+
       localStorage.setItem('apiToken-1', 'the-token');
       retro.highlighted_item_id = 2;
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
 
       expect('/retros/1/discussion/transition').toHaveBeenRequestedWith({
@@ -715,28 +728,28 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
-        data: {transition: 'NEXT'}
+        data: {transition: 'NEXT'},
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      request.succeed({retro});
+      Promise.runAll();
 
-      expect('checkAllRetroItemsDone').toHaveBeenDispatchedWith({
-        type: 'checkAllRetroItemsDone'
+      expect(Dispatcher).toHaveReceived({
+        type: 'checkAllRetroItemsDone',
       });
     });
-
   });
+
   describe('highlightRetroItem', () => {
     let item;
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/discussion', () => {
       expect('/retros/1/discussion').toHaveBeenRequestedWith({
@@ -744,18 +757,18 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
-        data: {item_id: 2}
+        data: {item_id: 2},
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      request.succeed({retro});
+      Promise.runAll();
 
-      expect('retroItemSuccessfullyHighlighted').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyHighlighted',
-        data: {retro: retro}
+        data: {retro},
       });
     });
   });
@@ -763,7 +776,7 @@ describe('ApiDispatcher', () => {
   describe('unhighlightRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'unhighlightRetroItem', data: {retro_id: 1}});
     });
     it('makes an api DELETE to /retros/:id/discussion', () => {
@@ -772,10 +785,10 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
-      expect('retroItemSuccessfullyUnhighlighted').toHaveBeenDispatched();
+      expect(Dispatcher).toHaveReceived('retroItemSuccessfullyUnhighlighted');
     });
   });
 
@@ -784,8 +797,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item}});
     });
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
       expect('/retros/1/items/2/done').toHaveBeenRequestedWith({
@@ -793,19 +806,19 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       item = retro.items[0];
       item.done = true;
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item: item});
-      MockPromises.tickAllTheWay();
+      request.succeed({item});
+      Promise.runAll();
 
-      expect('retroItemSuccessfullyDone').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyDone',
-        data: {retroId: 1, itemId: item.id}
+        data: {retroId: 1, itemId: item.id},
       });
     });
   });
@@ -816,8 +829,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item: item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item}});
     });
 
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
@@ -830,16 +843,16 @@ describe('ApiDispatcher', () => {
         },
         data: {
           done: false,
-        }
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
       request.respondWith({status: 204});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
-      expect('retroItemSuccessfullyUndone').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyUndone',
-        data: {retroId: 1, item: item}
+        data: {retroId: 1, item},
       });
     });
   });
@@ -847,7 +860,7 @@ describe('ApiDispatcher', () => {
   describe('extendTimer', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'extendTimer', data: {retro_id: 1}});
     });
 
@@ -857,17 +870,17 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      request.succeed({retro});
+      Promise.runAll();
 
-      expect('extendTimerSuccessfullyDone').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'extendTimerSuccessfullyDone',
-        data: {retro: retro}
+        data: {retro},
       });
     });
   });
@@ -875,7 +888,7 @@ describe('ApiDispatcher', () => {
   describe('archiveRetro', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'archiveRetro', data: {retro: {slug: 1, send_archive_email: true}}});
     });
 
@@ -885,20 +898,20 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          send_archive_email: true
-        }
+          send_archive_email: true,
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: retro});
-      MockPromises.tickAllTheWay();
+      request.succeed({retro});
+      Promise.runAll();
 
-      expect('archiveRetroSuccessfullyDone').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'archiveRetroSuccessfullyDone',
-        data: {retro: retro}
+        data: {retro},
       });
     });
   });
@@ -906,7 +919,7 @@ describe('ApiDispatcher', () => {
   describe('createRetroActionItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroActionItem', data: {retro_id: 1, description: 'a new action item'}});
     });
 
@@ -916,11 +929,11 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          description: 'a new action item'
-        }
+          description: 'a new action item',
+        },
       });
     });
   });
@@ -931,7 +944,7 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'doneRetroActionItem', data: {retro_id: 1, action_item_id: 1, done: true}});
     });
 
@@ -941,20 +954,20 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
+          'authorization': 'Bearer the-token',
         },
         data: {
-          done: true
-        }
+          done: true,
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item: action_item});
-      MockPromises.tickAllTheWay();
+      request.succeed({action_item});
+      Promise.runAll();
 
-      expect('doneRetroActionItemSuccessfullyToggled').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item: action_item}
+        data: {action_item},
       });
     });
   });
@@ -964,8 +977,8 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
-      subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item: action_item}});
+      subject.$store = new Cursor({retro}, cursorSpy);
+      subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item}});
     });
 
     it('makes an api DELETE to /retros/:id/action_items/:action_item_id', () => {
@@ -974,12 +987,12 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
-      expect('retroActionItemSuccessfullyDeleted').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroActionItemSuccessfullyDeleted',
-        data: {action_item: action_item}
+        data: {action_item},
       });
     });
   });
@@ -989,11 +1002,11 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
 
       subject.dispatch({
         type: 'editRetroActionItem',
-        data: {retro_id: 1, action_item_id: action_item.id, description: 'this is a description'}
+        data: {retro_id: 1, action_item_id: action_item.id, description: 'this is a description'},
       });
     });
 
@@ -1003,17 +1016,17 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
 
       const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item: action_item});
-      MockPromises.tickAllTheWay();
+      request.succeed({action_item});
+      Promise.runAll();
 
-      expect('retroActionItemSuccessfullyEdited').toHaveBeenDispatchedWith({
+      expect(Dispatcher).toHaveReceived({
         type: 'retroActionItemSuccessfullyEdited',
-        data: {action_item}
+        data: {action_item},
       });
     });
   });
@@ -1021,7 +1034,7 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchives', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchives', data: {retro_id: '1'}});
     });
 
@@ -1030,22 +1043,22 @@ describe('ApiDispatcher', () => {
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
-      expect('retroArchivesSuccessfullyFetched').toHaveBeenDispatched();
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived('retroArchivesSuccessfullyFetched');
     });
 
     describe('when retro does not exist', () => {
       it('dispatches retroNotFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
-        expect('retroNotFound').toHaveBeenDispatchedWith({
-          type: 'retroNotFound'
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'retroNotFound',
         });
       });
     });
@@ -1054,31 +1067,31 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchive', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro: retro}, cursorSpy);
+      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchive', data: {retro_id: '1', archive_id: '1'}});
     });
 
-    it('makes an api GET to /rertros/:retro_id/archives/:archive_id', () => {
+    it('makes an api GET to /retros/:retro_id/archives/:archive_id', () => {
       expect('/retros/1/archives/1').toHaveBeenRequestedWith({
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          'authorization': 'Bearer the-token'
-        }
+          'authorization': 'Bearer the-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
-      expect('retroArchiveSuccessfullyFetched').toHaveBeenDispatched();
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived('retroArchiveSuccessfullyFetched');
     });
 
     describe('when archives do not exist', () => {
       it('dispatches notFound', () => {
         const request = jasmine.Ajax.requests.mostRecent();
         request.notFound();
-        MockPromises.tickAllTheWay();
-        expect('notFound').toHaveBeenDispatchedWith({
-          type: 'notFound'
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'notFound',
         });
       });
     });
@@ -1089,7 +1102,7 @@ describe('ApiDispatcher', () => {
       subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createUser',
-        data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'}
+        data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'},
       });
     });
 
@@ -1097,25 +1110,25 @@ describe('ApiDispatcher', () => {
       expect('/users').toHaveBeenRequestedWith({
         method: 'POST',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
         data: {
           'access_token': 'the-access-token',
           'company_name': 'Company name',
-          'full_name': 'My Full Name'
-        }
+          'full_name': 'My Full Name',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
-      expect('redirectToRetroCreatePage').toHaveBeenDispatched();
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived('redirectToRetroCreatePage');
     });
 
     it('stores the auth token in local storage', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({auth_token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
     });
@@ -1126,7 +1139,7 @@ describe('ApiDispatcher', () => {
       subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createSession',
-        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'}
+        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'},
       });
     });
 
@@ -1134,41 +1147,42 @@ describe('ApiDispatcher', () => {
       expect('/sessions').toHaveBeenRequestedWith({
         method: 'POST',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
         data: {
-          'access_token': 'the-access-token'
-        }
+          'access_token': 'the-access-token',
+        },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
-      expect('loggedInSuccessfully').toHaveBeenDispatched();
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived('loggedInSuccessfully');
     });
 
     it('if the server returns a 404 because the user does not exist', () => {
       const request = jasmine.Ajax.requests.mostRecent();
       request.notFound();
-      MockPromises.tickAllTheWay();
-      expect('redirectToRegistration').toHaveBeenDispatchedWith({
+      Promise.runAll();
+      expect(Dispatcher).toHaveReceived({
         type: 'redirectToRegistration',
         data: {
           'access_token': 'the-access-token',
           'email': 'a@a.a',
-          'name': 'My full name'
-        }
+          'name': 'My full name',
+        },
       });
     });
 
     it('stores the auth token in local storage', () => {
+      realDispatchLevels = 2; // allow createSession and loggedInSuccessfully
+
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed({auth_token: 'the-token'});
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
     });
-
   });
 
   describe('retrieveConfig', () => {
@@ -1181,13 +1195,13 @@ describe('ApiDispatcher', () => {
       expect('/config').toHaveBeenRequestedWith({
         method: 'GET',
         requestHeaders: {
-          accept: 'application/json',
+          'accept': 'application/json',
           'content-type': 'application/json',
         },
       });
       const request = jasmine.Ajax.requests.mostRecent();
       request.succeed();
-      MockPromises.tickAllTheWay();
+      Promise.runAll();
     });
   });
 });

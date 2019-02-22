@@ -29,6 +29,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@import 'palette';
+
 .retro-archives {
   .retro-heading {
     width: 100%;
@@ -36,9 +38,11 @@
     .back-button {
       padding-left: 0;
     }
+
     .menu {
       padding-right: 0;
     }
+
     .archives-title {
       padding-top: 0.5em;
     }
@@ -47,6 +51,7 @@
   .archives {
     background-color: #f2eee2;
     padding-top: 1em;
+
     .row {
       width: 100%;
     }
@@ -65,6 +70,7 @@
       cursor: pointer;
     }
   }
+
   .retro-menu {
     padding: 16px 16px 0 0;
     float: right;

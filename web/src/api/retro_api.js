@@ -29,8 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {fetchJson} from '../helpers/fetch_helper';
-
+import fetchJson from '../helpers/fetch_helper';
 
 export default {
   apiBaseUrl() {
@@ -41,16 +40,16 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros`, {
       method: 'POST',
       headers: {
-        'X-AUTH-TOKEN': localStorage.getItem('authToken')
+        'X-AUTH-TOKEN': localStorage.getItem('authToken'),
       },
       body: JSON.stringify({
         retro: {
           name: data.name,
           slug: data.slug,
           password: data.password,
-          is_private: data.isPrivate
-        }
-      })
+          is_private: data.isPrivate,
+        },
+      }),
     });
   },
 
@@ -60,13 +59,13 @@ export default {
       accessToken: token,
       body: JSON.stringify({
         retro: {
-          name: name,
-          slug: slug,
-          is_private: is_private,
-          video_link: video_link
+          name,
+          slug,
+          is_private,
+          video_link,
         },
-        request_uuid: request_uuid
-      })
+        request_uuid,
+      }),
     });
   },
 
@@ -78,7 +77,7 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros`, {
       method: 'GET',
       headers: {
-        'X-AUTH-TOKEN': localStorage.getItem('authToken')
+        'X-AUTH-TOKEN': localStorage.getItem('authToken'),
       },
     });
   },
@@ -90,14 +89,10 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros/${id}/login`);
   },
 
-  loginToRetro(data) {
-    return fetchJson(`${this.apiBaseUrl()}/retros/${data.retro_id}/login`, {
+  loginToRetro({retro_id, password}) {
+    return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/login`, {
       method: 'PUT',
-      body: JSON.stringify({
-        retro: {
-          password: data.password
-        }
-      })
+      body: JSON.stringify({retro: {password}}),
     });
   },
 
@@ -105,10 +100,7 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items`, {
       method: 'POST',
       accessToken: token,
-      body: JSON.stringify({
-        description: description,
-        category: category
-      })
+      body: JSON.stringify({description, category}),
     });
   },
 
@@ -116,78 +108,74 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items/${item_id}`, {
       method: 'PATCH',
       accessToken: token,
-      body: JSON.stringify({
-        description
-      })
+      body: JSON.stringify({description}),
     });
   },
 
   deleteRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items/${item_id}`, {
       method: 'DELETE',
-      accessToken: token});
+      accessToken: token,
+    });
   },
 
   voteRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items/${item_id}/vote`, {
       method: 'POST',
-      accessToken: token});
+      accessToken: token,
+    });
   },
 
   nextRetroItem(retro_id, token) {
-      return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion/transitions`, {
-          method: 'POST',
-          accessToken: token,
-          body: JSON.stringify({
-              transition: 'NEXT'
-          })
-      });
+    return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion/transitions`, {
+      method: 'POST',
+      accessToken: token,
+      body: JSON.stringify({transition: 'NEXT'}),
+    });
   },
 
   highlightRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion`, {
       method: 'POST',
       accessToken: token,
-      body: JSON.stringify({
-        item_id: item_id
-      })
+      body: JSON.stringify({item_id}),
     });
   },
 
   unhighlightRetroItem(retro_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion`, {
       method: 'DELETE',
-      accessToken: token
+      accessToken: token,
     });
   },
 
   doneRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items/${item_id}/done`, {
       method: 'PATCH',
-      accessToken: token});
+      accessToken: token,
+    });
   },
 
   undoneRetroItem(retro_id, item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/items/${item_id}/done`, {
       method: 'PATCH',
       accessToken: token,
-      body: JSON.stringify({ done: false }),
+      body: JSON.stringify({done: false}),
     });
   },
 
   extendTimer(retro_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/discussion`, {
       method: 'PATCH',
-      accessToken: token});
+      accessToken: token,
+    });
   },
 
   archiveRetro(retro_id, token, send_archive_email) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/archive`, {
       method: 'PUT',
       accessToken: token,
-      body: JSON.stringify({
-        send_archive_email: send_archive_email
-      })
+      body: JSON.stringify({send_archive_email}),
     });
   },
 
@@ -195,25 +183,22 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/action_items`, {
       method: 'POST',
       accessToken: token,
-      body: JSON.stringify({
-        description: description
-      })
+      body: JSON.stringify({description}),
     });
   },
 
   deleteRetroActionItem(retro_id, action_item_id, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/action_items/${action_item_id}`, {
       method: 'DELETE',
-      accessToken: token});
+      accessToken: token,
+    });
   },
 
   doneRetroActionItem(retro_id, action_item_id, done, token) {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/action_items/${action_item_id}`, {
-        method: 'PATCH',
-        accessToken: token,
-        body: JSON.stringify({
-          done: done
-        })
+      method: 'PATCH',
+      accessToken: token,
+      body: JSON.stringify({done}),
     });
   },
 
@@ -221,7 +206,7 @@ export default {
     return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/action_items/${action_item_id}`, {
       method: 'PATCH',
       accessToken: token,
-      body: JSON.stringify({description})
+      body: JSON.stringify({description}),
     });
   },
 
@@ -236,14 +221,14 @@ export default {
   createUser(token, company_name, full_name) {
     return fetchJson(`${this.apiBaseUrl()}/users`, {
       method: 'POST',
-      body: JSON.stringify({'access_token': token, 'company_name': company_name, 'full_name': full_name})
+      body: JSON.stringify({access_token: token, company_name, full_name}),
     });
   },
 
   createSession(token) {
     return fetchJson(`${this.apiBaseUrl()}/sessions`, {
       method: 'POST',
-      body: JSON.stringify({'access_token': token}),
+      body: JSON.stringify({access_token: token}),
     });
   },
 
@@ -254,13 +239,12 @@ export default {
       body: JSON.stringify({
         current_password,
         new_password,
-        request_uuid
+        request_uuid,
       }),
     });
   },
 
   retrieveConfig() {
     return fetchJson(`${this.apiBaseUrl()}/config`);
-  }
+  },
 };
-

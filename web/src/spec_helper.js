@@ -29,45 +29,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Application from './components/Application'; // Load dispatchers (sets global state in p-flux Actions)
+import './test_support/application_globals';
+import './test_support/enzyme';
 
-import 'jasmine_dom_matchers';
 import './test_support/dispatcher_matchers';
-import './test_support/react_helper';
-const {Dispatcher} = require('p-flux');
-const jQuery = require('jquery');
-global.React = require('react');
-global.ReactDOM = require('react-dom');
-
-global.Dispatcher = Dispatcher;
-global.$ = jQuery;
-
-export function combineElementsContent(className) {
-  let message = '';
-  $(className).map((i, e) => {
-    message += e.textContent;
-  });
-  return message;
-}
-
-jest.useFakeTimers();
-
-beforeEach(() => {
-  global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
-
-  global.root = jQuery('<div id="root" />').get(0);
-  jQuery('body').find('#root').remove().end().append(global.root);
-
-  Application.reset(); // set global state such as p-flux.Actions
-
-  spyOn(Dispatcher, 'dispatch');
-
-  global.localStorage.clear();
-
-  jest.clearAllTimers();
-});
-
-afterEach(() => {
-  ReactDOM.unmountComponentAtNode(global.root);
-  Dispatcher.reset();
-});
+import './test_support/enzyme_matchers';

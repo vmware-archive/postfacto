@@ -29,38 +29,54 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const {Dispatcher} = require('p-flux');
-
 expect.extend({
-  toHaveBeenDispatched(actual) {
-    const allDispatchers = Dispatcher.dispatch.calls.all()
-        .map((dispatchCall) => dispatchCall.args[0].type);
-    const pass = allDispatchers.includes(actual);
-
-    let message;
-    if (pass) {
-      message = `Expected ${actual} not to have been dispatched, but it was`;
+  toHaveReceived(spyDispatcher, expectedAction) {
+    let expectedType;
+    let expectedContent;
+    if (typeof expectedAction === 'string') {
+      expectedType = expectedAction;
+      expectedContent = null;
     } else {
-      message = `Expected ${actual} to have been dispatched, but it was not. \n Actual dispatch calls are ${allDispatchers.join(', ')}`;
+      expectedType = expectedAction.type;
+      expectedContent = expectedAction;
     }
 
-    return {pass, message: () => message};
-  },
+    const observedActions = spyDispatcher.dispatch.mock.calls
+      .map((dispatchCall) => dispatchCall[0]);
 
-  toHaveBeenDispatchedWith(actual, expected) {
-    const observed = Dispatcher.dispatch.calls.all()
-        .map(dispatchCall => dispatchCall.args[0])
-        .filter(({type}) => type === actual);
+    if (!observedActions.length) {
+      return {
+        pass: false,
+        message: () => `Expected '${expectedType}' to have been dispatched, but no actions were dispatched`,
+      };
+    }
 
-    const pass = observed.some(params => {
-      return this.equals(params, expected);
-    });
+    const errorInfo = 'Observed actions:\n' + observedActions
+      .map((action) => '  ' + this.utils.printReceived(action))
+      .join('\n');
 
-    const filtered = observed.map((o) => this.utils.printReceived(o));
+    const matchingActions = observedActions
+      .filter(({type}) => (type === expectedType));
+
+    if (!matchingActions.length) {
+      return {
+        pass: false,
+        message: () => `Expected '${expectedType}' to have been dispatched, but it was not. ${errorInfo}`,
+      };
+    }
+
+    if (expectedContent) {
+      if (!matchingActions.some((action) => this.equals(action, expectedContent))) {
+        return {
+          pass: false,
+          message: () => `Expected ${this.utils.printExpected(expectedContent)} to have been dispatched, but it was not. ${errorInfo}`,
+        };
+      }
+    }
 
     return {
-      pass,
-      message: () => `Expected ${actual} to have been dispatched with:\n${this.utils.printExpected(expected)}\nAll dispatches of type ${actual}:\n${filtered.join('\n')}`,
+      pass: true,
+      message: () => `Expected '${expectedAction}' not to have been dispatched, but it was`,
     };
   },
 });

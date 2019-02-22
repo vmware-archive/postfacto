@@ -29,48 +29,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {fetchJson} from './fetch_helper';
+import {Dispatcher} from 'p-flux';
+import fetchJson from './fetch_helper';
 import '../spec_helper';
 
 describe('fetchJson', () => {
   describe('errors', () => {
     beforeEach(() => {
-      spyOn(window, 'fetch').and.callFake(() => Promise.reject(new Error('some error')));
+      jest.spyOn(window, 'fetch').mockRejectedValue(new Error('some error'));
     });
 
-    it('returns empty array', () => {
-      return fetchJson('http://example.com/some-url')
-        .then((results) => {
-          expect(results).toEqual([]);
-        });
+    it('returns empty array', async () => {
+      const results = await fetchJson('http://example.com/some-url');
+      expect(results).toEqual([]);
     });
 
-    it('dispatches apiServerNotFound', () => {
-      return fetchJson('http://example.com/some-url')
-        .then(() => {
-          expect('apiServerNotFound').toHaveBeenDispatched();
-        });
+    it('dispatches apiServerNotFound', async () => {
+      await fetchJson('http://example.com/some-url');
+      expect(Dispatcher).toHaveReceived('apiServerNotFound');
     });
   });
 
   describe('HTTP 204 no content', () => {
     beforeEach(() => {
-      spyOn(window, 'fetch').and.returnValue(Promise.resolve({status: 204, json: () => Promise.resolve('')}));
+      jest.spyOn(window, 'fetch').mockResolvedValue({status: 204, json: () => Promise.resolve('ignored content')});
     });
 
-    it('returns the status code and empty response string', () => {
-      return fetchJson('http://example.com/some-url')
-        .then((results) => {
-          expect(results).toEqual([204, '']);
-        });
+    it('returns the status code and empty response string', async () => {
+      const results = await fetchJson('http://example.com/some-url');
+      expect(results).toEqual([204, '']);
     });
 
-    it('does not dispatch apiServerNotFound', () => {
-      return fetchJson('http://example.com/some-url')
-        .then(() => {
-          expect('apiServerNotFound').not.toHaveBeenDispatched();
-        });
+    it('does not dispatch apiServerNotFound', async () => {
+      await fetchJson('http://example.com/some-url');
+      expect(Dispatcher).not.toHaveReceived('apiServerNotFound');
     });
   });
-
 });

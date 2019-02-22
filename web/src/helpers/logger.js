@@ -30,7 +30,6 @@
  */
 
 export default class Logger {
-
   static debug(message) {
     Logger.log(message, 'DEBUG');
   }
@@ -43,7 +42,6 @@ export default class Logger {
     Logger.log(message, 'WARN');
   }
 
-  static log(message, logLevel) {
-
+  static log() {
   }
 }

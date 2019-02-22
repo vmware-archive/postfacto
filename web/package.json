@@ -6,12 +6,8 @@
     "actioncable": "^5.2.2",
     "foundation-sites": "6.2.4",
     "grapnel": "^0.7.0",
-    "lodash": "^4.17.11",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
-    "mock-promises": "^0.8.2",
-    "moment": "^2.23.0",
-    "motion-ui": "^2.0.3",
     "node-sass": "^4.11.0",
     "p-flux": "^1.1.1",
     "prop-types": "^15.6.2",
@@ -27,15 +23,19 @@
   "devDependencies": {
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
+    "eslint-config-airbnb": "^17.1.0",
     "jasmine-ajax": "^3.4.0",
     "jasmine-core": "^3.3.0",
-    "jasmine_dom_matchers": "^1.4.0",
+    "jest-enzyme": "^7.0.1",
     "pivotal-js-jasmine-matchers": "^0.1.1",
+    "promise-mock": "^2.1.0",
+    "pui-cursor": "^3.0.5",
     "serve": "^10.1.1"
   },
   "scripts": {
     "start": "REACT_APP_USE_MOCK_GOOGLE=\"$USE_MOCK_GOOGLE\" REACT_APP_GOOGLE_OAUTH_CLIENT_ID=\"$GOOGLE_OAUTH_CLIENT_ID\" react-scripts start",
     "build": "REACT_APP_USE_MOCK_GOOGLE=\"$USE_MOCK_GOOGLE\" REACT_APP_GOOGLE_OAUTH_CLIENT_ID=\"$GOOGLE_OAUTH_CLIENT_ID\" react-scripts build",
+    "lint": "eslint --ext=js --ext=jsx src",
     "serve-built": "serve -s -n -l 3000 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

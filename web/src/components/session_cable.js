@@ -35,11 +35,11 @@ import {Actions} from 'p-flux';
 
 export default class SessionCable extends React.Component {
   static propTypes = {
-    cable: types.object,
+    cable: types.object.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {subscription: null};
   }
 
@@ -53,7 +53,7 @@ export default class SessionCable extends React.Component {
 
   componentWillUnmount() {
     const {cable} = this.props;
-    cable.connection.close({ allowReconnect: false });
+    cable.connection.close({allowReconnect: false});
     cable.subscriptions.remove(this.state.subscription);
   }
 
@@ -70,12 +70,12 @@ export default class SessionCable extends React.Component {
   }
 
   subscribe(cable) {
-    let subscription = cable.subscriptions.create(
-      { channel: 'SessionsChannel' },
-      { received: this.onReceived }
+    const subscription = cable.subscriptions.create(
+      {channel: 'SessionsChannel'},
+      {received: this.onReceived},
     );
 
-    this.setState({subscription: subscription});
+    this.setState({subscription});
   }
 
   render() {

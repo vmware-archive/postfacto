@@ -33,20 +33,15 @@
 // Do not use it for new tests!
 
 import {toHaveBeenRequestedWith} from 'pivotal-js-jasmine-matchers/lib/matchers/request_matchers';
-
 // Make jasmine-ajax work with Jest (https://github.com/jasmine/jasmine-ajax/issues/178)
 import JasmineCore from 'jasmine-core';
-global.getJasmineRequireObj = function() {
-  return JasmineCore;
-};
+
+global.getJasmineRequireObj = () => JasmineCore;
 import('jasmine-ajax');
 
 Object.assign(XMLHttpRequest.prototype, {
   succeed(data = {}, options = {}) {
     this.respondWith(Object.assign({status: 200, responseText: data ? JSON.stringify(data) : '{}'}, options));
-  },
-  fail(data, options = {}) {
-    this.respondWith(Object.assign({status: 400, responseText: JSON.stringify(data)}, options));
   },
   forbidden(data, options = {}) {
     this.respondWith(Object.assign({status: 403, responseText: data ? JSON.stringify(data) : '{}'}, options));
@@ -54,9 +49,6 @@ Object.assign(XMLHttpRequest.prototype, {
   notFound() {
     this.respondWith(Object.assign({status: 404, responseText: '{}'}));
   },
-  noContent() {
-    this.respondWith(Object.assign({status: 204, responseText: ''}));
-  }
 });
 
 // Wrap pivotal-js-jasmine-matchers to work with Jest
@@ -72,6 +64,6 @@ expect.extend({
     return {
       pass,
       message: () => message,
-    }
+    };
   },
 });
