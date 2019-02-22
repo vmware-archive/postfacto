@@ -33,134 +33,185 @@ import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import TextareaAutosize from 'react-autosize-textarea';
+import EmojiSelector from './emoji_selector';
 
 export default class RetroColumnInput extends React.Component {
-  static propTypes = {
-    category: types.string.isRequired,
-    retroId: types.string.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputText: '',
-      isFocused: false,
-      multiline: '',
+    static propTypes = {
+      category: types.string.isRequired,
+      retroId: types.string.isRequired,
     };
 
-    this.submitRetroItem = this.submitRetroItem.bind(this);
-    this.inputFocus = this.inputFocus.bind(this);
-    this.inputBlur = this.inputBlur.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onResize = this.onResize.bind(this);
-  }
+    constructor(props) {
+      super(props);
+      this.state = {
+        inputText: '',
+        isFocused: false,
+        multiline: '',
+      };
 
-  resolvePlaceholder() {
-    const {category} = this.props;
-    if (category === 'happy') {
-      return 'I\'m glad that...';
+      this.submitRetroItem = this.submitRetroItem.bind(this);
+      this.inputFocus = this.inputFocus.bind(this);
+      this.inputBlur = this.inputBlur.bind(this);
+      this.onChange = this.onChange.bind(this);
+      this.onKeyPress = this.onKeyPress.bind(this);
+      this.onResize = this.onResize.bind(this);
     }
-    if (category === 'meh') {
-      return 'I\'m wondering about...';
-    }
-    if (category === 'sad') {
-      return 'It wasn\'t so great that...';
-    }
-    return 'Add an action item';
-  }
 
-  onKeyPress(event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      if (event.target.value !== '') {
-        this.submitRetroItem();
+    resolvePlaceholder() {
+      const {category} = this.props;
+      if (category === 'happy') {
+        return 'I\'m glad that...';
       }
+      if (category === 'meh') {
+        return 'I\'m wondering about...';
+      }
+      if (category === 'sad') {
+        return 'It wasn\'t so great that...';
+      }
+      return 'Add an action item';
+    }
+
+    onKeyPress(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        if (event.target.value !== '') {
+          this.submitRetroItem();
+        }
+        event.preventDefault();
+      }
+    }
+
+    submitRetroItem() {
+      const {retroId, category} = this.props;
+      const {inputText} = this.state;
+      if (category === 'action') {
+        Actions.createRetroActionItem({retro_id: retroId, description: inputText});
+      } else {
+        Actions.createRetroItem({retro_id: retroId, category, description: inputText});
+      }
+      this.setState({inputText: '', multiline: ''});
+    }
+
+    onChange(event) {
+      if (event.target.value.trim().length === 0) {
+        this.setState({multiline: ''});
+      }
+
+      this.setState({inputText: event.target.value});
+    }
+
+    onResize(event) {
+      // store value as well to work around https://github.com/buildo/react-autosize-textarea/issues/109
+      this.setState({multiline: 'multiline', inputText: event.target.value});
+    }
+
+    inputFocus() {
+      this.setState({isFocused: true});
+    }
+
+    inputBlur() {
+      this.setState({
+        isFocused: false,
+        isSelectingEmoji: false,
+      });
+    }
+
+    renderDoneButton() {
+      if (this.state.inputText) {
+        return (
+          <div className={'input-button-wrapper ' + this.state.multiline}>
+            <div
+              className="input-button"
+              onClick={this.submitRetroItem}
+            >
+              <i className="fa fa-check" aria-hidden="true"/>
+            </div>
+          </div>
+        );
+      }
+      return null;
+    }
+
+    onEmojiButtonClick(event) {
       event.preventDefault();
-    }
-  }
-
-  submitRetroItem() {
-    const {retroId, category} = this.props;
-    const {inputText} = this.state;
-    if (category === 'action') {
-      Actions.createRetroActionItem({retro_id: retroId, description: inputText});
-    } else {
-      Actions.createRetroItem({retro_id: retroId, category, description: inputText});
-    }
-    this.setState({inputText: '', multiline: ''});
-  }
-
-  onChange(event) {
-    if (event.target.value.trim().length === 0) {
-      this.setState({multiline: ''});
+      const {isSelectingEmoji} = this.state;
+      this.setState({isSelectingEmoji: !isSelectingEmoji});
+      this.textarea.focus();
     }
 
-    this.setState({inputText: event.target.value});
-  }
+    onEmojiSelect(event, emoji) {
+      event.preventDefault();
+      this.setState(({inputText, ...oldState}) => {
+        const start = this.textarea.selectionStart;
+        const end = this.textarea.selectionEnd;
+        const newInputText = inputText.substring(0, start) + emoji + inputText.substring(end, inputText.length);
+        this.textarea.focus();
+        return ({
+          ...oldState,
+          inputText: newInputText,
+          isSelectingEmoji: false,
+        });
+      });
+    }
 
-  onResize(event) {
-    // store value as well to work around https://github.com/buildo/react-autosize-textarea/issues/109
-    this.setState({multiline: 'multiline', inputText: event.target.value});
-  }
-
-  inputFocus() {
-    this.setState({isFocused: true});
-  }
-
-  inputBlur() {
-    this.setState({isFocused: false});
-  }
-
-  renderButton() {
-    if (this.state.inputText) {
+    renderEmojiButton() {
       return (
         <div className={'input-button-wrapper ' + this.state.multiline}>
-          <div
-            className="input-button"
-            onClick={this.submitRetroItem}
-          >
-            <i className="fa fa-check" aria-hidden="true"/>
+          <div className="emoji-button" onClick={(...args) => this.onEmojiButtonClick(...args)}>
+            <i className="fa fa-smile-o" aria-hidden="true"/>
           </div>
         </div>
       );
     }
-    return null;
-  }
 
-  resolveInputBoxClass() {
-    const {multiline, isFocused} = this.state;
-    let classes = 'input-box ' + multiline;
-
-    if (isFocused) {
-      classes += ' focused';
+    renderEmojiSelector() {
+      const {isSelectingEmoji} = this.state;
+      if (!isSelectingEmoji) {
+        return null;
+      }
+      return <EmojiSelector hidden={!isSelectingEmoji} onSelect={(event, emoji) => this.onEmojiSelect(event, emoji)}/>;
     }
-    return classes;
-  }
 
-  render() {
-    const {category} = this.props;
+    resolveInputBoxClass() {
+      const {multiline, isFocused, isSelectingEmoji} = this.state;
+      let classes = 'input-box ' + multiline;
 
-    const classNames = 'retro-item-add-input';
+      if (isFocused || isSelectingEmoji) {
+        classes += ' focused';
+      }
 
-    return (
-      <div className="retro-item-list-input">
-        <div className={this.resolveInputBoxClass()}>
-          <TextareaAutosize
-            type="text"
-            className={classNames}
-            placeholder={this.resolvePlaceholder(category)}
-            onFocus={this.inputFocus}
-            onBlur={this.inputBlur}
-            onChange={this.onChange}
-            value={this.state.inputText}
-            onKeyPress={this.onKeyPress}
-            onResize={this.onResize}
-            required
-            autoComplete="off"
-          />
-          {this.renderButton()}
+      if (isSelectingEmoji) {
+        classes += ' emoji-selector-focus';
+      }
+      return classes;
+    }
+
+    render() {
+      const {category} = this.props;
+
+      const classNames = 'retro-item-add-input';
+
+      return (
+        <div className="retro-item-list-input">
+          <div className={this.resolveInputBoxClass()}>
+            <TextareaAutosize
+              type="text"
+              className={classNames}
+              placeholder={this.resolvePlaceholder(category)}
+              onFocus={this.inputFocus}
+              onBlur={this.inputBlur}
+              onChange={this.onChange}
+              value={this.state.inputText}
+              onKeyPress={this.onKeyPress}
+              onResize={this.onResize}
+              required
+              autoComplete="off"
+              innerRef={(ref) => { this.textarea = ref; }}
+            />
+            {this.renderEmojiButton()}
+            {this.renderDoneButton()}
+          </div>
+          {this.renderEmojiSelector()}
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }

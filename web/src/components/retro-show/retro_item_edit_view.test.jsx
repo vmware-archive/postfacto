@@ -34,6 +34,7 @@ import {mount} from 'enzyme';
 import '../../spec_helper';
 
 import RetroItemEditView from './retro_item_edit_view';
+import EmojiSelector from './emoji_selector';
 
 describe('RetroItemEditView', () => {
   let deleteSpy;
@@ -101,6 +102,31 @@ describe('RetroItemEditView', () => {
     it('should remove the action item', () => {
       dom.find('.edit-delete').simulate('click');
       expect(deleteSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('emoji button', () => {
+    it('shows the emoji button on button click', () => {
+      expect(dom.find(EmojiSelector)).not.toExist();
+
+      const textarea = dom.find('textarea');
+      textarea.simulate('focus');
+      dom.find('.emoji-button').simulate('click', {});
+
+      expect(dom.find(EmojiSelector)).toExist();
+    });
+
+    it('adds the selected emoji to the selected position in text', () => {
+      const textarea = dom.find('textarea');
+
+      textarea.simulate('change', {target: {value: 'anything'}});
+
+      expect(textarea).toHaveText('anything');
+
+      dom.find('.emoji-button').simulate('click', {});
+      dom.find('.emoji-selector-option').first().simulate('mouseDown', {});
+
+      expect(textarea).toHaveText(String.fromCodePoint(0x1F600) + 'anything');
     });
   });
 });

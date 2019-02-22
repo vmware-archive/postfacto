@@ -32,106 +32,150 @@
 import React from 'react';
 import types from 'prop-types';
 import TextareaAutosize from 'react-autosize-textarea';
+import EmojiSelector from './emoji_selector';
 
 export default class RetroItemEditView extends React.Component {
-  static propTypes = {
-    originalText: types.string.isRequired,
-    deleteItem: types.func.isRequired,
-    saveItem: types.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      editedText: '',
-      saveDisabled: '',
+    static propTypes = {
+      originalText: types.string.isRequired,
+      deleteItem: types.func.isRequired,
+      saveItem: types.func.isRequired,
     };
 
-    this.onTextChanged = this.onTextChanged.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onDeleteClicked = this.onDeleteClicked.bind(this);
-    this.onSaveClicked = this.onSaveClicked.bind(this);
-  }
+    constructor(props) {
+      super(props);
+      this.state = {
+        editedText: '',
+        saveDisabled: '',
+      };
 
-  componentDidMount() {
-    // this is not in constructor so that the cursor aligns to end of textarea in Safari
-    this.setState({editedText: this.props.originalText});
-  }
-
-  onTextChanged(event) {
-    const value = event.target.value;
-
-    this.setState({editedText: value, saveDisabled: value.length === 0 ? 'disabled' : ''});
-  }
-
-  onSaveClicked(event) {
-    event.stopPropagation();
-    const {editedText} = this.state;
-
-    if (editedText.trim().length > 0) {
-      this.props.saveItem(editedText);
+      this.onTextChanged = this.onTextChanged.bind(this);
+      this.onKeyPress = this.onKeyPress.bind(this);
+      this.onDeleteClicked = this.onDeleteClicked.bind(this);
+      this.onSaveClicked = this.onSaveClicked.bind(this);
+      this.onEmojiButtonClicked = this.onEmojiButtonClicked.bind(this);
+      this.onEmojiSelected = this.onEmojiSelected.bind(this);
     }
-  }
 
-  onDeleteClicked(event) {
-    event.stopPropagation();
-    this.props.deleteItem();
-  }
-
-  onKeyPress(event) {
-    const {editedText} = this.state;
-    const value = event.target.value;
-    if (event.key === 'Enter' && !event.shiftKey && value && value.trim().length > 0) {
-      this.props.saveItem(editedText);
+    componentDidMount() {
+      // this is not in constructor so that the cursor aligns to end of textarea in Safari
+      this.setState({editedText: this.props.originalText});
     }
-  }
 
-  renderTextInput() {
-    return (
-      <div className="edit-text">
-        <TextareaAutosize
-          type="text"
-          name="edit-text-field"
-          autoFocus
-          value={this.state.editedText}
-          onChange={this.onTextChanged}
-          onKeyPress={this.onKeyPress}
-        />
-      </div>
-    );
-  }
+    onTextChanged(event) {
+      const value = event.target.value;
 
-  renderDeleteButton() {
-    return (
-      <div className="edit-delete" onClick={this.onDeleteClicked}>
-        <i className="fa fa-trash-o"/>
-        <span>Delete</span>
-      </div>
-    );
-  }
+      this.setState({editedText: value, saveDisabled: value.length === 0 ? 'disabled' : ''});
+    }
 
-  renderSaveButton() {
-    const {saveDisabled} = this.state;
+    onSaveClicked(event) {
+      event.stopPropagation();
+      const {editedText} = this.state;
 
-    return (
-      <div className={'edit-save ' + saveDisabled} onClick={this.onSaveClicked}>
-        <i className="fa fa-check"/>
-        <span>Save</span>
-      </div>
-    );
-  }
+      if (editedText.trim().length > 0) {
+        this.props.saveItem(editedText);
+      }
+    }
 
-  render() {
-    return (
-      <div className="edit-view">
-        <div className="edit-content">
-          {this.renderTextInput()}
+    onDeleteClicked(event) {
+      event.stopPropagation();
+      this.props.deleteItem();
+    }
+
+    onEmojiButtonClicked() {
+      const {isSelectingEmoji} = this.state;
+      this.setState({isSelectingEmoji: !isSelectingEmoji});
+      this.textarea.focus();
+    }
+
+    onEmojiSelected(event, emoji) {
+      this.setState(({editedText, ...oldState}) => {
+        const start = this.textarea.selectionStart;
+        const end = this.textarea.selectionEnd;
+        const newInputText = editedText.substring(0, start) + emoji + editedText.substring(end, editedText.length);
+        this.textarea.focus();
+        return ({
+          ...oldState,
+          editedText: newInputText,
+          isSelectingEmoji: false,
+        });
+      });
+    }
+
+    onKeyPress(event) {
+      const {editedText} = this.state;
+      const value = event.target.value;
+      if (event.key === 'Enter' && !event.shiftKey && value && value.trim().length > 0) {
+        this.props.saveItem(editedText);
+      }
+    }
+
+    renderTextInput() {
+      return (
+        <div className="edit-text">
+          <TextareaAutosize
+            type="text"
+            name="edit-text-field"
+            autoFocus
+            value={this.state.editedText}
+            onChange={this.onTextChanged}
+            onKeyPress={this.onKeyPress}
+            innerRef={(ref) => { this.textarea = ref; }}
+          />
         </div>
-        <div className="edit-buttons">
-          {this.renderDeleteButton()}
-          {this.renderSaveButton()}
+      );
+    }
+
+    renderDeleteButton() {
+      return (
+        <div className="edit-delete" onClick={this.onDeleteClicked}>
+          <i className="fa fa-trash-o"/>
+          <span>Delete</span>
         </div>
-      </div>
-    );
-  }
+      );
+    }
+
+    renderSaveButton() {
+      const {saveDisabled} = this.state;
+
+      return (
+        <div className={'edit-save ' + saveDisabled} onClick={this.onSaveClicked}>
+          <i className="fa fa-check"/>
+          <span>Save</span>
+        </div>
+      );
+    }
+
+    renderEmojiButton() {
+      return (
+        <div className="emoji-button" onClick={this.onEmojiButtonClicked}>
+          <i className="fa fa-smile-o" aria-hidden="true"/>
+        </div>
+      );
+    }
+
+    renderEmojiSelector() {
+      const {isSelectingEmoji} = this.state;
+      if (!isSelectingEmoji) {
+        return null;
+      }
+      return (
+        <EmojiSelector onSelect={this.onEmojiSelected}/>
+      );
+    }
+
+    render() {
+      return (
+        <div className="edit-view">
+          <div className="edit-content">
+            {this.renderTextInput()}
+          </div>
+          {this.renderEmojiSelector()}
+          <div className="edit-buttons">
+            {this.renderDeleteButton()}
+            {this.renderEmojiButton()}
+            {this.renderSaveButton()}
+          </div>
+        </div>
+      );
+    }
 }
