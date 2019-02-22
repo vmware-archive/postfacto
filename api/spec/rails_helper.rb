@@ -102,7 +102,7 @@ Shoulda::Matchers.configure do |config|
 end
 
 def token_for(retro)
-  RetroToken.generate(
+  JWTToken.generate(
     retro.slug,
     CLOCK.current_time,
     nil,

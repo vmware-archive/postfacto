@@ -1,6 +1,6 @@
 require 'jwt'
 
-class RetroToken
+class JWTToken
   def self.generate(retro_slug, current_time, session_time_limit, secret)
     payload = { slug: retro_slug }
     payload[:exp] = (current_time + session_time_limit).to_i if session_time_limit

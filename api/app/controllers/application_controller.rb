@@ -29,7 +29,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'security/retro_token'
+require 'security/jwt_token'
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      RetroToken.valid?(@retro.slug, token, Rails.application.secrets.secret_key_base)
+      JWTToken.valid?(@retro.slug, token, Rails.application.secrets.secret_key_base)
     end
   end
 

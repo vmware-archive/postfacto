@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'security/retro_token'
+require 'security/jwt_token'
 
 class RetrosController < ApplicationController
   before_action :load_retro_with_items, only: [:show]
@@ -148,7 +148,7 @@ class RetrosController < ApplicationController
   end
 
   def generate_retro_token(retro)
-    RetroToken.generate(
+    JWTToken.generate(
       retro.slug,
       CLOCK.current_time,
       Rails.configuration.session_time,

@@ -29,7 +29,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 require 'rails_helper'
-require 'security/retro_token'
 
 describe '/retros/:retro_id/action_items' do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'the-password') }

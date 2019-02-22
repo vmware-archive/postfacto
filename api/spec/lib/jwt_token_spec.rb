@@ -1,13 +1,13 @@
 require 'spec_helper'
-require 'security/retro_token'
+require 'security/jwt_token'
 
-describe RetroToken do
+describe JWTToken do
   describe 'generate' do
     it 'returns a valid token' do
       secret = 'secret'
       current_time = Time.now
       session_time_limit = 2.minutes
-      token = RetroToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
+      token = JWTToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
       decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
       expect(decoded_token.first['slug']).to eq('happy-sad-meh')
@@ -18,7 +18,7 @@ describe RetroToken do
       it 'returns a token that will not expire' do
         secret = 'secret'
         current_time = Time.now
-        token = RetroToken.generate('happy-sad-meh', current_time, nil, secret)
+        token = JWTToken.generate('happy-sad-meh', current_time, nil, secret)
 
         decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
         expect(decoded_token.first['slug']).to eq('happy-sad-meh')
@@ -37,7 +37,7 @@ describe RetroToken do
         }
 
         token = JWT.encode(payload, secret, 'HS256')
-        expect(RetroToken.valid?('another-one', token, secret)).to eq(false)
+        expect(JWTToken.valid?('another-one', token, secret)).to eq(false)
       end
     end
 
@@ -51,7 +51,7 @@ describe RetroToken do
         }
 
         token = JWT.encode(payload, secret, 'HS256')
-        expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(false)
+        expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(false)
       end
 
       context 'token still valid' do
@@ -64,7 +64,7 @@ describe RetroToken do
           }
 
           token = JWT.encode(payload, secret, 'HS256')
-          expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(true)
+          expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(true)
         end
       end
     end
@@ -74,7 +74,7 @@ describe RetroToken do
         secret = 'secret'
         token = 'this-cannot-be-parsed-by-jwt'
 
-        expect(RetroToken.valid?('happy-sad-meh', token, secret)).to eq(false)
+        expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(false)
       end
     end
   end
