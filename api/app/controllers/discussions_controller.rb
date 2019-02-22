@@ -29,6 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class DiscussionsController < ApplicationController
+  include RetrosAuth
+
   before_action :load_retro, :authenticate_retro
 
   def create
@@ -55,5 +57,11 @@ class DiscussionsController < ApplicationController
 
     RetrosChannel.broadcast(@retro)
     render json: :nothing, status: :no_content
+  end
+
+  private
+
+  def load_retro
+    @retro = Retro.friendly.find(params.fetch(:retro_id))
   end
 end

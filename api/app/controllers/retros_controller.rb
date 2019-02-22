@@ -31,6 +31,8 @@
 require 'security/jwt_token'
 
 class RetrosController < ApplicationController
+  include RetrosAuth
+
   before_action :load_retro_with_items, only: [:show]
   before_action :load_retro, :authenticate_retro
   before_action :authenticate_user, only: [:create, :index]
@@ -145,14 +147,5 @@ class RetrosController < ApplicationController
 
   def load_retro_with_items
     @retro = Retro.includes(:items, :action_items).find_by_slug!(params.fetch(:id))
-  end
-
-  def generate_retro_token(retro)
-    JWTToken.generate(
-      retro.slug,
-      CLOCK.current_time,
-      Rails.configuration.session_time,
-      Rails.application.secrets.secret_key_base
-    )
   end
 end

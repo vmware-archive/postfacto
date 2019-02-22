@@ -29,6 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class TransitionsController < ApplicationController
+  include RetrosAuth
+
   before_action :load_retro, :authenticate_retro
 
   def transitions
@@ -57,5 +59,11 @@ class TransitionsController < ApplicationController
     @retro.save!
     RetrosChannel.broadcast(@retro)
     render 'retros/show'
+  end
+
+  private
+
+  def load_retro
+    @retro = Retro.friendly.find(params.fetch(:retro_id))
   end
 end

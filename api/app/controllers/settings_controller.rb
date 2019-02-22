@@ -29,9 +29,17 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class SettingsController < ApplicationController
+  include RetrosAuth
+
   before_action :authenticate_retro_admin
 
   def index
     render json: { retro: @retro.as_json(only: [:id, :name, :slug, :is_private]) }, status: :ok
+  end
+
+  private
+
+  def load_retro
+    @retro = Retro.friendly.find(params.fetch(:retro_id))
   end
 end

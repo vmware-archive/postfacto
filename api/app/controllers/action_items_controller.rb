@@ -29,6 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class ActionItemsController < ApplicationController
+  include RetrosAuth
+
   before_action :load_retro, :authenticate_retro
 
   def destroy
@@ -52,6 +54,10 @@ class ActionItemsController < ApplicationController
   end
 
   private
+
+  def load_retro
+    @retro = Retro.friendly.find(params.fetch(:retro_id))
+  end
 
   def action_params
     params.require(:action_item).permit(:description, :done)
