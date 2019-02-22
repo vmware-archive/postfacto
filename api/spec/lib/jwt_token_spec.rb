@@ -10,7 +10,7 @@ describe JWTToken do
       token = JWTToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
 
       decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
-      expect(decoded_token.first['slug']).to eq('happy-sad-meh')
+      expect(decoded_token.first['subject']).to eq('happy-sad-meh')
       expect(decoded_token.first['exp']).to eq((current_time + session_time_limit).to_i)
     end
 
@@ -21,19 +21,19 @@ describe JWTToken do
         token = JWTToken.generate('happy-sad-meh', current_time, nil, secret)
 
         decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
-        expect(decoded_token.first['slug']).to eq('happy-sad-meh')
+        expect(decoded_token.first['subject']).to eq('happy-sad-meh')
         expect(decoded_token.first['exp']).to eq(nil)
       end
     end
   end
 
   describe 'valid?' do
-    context 'slug is incorrect' do
+    context 'subject is incorrect' do
       it 'returns false' do
         secret = 'secret'
 
         payload = {
-          slug: 'happy-sad-meh'
+          subject: 'happy-sad-meh'
         }
 
         token = JWT.encode(payload, secret, 'HS256')
@@ -46,7 +46,7 @@ describe JWTToken do
         secret = 'secret'
 
         payload = {
-          slug: 'happy-sad-meh',
+          subject: 'happy-sad-meh',
           exp: (Time.now - 1.minutes).to_i
         }
 
@@ -59,7 +59,7 @@ describe JWTToken do
           secret = 'secret'
 
           payload = {
-            slug: 'happy-sad-meh',
+            subject: 'happy-sad-meh',
             exp: (Time.now + 1.minutes).to_i
           }
 
