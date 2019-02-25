@@ -36,6 +36,7 @@ import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import RetroColumnInput from './retro_column_input';
+import EmojiSelector from './emoji_selector';
 
 const retroId = 'retro-slug-123';
 
@@ -157,5 +158,42 @@ describe('inputting an action item', () => {
 
     expect(subject.find('.input-box')).toHaveClassName('multiline');
     expect(subject.find('.input-button-wrapper')).toHaveClassName('multiline');
+  });
+
+  it('shows the emoji button on button click', () => {
+    expect(subject.find(EmojiSelector)).not.toExist();
+
+    const textarea = subject.find('textarea');
+    textarea.simulate('focus');
+    subject.find('.emoji-button').simulate('click', {});
+
+    expect(subject.find(EmojiSelector)).toExist();
+  });
+
+  it('adds the selected emoji to the selected position in text', () => {
+    const textarea = subject.find('textarea');
+
+    textarea.simulate('change', {target: {value: 'anything'}});
+
+    expect(textarea).toHaveText('anything');
+
+    subject.find('.emoji-button').simulate('click', {});
+    subject.find('.emoji-selector-option').first().simulate('mouseDown', {});
+
+    expect(textarea).toHaveText(String.fromCodePoint(0x1F600) + 'anything');
+  });
+
+  it('hides the emoji selector on blur', () => {
+    expect(subject.find(EmojiSelector)).not.toExist();
+
+    const textarea = subject.find('textarea');
+    textarea.simulate('focus');
+    subject.find('.emoji-button').simulate('click', {});
+
+    expect(subject.find(EmojiSelector)).toExist();
+
+    textarea.simulate('blur');
+
+    expect(subject.find(EmojiSelector)).not.toExist();
   });
 });

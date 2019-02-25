@@ -548,7 +548,12 @@ ol ol > li:before {
   .edit-buttons {
     display: flex;
     position: relative;
-    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+
+    .edit-delete {
+      flex: 2;
+    }
 
     .edit-delete, .edit-save {
       vertical-align: middle;
@@ -571,11 +576,6 @@ ol ol > li:before {
     }
 
     .edit-save {
-      display: block;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-
       text-align: center;
       color: $black;
       background: $button;
@@ -962,7 +962,6 @@ button:focus {
   padding: 0.2rem;
 
   textarea {
-    transition: none;
     height: 3.4rem;
     min-height: 55px;
     border: none;
@@ -1013,10 +1012,55 @@ button:focus {
   .input-button-wrapper.multiline {
     flex-direction: row-reverse;
   }
+
+  .emoji-button i:not(:active) {
+    color: rgba(255, 255, 255, 0);
+  }
+
+  .emoji-button {
+    display: flex;
+    height: 2.6rem;
+    width: 3.1rem;
+    margin: 0.4rem 0;
+    font-size: 1.3rem;
+
+    i {
+      margin: auto;
+      color: $dark-gray;
+    }
+  }
+}
+
+.emoji-button {
+  display: flex;
+  margin: 0.4rem 0.6rem;
+  font-size: 1.3rem;
+
+  i {
+    margin: auto;
+    color: $dark-gray;
+  }
+
+  i:hover {
+    color: $light-black;
+  }
+}
+
+.input-box:active {
+  background-color: $white;
+}
+
+.input-box.emoji-selector-focus {
+  background-color: $white;
+}
+
+.input-box.focused, .input-box:active {
+  .emoji-button i {
+    color: $secondary;
+  }
 }
 
 .input-box.focused {
-  transition: background-color 0.15s ease-out;
   background-color: white;
 
   textarea {
@@ -1037,6 +1081,50 @@ button:focus {
 
     &:-ms-input-placeholder { /* IE 10+ */
       color: darken($dark-gray, 5%);
+    }
+  }
+}
+
+.input-box.emoji-selector-focus {
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+
+.emoji-selector {
+  background: $white;
+  padding: 0.4rem 0.2rem;
+  max-height: 5*32px;
+  overflow-y: scroll;
+  border-radius: 0 0 0.2rem 0.2rem;
+  border-top: $light-gray solid 1px;
+  text-align: left;
+
+  &, & > * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  h1 {
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: $normal-gray;
+    margin: 0.6rem 0 0.6rem 0.4rem;
+  }
+
+  .emoji-selector-option {
+    padding: 0.25rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 32px;
+    min-height: 32px;
+    text-align: center;
+
+    &:hover {
+      background: $lighter-gray;
     }
   }
 }
