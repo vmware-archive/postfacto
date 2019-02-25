@@ -25,23 +25,40 @@ popd >/dev/null
 # Set up trap to ensure spawned processes are killed in all situations
 
 SPAWNED_PIDS="";
+
+kill_pid_tree() {
+  # Behaviour of react_scripts node servers makes them hard to kill;
+  # must identify child and grandchild processes
+  PID="$1"
+  SUBPID1="$(ps -o pid --no-headers --ppid="$PID" || true)"
+  if [[ -n "$SUBPID1" ]]; then
+    SUBPID2="$(ps -o pid --no-headers --ppid="$SUBPID1" || true)"
+    if [[ -n "$SUBPID2" ]]; then
+      kill "$SUBPID2" >/dev/null 2>&1 || true
+    fi
+    kill "$SUBPID1" >/dev/null 2>&1 || true
+  fi
+  kill "$PID" >/dev/null 2>&1 || true
+}
+
 kill_spawned() {
   if [[ -n "$SPAWNED_PIDS" ]]; then
     echo "Shutting down child processes $SPAWNED_PIDS"
     for PID in $SPAWNED_PIDS; do
-      kill -SIGINT "$PID" >/dev/null || true
+      kill_pid_tree "$PID"
     done
-    pkill -P $$ >/dev/null # try really hard to kill everything
-    kill 0 >/dev/null # why won't you die?
     SPAWNED_PIDS=""
   fi
 }
+
 register_spawned() {
   SPAWNED_PIDS="$SPAWNED_PIDS $1"
 }
 
 if [[ "$EPHEMERAL_CONTAINER" != "true" ]]; then
-  trap "kill_spawned; sleep 1; echo 'Shutdown complete.';" INT TERM EXIT
+  # If we kill the script or a test fails, ensure it is cleaned up
+  # (only necessary if we are in a long-lived container, i.e. not in CI)
+  trap "kill_spawned; sleep 1; echo 'e2e tests failed :('; false;" EXIT
 fi
 
 # Launch mock auth server
@@ -83,21 +100,15 @@ popd >/dev/null
 
 # Shutdown services
 
-if [[ "$EPHEMERAL_CONTAINER" == "true" ]]; then
-  # Don't need to worry too much about shutting down services,
-  # since container will disappear soon anyway
-  echo "Shutting down child processes $SPAWNED_PIDS"
-  for PID in $SPAWNED_PIDS; do
-    kill -SIGINT "$PID" >/dev/null || true
-  done
-else
-  kill_spawned
-  trap - INT TERM EXIT
+kill_spawned;
+
+if [[ "$EPHEMERAL_CONTAINER" != "true" ]]; then
+  trap - EXIT
 fi
 
 # Successful, so remove log files
-rm "$API_LOG" || true
-rm "$WEB_LOG" || true
+rm "$API_LOG" >/dev/null || true
+rm "$WEB_LOG" >/dev/null || true
 
 sleep 1;
 echo "E2E tests passed"

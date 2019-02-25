@@ -77,6 +77,17 @@ cd web
 CI=true npm test
 ```
 
+Note that the frontend tests will run significantly faster outside the docker container.
+If you want to do this, you will need to install the dependencies again (due to architecture differences):
+
+```bash
+cd web
+npm install
+npm test
+```
+
+Both installations can coexist; the docker container will use dependencies located in docker_node_modules.
+
 ### API
 
 ```bash
