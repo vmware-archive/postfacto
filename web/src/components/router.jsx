@@ -47,8 +47,9 @@ import HomePage from './home/home_page';
 import ListRetroArchivesPage from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
+import useRouter from './use_router';
 
-export default class Router extends React.Component {
+export class Router extends React.Component {
   static propTypes = {
     router: types.object.isRequired,
     retro: types.object,
@@ -192,3 +193,5 @@ export default class Router extends React.Component {
     return localStorage.getItem('authToken');
   }
 }
+
+export default useRouter(Router);

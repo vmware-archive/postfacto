@@ -36,10 +36,10 @@ import {Dispatcher} from 'p-flux';
 export default (Component) => class extends React.Component {
   constructor(props) {
     super(props);
-    const {state} = this;
+
     const router = new Grapnel({pushState: true});
     Dispatcher.router = router;
-    this.state = {...state, router};
+    this.state = {router};
   }
 
   render() {

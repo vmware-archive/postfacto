@@ -9,7 +9,7 @@ describe('Application', () => {
     const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
     global.Retro = {config};
 
-    const app = mount(<EnhancedApplication config={config} store={{}} router={{}}/>);
+    const app = mount(<EnhancedApplication config={config}/>);
     expect(app).toExist();
     app.unmount();
   });
