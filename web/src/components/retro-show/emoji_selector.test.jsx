@@ -41,8 +41,8 @@ describe('EmojiSelector', () => {
     const wrapper = mount(<EmojiSelector onSelect={() => {}}/>);
     const headers = wrapper.find('.emoji-selector-group h1');
 
-    expect(headers.length).toEqual(1);
-    expect(headers.at(0)).toHaveText('Smiley Faces');
+    expect(headers.length).toEqual(9);
+    expect(headers.at(0)).toHaveText('Smileys & Emotion');
   });
 
   describe('onSelect', () => {
