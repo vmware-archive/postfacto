@@ -31,14 +31,7 @@
 class ActionItemsController < ApplicationController
   include RetrosAuth
 
-  before_action :load_retro, :authenticate_retro
-
-  def destroy
-    action_item = @retro.action_items.find(params.fetch(:id))
-    action_item.destroy!
-    RetrosChannel.broadcast(@retro)
-    render json: :nothing, status: :no_content
-  end
+  before_action :load_and_authenticate_retro
 
   def create
     @action_item = @retro.action_items.create!(action_params)
@@ -53,11 +46,14 @@ class ActionItemsController < ApplicationController
     render 'show'
   end
 
-  private
-
-  def load_retro
-    @retro = Retro.friendly.find(params.fetch(:retro_id))
+  def destroy
+    action_item = @retro.action_items.find(params.fetch(:id))
+    action_item.destroy!
+    RetrosChannel.broadcast(@retro)
+    render json: :nothing, status: :no_content
   end
+
+  private
 
   def action_params
     params.require(:action_item).permit(:description, :done)

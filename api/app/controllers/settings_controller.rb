@@ -31,7 +31,7 @@
 class SettingsController < ApplicationController
   include RetrosAuth
 
-  before_action :authenticate_retro_admin
+  before_action :load_and_authenticate_retro_admin
 
   def index
     render json: { retro: @retro.as_json(only: [:id, :name, :slug, :is_private]) }, status: :ok

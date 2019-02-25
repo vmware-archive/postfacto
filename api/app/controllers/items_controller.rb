@@ -31,7 +31,7 @@
 class ItemsController < ApplicationController
   include RetrosAuth
 
-  before_action :load_retro, :authenticate_retro
+  before_action :load_and_authenticate_retro
 
   def destroy
     item = @retro.items.find(params.fetch(:id))
@@ -76,10 +76,6 @@ class ItemsController < ApplicationController
   end
 
   private
-
-  def load_retro
-    @retro = Retro.friendly.find(params.fetch(:retro_id))
-  end
 
   def broadcast
     RetrosChannel.broadcast(@retro)

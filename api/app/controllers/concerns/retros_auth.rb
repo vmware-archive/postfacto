@@ -1,15 +1,21 @@
 module RetrosAuth
   include ActiveSupport::Concern
 
-  def authenticate_retro
+  def load_retro
+    @retro = Retro.find_by_slug!(params.fetch(:retro_id) { params.fetch(:id) })
+  end
+
+  def load_and_authenticate_retro
     @retro ||= load_retro
     render json: {}, status: :forbidden unless user_allowed_to_access_retro?
   end
 
-  def authenticate_retro_admin
+  def load_and_authenticate_retro_admin
     @retro ||= load_retro
     render json: {}, status: :forbidden unless user_allowed_to_perform_admin_action?
   end
+
+  private
 
   def user_allowed_to_access_retro?
     !@retro.is_private? || valid_token_provided?

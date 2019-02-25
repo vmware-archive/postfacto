@@ -33,12 +33,11 @@ require 'security/jwt_token'
 class RetrosController < ApplicationController
   include RetrosAuth
 
-  before_action :load_retro_with_items, only: [:show]
-  before_action :load_retro, :authenticate_retro
+  before_action :load_and_authenticate_retro, only: [:show, :update_password]
   before_action :authenticate_user, only: [:create, :index]
-  before_action :authenticate_retro_admin, only: [:archive, :update]
-  skip_before_action :load_retro, only: [:create, :index, :show]
-  skip_before_action :authenticate_retro, only: [:create, :index, :show_login, :login]
+  before_action :load_and_authenticate_retro_admin, only: [:archive, :update]
+
+  before_action :load_retro, only: [:show_login, :login]
 
   def create
     @retro = @user.retros.create(retro_params)
@@ -119,10 +118,6 @@ class RetrosController < ApplicationController
 
   def password_matches?(value)
     @retro.validate_login?(value)
-  end
-
-  def load_retro
-    @retro = Retro.find_by_slug!(params.fetch(:id))
   end
 
   def broadcast
