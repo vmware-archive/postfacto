@@ -48,43 +48,9 @@ import ListRetroArchivesPage from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
 
-function isObject(obj) {
-  return typeof obj === 'object';
-}
-function toFlattenedRoutes(routesHash) {
-  /* eslint-disable no-param-reassign */
-  return Object.keys(routesHash).reduce((paths, parent) => {
-    if (isObject(routesHash[parent])) {
-      const children = toFlattenedRoutes(routesHash[parent]);
-      Object.keys(children).forEach((child) => {
-        paths[parent + child] = children[child];
-      });
-    } else {
-      paths[parent] = routesHash[parent];
-    }
-    return paths;
-  }, {});
-  /* eslint-enable no-param-reassign */
-}
-
-const routes = {
-  '*': 'showNotFound',
-  '/': 'showHome',
-  '/retros/:retroId': 'showRetro',
-  '/retros/:retroId/archives': 'listRetroArchives',
-  '/retros/:retroId/archives/:archiveId': 'showRetroArchive',
-  '/retros/:retroId/login': 'loginToRetro',
-  '/retros/:retroId/relogin': 'reloginToRetro',
-  '/retros/:retroId/settings': 'showRetroSettings',
-  '/retros/:retroId/settings/password': 'showRetroPasswordSettings',
-  '/retros/new': 'createRetro',
-  '/terms': 'showTerms',
-  '/registration/:accessToken/:email/:fullName': 'showRegistration',
-};
-
 export default class Router extends React.Component {
   static propTypes = {
-    router: types.oneOfType([types.object, types.func]).isRequired,
+    router: types.object.isRequired,
     retro: types.object,
     config: types.object,
     alert: types.object,
@@ -100,15 +66,24 @@ export default class Router extends React.Component {
 
   constructor(props) {
     super(props);
-    const {state} = this;
-    this.state = {...state, Page: EmptyPage};
+    this.state = {Page: EmptyPage, additionalProps: {}};
   }
 
   componentDidMount() {
     const {router} = this.props;
-    Object.entries(toFlattenedRoutes(routes)).forEach(([path, callbackName]) => {
-      router.get(path, this[callbackName]);
-    });
+
+    router.get('*', this.showNotFound);
+    router.get('/', this.showHome);
+    router.get('/retros/:retroId', this.showRetro);
+    router.get('/retros/:retroId/archives', this.listRetroArchives);
+    router.get('/retros/:retroId/archives/:archiveId', this.showRetroArchive);
+    router.get('/retros/:retroId/login', this.loginToRetro);
+    router.get('/retros/:retroId/relogin', this.reloginToRetro);
+    router.get('/retros/:retroId/settings', this.showRetroSettings);
+    router.get('/retros/:retroId/settings/password', this.showRetroPasswordSettings);
+    router.get('/retros/new', this.createRetro);
+    router.get('/terms', this.showTerms);
+    router.get('/registration/:accessToken/:email/:fullName', this.showRegistration);
 
     Actions.retrieveConfig();
   }
