@@ -29,43 +29,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
 import types from 'prop-types';
+import LegalBanner from '../shared/legal_banner';
 
-class LegalBanner extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.okClicked = this.okClicked.bind(this);
-  }
-
-  okClicked() {
-  }
-
-  shouldHide() {
-    return true;
-  }
-
-  render() {
-    if (this.shouldHide()) {
-      return null;
-    }
-
-    return (
-      <div className="banner" style={{display: 'flex'}}>
-        <div className="terms-text">
-          By accessing and using Postfacto, you agree to our
-          {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
-          {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
-          use of cookies
-        </div>
-        <button className="button ok-button" type="button" onClick={this.okClicked}>OK</button>
-      </div>
-    );
-  }
-}
-
-class RetroLegalBanner extends LegalBanner {
+export default class RetroLegalBanner extends LegalBanner {
   static propTypes = {
     retro: types.object.isRequired,
   };
@@ -106,26 +73,3 @@ class RetroLegalBanner extends LegalBanner {
     return JSON.parse(window.localStorage.retroBannersDismissed).includes(retro.id);
   }
 }
-
-class HomeLegalBanner extends LegalBanner {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      hasBeenDismissed: window.localStorage.homeTermsDismissed,
-    };
-  }
-
-  okClicked() {
-    super.okClicked();
-
-    window.localStorage.homeTermsDismissed = true;
-
-    this.setState({hasBeenDismissed: true});
-  }
-
-  shouldHide() {
-    return this.state.hasBeenDismissed;
-  }
-}
-
-export {RetroLegalBanner, HomeLegalBanner};
