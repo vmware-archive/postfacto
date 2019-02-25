@@ -86,16 +86,20 @@ export class Router extends React.Component {
     router.get('/registration/:accessToken/:email/:fullName', this.showRegistration);
   }
 
+  setPage(page, additionalProps = {}) {
+    this.setState({Page: page, additionalProps});
+  }
+
   componentWillReceiveProps(nextProps) {
     const {api_server_not_found, retro_not_found, not_found} = nextProps;
     if (api_server_not_found) {
-      this.setState({Page: ApiServerNotFoundPage});
+      this.setPage(ApiServerNotFoundPage);
     }
     if (retro_not_found) {
-      this.setState({Page: RetroNotFoundPage});
+      this.setPage(RetroNotFoundPage);
     }
     if (not_found) {
-      this.setState({Page: NotFoundPage});
+      this.setPage(NotFoundPage);
     }
   }
 
@@ -108,77 +112,71 @@ export class Router extends React.Component {
   showRetro = (req) => {
     const {retroId} = req.params;
     if (retroId === 'new') {
-      this.setState({Page: RetroCreatePage});
+      this.setPage(RetroCreatePage);
       return;
     }
 
     Actions.retroIdRouted(retroId);
-    this.setState({Page: ShowRetroPage, additionalProps: {retroId, archives: false}});
+    this.setPage(ShowRetroPage, {retroId, archives: false});
   };
 
   listRetros = () => {
-    this.setState({Page: ListRetrosPage});
+    this.setPage(ListRetrosPage);
   };
 
   listRetroArchives = (req) => {
     const {retroId} = req.params;
     Actions.retroIdRouted(retroId);
-    this.setState({Page: ListRetroArchivesPage, additionalProps: {retroId}});
+    this.setPage(ListRetroArchivesPage, {retroId});
   };
 
   showRetroArchive = (req) => {
     const {retroId, archiveId} = req.params;
     Actions.retroIdRouted(retroId);
-    this.setState({
-      Page: ShowRetroPage,
-      additionalProps: {retroId, archives: true, archiveId},
-    });
+    this.setPage(ShowRetroPage, {retroId, archives: true, archiveId});
   };
 
   showRetroSettings = (req) => {
     const {retroId} = req.params;
     Actions.retroIdRouted(retroId);
-    this.setState({Page: ShowRetroSettingsPage, additionalProps: {retroId}});
+    this.setPage(ShowRetroSettingsPage, {retroId});
   };
 
   showRetroPasswordSettings = (req) => {
     const {retroId} = req.params;
     Actions.retroIdRouted(retroId);
-    this.setState({Page: ShowRetroPasswordSettingsPage, additionalProps: {retroId}});
+    this.setPage(ShowRetroPasswordSettingsPage, {retroId});
   };
 
   showNotFound = () => {
-    this.setState({Page: NotFoundPage});
+    this.setPage(NotFoundPage);
   };
 
   showTerms = () => {
-    this.setState({Page: NewTermsPage});
+    this.setPage(NewTermsPage);
   };
 
   loginToRetro = (req) => {
     const {retroId} = req.params;
-    this.setState({Page: LoginToRetroPage, additionalProps: {retroId}});
+    this.setPage(LoginToRetroPage, {retroId});
   };
 
   reloginToRetro = (req) => {
     const {retroId} = req.params;
-    this.setState({Page: LoginToRetroPage, additionalProps: {retroId, force_relogin: true}});
+    this.setPage(LoginToRetroPage, {retroId, force_relogin: true});
   };
 
   showHome = () => {
     if (this.isUserLoggedIn()) {
       this.listRetros();
     } else {
-      this.setState({Page: HomePage});
+      this.setPage(HomePage);
     }
   };
 
   showRegistration = (req) => {
     const {accessToken, email, fullName} = req.params;
-    this.setState({
-      Page: RegistrationPage,
-      additionalProps: {accessToken, email, fullName},
-    });
+    this.setPage(RegistrationPage, {accessToken, email, fullName});
   };
 
   render() {
