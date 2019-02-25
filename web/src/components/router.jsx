@@ -84,8 +84,6 @@ export class Router extends React.Component {
     router.get('/retros/:retroId/settings/password', this.showRetroPasswordSettings);
     router.get('/terms', this.showTerms);
     router.get('/registration/:accessToken/:email/:fullName', this.showRegistration);
-
-    Actions.retrieveConfig();
   }
 
   componentWillReceiveProps(nextProps) {

@@ -31,7 +31,7 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {useStore} from 'p-flux';
+import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import EnhancedRouter from './components/router';
@@ -58,6 +58,7 @@ class Application extends React.Component {
 
   componentDidMount() {
     Logger.info('Application started');
+    Actions.retrieveConfig();
   }
 
   render() {
