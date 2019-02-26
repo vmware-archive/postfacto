@@ -57,10 +57,12 @@ function createRetros(count = 1) {
 }
 
 describe('List Retros Page', () => {
+  const config = {contact: '', terms: '', privacy: ''};
+
   let dom;
 
   beforeEach(() => {
-    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)}/></MuiThemeProvider>);
+    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)} config={config}/></MuiThemeProvider>);
   });
 
   it('shows multiple retros', () => {

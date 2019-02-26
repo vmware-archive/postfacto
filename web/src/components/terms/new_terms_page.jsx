@@ -30,9 +30,10 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 import RetroFooter from '../shared/footer';
 
-export default () => (
+const NewTermsPage = ({config}) => (
   <div id="new-terms" className="terms">
     <div className="simple-text-page">
       <h1>Postfacto Services Agreement</h1>
@@ -234,6 +235,12 @@ export default () => (
       </p>
 
     </div>
-    <RetroFooter/>
+    <RetroFooter config={config}/>
   </div>
 );
+
+NewTermsPage.propTypes = {
+  config: types.object.isRequired,
+};
+
+export default NewTermsPage;

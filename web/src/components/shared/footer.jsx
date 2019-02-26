@@ -30,9 +30,9 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 
-export default function Footer() {
-  const {config} = global.Retro;
+export default function Footer({config}) {
   return (
     <div className="footer">
       <span className="links">
@@ -43,3 +43,11 @@ export default function Footer() {
     </div>
   );
 }
+
+Footer.propTypes = {
+  config: types.shape({
+    contact: types.string.isRequired,
+    terms: types.string.isRequired,
+    privacy: types.string.isRequired,
+  }).isRequired,
+};

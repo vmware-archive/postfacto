@@ -36,7 +36,7 @@ import Application from '../Application'; // Load dispatchers (sets global state
 jest.useFakeTimers();
 
 beforeEach(() => {
-  global.Retro = {config: {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'}};
+  global.Retro = {config: {api_base_url: 'https://example.com', enable_analytics: false}};
 
   Application.reset(); // set global state such as p-flux.Actions
 

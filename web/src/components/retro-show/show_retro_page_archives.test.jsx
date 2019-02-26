@@ -38,7 +38,14 @@ import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
-const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+const config = {
+  title: 'Retro',
+  api_base_url: 'https://example.com',
+  websocket_url: 'ws://websocket/url',
+  contact: '',
+  terms: '',
+  privacy: '',
+};
 
 describe('Show retro page archives', () => {
   const retro_archives = {

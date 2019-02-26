@@ -30,8 +30,16 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 
 export default class LegalBanner extends React.Component {
+  static propTypes = {
+    config: types.shape({
+      terms: types.string.isRequired,
+      privacy: types.string.isRequired,
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -46,6 +54,8 @@ export default class LegalBanner extends React.Component {
   }
 
   render() {
+    const {config} = this.props;
+
     if (this.shouldHide()) {
       return null;
     }
@@ -54,8 +64,8 @@ export default class LegalBanner extends React.Component {
       <div className="banner" style={{display: 'flex'}}>
         <div className="terms-text">
           By accessing and using Postfacto, you agree to our
-          {' '}<a href={global.Retro.config.terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and
-          {' '}<a href={global.Retro.config.privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
+          {' '}<a href={config.terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and
+          {' '}<a href={config.privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
           use of cookies
         </div>
         <button className="button ok-button" type="button" onClick={this.okClicked}>OK</button>

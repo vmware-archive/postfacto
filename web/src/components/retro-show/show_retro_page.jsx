@@ -276,14 +276,14 @@ export default class ShowRetroPage extends React.Component {
   }
 
   renderMobile(retro) {
-    const {config: {websocket_url}, retroId, archives} = this.props;
+    const {config, retroId, archives} = this.props;
     return (
       <span>
-        <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+        <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
-          <RetroLegalBanner retro={retro}/>
+          <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
           <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}/>
 
@@ -318,14 +318,14 @@ export default class ShowRetroPage extends React.Component {
           {
             this.renderColumnMobile(retro)
           }
-          <RetroFooter/>
+          <RetroFooter config={config}/>
         </div>
       </span>
     );
   }
 
   renderDesktop(retro) {
-    const {config: {websocket_url}, retroId, archives} = this.props;
+    const {config, retroId, archives} = this.props;
     const {isMobile} = this.state;
     let retroContainerClasses = 'full-height full-height-retro';
 
@@ -344,11 +344,11 @@ export default class ShowRetroPage extends React.Component {
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
-          <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+          <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
           {this.renderArchiveConfirmationDialog()}
           <div className={retroContainerClasses}>
 
-            <RetroLegalBanner retro={retro}/>
+            <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
             <RetroHeading
               retro={retro}
@@ -386,7 +386,7 @@ export default class ShowRetroPage extends React.Component {
               isMobile={isMobile}
               archives={archives}
             />
-            <RetroFooter/>
+            <RetroFooter config={config}/>
           </div>
         </span>
       </HotKeys>

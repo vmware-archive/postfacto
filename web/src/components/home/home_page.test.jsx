@@ -30,15 +30,17 @@
  */
 
 import React from 'react';
-import {mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import HomePage from './home_page';
 
+const config = {contact: '', terms: '', privacy: ''};
+
 describe('HomePage', () => {
   it('dispatches showHomePageAnalytics when mounted', () => {
-    mount(<HomePage/>);
+    shallow(<HomePage config={config}/>);
     expect(Dispatcher).toHaveReceived('showHomePageAnalytics');
   });
 });

@@ -30,6 +30,7 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 import {Actions} from 'p-flux';
 import RetroFooter from '../shared/footer';
 import GoogleLoginWrapper from './google_login_wrapper';
@@ -37,6 +38,10 @@ import Logger from '../../helpers/logger';
 import HomeLegalBanner from './home_legal_banner';
 
 export default class HomePage extends React.Component {
+  static propTypes = {
+    config: types.object.isRequired,
+  };
+
   componentDidMount() {
     Actions.showHomePageAnalytics();
   }
@@ -55,11 +60,13 @@ export default class HomePage extends React.Component {
   }
 
   render() {
+    const {config} = this.props;
+
     return (
       <div className="home-page">
         <div className="sticky-header">
           <div className="row">
-            <HomeLegalBanner/>
+            <HomeLegalBanner config={config}/>
           </div>
           <div className="row header-title">
             <div className="show-for-medium small-12 columns">
@@ -99,7 +106,7 @@ export default class HomePage extends React.Component {
           </div>
         </div>
 
-        <RetroFooter/>
+        <RetroFooter config={config}/>
       </div>
     );
   }

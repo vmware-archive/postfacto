@@ -50,6 +50,7 @@ export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {
     archives: types.array,
     retroId: types.string.isRequired,
+    config: types.object.isRequired,
   };
 
   static defaultProps = {
@@ -112,7 +113,7 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   render() {
-    const {archives, retroId} = this.props;
+    const {archives, retroId, config} = this.props;
     if (!archives) {
       return <div>Loading archives...</div>;
     }
@@ -154,7 +155,7 @@ export default class ListRetroArchivesPage extends React.Component {
             }
           </div>
         </div>
-        <RetroFooter/>
+        <RetroFooter config={config}/>
       </div>
     );
   }

@@ -32,8 +32,8 @@
 import LegalBanner from '../shared/legal_banner';
 
 export default class HomeLegalBanner extends LegalBanner {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       hasBeenDismissed: window.localStorage.homeTermsDismissed,
     };

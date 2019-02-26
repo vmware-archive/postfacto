@@ -48,8 +48,8 @@ export default class RetroHeading extends React.PureComponent {
     showVideoButton: false,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onArchivesButtonClicked = this.onArchivesButtonClicked.bind(this);
     this.handleArchiveRetro = this.handleArchiveRetro.bind(this);

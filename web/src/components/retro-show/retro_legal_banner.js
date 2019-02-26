@@ -34,21 +34,30 @@ import LegalBanner from '../shared/legal_banner';
 
 export default class RetroLegalBanner extends LegalBanner {
   static propTypes = {
-    retro: types.object.isRequired,
+    retroId: types.string.isRequired,
+    isPrivate: types.bool,
+    config: types.shape({
+      terms: types.string.isRequired,
+      privacy: types.string.isRequired,
+    }).isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  static defaultProps = {
+    isPrivate: false,
+  };
+
+  constructor(props) {
+    super(props);
 
     this.state = {
-      hasBeenDismissed: this.hasBeenDismissed(props.retro),
+      hasBeenDismissed: this.hasBeenDismissed(props.retroId),
     };
   }
 
   okClicked() {
     super.okClicked();
 
-    this.markAsDismissed(this.props.retro);
+    this.markAsDismissed(this.props.retroId);
 
     this.setState({
       hasBeenDismissed: true,
@@ -56,20 +65,20 @@ export default class RetroLegalBanner extends LegalBanner {
   }
 
   shouldHide() {
-    return this.state.hasBeenDismissed || this.props.retro.is_private;
+    return this.state.hasBeenDismissed || this.props.isPrivate;
   }
 
-  markAsDismissed(retro) {
+  markAsDismissed(retroId) {
     const retroBannersDismissed = JSON.parse(window.localStorage.retroBannersDismissed);
-    retroBannersDismissed.push(retro.id);
+    retroBannersDismissed.push(retroId);
     window.localStorage.retroBannersDismissed = JSON.stringify(retroBannersDismissed);
   }
 
-  hasBeenDismissed(retro) {
+  hasBeenDismissed(retroId) {
     if (!window.localStorage.retroBannersDismissed) {
       window.localStorage.retroBannersDismissed = JSON.stringify([]);
     }
 
-    return JSON.parse(window.localStorage.retroBannersDismissed).includes(retro.id);
+    return JSON.parse(window.localStorage.retroBannersDismissed).includes(retroId);
   }
 }
