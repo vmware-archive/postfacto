@@ -48,4 +48,9 @@ export default {
     archiveEmails: false,
   },
   countryCode: 'GB',
+  environment: {
+    isMobile640: false,
+    isMobile1030: false,
+    isMobile1084: false,
+  },
 };

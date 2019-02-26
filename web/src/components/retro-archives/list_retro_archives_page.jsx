@@ -48,36 +48,24 @@ function makeDateString(date) {
 
 const createdAtDesc = (a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
+// not pure: uses window.localStorage to check login status
 export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {
     archives: types.array,
     retroId: types.string.isRequired,
     config: types.object.isRequired,
+    environment: types.shape({
+      isMobile1030: types.bool,
+    }).isRequired,
   };
 
   static defaultProps = {
     archives: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isMobile: false,
-    };
-  }
-
   componentWillMount() {
     const {retroId} = this.props;
     Actions.getRetroArchives({retro_id: retroId});
-    this.handleResize();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
   }
 
   onArchiveClicked(archiveId, e) {
@@ -91,14 +79,6 @@ export default class ListRetroArchivesPage extends React.Component {
     Actions.backPressedFromArchives({retro_id: retroId});
   };
 
-  handleResize = () => {
-    this.setState({isMobile: this.getIsMobile()});
-  };
-
-  getIsMobile() {
-    return window.innerWidth <= 1030;
-  }
-
   getMenuItems() {
     const items = [
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
@@ -108,11 +88,11 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   render() {
-    const {archives, retroId, config} = this.props;
+    const {archives, retroId, config, environment} = this.props;
     if (!archives) {
       return <div>Loading archives...</div>;
     }
-    const {isMobile} = this.state;
+    const isMobile = environment.isMobile1030;
     const menuItems = this.getMenuItems();
 
     return (

@@ -88,24 +88,10 @@ describe('Show retro page archives', () => {
     ],
   };
 
-  let originalGetIsMobile;
-  let shouldBeMobile;
-
-  beforeEach(() => {
-    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-    ShowRetroPage.prototype.getIsMobile = () => shouldBeMobile;
-  });
-
-  afterEach(() => {
-    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
-  });
-
   describe('on desktop', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = false;
-
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -115,6 +101,7 @@ describe('Show retro page archives', () => {
             retro={retro_archives}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={{isMobile640: false}}
           />
         </MuiThemeProvider>
       ));
@@ -154,8 +141,6 @@ describe('Show retro page archives', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = true;
-
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -165,6 +150,7 @@ describe('Show retro page archives', () => {
             retro={retro_archives}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={{isMobile640: true}}
           />
         </MuiThemeProvider>
       ));

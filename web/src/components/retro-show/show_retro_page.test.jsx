@@ -76,23 +76,17 @@ function createRetro(isPrivate = false) {
 }
 
 describe('ShowRetroPage', () => {
-  let originalGetIsMobile;
-  let shouldBeMobile;
+  let environment;
 
   beforeEach(() => {
-    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-    ShowRetroPage.prototype.getIsMobile = () => shouldBeMobile;
-  });
-
-  afterEach(() => {
-    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
+    environment = {isMobile640: false};
   });
 
   describe('private retro', () => {
     const retro = createRetro(true);
 
     it('does not show the privacy and terms banner on mobile', () => {
-      shouldBeMobile = true;
+      environment.isMobile640 = true;
 
       const dom = mount((
         <MuiThemeProvider>
@@ -102,6 +96,7 @@ describe('ShowRetroPage', () => {
             archives={false}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={environment}
           />
         </MuiThemeProvider>
       ));
@@ -110,7 +105,7 @@ describe('ShowRetroPage', () => {
     });
 
     it('does not show the privacy and terms banner on desktop', () => {
-      shouldBeMobile = false;
+      environment.isMobile640 = false;
 
       const dom = mount((
         <MuiThemeProvider>
@@ -120,6 +115,7 @@ describe('ShowRetroPage', () => {
             archives={false}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={environment}
           />
         </MuiThemeProvider>
       ));
@@ -133,7 +129,7 @@ describe('ShowRetroPage', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = false;
+      environment.isMobile640 = false;
       retro = createRetro();
 
       dom = mount((
@@ -144,6 +140,7 @@ describe('ShowRetroPage', () => {
             archives={false}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={environment}
           />
         </MuiThemeProvider>
       ));
@@ -188,6 +185,7 @@ describe('ShowRetroPage', () => {
               message: 'Some dialog message',
             }}
             featureFlags={{archiveEmails: true}}
+            environment={environment}
           />
         </MuiThemeProvider>
       ));
@@ -216,6 +214,7 @@ describe('ShowRetroPage', () => {
             message: 'Some dialog message',
           }}
           featureFlags={{archiveEmails: true}}
+          environment={environment}
         />
       ));
 
@@ -234,7 +233,7 @@ describe('ShowRetroPage', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = true;
+      environment.isMobile640 = true;
       retro = createRetro();
 
       dom = mount((
@@ -245,6 +244,7 @@ describe('ShowRetroPage', () => {
             archives={false}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={environment}
           />
         </MuiThemeProvider>
       ));

@@ -50,12 +50,12 @@ describe('ListRetroArchivesPage', () => {
     },
   ];
   const config = {contact: '', terms: '', privacy: ''};
+  const environment = {isMobile1030: false};
 
   let dom;
 
   beforeEach(() => {
-    window.innerWidth = 1084;
-    dom = mount(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives} config={config}/></MuiThemeProvider>);
+    dom = mount(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives} config={config} environment={environment}/></MuiThemeProvider>);
   });
 
   it('shows all archived retros', () => {
@@ -91,7 +91,7 @@ describe('ListRetroArchivesPage', () => {
 
   it('shows a sign out menu item if logged in', () => {
     window.localStorage.setItem('authToken', 'some-token');
-    dom = shallow(<ListRetroArchivesPage retroId="789" archives={archives} config={config}/>);
+    dom = shallow(<ListRetroArchivesPage retroId="789" archives={archives} config={config} environment={environment}/>);
 
     expect(getMenuLabels(dom)).toEqual(['Sign out']);
   });
