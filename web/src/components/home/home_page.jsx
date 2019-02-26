@@ -33,7 +33,7 @@ import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import RetroFooter from '../shared/footer';
-import GoogleLoginWrapper from './google_login_wrapper';
+import LoginForm from './login_form';
 import Logger from '../../helpers/logger';
 import HomeLegalBanner from './home_legal_banner';
 
@@ -88,15 +88,12 @@ export default class HomePage extends React.Component {
           </div>
           <div className="row">
             <div className="text-center">
-              {
-                global.Retro.config.google_oauth_client_id || global.Retro.config.mock_google_auth ? (
-                  <GoogleLoginWrapper
-                    onSuccess={this.onSignIn}
-                    onFailure={this.onGoogleLoginFailure}
-                    className="top-start-retro"
-                  />
-                ) : null
-              }
+              <LoginForm
+                onSuccess={this.onSignIn}
+                onFailure={this.onGoogleLoginFailure}
+                className="top-start-retro"
+                config={config}
+              />
             </div>
           </div>
           <div className="row">

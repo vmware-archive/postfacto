@@ -33,18 +33,23 @@ import React from 'react';
 import types from 'prop-types';
 import GoogleLogin from 'react-google-login';
 
-export default class GoogleLoginWrapper extends React.Component {
+export default class LoginForm extends React.Component {
   static propTypes = {
     onSuccess: types.func.isRequired,
     onFailure: types.func.isRequired,
     className: types.string.isRequired,
+    config: types.shape({
+      mock_google_auth: types.string,
+      google_oauth_client_id: types.string,
+      google_oauth_hosted_domain: types.string,
+    }).isRequired,
   };
 
   onMockLogin = (event) => {
     event.stopPropagation();
 
     const {onSuccess} = this.props;
-    const accessToken = window.mock_google_auth;
+    const accessToken = window.mock_google_auth; // this global is mutated during E2E tests
 
     const mockedEmail = accessToken.split('_')[1];
     onSuccess({
@@ -57,8 +62,11 @@ export default class GoogleLoginWrapper extends React.Component {
   };
 
   render() {
-    const {onSuccess, onFailure, className} = this.props;
-    const {config} = global.Retro;
+    const {config, onSuccess, onFailure, className} = this.props;
+
+    if (!config.google_oauth_client_id && !config.mock_google_auth) {
+      return null;
+    }
 
     return (
       <div onClickCapture={config.mock_google_auth ? this.onMockLogin : null}>
