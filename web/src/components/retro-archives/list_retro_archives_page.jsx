@@ -46,6 +46,8 @@ function makeDateString(date) {
   return `${day} ${monthName} ${year}`;
 }
 
+const createdAtDesc = (a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
 export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {
     archives: types.array,
@@ -62,9 +64,6 @@ export default class ListRetroArchivesPage extends React.Component {
     this.state = {
       isMobile: false,
     };
-
-    this.handleResize = this.handleResize.bind(this);
-    this.onCurrentRetroClicked = this.onCurrentRetroClicked.bind(this);
   }
 
   componentWillMount() {
@@ -87,18 +86,14 @@ export default class ListRetroArchivesPage extends React.Component {
     Actions.routeToRetroArchive({retro_id: retroId, archive_id: archiveId});
   }
 
-  sortedArchives(archives) {
-    return archives.sort((a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
-  }
-
-  onCurrentRetroClicked() {
+  onCurrentRetroClicked = () => {
     const {retroId} = this.props;
     Actions.backPressedFromArchives({retro_id: retroId});
-  }
+  };
 
-  handleResize() {
+  handleResize = () => {
     this.setState({isMobile: this.getIsMobile()});
-  }
+  };
 
   getIsMobile() {
     return window.innerWidth <= 1030;
@@ -143,7 +138,7 @@ export default class ListRetroArchivesPage extends React.Component {
         <div className="archives">
           <div className="row">
             {
-              this.sortedArchives(archives).map((a) => (
+              archives.sort(createdAtDesc).map((a) => (
                 <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
                   <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
                     <a href={`/retros/${retroId}/archives/${a.id}`}>

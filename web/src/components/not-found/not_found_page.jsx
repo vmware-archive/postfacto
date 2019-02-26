@@ -32,20 +32,14 @@
 import React from 'react';
 import {Actions} from 'p-flux';
 
-export default class NotFoundPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onCreateNewRetroClicked = this.onCreateNewRetroClicked.bind(this);
-  }
-
+export default class NotFoundPage extends React.PureComponent {
   componentWillUnmount() {
     Actions.resetNotFound();
   }
 
-  onCreateNewRetroClicked() {
+  onCreateNewRetroClicked = () => {
     Actions.redirectToRetroCreatePage();
-  }
+  };
 
   render() {
     return (

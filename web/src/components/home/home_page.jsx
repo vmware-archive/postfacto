@@ -37,7 +37,7 @@ import LoginForm from './login_form';
 import Logger from '../../helpers/logger';
 import HomeLegalBanner from './home_legal_banner';
 
-export default class HomePage extends React.Component {
+export default class HomePage extends React.PureComponent {
   static propTypes = {
     config: types.object.isRequired,
   };

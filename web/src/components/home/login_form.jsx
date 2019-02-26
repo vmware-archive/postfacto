@@ -33,7 +33,7 @@ import React from 'react';
 import types from 'prop-types';
 import GoogleLogin from 'react-google-login';
 
-export default class LoginForm extends React.Component {
+export default class LoginForm extends React.PureComponent {
   static propTypes = {
     onSuccess: types.func.isRequired,
     onFailure: types.func.isRequired,

@@ -47,21 +47,17 @@ export default class RegistrationPage extends React.Component {
       fullName: props.fullName,
       companyName: '',
     };
-
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleCompanyNameChange = this.handleCompanyNameChange.bind(this);
-    this.register = this.register.bind(this);
   }
 
-  handleNameChange(e) {
+  handleNameChange = (e) => {
     this.setState({fullName: e.target.value});
-  }
+  };
 
-  handleCompanyNameChange(e) {
+  handleCompanyNameChange = (e) => {
     this.setState({companyName: e.target.value});
-  }
+  };
 
-  register() {
+  register = () => {
     const {fullName, companyName} = this.state;
 
     Actions.createUser({
@@ -69,7 +65,7 @@ export default class RegistrationPage extends React.Component {
       company_name: companyName,
       full_name: fullName,
     });
-  }
+  };
 
   render() {
     return (
@@ -77,7 +73,7 @@ export default class RegistrationPage extends React.Component {
         <div className="medium-6 small-12 columns registration-side-banner new-retro-column">
           <div className="medium-centered small-centered">
             <p>Welcome to Postfacto!</p>
-            <h1>Let’s create an account for you!</h1>
+            <h1>Let&rsquo;s create an account for you!</h1>
           </div>
         </div>
 
