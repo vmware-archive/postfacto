@@ -30,8 +30,8 @@
  */
 
 import React from 'react';
-import GoogleLogin from 'react-google-login';
 import types from 'prop-types';
+import GoogleLogin from 'react-google-login';
 
 export default class GoogleLoginWrapper extends React.Component {
   static propTypes = {
@@ -40,37 +40,39 @@ export default class GoogleLoginWrapper extends React.Component {
     className: types.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  onMockLogin = (event) => {
+    event.stopPropagation();
 
-    this.handleClickCapture = this.handleClickCapture.bind(this);
-  }
+    const {onSuccess} = this.props;
+    const accessToken = window.mock_google_auth;
 
-  handleClickCapture(event) {
-    if (global.Retro.config.mock_google_auth) {
-      event.stopPropagation();
-      const mockedEmail = window.mock_google_auth.split('_')[1];
-      this.props.onSuccess({
-        profileObj: {
-          email: mockedEmail + '@example.com',
-          name: 'my full name',
-        },
-        accessToken: window.mock_google_auth,
-      });
-    }
-  }
+    const mockedEmail = accessToken.split('_')[1];
+    onSuccess({
+      profileObj: {
+        email: mockedEmail + '@example.com',
+        name: 'my full name',
+      },
+      accessToken,
+    });
+  };
 
   render() {
+    const {onSuccess, onFailure, className} = this.props;
+    const {config} = global.Retro;
+
     return (
-      <div onClickCapture={this.handleClickCapture}>
+      <div onClickCapture={config.mock_google_auth ? this.onMockLogin : null}>
         <GoogleLogin
-          clientId={global.Retro.config.google_oauth_client_id}
-          onSuccess={this.props.onSuccess}
-          onFailure={this.props.onFailure}
-          className={'button start-retro ' + this.props.className}
-          hostedDomain={global.Retro.config.google_oauth_hosted_domain}
+          clientId={config.google_oauth_client_id}
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+          className={'button start-retro ' + className}
+          hostedDomain={config.google_oauth_hosted_domain}
         >
-          <span><i className="fa fa-google" aria-hidden="true" style={{marginRight: '10px'}}/>Sign in with Google</span>
+          <span>
+            <i className="fa fa-google" aria-hidden="true" style={{marginRight: '10px'}}/>
+            Sign in with Google
+          </span>
         </GoogleLogin>
       </div>
     );
