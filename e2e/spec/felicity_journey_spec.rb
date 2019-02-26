@@ -417,6 +417,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     within('div.retro-item', text: 'this is a happy item') do
       find('.retro-item-cancel').click
     end
+    sleep(1)
     expect(page).not_to have_css '.highlight'
 
     # Re-highlight

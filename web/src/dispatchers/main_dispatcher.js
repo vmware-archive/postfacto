@@ -75,7 +75,6 @@ export default {
   getRetroLoginSuccessfullyReceived({data}) {
     this.$store.merge({retro: data.retro});
   },
-
   retroNotFound() {
     this.$store.merge({retro_not_found: true});
   },

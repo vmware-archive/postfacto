@@ -36,6 +36,7 @@ import {Actions} from 'p-flux';
 import Scroll from 'react-scroll';
 import CountdownTimer from './countdown_timer';
 import RetroItemEditView from './retro_item_edit_view';
+import GiphyText from './giphy_text';
 
 export default class RetroColumnItem extends React.Component {
   static propTypes = {
@@ -70,7 +71,8 @@ export default class RetroColumnItem extends React.Component {
   componentDidUpdate(prevProps) {
     /* eslint-disable react/no-find-dom-node */
     const {item, highlighted_item_id} = prevProps;
-    const wasHighlighted = (highlighted_item_id && highlighted_item_id === item.id);
+    const wasHighlighted =
+      highlighted_item_id && highlighted_item_id === item.id;
     if (this.isHighlighted() && !wasHighlighted) {
       const windowH = document.body.getBoundingClientRect().height;
       const itemH = ReactDOM.findDOMNode(this).offsetHeight;
@@ -92,12 +94,12 @@ export default class RetroColumnItem extends React.Component {
   // boolean checkers
   isEnabled() {
     const {item, highlighted_item_id} = this.props;
-    return (!highlighted_item_id || highlighted_item_id === item.id);
+    return !highlighted_item_id || highlighted_item_id === item.id;
   }
 
   isHighlighted() {
     const {item, highlighted_item_id} = this.props;
-    return (highlighted_item_id && highlighted_item_id === item.id);
+    return highlighted_item_id && highlighted_item_id === item.id;
   }
 
   isDone() {
@@ -184,7 +186,11 @@ export default class RetroColumnItem extends React.Component {
 
     if (isEditing && editedText.trim().length > 0) {
       this.setState({isEditing: false});
-      Actions.updateRetroItem({retro_id: retroId, item, description: editedText});
+      Actions.updateRetroItem({
+        retro_id: retroId,
+        item,
+        description: editedText,
+      });
     }
   }
 
@@ -197,10 +203,18 @@ export default class RetroColumnItem extends React.Component {
 
   // render
   renderTimer() {
-    const {item, highlighted_item_id, retro_item_end_time, retroId} = this.props;
+    const {
+      item,
+      highlighted_item_id,
+      retro_item_end_time,
+      retroId,
+    } = this.props;
     if (item.id === highlighted_item_id) {
       return (
-        <CountdownTimer endTimestampInMs={Date.parse(retro_item_end_time)} retroId={retroId}/>
+        <CountdownTimer
+          endTimestampInMs={Date.parse(retro_item_end_time)}
+          retroId={retroId}
+        />
       );
     }
     return null;
@@ -213,8 +227,12 @@ export default class RetroColumnItem extends React.Component {
       return (
         <div className="item-footer">
           <br/>
-          <div className="retro-item-cancel" onClick={this.onItemCancelClicked}>Cancel</div>
-          <div className="item-done" onClick={this.onItemDoneClicked}>Done</div>
+          <div className="retro-item-cancel" onClick={this.onItemCancelClicked}>
+            Cancel
+          </div>
+          <div className="item-done" onClick={this.onItemDoneClicked}>
+            Done
+          </div>
         </div>
       );
     }
@@ -231,7 +249,9 @@ export default class RetroColumnItem extends React.Component {
     return (
       <div className="item-vote">
         <div className="item-vote-submit" onClick={this.onItemVoteClicked}>
-          <div className="vote-icon"><i className="fa fa-heart" aria-hidden="true"/></div>
+          <div className="vote-icon">
+            <i className="fa fa-heart" aria-hidden="true"/>
+          </div>
           <div className="vote-count">{this.props.item.vote_count}</div>
         </div>
       </div>
@@ -253,11 +273,12 @@ export default class RetroColumnItem extends React.Component {
   }
 
   renderDescription() {
-    const {item} = this.props;
-
+    const {retroId, item: {description}} = this.props;
     return (
       <div className="item-text">
-        <button type="button">{item.description}</button>
+        <button type="button">
+          <GiphyText retroId={retroId} value={description}/>
+        </button>
       </div>
     );
   }
@@ -296,7 +317,12 @@ export default class RetroColumnItem extends React.Component {
       );
     }
     return (
-      <div id={this.domId()} key={item.id} className={'retro-item' + this.getPrimaryClass()} onClick={this.onItemClicked}>
+      <div
+        id={this.domId()}
+        key={item.id}
+        className={'retro-item' + this.getPrimaryClass()}
+        onClick={this.onItemClicked}
+      >
         {itemContent}
       </div>
     );

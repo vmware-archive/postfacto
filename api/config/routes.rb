@@ -53,5 +53,6 @@ Rails.application.routes.draw do
     resource :discussion, only: [:create, :destroy, :update] do
       post 'transitions', controller: 'transitions'
     end
+    get 'giphy', to: 'giphy#search'
   end
 end

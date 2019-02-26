@@ -30,6 +30,7 @@
  */
 
 import fetchJson from '../helpers/fetch_helper';
+import {getApiToken} from '../dispatchers/api_dispatcher';
 
 export default {
   apiBaseUrl() {
@@ -241,6 +242,12 @@ export default {
         new_password,
         request_uuid,
       }),
+    });
+  },
+
+  getRetroGif(retro_id, query) {
+    return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/giphy?q=${encodeURI(query)}`, {
+      accessToken: getApiToken(retro_id),
     });
   },
 

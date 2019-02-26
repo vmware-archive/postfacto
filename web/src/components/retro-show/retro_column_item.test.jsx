@@ -36,6 +36,7 @@ import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import RetroColumnItem from './retro_column_item';
+import GiphyText from './giphy_text';
 
 describe('RetroColumnItem', () => {
   const retroId = 'retro-slug-123';
@@ -283,5 +284,13 @@ describe('RetroColumnItem', () => {
       dom.find('.item-done').simulate('click');
       expect(Dispatcher).not.toHaveReceived('doneRetroItem');
     });
+  });
+
+  it('renders the description in a giphy tag', () => {
+    const dom = mount(<RetroColumnItem retroId={retroId} item={item} highlighted_item_id={2} archives={false} isMobile/>);
+    const giphy = dom.find(GiphyText);
+
+    expect(giphy.prop('retroId')).toEqual(retroId);
+    expect(giphy.prop('value')).toEqual(item.description);
   });
 });

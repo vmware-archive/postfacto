@@ -45,6 +45,9 @@ export default function fetchJson(url, {accessToken, headers, ...options} = {}) 
       if (response.status === 204) {
         return [response.status, ''];
       }
+      if (response.status === 405) {
+        return [response.status, ''];
+      }
       return Promise.all([response.status, response.json()]);
     })
     .catch(() => {
