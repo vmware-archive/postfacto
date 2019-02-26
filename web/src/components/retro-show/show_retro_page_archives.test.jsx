@@ -142,7 +142,7 @@ describe('Show retro page archives', () => {
 
     it('shows a menu with "Sign out" if logged in', () => {
       window.localStorage.setItem('authToken', 'some-token');
-      dom.update();
+      dom.setProps({}); // force update
 
       const menuLabels = getMenuLabels(dom);
       const lastMenuLabel = menuLabels[menuLabels.length - 1];

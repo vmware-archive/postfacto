@@ -29,56 +29,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React from 'react';
 import types from 'prop-types';
 import LegalBanner from '../shared/legal_banner';
 
-export default class RetroLegalBanner extends LegalBanner {
+export default class HomeLegalBanner extends React.PureComponent {
   static propTypes = {
-    retroId: types.string.isRequired,
-    isPrivate: types.bool,
     config: types.shape({
       terms: types.string.isRequired,
       privacy: types.string.isRequired,
     }).isRequired,
   };
 
-  static defaultProps = {
-    isPrivate: false,
-  };
-
   constructor(props) {
     super(props);
 
     this.state = {
-      hasBeenDismissed: this.hasBeenDismissed(props.retroId),
+      hasBeenDismissed: window.localStorage.homeTermsDismissed,
     };
   }
 
-  okClicked() {
-    super.okClicked();
+  onDismiss = () => {
+    window.localStorage.homeTermsDismissed = true;
 
-    this.markAsDismissed(this.props.retroId);
+    this.setState({hasBeenDismissed: true});
+  };
 
-    this.setState({
-      hasBeenDismissed: true,
-    });
-  }
+  render() {
+    const {config} = this.props;
 
-  shouldHide() {
-    return this.state.hasBeenDismissed || this.props.isPrivate;
-  }
-
-  markAsDismissed(retroId) {
-    const retroBannersDismissed = JSON.parse(window.localStorage.retroBannersDismissed);
-    retroBannersDismissed.push(retroId);
-    window.localStorage.retroBannersDismissed = JSON.stringify(retroBannersDismissed);
-  }
-
-  hasBeenDismissed(retroId) {
-    if (!window.localStorage.retroBannersDismissed) {
-      window.localStorage.retroBannersDismissed = JSON.stringify([]);
+    if (this.state.hasBeenDismissed) {
+      return null;
     }
 
-    return JSON.parse(window.localStorage.retroBannersDismissed).includes(retroId);
+    return (<LegalBanner config={config} onDismiss={this.onDismiss}/>);
   }
 }
