@@ -58,16 +58,20 @@ export default class RegistrationPage extends React.Component {
   };
 
   register = () => {
+    const {accessToken} = this.props;
     const {fullName, companyName} = this.state;
 
     Actions.createUser({
-      access_token: this.props.accessToken,
+      access_token: accessToken,
       company_name: companyName,
       full_name: fullName,
     });
   };
 
   render() {
+    const {email} = this.props;
+    const {fullName, companyName} = this.state;
+
     return (
       <div className="registration-page">
         <div className="medium-6 small-12 columns registration-side-banner new-retro-column">
@@ -82,7 +86,7 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <label className="label">Email</label>
               <input
-                value={this.props.email}
+                value={email}
                 placeholder="Email"
                 id="email"
                 name="email"
@@ -95,7 +99,7 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <label className="label">Full Name</label>
               <input
-                value={this.state.fullName}
+                value={fullName}
                 onChange={this.handleNameChange}
                 placeholder="Full Name"
                 id="fullName"
@@ -108,7 +112,7 @@ export default class RegistrationPage extends React.Component {
             <div className="row">
               <label className="label">Company Name</label>
               <input
-                value={this.state.companyName}
+                value={companyName}
                 onChange={this.handleCompanyNameChange}
                 placeholder="Company Name"
                 id="companyName"
