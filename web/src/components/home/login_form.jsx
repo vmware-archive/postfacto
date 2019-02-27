@@ -39,7 +39,7 @@ export default class LoginForm extends React.PureComponent {
     onFailure: types.func.isRequired,
     className: types.string.isRequired,
     config: types.shape({
-      mock_google_auth: types.string,
+      mock_google_auth: types.bool,
       google_oauth_client_id: types.string,
       google_oauth_hosted_domain: types.string,
     }).isRequired,
