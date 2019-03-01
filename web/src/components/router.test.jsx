@@ -35,7 +35,7 @@ import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 
 import Alert from './shared/alert';
-import Router from './router';
+import {Router} from './router';
 import EmptyPage from './shared/empty_page';
 import HomePage from './home/home_page';
 import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';

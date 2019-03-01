@@ -41,7 +41,7 @@ import RetroColumn from './retro_column';
 import RetroActionPanel from './retro_action_panel';
 import RetroWebsocket from './retro_websocket';
 import RetroFooter from '../shared/footer';
-import {RetroLegalBanner} from '../shared/retro_legal_banner';
+import RetroLegalBanner from './retro_legal_banner';
 import RetroHeading from './retro_heading';
 
 import EmptyPage from '../shared/empty_page';

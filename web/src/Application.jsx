@@ -31,11 +31,10 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {useStore} from 'p-flux';
+import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import useRouter from './use_router';
-import Router from './components/router';
+import EnhancedRouter from './components/router';
 import Header from './components/shared/header';
 import Logger from './helpers/logger';
 
@@ -55,11 +54,11 @@ class Application extends React.Component {
   static propTypes = {
     config: types.object.isRequired,
     store: types.object.isRequired,
-    router: types.oneOfType([types.object, types.func]).isRequired,
   };
 
   componentDidMount() {
     Logger.info('Application started');
+    Actions.retrieveConfig();
   }
 
   render() {
@@ -69,7 +68,7 @@ class Application extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="retro-application">
           <Header config={config} retro={store.retro}/>
-          <Router router={router} config={config} {...store}/>
+          <EnhancedRouter router={router} config={config} {...store}/>
           <SessionWebsocket url={websocket_url}/>
         </div>
       </MuiThemeProvider>
@@ -78,7 +77,7 @@ class Application extends React.Component {
 }
 
 export default useStore(
-  useRouter(Application),
+  Application,
   {
     store: rootStore,
     actions: [],

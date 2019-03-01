@@ -31,7 +31,7 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import './spec_helper';
+import '../spec_helper';
 
 import PropTypes from 'prop-types';
 import useRouter from './use_router';

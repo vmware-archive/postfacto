@@ -34,7 +34,7 @@ import {Actions} from 'p-flux';
 import RetroFooter from '../shared/footer';
 import GoogleLoginWrapper from './google_login_wrapper';
 import Logger from '../../helpers/logger';
-import {HomeLegalBanner} from '../shared/retro_legal_banner';
+import HomeLegalBanner from './home_legal_banner';
 
 export default class HomePage extends React.Component {
   componentDidMount() {
