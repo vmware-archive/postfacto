@@ -31,9 +31,13 @@
 class RetrosController < ApplicationController
   include RetrosAuth
 
-  before_action :load_and_authenticate_retro, only: [:show, :update_password]
-  before_action :authenticate_user, only: [:create, :index]
-  before_action :load_and_authenticate_retro_admin, only: [:archive, :update]
+  before_action :authenticate_user, only: [:index, :create]
+  before_action :load_and_authenticate_retro, only: [:show]
+  before_action :load_and_authenticate_retro_admin, only: [:archive, :update, :update_password]
+
+  def index
+    render json: { retros: @user.retros }
+  end
 
   def create
     @retro = @user.retros.create(retro_params)
@@ -46,10 +50,6 @@ class RetrosController < ApplicationController
     else
       render json: { errors: retro_errors_hash }, status: :unprocessable_entity
     end
-  end
-
-  def index
-    render json: { retros: @user.retros }
   end
 
   def update
@@ -119,9 +119,5 @@ class RetrosController < ApplicationController
 
   def retro_update_password_params
     params.permit(:id, :current_password, :new_password, :request_uuid)
-  end
-
-  def load_retro_with_items
-    @retro = Retro.includes(:items, :action_items).find_by_slug!(params.fetch(:id))
   end
 end

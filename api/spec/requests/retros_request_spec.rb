@@ -419,7 +419,13 @@ describe '/retros' do
       retro.update!(password: 'before')
 
       patch retro_update_password_path(retro),
-            params: { current_password: 'before', new_password: 'after', request_uuid: 'blah' }, as: :json
+            headers: { HTTP_AUTHORIZATION: token },
+            params: {
+              current_password: 'before',
+              new_password: 'after',
+              request_uuid: 'blah'
+            },
+            as: :json
 
       expect(response.status).to eq(200)
 
@@ -430,7 +436,13 @@ describe '/retros' do
     it 'returns unprocessable entity when current password does not match' do
       retro.update!(password: 'bleah')
 
-      patch retro_update_password_path(retro), params: { current_password: 'before', new_password: 'after' }, as: :json
+      patch retro_update_password_path(retro),
+            headers: { HTTP_AUTHORIZATION: token },
+            params: {
+              current_password: 'before',
+              new_password: 'after'
+            },
+            as: :json
 
       expect(response.status).to eq(422)
       expect(retro.validate_login?('bleah')).to eq(true)

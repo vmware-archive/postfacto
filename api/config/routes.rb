@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   resources :oauth_sessions, path: 'sessions', only: [:create]
   resources :users, only: [:create]
 
-  resources :retros, only: [:create, :index, :show, :update] do
+  resources :retros, only: [:index, :create, :show, :update] do
     resources :archives, only: [:index, :show]
     resources :settings, only: [:index]
     resources :action_items, only: [:create, :destroy, :update]
