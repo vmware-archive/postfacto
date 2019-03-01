@@ -234,34 +234,6 @@ describe '/retros' do
     end
   end
 
-  describe 'GET /login' do
-    it 'returns retro ID and name' do
-      get retro_path(retro) + '/login', params: {}, as: :json
-      expect(status).to eq(200)
-      data = JSON.parse(response.body)
-      expect(data['retro']['id']).to be_kind_of(Integer)
-      expect(data['retro']['name']).to eq('My Retro')
-    end
-  end
-
-  describe 'PUT /login' do
-    context 'if password is correct' do
-      it 'responds with 200 and returns token' do
-        put retro_path(retro) + '/login', params: { retro: { password: 'the-password' } }, as: :json
-        expect(status).to eq(200)
-        data = JSON.parse(response.body)
-        expect(data['token']).to_not be_blank
-      end
-    end
-
-    context 'if password is incorrect' do
-      it 'responds with forbidden' do
-        put retro_path(retro) + '/login', params: { retro: { password: 'anything-else' } }, as: :json
-        expect(status).to eq(403)
-      end
-    end
-  end
-
   describe 'PUT /:id/archive' do
     context 'when authenticated' do
       before do

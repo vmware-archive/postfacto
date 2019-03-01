@@ -470,8 +470,8 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'getRetroLogin', data: {retro_id: 1}});
     });
 
-    it('makes an api GET to /retros/:id/login', () => {
-      expect('/retros/1/login').toHaveBeenRequestedWith({
+    it('makes an api GET to /retros/:id/sessions/new', () => {
+      expect('/retros/1/sessions/new').toHaveBeenRequestedWith({
         requestHeaders: {
           'accept': 'application/json',
           'content-type': 'application/json',
@@ -553,9 +553,9 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'loginToRetro', data: {retro_id: 15, password: 'pa55word'}});
     });
 
-    it('makes an api PUT to /retros/:id/login', () => {
-      expect('/retros/15/login').toHaveBeenRequestedWith({
-        method: 'PUT',
+    it('makes an api POST to /retros/:id/sessions', () => {
+      expect('/retros/15/sessions').toHaveBeenRequestedWith({
+        method: 'POST',
         data: {retro: {password: 'pa55word'}},
       });
       const request = jasmine.Ajax.requests.mostRecent();

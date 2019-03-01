@@ -28,16 +28,12 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'security/jwt_token'
-
 class RetrosController < ApplicationController
   include RetrosAuth
 
   before_action :load_and_authenticate_retro, only: [:show, :update_password]
   before_action :authenticate_user, only: [:create, :index]
   before_action :load_and_authenticate_retro_admin, only: [:archive, :update]
-
-  before_action :load_retro, only: [:show_login, :login]
 
   def create
     @retro = @user.retros.create(retro_params)
@@ -54,17 +50,6 @@ class RetrosController < ApplicationController
 
   def index
     render json: { retros: @user.retros }
-  end
-
-  def show_login
-  end
-
-  def login
-    if password_matches?(retro_params.fetch(:password))
-      render json: { token: generate_retro_token(@retro) }, status: :ok
-    else
-      render json: :no_content, status: :forbidden
-    end
   end
 
   def update
@@ -84,7 +69,7 @@ class RetrosController < ApplicationController
   end
 
   def update_password
-    if password_matches?(retro_update_password_params.fetch(:current_password))
+    if @retro.validate_login?(retro_update_password_params.fetch(:current_password))
       @retro.update!(password: retro_update_password_params.fetch(:new_password))
 
       RetrosChannel.broadcast_force_relogin(@retro.reload, retro_update_password_params.fetch(:request_uuid))
@@ -114,10 +99,6 @@ class RetrosController < ApplicationController
     errors_hash = @retro.errors.messages
     errors_hash.each { |k, v| errors_hash[k] = v.join(' ') }
     errors_hash
-  end
-
-  def password_matches?(value)
-    @retro.validate_login?(value)
   end
 
   def broadcast

@@ -29,112 +29,36 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 require 'rails_helper'
-require 'clients/google_client'
 
-describe '/sessions' do
+describe '/retros/:id/sessions' do
+  let(:retro) do
+    Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
+  end
+
+  describe 'GET /new' do
+    it 'returns retro ID and name' do
+      get new_retro_session_path(retro), params: {}, as: :json
+      expect(status).to eq(200)
+      data = JSON.parse(response.body)
+      expect(data['retro']['id']).to be_kind_of(Integer)
+      expect(data['retro']['name']).to eq('My Retro')
+    end
+  end
+
   describe 'POST /' do
-    context 'google login succeeds and user exists' do
-      before do
-        user_data = {
-          name: 'Felicity Frog',
-          email: 'felicity@frog.com',
-          hd: 'frog.com'
-        }
-
-        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(user_data)
-
-        @user = User.create!(name: 'Felicity Frog', email: 'felicity@frog.com')
-      end
-
-      it 'returns user details' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
-
-        expect(response.status).to eq(200)
-
-        data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to eq(@user.auth_token)
-        expect(data[:new_user]).to eq(true)
+    context 'if password is correct' do
+      it 'responds with 200 and returns token' do
+        post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+        expect(status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['token']).to_not be_blank
       end
     end
 
-    context 'google login succeeeds and user has retro' do
-      before do
-        user_data = {
-          name: 'Felicity Frog',
-          email: 'felicity@frog.com',
-          hd: 'frog.com'
-        }
-
-        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(user_data)
-
-        @user = User.create!(name: 'Felicity Frog', email: 'felicity@frog.com')
-        @user.retros.create!(name: 'Froggy Retro')
-      end
-
-      it 'returns user details' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
-
-        expect(response.status).to eq(200)
-
-        data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to eq(@user.auth_token)
-        expect(data[:new_user]).to eq(false)
-      end
-    end
-
-    context 'google login succeeds and user doesn\'t exist' do
-      before do
-        user_data = {
-          name: 'Felicity Frog',
-          email: 'felicity@frog.com',
-          hd: 'frog.com'
-        }
-
-        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(user_data)
-      end
-
-      it 'returns 404' do
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
-
-        expect(response.status).to eq(404)
-      end
-    end
-
-    context 'google login failure' do
-      before do
-        expect(GOOGLE_CLIENT).to receive(:get_user!)
-          .with('invalid-access-token')
-          .and_raise(GoogleClient::GetUserFailed.new)
-      end
-
-      it 'returns 500' do
-        post '/sessions', params: { access_token: 'invalid-access-token' }, as: :json
-
-        expect(response.status).to eq(500)
-      end
-    end
-
-    context 'hosted domain is set' do
-      it 'returns forbidden for out of domain accounts' do
-        expect(GOOGLE_CLIENT).to receive(:get_user!)
-          .with('the-access-token')
-          .and_raise(GoogleClient::InvalidUserDomain.new)
-
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
-        expect(response).to be_forbidden
-      end
-
-      it 'returns 404 for in domain accounts' do
-        google_user_data = {
-          name: 'Felicity Frog',
-          email: 'felicity@frog.com',
-          hd: 'frog.com'
-        }
-
-        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
-
-        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
-        expect(response).to be_not_found
+    context 'if password is incorrect' do
+      it 'responds with forbidden' do
+        post retro_sessions_path(retro) + '/', params: { retro: { password: 'anything-else' } }, as: :json
+        expect(status).to eq(403)
       end
     end
   end

@@ -28,27 +28,18 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'security/jwt_token'
+require 'clients/google_client'
 
-class SessionsController < ApplicationController
-  include RetrosAuth
-
-  before_action :load_retro
-
-  def new
-  end
-
+class OauthSessionsController < ApplicationController
   def create
-    if @retro.validate_login?(retro_params.fetch(:password))
-      render json: { token: generate_retro_token(@retro) }, status: :ok
-    else
-      render json: :no_content, status: :forbidden
-    end
-  end
+    google_user = GOOGLE_CLIENT.get_user!(params.fetch(:access_token))
 
-  private
+    user = User.find_by!(email: google_user[:email])
 
-  def retro_params
-    params.require(:retro).permit(:name, :slug, :password, :item_order, :is_private)
+    render json: { auth_token: user.auth_token, new_user: user.retros.empty? }
+  rescue GoogleClient::InvalidUserDomain
+    head :forbidden
+  rescue GoogleClient::GetUserFailed
+    head :internal_server_error
   end
 end

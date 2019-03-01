@@ -86,12 +86,12 @@ export default {
   },
 
   getRetroLogin(id) {
-    return fetchJson(`${this.apiBaseUrl()}/retros/${id}/login`);
+    return fetchJson(`${this.apiBaseUrl()}/retros/${id}/sessions/new`);
   },
 
   loginToRetro({retro_id, password}) {
-    return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/login`, {
-      method: 'PUT',
+    return fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/sessions`, {
+      method: 'POST',
       body: JSON.stringify({retro: {password}}),
     });
   },
