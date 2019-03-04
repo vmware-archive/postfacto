@@ -30,7 +30,7 @@
 #
 require 'rails_helper'
 
-describe '/retros/:retro_id/discussion/transition' do
+describe '/retros/:retro_id/discussion/transitions' do
   let(:retro) { Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link') }
   let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
