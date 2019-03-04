@@ -104,6 +104,7 @@ end
 def token_for(retro)
   JWTToken.generate(
     retro.slug,
+    'retros',
     CLOCK.current_time,
     nil,
     Rails.application.secrets.secret_key_base

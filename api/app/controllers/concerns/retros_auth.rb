@@ -58,6 +58,7 @@ module RetrosAuth
   def generate_retro_token(retro)
     JWTToken.generate(
       retro.slug,
+      'retros',
       CLOCK.current_time,
       Rails.configuration.session_time,
       Rails.application.secrets.secret_key_base

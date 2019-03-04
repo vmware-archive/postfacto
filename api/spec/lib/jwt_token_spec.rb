@@ -7,10 +7,11 @@ describe JWTToken do
       secret = 'secret'
       current_time = Time.now
       session_time_limit = 2.minutes
-      token = JWTToken.generate('happy-sad-meh', current_time, session_time_limit, secret)
+      token = JWTToken.generate('happy-sad-meh', 'issuer', current_time, session_time_limit, secret)
 
       decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
-      expect(decoded_token.first['subject']).to eq('happy-sad-meh')
+      expect(decoded_token.first['sub']).to eq('happy-sad-meh')
+      expect(decoded_token.first['iss']).to eq('issuer')
       expect(decoded_token.first['exp']).to eq((current_time + session_time_limit).to_i)
     end
 
@@ -18,10 +19,9 @@ describe JWTToken do
       it 'returns a token that will not expire' do
         secret = 'secret'
         current_time = Time.now
-        token = JWTToken.generate('happy-sad-meh', current_time, nil, secret)
+        token = JWTToken.generate('happy-sad-meh', 'issuer', current_time, nil, secret)
 
         decoded_token = JWT.decode(token, secret, true, algorithm: 'HS256')
-        expect(decoded_token.first['subject']).to eq('happy-sad-meh')
         expect(decoded_token.first['exp']).to eq(nil)
       end
     end
@@ -33,7 +33,7 @@ describe JWTToken do
         secret = 'secret'
 
         payload = {
-          subject: 'happy-sad-meh'
+          sub: 'happy-sad-meh'
         }
 
         token = JWT.encode(payload, secret, 'HS256')
@@ -46,7 +46,7 @@ describe JWTToken do
         secret = 'secret'
 
         payload = {
-          subject: 'happy-sad-meh',
+          sub: 'happy-sad-meh',
           exp: (Time.now - 1.minutes).to_i
         }
 
@@ -59,7 +59,7 @@ describe JWTToken do
           secret = 'secret'
 
           payload = {
-            subject: 'happy-sad-meh',
+            sub: 'happy-sad-meh',
             exp: (Time.now + 1.minutes).to_i
           }
 
