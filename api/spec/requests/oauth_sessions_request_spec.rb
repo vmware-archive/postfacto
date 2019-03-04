@@ -52,7 +52,7 @@ describe '/sessions' do
         expect(response.status).to eq(200)
 
         data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to eq(@user.auth_token)
+        expect(data[:auth_token]).to_not be_blank
         expect(data[:new_user]).to eq(true)
       end
     end
@@ -77,7 +77,7 @@ describe '/sessions' do
         expect(response.status).to eq(200)
 
         data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to eq(@user.auth_token)
+        expect(data[:auth_token]).to_not be_blank
         expect(data[:new_user]).to eq(false)
       end
     end

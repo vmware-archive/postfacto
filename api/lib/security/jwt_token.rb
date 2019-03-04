@@ -1,8 +1,8 @@
 require 'jwt'
 
 class JWTToken
-  def self.generate(retro_slug, current_time, session_time_limit, secret)
-    payload = { subject: retro_slug }
+  def self.generate(subject, current_time, session_time_limit, secret)
+    payload = { subject: subject }
     payload[:exp] = (current_time + session_time_limit).to_i if session_time_limit
     JWT.encode(payload, secret, 'HS256')
   end
