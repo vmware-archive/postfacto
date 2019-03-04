@@ -74,13 +74,13 @@ class Application extends React.Component {
   };
 
   render() {
-    const {config, store, router} = this.props;
+    const {config, store} = this.props;
     const {websocket_url} = config;
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="retro-application">
           <Header config={config} retro={store.retro}/>
-          <EnhancedRouter router={router} config={config} {...store}/>
+          <EnhancedRouter config={config} {...store}/>
           <SessionWebsocket url={websocket_url}/>
         </div>
       </MuiThemeProvider>
