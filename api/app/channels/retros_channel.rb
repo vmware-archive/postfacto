@@ -76,6 +76,10 @@ class RetrosChannel < ApplicationCable::Channel
 
   def user_allowed_to_access_retro?(retro, api_token)
     return true unless retro.is_private?
-    JWTToken.valid?(retro.slug, api_token, Rails.application.secrets.secret_key_base)
+    retro.slug == JWTToken.subject_for(
+      api_token,
+      Rails.application.secrets.secret_key_base,
+      'retros'
+    )
   end
 end

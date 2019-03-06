@@ -7,12 +7,12 @@ class JWTToken
     JWT.encode(payload, secret, 'HS256')
   end
 
-  def self.valid?(subject, token, secret)
-    decoded = JWT.decode(token, secret, true, algorithm: 'HS256')
-    decoded.first['sub'] == subject
+  def self.subject_for(token, secret, issuer)
+    decoded = JWT.decode(token, secret, true, algorithm: 'HS256', iss: issuer, verify_iss: true)
+    decoded.first['sub']
+  rescue JWT::InvalidIssuerError
+    nil
   rescue JWT::ExpiredSignature
-    false
-  rescue JWT::DecodeError
-    false
+    nil
   end
 end

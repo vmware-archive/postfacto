@@ -67,7 +67,11 @@ module RetrosAuth
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      JWTToken.valid?(@retro.slug, token, Rails.application.secrets.secret_key_base)
+      @retro.slug == JWTToken.subject_for(
+        token,
+        Rails.application.secrets.secret_key_base,
+        'retros'
+      )
     end
   end
 end

@@ -27,54 +27,42 @@ describe JWTToken do
     end
   end
 
-  describe 'valid?' do
-    context 'subject is incorrect' do
-      it 'returns false' do
-        secret = 'secret'
-
+  describe 'subject_for' do
+    context 'issuer is incorrect' do
+      it 'returns nil' do
         payload = {
-          sub: 'happy-sad-meh'
+          sub: 'happy-sad-meh',
+          iss: 'issuer'
         }
 
-        token = JWT.encode(payload, secret, 'HS256')
-        expect(JWTToken.valid?('another-one', token, secret)).to eq(false)
+        token = JWT.encode(payload, 'secret', 'HS256')
+        expect(JWTToken.subject_for(token, 'secret', 'not-issuer')).to eq(nil)
       end
     end
 
-    context 'token has expired' do
-      it 'returns false' do
-        secret = 'secret'
-
+    context 'token is expired' do
+      it 'returns nil' do
         payload = {
           sub: 'happy-sad-meh',
+          iss: 'issuer',
           exp: (Time.now - 1.minutes).to_i
         }
 
-        token = JWT.encode(payload, secret, 'HS256')
-        expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(false)
-      end
-
-      context 'token still valid' do
-        it 'returns true' do
-          secret = 'secret'
-
-          payload = {
-            sub: 'happy-sad-meh',
-            exp: (Time.now + 1.minutes).to_i
-          }
-
-          token = JWT.encode(payload, secret, 'HS256')
-          expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(true)
-        end
+        token = JWT.encode(payload, 'secret', 'HS256')
+        expect(JWTToken.subject_for(token, 'secret', 'not-issuer')).to eq(nil)
       end
     end
 
-    context 'token is invalid' do
-      it 'returns false' do
-        secret = 'secret'
-        token = 'this-cannot-be-parsed-by-jwt'
+    context 'token still valid' do
+      it 'returns the subject' do
+        payload = {
+          sub: 'happy-sad-meh',
+          iss: 'issuer',
+          exp: (Time.now + 1.minutes).to_i
+        }
 
-        expect(JWTToken.valid?('happy-sad-meh', token, secret)).to eq(false)
+        token = JWT.encode(payload, 'secret', 'HS256')
+        expect(JWTToken.subject_for(token, 'secret', 'issuer')).to eq('happy-sad-meh')
       end
     end
   end
