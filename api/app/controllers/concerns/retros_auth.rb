@@ -31,8 +31,6 @@
 require 'security/auth_token'
 
 module RetrosAuth
-  include ActiveSupport::Concern
-
   def load_retro
     @retro = Retro.find_by_slug!(params.fetch(:retro_id) { params.fetch(:id) })
   end
