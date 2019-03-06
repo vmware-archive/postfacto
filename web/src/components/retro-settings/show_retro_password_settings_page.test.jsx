@@ -57,11 +57,11 @@ describe('ShowRetroPasswordSettingsPage', () => {
     let dom;
 
     beforeEach(() => {
-      ShowRetroPasswordSettingsPage.prototype.getIsMobile = () => isMobile;
+      const environment = {isMobile640: isMobile};
 
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" retro={retro} session={session}/>
+          <ShowRetroPasswordSettingsPage retroId="13" retro={retro} session={session} environment={environment}/>
         </MuiThemeProvider>
       ));
     });

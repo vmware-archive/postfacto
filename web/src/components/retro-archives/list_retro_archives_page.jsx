@@ -46,38 +46,26 @@ function makeDateString(date) {
   return `${day} ${monthName} ${year}`;
 }
 
+const createdAtDesc = (a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+// not pure: uses window.localStorage to check login status
 export default class ListRetroArchivesPage extends React.Component {
   static propTypes = {
     archives: types.array,
     retroId: types.string.isRequired,
+    config: types.object.isRequired,
+    environment: types.shape({
+      isMobile1030: types.bool,
+    }).isRequired,
   };
 
   static defaultProps = {
     archives: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isMobile: false,
-    };
-
-    this.handleResize = this.handleResize.bind(this);
-    this.onCurrentRetroClicked = this.onCurrentRetroClicked.bind(this);
-  }
-
   componentWillMount() {
     const {retroId} = this.props;
     Actions.getRetroArchives({retro_id: retroId});
-    this.handleResize();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
   }
 
   onArchiveClicked(archiveId, e) {
@@ -86,22 +74,10 @@ export default class ListRetroArchivesPage extends React.Component {
     Actions.routeToRetroArchive({retro_id: retroId, archive_id: archiveId});
   }
 
-  sortedArchives(archives) {
-    return archives.sort((a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
-  }
-
-  onCurrentRetroClicked() {
+  onCurrentRetroClicked = () => {
     const {retroId} = this.props;
     Actions.backPressedFromArchives({retro_id: retroId});
-  }
-
-  handleResize() {
-    this.setState({isMobile: this.getIsMobile()});
-  }
-
-  getIsMobile() {
-    return window.innerWidth <= 1030;
-  }
+  };
 
   getMenuItems() {
     const items = [
@@ -112,11 +88,11 @@ export default class ListRetroArchivesPage extends React.Component {
   }
 
   render() {
-    const {archives, retroId} = this.props;
+    const {archives, retroId, config, environment} = this.props;
     if (!archives) {
       return <div>Loading archives...</div>;
     }
-    const {isMobile} = this.state;
+    const isMobile = environment.isMobile1030;
     const menuItems = this.getMenuItems();
 
     return (
@@ -142,7 +118,7 @@ export default class ListRetroArchivesPage extends React.Component {
         <div className="archives">
           <div className="row">
             {
-              this.sortedArchives(archives).map((a) => (
+              archives.sort(createdAtDesc).map((a) => (
                 <div className="archive-row medium-6 medium-offset-3 columns end text-center" key={a.id}>
                   <div className="archive-link" onClick={(e) => this.onArchiveClicked(a.id, e)}>
                     <a href={`/retros/${retroId}/archives/${a.id}`}>
@@ -154,7 +130,7 @@ export default class ListRetroArchivesPage extends React.Component {
             }
           </div>
         </div>
-        <RetroFooter/>
+        <RetroFooter config={config}/>
       </div>
     );
   }

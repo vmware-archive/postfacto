@@ -35,7 +35,8 @@ import {Actions} from 'p-flux';
 import types from 'prop-types';
 import RetroMenu from '../shared/retro_menu';
 
-export default class RetroHeading extends React.PureComponent {
+// not pure: uses window.localStorage to check login status
+export default class RetroHeading extends React.Component {
   static propTypes = {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
@@ -48,8 +49,8 @@ export default class RetroHeading extends React.PureComponent {
     showVideoButton: false,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onArchivesButtonClicked = this.onArchivesButtonClicked.bind(this);
     this.handleArchiveRetro = this.handleArchiveRetro.bind(this);

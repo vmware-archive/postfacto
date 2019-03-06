@@ -39,6 +39,10 @@ export default class LoginToRetroPage extends React.Component {
     retroId: types.string.isRequired,
     login_error_message: types.string,
     force_relogin: types.bool,
+    config: types.shape({
+      terms: types.string.isRequired,
+      privacy: types.string.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -108,7 +112,7 @@ export default class LoginToRetroPage extends React.Component {
   }
 
   render() {
-    const {retro: {name}} = this.props;
+    const {retro: {name}, config} = this.props;
     const {errors, inputStyle} = this.state;
     if (!name) {
       return null;
@@ -134,8 +138,8 @@ export default class LoginToRetroPage extends React.Component {
               />
               <p className="password-terms-text">
                 By logging in, you agree to our
-                {' '}<a href={global.Retro.config.terms} target="_blank">Terms of Use</a> and
-                {' '}<a href={global.Retro.config.privacy} target="_blank">Privacy Policy</a> and
+                {' '}<a href={config.terms} target="_blank">Terms of Use</a> and
+                {' '}<a href={config.privacy} target="_blank">Privacy Policy</a> and
                 use of cookies.
               </p>
               <div className="error-message">{errors}</div>

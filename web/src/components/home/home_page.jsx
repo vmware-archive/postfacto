@@ -30,13 +30,18 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 import {Actions} from 'p-flux';
 import RetroFooter from '../shared/footer';
-import GoogleLoginWrapper from './google_login_wrapper';
+import LoginForm from './login_form';
 import Logger from '../../helpers/logger';
 import HomeLegalBanner from './home_legal_banner';
 
-export default class HomePage extends React.Component {
+export default class HomePage extends React.PureComponent {
+  static propTypes = {
+    config: types.object.isRequired,
+  };
+
   componentDidMount() {
     Actions.showHomePageAnalytics();
   }
@@ -55,11 +60,13 @@ export default class HomePage extends React.Component {
   }
 
   render() {
+    const {config} = this.props;
+
     return (
       <div className="home-page">
         <div className="sticky-header">
           <div className="row">
-            <HomeLegalBanner/>
+            <HomeLegalBanner config={config}/>
           </div>
           <div className="row header-title">
             <div className="show-for-medium small-12 columns">
@@ -81,15 +88,12 @@ export default class HomePage extends React.Component {
           </div>
           <div className="row">
             <div className="text-center">
-              {
-                global.Retro.config.google_oauth_client_id || global.Retro.config.mock_google_auth ? (
-                  <GoogleLoginWrapper
-                    onSuccess={this.onSignIn}
-                    onFailure={this.onGoogleLoginFailure}
-                    className="top-start-retro"
-                  />
-                ) : null
-              }
+              <LoginForm
+                onSuccess={this.onSignIn}
+                onFailure={this.onGoogleLoginFailure}
+                className="top-start-retro"
+                config={config}
+              />
             </div>
           </div>
           <div className="row">
@@ -99,7 +103,7 @@ export default class HomePage extends React.Component {
           </div>
         </div>
 
-        <RetroFooter/>
+        <RetroFooter config={config}/>
       </div>
     );
   }

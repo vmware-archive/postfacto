@@ -58,14 +58,14 @@ describe('ShowRetroSettingsPage', () => {
     let fieldRetroName;
     let fieldRetroURL;
     let fieldRetroVideo;
+    let environment;
 
     beforeEach(() => {
-      ShowRetroSettingsPage.prototype.getIsMobile = () => isMobile;
-
       const session = {request_uuid: 'some-request-uuid'};
+      environment = {isMobile640: isMobile};
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13" retro={retro} session={session}/>
+          <ShowRetroSettingsPage retroId="13" retro={retro} session={session} environment={environment}/>
         </MuiThemeProvider>
       ));
 
@@ -179,7 +179,7 @@ describe('ShowRetroSettingsPage', () => {
       it('displays an error message if provided', () => {
         dom = mount((
           <MuiThemeProvider>
-            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}}/>
+            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}} environment={environment}/>
           </MuiThemeProvider>
         ));
 
@@ -191,7 +191,7 @@ describe('ShowRetroSettingsPage', () => {
       const privateRetro = Object.assign({}, retro, {is_private: true});
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13" retro={privateRetro}/>
+          <ShowRetroSettingsPage retroId="13" retro={privateRetro} environment={environment}/>
         </MuiThemeProvider>
       ));
 

@@ -68,6 +68,9 @@ export default class ShowRetroSettingsPage extends React.Component {
     retro: types.object,
     retroId: types.string.isRequired,
     session: types.object,
+    environment: types.shape({
+      isMobile640: types.bool,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -84,7 +87,6 @@ export default class ShowRetroSettingsPage extends React.Component {
     const {retro, errors} = props;
     this.state = Object.assign(
       {
-        isMobile: false,
         isPrivate: false,
         name: '',
         slug: '',
@@ -94,7 +96,6 @@ export default class ShowRetroSettingsPage extends React.Component {
       getStateUpdateFor(retro, errors),
     );
 
-    this.handleResize = this.handleResize.bind(this);
     this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
     this.onChangeName = this.onChange.bind(this, 'name');
     this.onChangeSlug = this.onChange.bind(this, 'slug');
@@ -106,11 +107,6 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   componentWillMount() {
     this.getSettings(this.props);
-    this.handleResize();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,12 +115,7 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
     Actions.clearErrors();
-  }
-
-  handleResize() {
-    this.setState({isMobile: this.getIsMobile()});
   }
 
   handleBackButtonClicked() {
@@ -203,10 +194,6 @@ export default class ShowRetroSettingsPage extends React.Component {
     Actions.routeToRetroPasswordSettings({retro_id: this.props.retroId});
   }
 
-  getIsMobile() {
-    return window.innerWidth < 640;
-  }
-
   // Fetch Retro
 
   getSettings(props) {
@@ -216,7 +203,9 @@ export default class ShowRetroSettingsPage extends React.Component {
 
   // Render
   renderBackButton() {
-    const {isMobile} = this.state;
+    const {environment} = this.props;
+    const isMobile = environment.isMobile640;
+
     return (
       <FlatButton
         className="retro-back"
@@ -274,13 +263,16 @@ export default class ShowRetroSettingsPage extends React.Component {
   }
 
   render() {
-    const {retro, retroId} = this.props;
+    const {retro, retroId, environment} = this.props;
+    const isMobile = environment.isMobile640;
+    const {errors} = this.state;
     const toggle = DEFAULT_TOGGLE_STYLE;
 
-    const {isMobile, errors} = this.state;
     const retroContainerClasses = isMobile ? 'full-height mobile-display' : 'full-height';
 
-    if (!(retro && retro.id)) return (<EmptyPage/>);
+    if (!(retro && retro.id)) {
+      return (<EmptyPage/>);
+    }
 
     return (
       <span className="retro-settings-page">

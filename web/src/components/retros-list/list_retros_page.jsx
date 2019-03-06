@@ -39,6 +39,7 @@ import RetroTile from './retro_tile';
 export default class ListRetrosPage extends React.Component {
   static propTypes = {
     retros: types.array.isRequired,
+    config: types.object.isRequired,
   };
 
   constructor(props) {
@@ -65,7 +66,9 @@ export default class ListRetrosPage extends React.Component {
   }
 
   render() {
-    const retroListItems = this.props.retros.map((retro) => (
+    const {config, retros} = this.props;
+
+    const retroListItems = retros.map((retro) => (
       <RetroTile key={retro.slug} callback={() => this.handleRetroListItemClicked(retro)} retro={retro}/>
     ));
 
@@ -102,7 +105,7 @@ export default class ListRetrosPage extends React.Component {
           </div>
         </div>
 
-        <RetroFooter/>
+        <RetroFooter config={config}/>
       </div>
     );
   }

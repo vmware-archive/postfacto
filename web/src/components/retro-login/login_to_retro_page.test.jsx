@@ -42,18 +42,20 @@ describe('LoginToRetroPage', () => {
     name: 'the retro name',
   };
 
+  const config = {terms: '', privacy: ''};
+
   let dom;
 
   describe('while retro is loading', () => {
     it('renders nothing', () => {
-      dom = shallow(<LoginToRetroPage retro={{name: ''}} retroId="13"/>);
+      dom = shallow(<LoginToRetroPage retro={{name: ''}} retroId="13" config={config}/>);
       expect(dom.find('h1')).not.toExist();
     });
   });
 
   describe('with a retro', () => {
     beforeEach(() => {
-      dom = mount(<LoginToRetroPage retro={retro} retroId="13"/>);
+      dom = mount(<LoginToRetroPage retro={retro} retroId="13" config={config}/>);
     });
 
     it('dispatches getRetroLogin', () => {
@@ -100,7 +102,7 @@ describe('LoginToRetroPage', () => {
 
   describe('title', () => {
     function setupRetro({force_relogin}) {
-      return shallow(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin}/>);
+      return shallow(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin} config={config}/>);
     }
 
     it('shows login required message when force_relogin is false', () => {

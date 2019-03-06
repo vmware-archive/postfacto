@@ -29,25 +29,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import React from 'react';
+import types from 'prop-types';
 import LegalBanner from '../shared/legal_banner';
 
-export default class HomeLegalBanner extends LegalBanner {
-  constructor(props, context) {
-    super(props, context);
+export default class HomeLegalBanner extends React.PureComponent {
+  static propTypes = {
+    config: types.shape({
+      terms: types.string.isRequired,
+      privacy: types.string.isRequired,
+    }).isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
     this.state = {
       hasBeenDismissed: window.localStorage.homeTermsDismissed,
     };
   }
 
-  okClicked() {
-    super.okClicked();
-
+  onDismiss = () => {
     window.localStorage.homeTermsDismissed = true;
 
     this.setState({hasBeenDismissed: true});
-  }
+  };
 
-  shouldHide() {
-    return this.state.hasBeenDismissed;
+  render() {
+    const {config} = this.props;
+
+    if (this.state.hasBeenDismissed) {
+      return null;
+    }
+
+    return (<LegalBanner config={config} onDismiss={this.onDismiss}/>);
   }
 }

@@ -30,36 +30,26 @@
  */
 
 import React from 'react';
+import types from 'prop-types';
 
-export default class LegalBanner extends React.Component {
-  constructor(props) {
-    super(props);
+const LegalBanner = ({config: {terms, privacy}, onDismiss}) => (
+  <div className="banner" style={{display: 'flex'}}>
+    <div className="terms-text">
+      By accessing and using Postfacto, you agree to our
+      {' '}<a href={terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and
+      {' '}<a href={privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
+      use of cookies
+    </div>
+    <button className="button ok-button" type="button" onClick={onDismiss}>OK</button>
+  </div>
+);
 
-    this.okClicked = this.okClicked.bind(this);
-  }
+LegalBanner.propTypes = {
+  config: types.shape({
+    terms: types.string.isRequired,
+    privacy: types.string.isRequired,
+  }).isRequired,
+  onDismiss: types.func.isRequired,
+};
 
-  okClicked() {
-  }
-
-  shouldHide() {
-    return true;
-  }
-
-  render() {
-    if (this.shouldHide()) {
-      return null;
-    }
-
-    return (
-      <div className="banner" style={{display: 'flex'}}>
-        <div className="terms-text">
-          By accessing and using Postfacto, you agree to our
-          {' '}<a href={global.Retro.config.terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and
-          {' '}<a href={global.Retro.config.privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
-          use of cookies
-        </div>
-        <button className="button ok-button" type="button" onClick={this.okClicked}>OK</button>
-      </div>
-    );
-  }
-}
+export default LegalBanner;

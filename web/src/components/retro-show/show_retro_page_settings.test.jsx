@@ -38,10 +38,16 @@ import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
-const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+const config = {
+  title: 'Retro',
+  api_base_url: 'https://example.com',
+  websocket_url: 'ws://websocket/url',
+  contact: '',
+  terms: '',
+  privacy: '',
+};
 
 describe('Retro settings', () => {
-  let originalGetIsMobile;
   let dom;
 
   beforeEach(() => {
@@ -53,8 +59,6 @@ describe('Retro settings', () => {
       action_items: [],
     };
 
-    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-    ShowRetroPage.prototype.getIsMobile = () => false;
     window.localStorage.setItem('authToken', 'some-token');
 
     dom = mount((
@@ -65,13 +69,10 @@ describe('Retro settings', () => {
           archives={false}
           config={config}
           featureFlags={{archiveEmails: true}}
+          environment={{isMobile640: false}}
         />
       </MuiThemeProvider>
     ));
-  });
-
-  afterEach(() => {
-    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
   });
 
   describe('retro settings menu item', () => {

@@ -38,7 +38,14 @@ import '../../spec_helper';
 
 import ShowRetroPage from './show_retro_page';
 
-const config = {title: 'Retro', api_base_url: 'https://example.com', websocket_url: 'ws://websocket/url'};
+const config = {
+  title: 'Retro',
+  api_base_url: 'https://example.com',
+  websocket_url: 'ws://websocket/url',
+  contact: '',
+  terms: '',
+  privacy: '',
+};
 
 describe('Show retro page archives', () => {
   const retro_archives = {
@@ -81,24 +88,10 @@ describe('Show retro page archives', () => {
     ],
   };
 
-  let originalGetIsMobile;
-  let shouldBeMobile;
-
-  beforeEach(() => {
-    originalGetIsMobile = ShowRetroPage.prototype.getIsMobile;
-    ShowRetroPage.prototype.getIsMobile = () => shouldBeMobile;
-  });
-
-  afterEach(() => {
-    ShowRetroPage.prototype.getIsMobile = originalGetIsMobile;
-  });
-
   describe('on desktop', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = false;
-
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -108,6 +101,7 @@ describe('Show retro page archives', () => {
             retro={retro_archives}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={{isMobile640: false}}
           />
         </MuiThemeProvider>
       ));
@@ -135,7 +129,7 @@ describe('Show retro page archives', () => {
 
     it('shows a menu with "Sign out" if logged in', () => {
       window.localStorage.setItem('authToken', 'some-token');
-      dom.update();
+      dom.setProps({}); // force update
 
       const menuLabels = getMenuLabels(dom);
       const lastMenuLabel = menuLabels[menuLabels.length - 1];
@@ -147,8 +141,6 @@ describe('Show retro page archives', () => {
     let dom;
 
     beforeEach(() => {
-      shouldBeMobile = true;
-
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -158,6 +150,7 @@ describe('Show retro page archives', () => {
             retro={retro_archives}
             config={config}
             featureFlags={{archiveEmails: true}}
+            environment={{isMobile640: true}}
           />
         </MuiThemeProvider>
       ));

@@ -45,6 +45,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     errors: types.shape({
       current_password: types.string,
     }),
+    environment: types.shape({
+      isMobile640: types.bool,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -56,7 +59,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMobile: false,
       current_password: '',
       confirm_new_password: '',
       new_password: '',
@@ -66,7 +68,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
       },
     };
 
-    this.handleResize = this.handleResize.bind(this);
     this.handleBackButtonClicked = this.handleBackButtonClicked.bind(this);
     this.onCurrentPasswordChange = this.onChange.bind(this, 'current_password');
     this.onNewPasswordChange = this.onChange.bind(this, 'new_password');
@@ -78,11 +79,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   componentWillMount() {
     const {retroId} = this.props;
     Actions.getRetroSettings({id: retroId});
-    this.handleResize();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,16 +94,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
     Actions.clearErrors();
-  }
-
-  handleResize() {
-    this.setState({isMobile: this.getIsMobile()});
-  }
-
-  getIsMobile() {
-    return window.innerWidth < 640;
   }
 
   handleBackButtonClicked() {
@@ -149,7 +136,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
 
   // Render
   renderBackButton() {
-    const {isMobile} = this.state;
+    const {environment} = this.props;
+    const isMobile = environment.isMobile640;
+
     return (
       <FlatButton
         className="retro-back"
@@ -162,7 +151,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   renderMobileHeading() {
-    const {isMobile} = this.state;
     const {retro} = this.props;
     const menuItems = this.getMenuItems();
 
@@ -172,13 +160,12 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         <div className="retro-name">
           <h1>{retro.name}</h1>
         </div>
-        <RetroMenu isMobile={isMobile} items={menuItems}/>
+        <RetroMenu isMobile items={menuItems}/>
       </div>
     );
   }
 
   renderDesktopHeading() {
-    const {isMobile} = this.state;
     const {retro} = this.props;
     const menuItems = this.getMenuItems();
 
@@ -188,7 +175,7 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
         <div className="retro-name">
           <h1>{retro.name}</h1>
         </div>
-        <RetroMenu isMobile={isMobile} items={menuItems}/>
+        <RetroMenu isMobile={false} items={menuItems}/>
       </div>
     );
   }
@@ -202,8 +189,9 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   render() {
-    const {retro} = this.props;
-    const {isMobile, errors} = this.state;
+    const {retro, environment} = this.props;
+    const isMobile = environment.isMobile640;
+    const {errors} = this.state;
     const retroContainerClasses = isMobile ? 'full-height mobile-display' : 'full-height';
 
     if (!(retro && retro.id)) {

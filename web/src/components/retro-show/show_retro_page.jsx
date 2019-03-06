@@ -68,6 +68,9 @@ export default class ShowRetroPage extends React.Component {
       title: types.string,
       message: types.string,
     }),
+    environment: types.shape({
+      isMobile640: types.bool,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -81,12 +84,10 @@ export default class ShowRetroPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMobile: false,
       currentMobileCategory: 'happy',
       filtered_retro_archive: {},
     };
 
-    this.handleResize = this.handleResize.bind(this);
     this.handleArchiveRetroConfirmation = this.handleArchiveRetroConfirmation.bind(this);
     this.handleArchiveEmailPreferenceChange = this.handleArchiveEmailPreferenceChange.bind(this);
     this.moveToNextItem = this.moveToNextItem.bind(this);
@@ -97,11 +98,6 @@ export default class ShowRetroPage extends React.Component {
 
     this.fetchRetros(retroId, archives, archiveId);
     this.initializeArchivesState(retro_archives, archives);
-    this.handleResize();
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -113,19 +109,7 @@ export default class ShowRetroPage extends React.Component {
     this.initializeArchivesState(retro_archives, archives);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
   // Calculate if mobile
-
-  handleResize() {
-    this.setState({isMobile: this.getIsMobile()});
-  }
-
-  getIsMobile() {
-    return window.innerWidth < 640;
-  }
 
   // Fetch Retro or archive data
 
@@ -191,14 +175,14 @@ export default class ShowRetroPage extends React.Component {
 
   renderColumnMobile(retro) {
     const {archives, retroId} = this.props;
-    const {currentMobileCategory, isMobile} = this.state;
+    const {currentMobileCategory} = this.state;
 
     if (currentMobileCategory === 'action') {
       return (
         <RetroActionPanel
           retro={retro}
           retroId={retroId}
-          isMobile={isMobile}
+          isMobile
           archives={archives}
         />
       );
@@ -209,7 +193,7 @@ export default class ShowRetroPage extends React.Component {
         retro={retro}
         retroId={retroId}
         archives={archives}
-        isMobile={isMobile}
+        isMobile
       />
     );
   }
@@ -276,16 +260,17 @@ export default class ShowRetroPage extends React.Component {
   }
 
   renderMobile(retro) {
-    const {config: {websocket_url}, retroId, archives} = this.props;
+    const {config, retroId, archives} = this.props;
+
     return (
       <span>
-        <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+        <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
-          <RetroLegalBanner retro={retro}/>
+          <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
-          <RetroHeading retro={retro} retroId={retroId} isMobile={this.state.isMobile} archives={archives}/>
+          <RetroHeading retro={retro} retroId={retroId} isMobile archives={archives}/>
 
           <div className="mobile-tabs">
             <div className="mobile-tabs-list">
@@ -315,18 +300,16 @@ export default class ShowRetroPage extends React.Component {
               </div>
             </div>
           </div>
-          {
-            this.renderColumnMobile(retro)
-          }
-          <RetroFooter/>
+          {this.renderColumnMobile(retro)}
+          <RetroFooter config={config}/>
         </div>
       </span>
     );
   }
 
   renderDesktop(retro) {
-    const {config: {websocket_url}, retroId, archives} = this.props;
-    const {isMobile} = this.state;
+    const {config, retroId, archives} = this.props;
+
     let retroContainerClasses = 'full-height full-height-retro';
 
     if (archives) {
@@ -344,16 +327,16 @@ export default class ShowRetroPage extends React.Component {
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
-          <RetroWebsocket url={websocket_url} retro_id={retroId}/>
+          <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
           {this.renderArchiveConfirmationDialog()}
           <div className={retroContainerClasses}>
 
-            <RetroLegalBanner retro={retro}/>
+            <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
             <RetroHeading
               retro={retro}
               retroId={retroId}
-              isMobile={this.state.isMobile}
+              isMobile={false}
               archives={archives}
               showVideoButton={!archives}
             />
@@ -363,30 +346,30 @@ export default class ShowRetroPage extends React.Component {
                 retro={retro}
                 retroId={retroId}
                 archives={archives}
-                isMobile={isMobile}
+                isMobile={false}
               />
               <RetroColumn
                 category="meh"
                 retro={retro}
                 retroId={retroId}
                 archives={archives}
-                isMobile={isMobile}
+                isMobile={false}
               />
               <RetroColumn
                 category="sad"
                 retro={retro}
                 retroId={retroId}
                 archives={archives}
-                isMobile={isMobile}
+                isMobile={false}
               />
             </div>
             <RetroActionPanel
               retro={retro}
               retroId={retroId}
-              isMobile={isMobile}
+              isMobile={false}
               archives={archives}
             />
-            <RetroFooter/>
+            <RetroFooter config={config}/>
           </div>
         </span>
       </HotKeys>
@@ -394,13 +377,13 @@ export default class ShowRetroPage extends React.Component {
   }
 
   render() {
-    const {retro, archives} = this.props;
-    const {isMobile, filtered_retro_archive} = this.state;
+    const {retro, archives, environment} = this.props;
+    const {filtered_retro_archive} = this.state;
     const retro_object = archives ? filtered_retro_archive : retro;
     if (!(retro_object && retro_object.id)) {
       return (<EmptyPage/>);
     }
-    if (isMobile) {
+    if (environment.isMobile640) {
       return this.renderMobile(retro_object);
     }
     return this.renderDesktop(retro_object);
