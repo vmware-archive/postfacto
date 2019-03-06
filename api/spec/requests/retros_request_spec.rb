@@ -76,7 +76,7 @@ describe '/retros' do
         expect(retro.action_items.count).to eq 2
 
         expect do
-          post '/retros', headers: { 'X-AUTH-TOKEN': user.auth_token }, params: { retro: { name: 'the second retro' } }
+          post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) }, params: { retro: { name: 'the second retro' } }
         end.to_not change { [Item.count, ActionItem.count] }
       end
     end
