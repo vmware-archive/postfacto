@@ -52,8 +52,12 @@ describe '/sessions' do
         expect(response.status).to eq(200)
 
         data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to_not be_blank
         expect(data[:new_user]).to eq(true)
+
+        jwt = JWT.decode(data[:auth_token], nil, false)
+        expect(jwt[0]['sub']).to eq(@user.id)
+        expect(jwt[0]['iss']).to eq('users')
+        expect(jwt[1]['alg']).to eq('HS256')
       end
     end
 
@@ -77,8 +81,12 @@ describe '/sessions' do
         expect(response.status).to eq(200)
 
         data = JSON.parse(response.body, symbolize_names: true)
-        expect(data[:auth_token]).to_not be_blank
         expect(data[:new_user]).to eq(false)
+
+        jwt = JWT.decode(data[:auth_token], nil, false)
+        expect(jwt[0]['sub']).to eq(@user.id)
+        expect(jwt[0]['iss']).to eq('users')
+        expect(jwt[1]['alg']).to eq('HS256')
       end
     end
 

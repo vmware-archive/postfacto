@@ -38,7 +38,13 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_user
-    @user = User.find_by_auth_token(request.headers['X-AUTH-TOKEN'])
+    user_id = JWTToken.subject_for(
+      request.headers['X-AUTH-TOKEN'],
+      Rails.application.secrets.secret_key_base,
+      'users'
+    )
+
+    @user = User.find(user_id) if user_id
     render json: :no_content, status: :unauthorized unless @user
   end
 

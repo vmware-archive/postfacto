@@ -29,14 +29,16 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 require 'clients/google_client'
+require 'security/jwt_token'
 
 class OauthSessionsController < ApplicationController
   def create
     google_user = GOOGLE_CLIENT.get_user!(params.fetch(:access_token))
 
     user = User.find_by!(email: google_user[:email])
+    token = JWTToken.generate(user.id, 'users', CLOCK.now, nil, Rails.application.secrets.secret_key_base)
 
-    render json: { auth_token: user.auth_token, new_user: user.retros.empty? }
+    render json: { auth_token: token, new_user: user.retros.empty? }
   rescue GoogleClient::InvalidUserDomain
     head :forbidden
   rescue GoogleClient::GetUserFailed

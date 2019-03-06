@@ -51,7 +51,11 @@ describe '/retros/:id/sessions' do
         post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
         expect(status).to eq(200)
         data = JSON.parse(response.body)
-        expect(data['token']).to_not be_blank
+
+        jwt = JWT.decode(data['token'], nil, false)
+        expect(jwt[0]['sub']).to eq(retro.slug)
+        expect(jwt[0]['iss']).to eq('retros')
+        expect(jwt[1]['alg']).to eq('HS256')
       end
     end
 

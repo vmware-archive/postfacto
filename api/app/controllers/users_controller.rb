@@ -46,7 +46,9 @@ class UsersController < ApplicationController
       head :multiple_choices
     else
       user = User.create!(user)
-      render json: { auth_token: user.auth_token }, status: :created
+      token = JWTToken.generate(user.id, 'users', CLOCK.now, nil, Rails.application.secrets.secret_key_base)
+
+      render json: { auth_token: token }, status: :created
     end
   end
 

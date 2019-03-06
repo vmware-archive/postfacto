@@ -65,5 +65,11 @@ describe JWTToken do
         expect(JWTToken.subject_for(token, 'secret', 'issuer')).to eq('happy-sad-meh')
       end
     end
+
+    context 'token is bogus' do
+      it 'returns nil' do
+        expect(JWTToken.subject_for('blah', 'secret', 'not-issuer')).to eq(nil)
+      end
+    end
   end
 end

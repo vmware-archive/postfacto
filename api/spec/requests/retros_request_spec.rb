@@ -41,7 +41,7 @@ describe '/retros' do
     context 'when auth header is provided' do
       let(:user) { User.create!(email: 'test@test.io', name: 'random') }
       before do
-        post '/retros', headers: { 'X-AUTH-TOKEN': user.auth_token },
+        post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
                         params: { retro: { name: 'the new retro', slug: 'my-retro-url', password: 'the-password' } },
                         as: :json
       end
@@ -94,7 +94,7 @@ describe '/retros' do
 
       it 'returns unprocessable entity with error message' do
         # Create retro with same slug
-        post '/retros', headers: { 'X-AUTH-TOKEN': user.auth_token },
+        post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
                         params: { retro: { name: 'the new retro', slug: retro.slug, password: 'the-password' } },
                         as: :json
 
@@ -110,7 +110,7 @@ describe '/retros' do
       before do
         user.retros.create(name: 'Felicity Frog')
         user.retros.create(name: 'Frog Felicity')
-        get '/retros', headers: { 'X-AUTH-TOKEN': user.auth_token }, as: :json
+        get '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) }, as: :json
       end
 
       it 'returns a list of retros' do

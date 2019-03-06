@@ -14,5 +14,7 @@ class JWTToken
     nil
   rescue JWT::ExpiredSignature
     nil
+  rescue JWT::DecodeError
+    nil
   end
 end

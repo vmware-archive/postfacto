@@ -101,12 +101,24 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-def token_for(retro)
-  JWTToken.generate(
-    retro.slug,
-    'retros',
-    CLOCK.current_time,
-    nil,
-    Rails.application.secrets.secret_key_base
-  )
+def token_for(item)
+  case item
+  when Retro
+    JWTToken.generate(
+      retro.slug,
+      'retros',
+      CLOCK.current_time,
+      nil,
+      Rails.application.secrets.secret_key_base
+    )
+
+  when User
+    JWTToken.generate(
+      user.id,
+      'users',
+      CLOCK.current_time,
+      nil,
+      Rails.application.secrets.secret_key_base
+    )
+  end
 end
