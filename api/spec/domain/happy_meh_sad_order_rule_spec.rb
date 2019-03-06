@@ -29,6 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+require 'rails_helper'
+
 describe HappyMehSadOrderRule do
   let(:retro) {
     user = User.create!(email: 'me@example.com')

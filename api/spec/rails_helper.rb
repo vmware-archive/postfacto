@@ -90,6 +90,10 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include RequestSpecHelper, type: :request
+
+  config.before(:each) do
+    CLOCK.time = nil
+  end
 end
 
 Shoulda::Matchers.configure do |config|

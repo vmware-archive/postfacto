@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'security/jwt_token'
+require 'active_support/core_ext/integer/time'
 
 describe JWTToken do
   describe 'generate' do

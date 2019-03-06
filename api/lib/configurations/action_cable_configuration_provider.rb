@@ -57,7 +57,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'action_cable_configuration'
+require_relative 'action_cable_configuration'
 
 class ActionCableConfigurationProvider
   def config(host:)

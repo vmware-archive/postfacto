@@ -29,7 +29,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
-require 'action_cable_host_provider'
+require 'configurations/action_cable_host_provider'
 require 'climate_control'
 
 describe ActionCableHostProvider do

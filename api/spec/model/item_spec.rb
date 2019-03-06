@@ -33,12 +33,6 @@ require 'rails_helper'
 describe Item do
   let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link') }
 
-  it 'is an active record model' do
-    item = retro.items.new(description: 'this is a happy item', category: Item.categories.fetch(:happy))
-
-    item.save
-  end
-
   describe '#vote!' do
     it 'increments vote_count' do
       item = Item.create!(
