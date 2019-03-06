@@ -24,10 +24,8 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "eslint-config-airbnb": "^17.1.0",
-    "jasmine-ajax": "^3.4.0",
-    "jasmine-core": "^3.3.0",
+    "fast-deep-equal": "^2.0.1",
     "jest-enzyme": "^7.0.1",
-    "pivotal-js-jasmine-matchers": "^0.1.1",
     "promise-mock": "^2.1.0",
     "pui-cursor": "^3.0.5",
     "serve": "^10.1.1"

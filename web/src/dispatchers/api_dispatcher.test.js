@@ -29,14 +29,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../test_support/fetch_matchers';
 import PromiseMock from 'promise-mock';
 import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
 import {Dispatcher} from 'p-flux';
+import MockFetch from '../test_support/fetch_matchers';
 import '../spec_helper';
-
-/* global jasmine */
 
 describe('ApiDispatcher', () => {
   let subject;
@@ -96,12 +94,12 @@ describe('ApiDispatcher', () => {
       ],
     };
 
-    jasmine.Ajax.install();
+    MockFetch.install();
   });
 
   afterEach(() => {
     PromiseMock.uninstall();
-    jasmine.Ajax.uninstall();
+    MockFetch.uninstall();
   });
 
   describe('retroCreate', () => {
@@ -118,9 +116,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /retros', () => {
-      expect('https://example.com/retros').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('https://example.com/retros', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'x-auth-token': 'the-auth-token',
@@ -133,8 +131,8 @@ describe('ApiDispatcher', () => {
           },
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro, token: 'the-token'});
+      const request = MockFetch.latestRequest();
+      request.ok({retro, token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
       expect(Dispatcher).toHaveReceived('retroSuccessfullyCreated');
@@ -142,8 +140,8 @@ describe('ApiDispatcher', () => {
 
     describe('when unprocessable entity is received', () => {
       beforeEach(() => {
-        const request = jasmine.Ajax.requests.mostRecent();
-        request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
+        const request = MockFetch.latestRequest();
+        request.resolveJsonStatus(422, {errors: ['some error']});
         Promise.runAll();
       });
 
@@ -187,9 +185,9 @@ describe('ApiDispatcher', () => {
 
     it('makes an api PATCH to /retros/:id', () => {
       dispatchRetroData('the-new-slug-123', 'retro-slug-123', true, 'some-uuid');
-      expect('/retros/13').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/13', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-auth-token',
@@ -204,8 +202,8 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({
+      const request = MockFetch.latestRequest();
+      request.ok({
         retro: {
           name: 'the new retro name',
           slug: 'the-new-slug-123',
@@ -241,7 +239,7 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         dispatchRetroData('the-new-slug-123', 'retro-slug-123', 'some-uuid');
 
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.forbidden();
         Promise.runAll();
       });
@@ -262,8 +260,8 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         dispatchRetroData('the-new-slug-123', 'retro-slug-123', 'some-uuid');
 
-        const request = jasmine.Ajax.requests.mostRecent();
-        request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
+        const request = MockFetch.latestRequest();
+        request.resolveJsonStatus(422, {errors: ['some error']});
         Promise.runAll();
       });
 
@@ -283,8 +281,8 @@ describe('ApiDispatcher', () => {
       beforeEach(() => {
         dispatchRetroData('retro-slug-123', 'retro-slug-123', false, 'some-uuid');
 
-        const request = jasmine.Ajax.requests.mostRecent();
-        request.succeed({
+        const request = MockFetch.latestRequest();
+        request.ok({
           retro: {
             name: 'the new retro name',
             slug: 'retro-slug-123',
@@ -333,9 +331,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PATCH to /retros/:id/password', () => {
-      expect('/retros/13/password').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/13/password', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-auth-token',
@@ -347,8 +345,8 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({token: 'new-api-token'});
+      const request = MockFetch.latestRequest();
+      request.ok({token: 'new-api-token'});
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
         type: 'retroPasswordSuccessfullyUpdated',
@@ -376,8 +374,8 @@ describe('ApiDispatcher', () => {
 
     describe('when unprocessable entity is received', () => {
       beforeEach(() => {
-        const request = jasmine.Ajax.requests.mostRecent();
-        request.respondWith({status: 422, contentType: 'application/json', responseText: '{"errors": ["some error"]}'});
+        const request = MockFetch.latestRequest();
+        request.resolveJsonStatus(422, {errors: ['some error']});
         Promise.runAll();
       });
 
@@ -398,15 +396,15 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api GET to /retros/:id', () => {
-      expect('/retros/1').toHaveBeenRequestedWith({
-        requestHeaders: {
+      expect(MockFetch).toHaveRequested('/retros/1', {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro});
+      const request = MockFetch.latestRequest();
+      request.ok({retro});
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
         type: 'retroSuccessfullyFetched',
@@ -416,7 +414,7 @@ describe('ApiDispatcher', () => {
 
     describe('when forbidden is received', () => {
       it('dispatches requireRetroLogin', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.forbidden();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -428,7 +426,7 @@ describe('ApiDispatcher', () => {
 
     describe('when retro does not exist', () => {
       it('dispatches retroNotFound', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -446,16 +444,16 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an API GET to /retros', () => {
-      expect('/retros').toHaveBeenRequestedWith({
-        requestHeaders: {
+      expect(MockFetch).toHaveRequested('/retros', {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'x-auth-token': 'the-auth-token',
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retros: [retro]});
+      const request = MockFetch.latestRequest();
+      request.ok({retros: [retro]});
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
         type: 'retrosSuccessfullyFetched',
@@ -471,14 +469,14 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api GET to /retros/:id/sessions/new', () => {
-      expect('/retros/1/sessions/new').toHaveBeenRequestedWith({
-        requestHeaders: {
+      expect(MockFetch).toHaveRequested('/retros/1/sessions/new', {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
+      const request = MockFetch.latestRequest();
+      request.ok({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
         type: 'getRetroLoginSuccessfullyReceived',
@@ -488,7 +486,7 @@ describe('ApiDispatcher', () => {
 
     describe('when retro does not exist', () => {
       it('dispatches retroNotFound', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -509,16 +507,16 @@ describe('ApiDispatcher', () => {
         localStorage.setItem('apiToken-retro-slug-123', 'the-token');
         doSetup();
 
-        expect('/retros/retro-slug-123/settings').toHaveBeenRequestedWith({
-          requestHeaders: {
+        expect(MockFetch).toHaveRequested('/retros/retro-slug-123/settings', {
+          headers: {
             'accept': 'application/json',
             'content-type': 'application/json',
             'authorization': 'Bearer the-token',
           },
         });
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
-        request.succeed(response);
+        request.ok(response);
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
           type: 'getRetroSettingsSuccessfullyReceived',
@@ -530,13 +528,13 @@ describe('ApiDispatcher', () => {
         localStorage.setItem('apiToken-retro-slug-123', '');
         doSetup();
 
-        expect('/retros/retro-slug-123/settings').toHaveBeenRequestedWith({
-          requestHeaders: {
+        expect(MockFetch).toHaveRequested('/retros/retro-slug-123/settings', {
+          headers: {
             'accept': 'application/json',
             'content-type': 'application/json',
           },
         });
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.forbidden();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -554,12 +552,12 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /retros/:id/sessions', () => {
-      expect('/retros/15/sessions').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/15/sessions', {
         method: 'POST',
         data: {retro: {password: 'pa55word'}},
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({token: 'the-token'});
+      const request = MockFetch.latestRequest();
+      request.ok({token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
       expect(Dispatcher).toHaveReceived({
@@ -570,7 +568,7 @@ describe('ApiDispatcher', () => {
 
     describe('when password is wrong', () => {
       it('dispatches retroLoginFailed', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -589,9 +587,9 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
-      expect('/retros/1/items/2').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items/2', {
         method: 'DELETE',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -612,9 +610,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /retros/:id/items', () => {
-      expect('/retros/1/items').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -627,8 +625,8 @@ describe('ApiDispatcher', () => {
     });
 
     it('dispatches retroItemSuccessfullyCreated with the response', () => {
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item: {id: 1, category: 'happy', description: 'this is an item'}});
+      const request = MockFetch.latestRequest();
+      request.ok({item: {id: 1, category: 'happy', description: 'this is an item'}});
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
         type: 'retroItemSuccessfullyCreated',
@@ -646,9 +644,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PATCH to /retros/:retro_id/items/:id', () => {
-      expect(`/retros/1/items/${item.id}`).toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested(`/retros/1/items/${item.id}`, {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -670,9 +668,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api DELETE to /retros/:id/items/:item_id', () => {
-      expect('/retros/1/items/2').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items/2', {
         method: 'DELETE',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -694,17 +692,17 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/items/:item_id/vote', () => {
-      expect('/retros/1/items/2/vote').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items/2/vote', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item});
+      const request = MockFetch.latestRequest();
+      request.ok({item});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -715,7 +713,7 @@ describe('ApiDispatcher', () => {
   });
 
   describe('nextRetroItem', () => {
-    it('makes an API POST to /retros/:id/discussion/transition', () => {
+    it('makes an API POST to /retros/:id/discussion/transitions', () => {
       realDispatchLevels = 2; // allow nextRetroItem and retroItemSuccessfullyDone
 
       localStorage.setItem('apiToken-1', 'the-token');
@@ -723,9 +721,9 @@ describe('ApiDispatcher', () => {
       subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
 
-      expect('/retros/1/discussion/transition').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/discussion/transitions', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -733,8 +731,8 @@ describe('ApiDispatcher', () => {
         data: {transition: 'NEXT'},
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro});
+      const request = MockFetch.latestRequest();
+      request.ok({retro});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -752,9 +750,9 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/discussion', () => {
-      expect('/retros/1/discussion').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -762,8 +760,8 @@ describe('ApiDispatcher', () => {
         data: {item_id: 2},
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro});
+      const request = MockFetch.latestRequest();
+      request.ok({retro});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -780,9 +778,9 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'unhighlightRetroItem', data: {retro_id: 1}});
     });
     it('makes an api DELETE to /retros/:id/discussion', () => {
-      expect('/retros/1/discussion').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
         method: 'DELETE',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -801,9 +799,9 @@ describe('ApiDispatcher', () => {
       subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item}});
     });
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
-      expect('/retros/1/items/2/done').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items/2/done', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -812,8 +810,8 @@ describe('ApiDispatcher', () => {
 
       item = retro.items[0];
       item.done = true;
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({item});
+      const request = MockFetch.latestRequest();
+      request.ok({item});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -834,9 +832,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
-      expect('/retros/1/items/2/done').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/items/2/done', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -846,8 +844,8 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.respondWith({status: 204});
+      const request = MockFetch.latestRequest();
+      request.noContent();
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -865,17 +863,17 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PATCH to /retros/:id/discussion', () => {
-      expect('/retros/1/discussion').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro});
+      const request = MockFetch.latestRequest();
+      request.ok({retro});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -893,9 +891,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PUT to /retros/:id/archive', () => {
-      expect('/retros/1/archive').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/archive', {
         method: 'PUT',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -905,8 +903,8 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({retro});
+      const request = MockFetch.latestRequest();
+      request.ok({retro});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -924,9 +922,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /retros/:id/action_items', () => {
-      expect('/retros/1/action_items').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/action_items', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -949,9 +947,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PATCH to /retros/:id/action_items/:action_item_id', () => {
-      expect('/retros/1/action_items/1').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -961,8 +959,8 @@ describe('ApiDispatcher', () => {
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item});
+      const request = MockFetch.latestRequest();
+      request.ok({action_item});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -982,9 +980,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api DELETE to /retros/:id/action_items/:action_item_id', () => {
-      expect('/retros/1/action_items/1').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
         method: 'DELETE',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
@@ -1011,17 +1009,17 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api PUT to /retros/:id/action_items/:action_item_id', () => {
-      expect('/retros/1/action_items/1').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
         method: 'PATCH',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({action_item});
+      const request = MockFetch.latestRequest();
+      request.ok({action_item});
       Promise.runAll();
 
       expect(Dispatcher).toHaveReceived({
@@ -1039,22 +1037,22 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api GET to /retros/:retro_id/archives', () => {
-      expect('/retros/1/archives').toHaveBeenRequestedWith({
-        requestHeaders: {
+      expect(MockFetch).toHaveRequested('/retros/1/archives', {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
+      const request = MockFetch.latestRequest();
+      request.ok();
       Promise.runAll();
       expect(Dispatcher).toHaveReceived('retroArchivesSuccessfullyFetched');
     });
 
     describe('when retro does not exist', () => {
       it('dispatches retroNotFound', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -1072,22 +1070,22 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api GET to /retros/:retro_id/archives/:archive_id', () => {
-      expect('/retros/1/archives/1').toHaveBeenRequestedWith({
-        requestHeaders: {
+      expect(MockFetch).toHaveRequested('/retros/1/archives/1', {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
           'authorization': 'Bearer the-token',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
+      const request = MockFetch.latestRequest();
+      request.ok();
       Promise.runAll();
       expect(Dispatcher).toHaveReceived('retroArchiveSuccessfullyFetched');
     });
 
     describe('when archives do not exist', () => {
       it('dispatches notFound', () => {
-        const request = jasmine.Ajax.requests.mostRecent();
+        const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
         expect(Dispatcher).toHaveReceived({
@@ -1107,9 +1105,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /users', () => {
-      expect('/users').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/users', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
         },
@@ -1119,15 +1117,15 @@ describe('ApiDispatcher', () => {
           'full_name': 'My Full Name',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
+      const request = MockFetch.latestRequest();
+      request.ok();
       Promise.runAll();
       expect(Dispatcher).toHaveReceived('redirectToRetroCreatePage');
     });
 
     it('stores the auth token in local storage', () => {
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({auth_token: 'the-token'});
+      const request = MockFetch.latestRequest();
+      request.ok({auth_token: 'the-token'});
       Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
@@ -1144,9 +1142,9 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api POST to /sessions', () => {
-      expect('/sessions').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/sessions', {
         method: 'POST',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
         },
@@ -1154,14 +1152,14 @@ describe('ApiDispatcher', () => {
           'access_token': 'the-access-token',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
+      const request = MockFetch.latestRequest();
+      request.ok();
       Promise.runAll();
       expect(Dispatcher).toHaveReceived('loggedInSuccessfully');
     });
 
     it('if the server returns a 404 because the user does not exist', () => {
-      const request = jasmine.Ajax.requests.mostRecent();
+      const request = MockFetch.latestRequest();
       request.notFound();
       Promise.runAll();
       expect(Dispatcher).toHaveReceived({
@@ -1177,8 +1175,8 @@ describe('ApiDispatcher', () => {
     it('stores the auth token in local storage', () => {
       realDispatchLevels = 2; // allow createSession and loggedInSuccessfully
 
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed({auth_token: 'the-token'});
+      const request = MockFetch.latestRequest();
+      request.ok({auth_token: 'the-token'});
       Promise.runAll();
 
       expect(localStorage.getItem('authToken')).toEqual('the-token');
@@ -1192,15 +1190,15 @@ describe('ApiDispatcher', () => {
     });
 
     it('makes an api GET to /config', () => {
-      expect('/config').toHaveBeenRequestedWith({
+      expect(MockFetch).toHaveRequested('/config', {
         method: 'GET',
-        requestHeaders: {
+        headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
         },
       });
-      const request = jasmine.Ajax.requests.mostRecent();
-      request.succeed();
+      const request = MockFetch.latestRequest();
+      request.ok();
       Promise.runAll();
     });
   });
