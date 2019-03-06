@@ -38,6 +38,5 @@ end
 
 User.find_or_create_by!(
   email: 'labs-sydney-devs@example.com',
-  name: 'Test User',
-  auth_token: 'secret-test-user-token-ef87c521b979'
+  name: 'Test User'
 )
