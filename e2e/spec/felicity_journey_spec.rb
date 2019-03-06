@@ -237,8 +237,8 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
 
   specify 'Auto facilitation journey' do
     register('felicity-auto-facilitate-user')
-    create_public_retro('first-retro')
-    retro_url = create_public_retro('auto-facilitate-retro')
+    create_public_retro
+    retro_url = create_public_retro
     visit retro_url
 
     fill_in("I'm glad that...", with: 'something really happy')
