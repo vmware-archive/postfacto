@@ -31,7 +31,7 @@
 # Be sure to restart your server when you modify this file.
 # Action Cable runs in a loop that does not support auto reloading.
 
-require 'security/jwt_token'
+require 'security/auth_token'
 
 class RetrosChannel < ApplicationCable::Channel
 
@@ -76,7 +76,7 @@ class RetrosChannel < ApplicationCable::Channel
 
   def user_allowed_to_access_retro?(retro, api_token)
     return true unless retro.is_private?
-    retro.slug == JWTToken.subject_for(
+    retro.slug == AuthToken.subject_for(
       api_token,
       Rails.application.secrets.secret_key_base,
       'retros'

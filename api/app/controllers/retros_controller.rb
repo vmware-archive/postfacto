@@ -81,7 +81,7 @@ class RetrosController < ApplicationController
   end
 
   def archive
-    RetroArchiveService.instance.call(@retro, Time.now, retro_archive_params.fetch(:send_archive_email, true))
+    RetroArchiveService.archive(@retro, Time.now, retro_archive_params.fetch(:send_archive_email, true))
 
     broadcast
     render 'show'

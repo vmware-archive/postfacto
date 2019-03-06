@@ -108,7 +108,7 @@ end
 def token_for(item)
   case item
   when Retro
-    JWTToken.generate(
+    AuthToken.generate(
       retro.slug,
       'retros',
       CLOCK.current_time,
@@ -117,7 +117,7 @@ def token_for(item)
     )
 
   when User
-    JWTToken.generate(
+    AuthToken.generate(
       user.id,
       'users',
       CLOCK.current_time,

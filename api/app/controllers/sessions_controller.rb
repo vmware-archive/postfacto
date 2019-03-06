@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'security/jwt_token'
+require 'security/auth_token'
 
 class SessionsController < ApplicationController
   include RetrosAuth
