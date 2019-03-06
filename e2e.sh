@@ -16,6 +16,8 @@ WEB_LOG="$BASE_DIR/test-web-server.log";
 # Update database
 
 pushd "$BASE_DIR/api" >/dev/null
+  echo 'Dropping test database...'
+  bundle exec rake db:drop
   echo 'Migrating test database...'
   bundle exec rake db:create db:migrate db:test:prepare
   echo 'Seeding test data...'
