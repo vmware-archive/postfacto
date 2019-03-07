@@ -7,6 +7,7 @@
 * rspec
 * Node 11+
 * chromedriver
+* tmux
 
 To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development:
 
