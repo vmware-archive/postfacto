@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'sendgrid_vcap_parser'
+require 'configurations/sendgrid_vcap_parser'
 
 describe SendgridVCAPParser do
   it 'parses a CF-style VCAP_SERVICES string to generate a SendgridConfiguration' do

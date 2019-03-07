@@ -28,7 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'rails_helper'
+# require 'rails_helper'
+
+require 'queries/safe_order_by'
 
 describe SafeOrderBy do
   it 'translates given ActiveAdmin order strings into order-by clauses' do

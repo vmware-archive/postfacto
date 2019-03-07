@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'sendgrid_configuration'
+require_relative 'sendgrid_configuration'
 
 class SendgridVCAPParser
   class << self

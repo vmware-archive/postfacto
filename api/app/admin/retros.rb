@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require_relative "../models/queries/safe_order_by"
+require 'queries/safe_order_by'
 
 ActiveAdmin.register Retro do
   menu priority: 1

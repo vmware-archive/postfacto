@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'redis_configuration_provider'
+require 'configurations/redis_configuration_provider'
 require 'climate_control'
 
 describe RedisConfigurationProvider do

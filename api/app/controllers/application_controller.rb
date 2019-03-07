@@ -29,7 +29,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-require 'security/jwt_token'
+require 'security/auth_token'
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_user
-    user_id = JWTToken.subject_for(
+    user_id = AuthToken.subject_for(
       request.headers['X-AUTH-TOKEN'],
       Rails.application.secrets.secret_key_base,
       'users'

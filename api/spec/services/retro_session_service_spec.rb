@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'rails_helper'
+require_relative '../../../api/app/services/retro_session_service'
 
 describe 'RetroSessionService' do
   subject { RetroSessionService.instance }

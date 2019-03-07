@@ -28,11 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'security/jwt_token'
+require 'security/auth_token'
 
 module RetrosAuth
-  include ActiveSupport::Concern
-
   def load_retro
     @retro = Retro.find_by_slug!(params.fetch(:retro_id) { params.fetch(:id) })
   end
@@ -56,7 +54,7 @@ module RetrosAuth
   end
 
   def generate_retro_token(retro)
-    JWTToken.generate(
+    AuthToken.generate(
       retro.slug,
       'retros',
       CLOCK.current_time,
@@ -67,7 +65,7 @@ module RetrosAuth
 
   def valid_token_provided?
     authenticate_with_http_token do |token, _options|
-      @retro.slug == JWTToken.subject_for(
+      @retro.slug == AuthToken.subject_for(
         token,
         Rails.application.secrets.secret_key_base,
         'retros'

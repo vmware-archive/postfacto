@@ -57,7 +57,7 @@ describe RetroArchiveService do
       archived: true
     )
 
-    RetroArchiveService.instance.call(retro, Time.now, true)
+    RetroArchiveService.archive(retro, Time.now, true)
 
     old_item.reload
     old_action.reload
@@ -66,7 +66,7 @@ describe RetroArchiveService do
   end
 
   it 'archives all existing items and completed actions' do
-    RetroArchiveService.instance.call(retro, Time.now, true)
+    RetroArchiveService.archive(retro, Time.now, true)
 
     expect(Item.where(retro: retro).where('archived_at IS NOT NULL').pluck(:description))
       .to match_array(['one happy item'])
@@ -95,7 +95,7 @@ describe RetroArchiveService do
   end
 
   it 'set the send_archive_email' do
-    RetroArchiveService.instance.call(retro, Time.now, false)
+    RetroArchiveService.archive(retro, Time.now, false)
 
     expect(retro.send_archive_email).to equal(false)
   end
@@ -107,7 +107,7 @@ describe RetroArchiveService do
     mail = spy
     allow(ArchivedMailer).to receive(:archived_email) { mail }
 
-    RetroArchiveService.instance.call(retro, Time.now, true)
+    RetroArchiveService.archive(retro, Time.now, true)
 
     expect(ArchivedMailer).to have_received(:archived_email).with(retro, anything, user, 'postfacto-test@example.com')
     expect(mail).to have_received(:deliver_now)
@@ -120,7 +120,7 @@ describe RetroArchiveService do
     mail = spy
     allow(ArchivedMailer).to receive(:archived_email) { mail }
 
-    RetroArchiveService.instance.call(retro, Time.now, false)
+    RetroArchiveService.archive(retro, Time.now, false)
 
     expect(ArchivedMailer).to_not have_received(:archived_email)
   end
@@ -128,7 +128,7 @@ describe RetroArchiveService do
   it 'does not send an email if there is no retro owner' do
     allow(ArchivedMailer).to receive(:archived_email)
 
-    RetroArchiveService.instance.call(retro, Time.now, true)
+    RetroArchiveService.archive(retro, Time.now, true)
 
     expect(ArchivedMailer).to_not have_received(:archived_email)
   end

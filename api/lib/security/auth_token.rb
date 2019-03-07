@@ -1,6 +1,6 @@
 require 'jwt'
 
-class JWTToken
+module AuthToken
   def self.generate(subject, issuer, current_time, session_time_limit, secret)
     payload = { sub: subject, iss: issuer }
     payload[:exp] = (current_time + session_time_limit).to_i if session_time_limit

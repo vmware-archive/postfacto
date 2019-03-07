@@ -250,17 +250,17 @@ describe '/retros' do
       end
 
       it 'calls the archive service' do
-        allow(RetroArchiveService.instance).to receive(:call)
+        allow(RetroArchiveService).to receive(:archive)
         subject
-        expect(RetroArchiveService.instance).to have_received(:call).with(retro, anything, true)
+        expect(RetroArchiveService).to have_received(:archive).with(retro, anything, true)
       end
 
       it 'defaults to sending an archive email' do
-        allow(RetroArchiveService.instance).to receive(:call)
+        allow(RetroArchiveService).to receive(:archive)
         put retro_path(retro) + '/archive',
             headers: { HTTP_AUTHORIZATION: token },
             params: {}, as: :json
-        expect(RetroArchiveService.instance).to have_received(:call).with(retro, anything, true)
+        expect(RetroArchiveService).to have_received(:archive).with(retro, anything, true)
       end
 
       it 'returns the updated retro' do
@@ -296,9 +296,9 @@ describe '/retros' do
       end
 
       it 'does not call the archive service' do
-        allow(RetroArchiveService.instance).to receive(:call)
+        allow(RetroArchiveService).to receive(:archive)
         subject
-        expect(RetroArchiveService.instance).to_not have_received(:call)
+        expect(RetroArchiveService).to_not have_received(:archive)
       end
 
       it 'returns forbidden' do
