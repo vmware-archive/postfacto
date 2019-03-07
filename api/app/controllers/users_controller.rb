@@ -46,7 +46,13 @@ class UsersController < ApplicationController
       head :multiple_choices
     else
       user = User.create!(user)
-      token = AuthToken.generate(user.id, 'users', CLOCK.now, nil, Rails.application.secrets.secret_key_base)
+      token = AuthToken.generate(
+        user.id,
+        'users',
+        CLOCK.current_time,
+        Rails.configuration.session_time,
+        Rails.application.secrets.secret_key_base
+      )
 
       render json: { auth_token: token }, status: :created
     end

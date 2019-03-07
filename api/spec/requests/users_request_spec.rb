@@ -47,13 +47,56 @@ describe '/users' do
 
       expect(response).to be_created
 
-      data = JSON.parse(response.body, symbolize_names: true)
-
-      expect(data[:auth_token]).not_to be_nil
       user = User.last
       expect(user.name).to eq('Felicity Toad')
       expect(user.email).to eq('felicity@frog.com')
       expect(user.company_name).to eq('Felicity Corps')
+    end
+
+    it 'returns a token' do
+      google_user_data = {
+        name: 'Felicity Frog',
+        email: 'felicity@frog.com',
+        hd: 'frog.com'
+      }
+
+      expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
+
+      post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
+                               full_name: 'Felicity Toad' }, as: :json
+
+      data = JSON.parse(response.body)
+      jwt = JWT.decode(data['auth_token'], nil, false)
+      expect(jwt[0]['sub']).to_not be_blank
+      expect(jwt[0]['iss']).to eq('users')
+      expect(jwt[1]['alg']).to eq('HS256')
+    end
+
+    context 'when there is a session time' do
+      let(:session_time) { 1.seconds }
+
+      before do
+        allow(Rails.configuration).to receive(:session_time).and_return(session_time)
+        allow(CLOCK).to receive(:current_time).and_return(Time.now)
+      end
+
+      it 'responds with an expiring token' do
+        google_user_data = {
+          name: 'Felicity Frog',
+          email: 'felicity@frog.com',
+          hd: 'frog.com'
+        }
+
+        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
+
+        post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps',
+                                 full_name: 'Felicity Toad' }, as: :json
+
+        data = JSON.parse(response.body)
+        jwt = JWT.decode(data['auth_token'], nil, false)
+
+        expect(jwt[0]['exp'].to_i).to eq((CLOCK.current_time + session_time).to_i)
+      end
     end
 
     context 'user with the same email exists' do

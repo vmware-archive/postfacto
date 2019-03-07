@@ -32,6 +32,4 @@ class Clock
   def current_time
     Time.now.utc
   end
-
-  alias now current_time
 end

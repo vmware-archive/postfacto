@@ -39,7 +39,7 @@ class OauthSessionsController < ApplicationController
     token = AuthToken.generate(
       user.id,
       'users',
-      CLOCK.now,
+      CLOCK.current_time,
       Rails.configuration.session_time,
       Rails.application.secrets.secret_key_base
     )
