@@ -30,8 +30,9 @@
 #
 class RetrosController < ApplicationController
   include RetrosAuth
+  include UsersAuth
 
-  before_action :authenticate_user, only: [:index, :create]
+  before_action :load_and_authenticate_user, only: [:index, :create]
   before_action :load_and_authenticate_retro, only: [:show]
   before_action :load_and_authenticate_retro_admin, only: [:archive, :update, :update_password]
 

@@ -32,19 +32,12 @@ require 'clients/google_client'
 require 'security/auth_token'
 
 class OauthSessionsController < ApplicationController
+  include UsersAuth
+
   def create
     google_user = GOOGLE_CLIENT.get_user!(params.fetch(:access_token))
-
     user = User.find_by!(email: google_user[:email])
-    token = AuthToken.generate(
-      user.id,
-      'users',
-      CLOCK.current_time,
-      Rails.configuration.session_time,
-      Rails.application.secrets.secret_key_base
-    )
-
-    render json: { auth_token: token, new_user: user.retros.empty? }
+    render json: { auth_token: generate_user_token(user), new_user: user.retros.empty? }
   rescue GoogleClient::InvalidUserDomain
     head :forbidden
   rescue GoogleClient::GetUserFailed

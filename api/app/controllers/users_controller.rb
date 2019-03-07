@@ -31,6 +31,8 @@
 require 'clients/google_client'
 
 class UsersController < ApplicationController
+  include UsersAuth
+
   def create
     google_user = GOOGLE_CLIENT.get_user! params.fetch(:access_token)
     user = google_user.slice(:email)
@@ -46,15 +48,7 @@ class UsersController < ApplicationController
       head :multiple_choices
     else
       user = User.create!(user)
-      token = AuthToken.generate(
-        user.id,
-        'users',
-        CLOCK.current_time,
-        Rails.configuration.session_time,
-        Rails.application.secrets.secret_key_base
-      )
-
-      render json: { auth_token: token }, status: :created
+      render json: { auth_token: generate_user_token(user) }, status: :created
     end
   end
 

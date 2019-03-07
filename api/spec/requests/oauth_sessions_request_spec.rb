@@ -55,7 +55,7 @@ describe '/sessions' do
         expect(data[:new_user]).to eq(true)
 
         jwt = JWT.decode(data[:auth_token], nil, false)
-        expect(jwt[0]['sub']).to eq(@user.id)
+        expect(jwt[0]['sub']).to eq('felicity@frog.com')
         expect(jwt[0]['iss']).to eq('users')
         expect(jwt[1]['alg']).to eq('HS256')
       end
@@ -93,7 +93,7 @@ describe '/sessions' do
         expect(data[:new_user]).to eq(false)
 
         jwt = JWT.decode(data[:auth_token], nil, false)
-        expect(jwt[0]['sub']).to eq(@user.id)
+        expect(jwt[0]['sub']).to eq('felicity@frog.com')
         expect(jwt[0]['iss']).to eq('users')
         expect(jwt[1]['alg']).to eq('HS256')
       end

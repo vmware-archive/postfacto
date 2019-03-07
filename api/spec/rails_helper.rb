@@ -114,7 +114,7 @@ def token_for(item)
 
   when User
     AuthToken.generate(
-      user.id,
+      user.email,
       'users',
       CLOCK.current_time,
       nil,

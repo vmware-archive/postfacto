@@ -28,16 +28,27 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-
 require 'security/auth_token'
 
-class ApplicationController < ActionController::Base
-  protect_from_forgery
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+module UsersAuth
+  def generate_user_token(user)
+    AuthToken.generate(
+      user.email,
+      'users',
+      CLOCK.current_time,
+      Rails.configuration.session_time,
+      Rails.application.secrets.secret_key_base
+    )
+  end
 
-  private
+  def load_and_authenticate_user
+    email = AuthToken.subject_for(
+      request.headers['X-AUTH-TOKEN'],
+      Rails.application.secrets.secret_key_base,
+      'users'
+    )
 
-  def record_not_found
-    render json: {}, status: :not_found
+    @user = User.find_by_email(email) if email
+    render json: :no_content, status: :unauthorized unless @user
   end
 end
