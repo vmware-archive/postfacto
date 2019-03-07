@@ -36,7 +36,13 @@ class OauthSessionsController < ApplicationController
     google_user = GOOGLE_CLIENT.get_user!(params.fetch(:access_token))
 
     user = User.find_by!(email: google_user[:email])
-    token = AuthToken.generate(user.id, 'users', CLOCK.now, nil, Rails.application.secrets.secret_key_base)
+    token = AuthToken.generate(
+      user.id,
+      'users',
+      CLOCK.now,
+      Rails.configuration.session_time,
+      Rails.application.secrets.secret_key_base
+    )
 
     render json: { auth_token: token, new_user: user.retros.empty? }
   rescue GoogleClient::InvalidUserDomain

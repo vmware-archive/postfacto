@@ -82,11 +82,38 @@ describe '/sessions' do
 
         data = JSON.parse(response.body, symbolize_names: true)
         expect(data[:new_user]).to eq(false)
+      end
+
+      it 'returns a token' do
+        post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+
+        expect(response.status).to eq(200)
+
+        data = JSON.parse(response.body, symbolize_names: true)
+        expect(data[:new_user]).to eq(false)
 
         jwt = JWT.decode(data[:auth_token], nil, false)
         expect(jwt[0]['sub']).to eq(@user.id)
         expect(jwt[0]['iss']).to eq('users')
         expect(jwt[1]['alg']).to eq('HS256')
+      end
+
+      context 'when there is a session time' do
+        let(:session_time) { 1.seconds }
+
+        before do
+          allow(Rails.configuration).to receive(:session_time).and_return(session_time)
+          allow(CLOCK).to receive(:current_time).and_return(Time.now)
+        end
+
+        it 'responds with an expiring token' do
+          post '/sessions', params: { access_token: 'the-access-token' }, as: :json
+
+          data = JSON.parse(response.body)
+          jwt = JWT.decode(data['auth_token'], nil, false)
+
+          expect(jwt[0]['exp'].to_i).to eq((CLOCK.current_time + session_time).to_i)
+        end
       end
     end
 

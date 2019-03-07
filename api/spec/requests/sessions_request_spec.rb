@@ -47,15 +47,38 @@ describe '/retros/:id/sessions' do
 
   describe 'POST /' do
     context 'if password is correct' do
-      it 'responds with 200 and returns token' do
+      it 'responds with 200' do
         post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
         expect(status).to eq(200)
-        data = JSON.parse(response.body)
+      end
 
+      it 'responds with a token' do
+        post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+
+        data = JSON.parse(response.body)
         jwt = JWT.decode(data['token'], nil, false)
+
         expect(jwt[0]['sub']).to eq(retro.slug)
         expect(jwt[0]['iss']).to eq('retros')
         expect(jwt[1]['alg']).to eq('HS256')
+      end
+
+      context 'when there is a session time' do
+        let(:session_time) { 1.seconds }
+
+        before do
+          allow(Rails.configuration).to receive(:session_time).and_return(session_time)
+          allow(CLOCK).to receive(:current_time).and_return(Time.now)
+        end
+
+        it 'responds with an expiring token' do
+          post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+
+          data = JSON.parse(response.body)
+          jwt = JWT.decode(data['token'], nil, false)
+
+          expect(jwt[0]['exp'].to_i).to eq((CLOCK.current_time + session_time).to_i)
+        end
       end
     end
 

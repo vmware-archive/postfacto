@@ -29,10 +29,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class Clock
-  attr_writer :time
-
   def current_time
-    @time || Time.now.utc
+    Time.now.utc
   end
 
   alias now current_time
