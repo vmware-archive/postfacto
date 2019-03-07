@@ -31,6 +31,7 @@
 require 'capybara/rspec'
 require 'rspec/retry'
 require 'selenium/webdriver'
+require 'securerandom'
 
 Capybara.register_driver(:headless_chrome) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
@@ -104,7 +105,7 @@ module SpecHelpers
     expect(current_url).to have_content(RETRO_APP_BASE_URL + '/retros/new')
 
     fill_in 'Team name', with: team_name || 'My Retro'
-    fill_in 'team-name', with: slug || Time.now.strftime('%Y%m%d%H%M%s')
+    fill_in 'team-name', with: slug || SecureRandom.uuid
     fill_in 'Create password', with: 'password'
   end
 
