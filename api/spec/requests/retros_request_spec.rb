@@ -32,7 +32,15 @@ require 'rails_helper'
 
 describe '/retros' do
   let(:retro) do
-    Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
+    retro_admin = User.create!(email: 'admin@test.io', name: 'random')
+
+    Retro.create!(
+      name: 'My Retro',
+      password: 'the-password',
+      video_link: 'the-video-link',
+      is_private: false,
+      user: retro_admin
+    )
   end
 
   let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
@@ -246,21 +254,12 @@ describe '/retros' do
       subject do
         put retro_path(retro) + '/archive',
             headers: { HTTP_AUTHORIZATION: token },
-            params: { send_archive_email: true }, as: :json
-      end
-
-      it 'calls the archive service' do
-        allow(RetroArchiveService).to receive(:archive)
-        subject
-        expect(RetroArchiveService).to have_received(:archive).with(retro, anything, true)
+            params: { send_archive_email: true },
+            as: :json
       end
 
       it 'defaults to sending an archive email' do
-        allow(RetroArchiveService).to receive(:archive)
-        put retro_path(retro) + '/archive',
-            headers: { HTTP_AUTHORIZATION: token },
-            params: {}, as: :json
-        expect(RetroArchiveService).to have_received(:archive).with(retro, anything, true)
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
       it 'returns the updated retro' do
