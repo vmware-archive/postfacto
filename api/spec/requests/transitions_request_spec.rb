@@ -35,69 +35,103 @@ describe '/retros/:retro_id/discussion/transitions' do
   let(:token) { ActionController::HttpAuthentication::Token.encode_credentials(token_for(retro)) }
 
   describe 'POST' do
-    it 'selects next item when no previous item highlighted' do
-      allow(RetrosChannel).to receive_messages(broadcast: {})
-      item = retro.items.create!(description: 'first item', category: :happy)
+    context 'selecting next item with no previously highlighted item' do
+      let!(:item) { retro.items.create!(description: 'first item', category: :happy) }
 
-      post retro_path(retro) + '/discussion/transitions',
-           headers: { HTTP_AUTHORIZATION: token },
-           params: { transition: 'NEXT' },
-           as: :json
+      it 'selects the next item' do
+        do_request
+        retro.reload
+        expect(retro.highlighted_item_id).to eq(item.id)
 
-      retro.reload
-      expect(retro.highlighted_item_id).to eq(item.id)
+        data = JSON.parse(response.body)
+        expect(data['retro']['highlighted_item_id']).to eq(item.id)
+        expect(data['retro']['retro_item_end_time']).not_to be_nil
+      end
 
-      expect(RetrosChannel).to have_received(:broadcast).with(retro).ordered
-      data = JSON.parse(response.body)
-      expect(data['retro']['highlighted_item_id']).to eq(item.id)
-      expect(data['retro']['retro_item_end_time']).not_to be_nil
+      it 'broadcasts the change' do
+        expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('highlighted_item_id' => item.id)
+              )
+          )
+      end
     end
 
-    it 'marks previously hilighted item as done if there was one' do
-      allow(RetrosChannel).to receive_messages(broadcast: {})
-      item = retro.items.create!(description: 'first item', done: true, category: :happy)
-      item2 = retro.items.create!(description: 'second item', category: :meh)
-      retro.highlighted_item_id = item.id
+    context 'select next item with a previously highlighted item' do
+      let!(:item) { retro.items.create!(description: 'first item', category: :happy) }
+      let!(:item2) { retro.items.create!(description: 'second item', category: :meh) }
 
-      post retro_path(retro) + '/discussion/transitions',
-           headers: { HTTP_AUTHORIZATION: token },
-           params: { transition: 'NEXT' },
-           as: :json
+      before do
+        retro.highlighted_item_id = item.id
+        retro.save!
+      end
 
-      retro.reload
+      it 'marks the previous item as done' do
+        do_request
+        retro.reload
 
-      expect(retro.highlighted_item_id).to eq(item2.id)
-      expect(RetrosChannel).to have_received(:broadcast).with(retro).ordered
-      data = JSON.parse(response.body)
-      expect(data['retro']['highlighted_item_id']).to eq(item2.id)
-      expect(data['retro']['retro_item_end_time']).not_to be_nil
+        expect(retro.highlighted_item_id).to eq(item2.id)
+        data = JSON.parse(response.body)
+        expect(data['retro']['highlighted_item_id']).to eq(item2.id)
+        expect(data['retro']['retro_item_end_time']).not_to be_nil
+      end
+
+      it 'broadcasts the change' do
+        expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including(
+                    'highlighted_item_id' => item2.id,
+                    'items' => match_array(
+                                   [
+                                     hash_including('id' => item.id, 'done' => true),
+                                     hash_including('id' => item2.id, 'done' => false)
+                                   ]
+                                 )
+                  )
+              )
+          )
+      end
     end
 
-    it 'sets highlighted item to nil if the last item was finished' do
-      allow(RetrosChannel).to receive_messages(broadcast: {})
-      item = retro.items.create!(description: 'first item', done: true, category: :happy)
-      retro.highlighted_item_id = item.id
+    context 'selecting next item when on the last item' do
+      let!(:item) { retro.items.create!(description: 'first item', done: true, category: :happy) }
 
-      post retro_path(retro) + '/discussion/transitions',
-           headers: { HTTP_AUTHORIZATION: token },
-           params: { transition: 'NEXT' },
-           as: :json
+      before do
+        retro.highlighted_item_id = item.id
+        retro.save!
+      end
 
-      retro.reload
+      it 'sets highlighted item to nil if the last item was finished' do
+        do_request
 
-      expect(retro.highlighted_item_id).to eq(nil)
-      data = JSON.parse(response.body)
-      expect(data['retro']['highlighted_item_id']).to be_nil
-      expect(data['retro']['retro_item_end_time']).to be_nil
+        retro.reload
+
+        expect(retro.highlighted_item_id).to eq(nil)
+        data = JSON.parse(response.body)
+        expect(data['retro']['highlighted_item_id']).to be_nil
+        expect(data['retro']['retro_item_end_time']).to be_nil
+      end
+
+      it 'broadcasts the change' do
+        expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('highlighted_item_id' => be_nil)
+              )
+          )
+      end
     end
 
     it 'fails with 400 when transition is not NEXT' do
-      post retro_path(retro) + '/discussion/transitions',
-           headers: { HTTP_AUTHORIZATION: token },
-           params: { transition: 'SOME_OTHER_TRANSITION' },
-           as: :json
+      do_request('SOME_OTHER_TRANSITION')
 
       expect(response.status).to eq(400)
     end
+  end
+
+  def do_request(transition = 'NEXT')
+    post retro_path(retro) + '/discussion/transitions',
+         headers: { HTTP_AUTHORIZATION: token },
+         params: { transition: transition },
+         as: :json
   end
 end

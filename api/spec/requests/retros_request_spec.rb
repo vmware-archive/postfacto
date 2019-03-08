@@ -339,6 +339,10 @@ describe '/retros' do
     end
 
     context 'when private and authenticated' do
+      before do
+        retro.update(is_private: true)
+      end
+
       let(:is_private) { false }
 
       it 'returns the updated retro' do
@@ -356,23 +360,16 @@ describe '/retros' do
       end
 
       it 'broadcasts the updated retro' do
-        allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-        do_request
-
-        expect(RetrosChannel).to have_received(:broadcast).with(retro)
+        expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including('retro' => hash_including('name' => 'Your Retro'))
+          )
       end
 
       context 'and changing retro to public' do
         it 'does not broadcast force relogin' do
-          retro.update(is_private: true)
-
-          allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-          do_request
-
-          expect(RetrosChannel).not_to have_received(:broadcast_force_relogin)
-          expect(RetrosChannel).to have_received(:broadcast).with(retro.reload)
+          expect { do_request }.not_to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+              hash_including('command' => 'force_relogin')
+            )
         end
       end
     end
@@ -400,12 +397,9 @@ describe '/retros' do
         let(:is_private) { true }
 
         it 'broadcasts force relogin and updated retro' do
-          allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-          do_request
-
-          expect(RetrosChannel).to have_received(:broadcast_force_relogin)
-          expect(RetrosChannel).to have_received(:broadcast).with(retro.reload)
+          expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+              hash_including('command' => 'force_relogin')
+            )
         end
       end
     end

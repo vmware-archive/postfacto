@@ -58,8 +58,11 @@ describe '/retros/:retro_id/discussion' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('highlighted_item_id' => item.id)
+              )
+          )
       end
     end
 
@@ -111,8 +114,10 @@ describe '/retros/:retro_id/discussion' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with { |message|
+          retro_item_end_time = Time.parse(message['retro']['retro_item_end_time'])
+          expect(retro_item_end_time).to be_within(2.seconds).of(2.minutes.from_now)
+        }
       end
     end
 
@@ -144,7 +149,7 @@ describe '/retros/:retro_id/discussion' do
         delete retro_path(retro) + '/discussion', headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
 
-      it 'adds 2 minutes to the timer' do
+      it 'removes the highlighted item' do
         subject
         retro.reload
 
@@ -153,8 +158,11 @@ describe '/retros/:retro_id/discussion' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('highlighted_item_id' => be_nil)
+              )
+          )
       end
     end
 

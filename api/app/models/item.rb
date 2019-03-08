@@ -37,8 +37,7 @@ class Item < ActiveRecord::Base
   before_destroy :clear_highlight
 
   def vote!
-    Item.where(id: id).update_all('vote_count = vote_count + 1')
-    reload
+    increment! :vote_count
   end
 
   private

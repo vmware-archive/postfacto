@@ -94,8 +94,11 @@ describe '/retros/:retro_id/items' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('items' => be_empty)
+              )
+          )
       end
     end
   end
@@ -121,9 +124,12 @@ describe '/retros/:retro_id/items' do
         expect(data['item']['done']).to eq(false)
       end
 
-      it 'broadcasts to item channel with the item' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+      it 'broadcasts to retro channel with updated retro including item' do
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('items' => have_attributes(size: 2))
+              )
+          )
       end
     end
 
@@ -176,18 +182,19 @@ describe '/retros/:retro_id/items' do
     end
 
     context 'when authenticated' do
+      let(:expected_count) { item.vote_count + 1 }
+
       subject do
         post retro_item_path(retro, item) + '/vote',
              headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
 
-      it 'successfully vote when logged in' do
+      it 'successfully increases the vote' do
         subject
 
         expect(status).to eq(200)
 
         data = JSON.parse(response.body)
-        expected_count = item.vote_count + 1
 
         expect(data['item']['vote_count']).to eq(expected_count)
         item.reload
@@ -195,8 +202,15 @@ describe '/retros/:retro_id/items' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('items' => match_array(
+                    [
+                      hash_including('vote_count' => expected_count)
+                    ]
+                  ))
+              )
+          )
       end
     end
   end
@@ -222,8 +236,15 @@ describe '/retros/:retro_id/items' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('items' => match_array(
+                    [
+                      hash_including('done' => true)
+                    ]
+                  ))
+              )
+          )
       end
 
       context 'done param is set to true' do
@@ -305,8 +326,15 @@ describe '/retros/:retro_id/items' do
       end
 
       it 'broadcasts to retro channel' do
-        expect(RetrosChannel).to receive(:broadcast)
-        subject
+        expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including(
+                'retro' => hash_including('items' => match_array(
+                    [
+                      hash_including('description' => 'Changed description')
+                    ]
+                  ))
+              )
+          )
       end
 
       context 'if item does not exist' do
