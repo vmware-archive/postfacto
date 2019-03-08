@@ -32,9 +32,9 @@ kill_pid_tree() {
   # Behaviour of react_scripts node servers makes them hard to kill;
   # must identify child and grandchild processes
   PID="$1"
-  SUBPID1="$(ps -o pid --no-headers --ppid="$PID" || true)"
+  SUBPID1="$(pgrep -P "$PID" || true)"
   if [[ -n "$SUBPID1" ]]; then
-    SUBPID2="$(ps -o pid --no-headers --ppid="$SUBPID1" || true)"
+    SUBPID2="$(pgrep -P "$SUBPID1" || true)"
     if [[ -n "$SUBPID2" ]]; then
       kill "$SUBPID2" >/dev/null 2>&1 || true
     fi
