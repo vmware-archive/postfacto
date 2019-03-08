@@ -196,6 +196,11 @@ module SpecHelpers
 
     value
   end
+
+  def select_item(item_text)
+    find('.item-text', text: item_text).click
+    sleep 1
+  end
 end
 
 RSpec.configure do |c|

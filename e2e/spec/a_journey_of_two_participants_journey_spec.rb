@@ -121,8 +121,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     end
 
     in_browser(:felicity) do
-      # Select an item to be discussed
-      find('.item-text', text: 'this is a sad item').click
+      select_item('this is a sad item')
     end
 
     # Item should be highlighted
@@ -130,6 +129,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       expect(find('.retro-item.highlight', text: 'this is a sad item')).to_not be_nil
       expect(find('.retro-item.lowlight', text: 'A meh item')).to_not be_nil
     end
+
 
     in_browser(:felicity) do
       within('div.retro-item', text: 'this is a sad item') do

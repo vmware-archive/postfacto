@@ -438,7 +438,8 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
 
     # Re-highlight the done item
-    find('div.retro-item', text: 'this is a happy item').click
+    select_item('this is a happy item')
+    
     expect(page).to have_css('.highlight .item-text', text: 'this is a happy item')
     expect(page).to have_css('.retro-item-timer-clock')
     within('div.retro-item', text: 'this is a happy item') do
