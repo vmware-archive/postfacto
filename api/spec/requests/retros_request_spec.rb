@@ -243,19 +243,31 @@ describe '/retros' do
   end
 
   describe 'PUT /:id/archive' do
-    context 'when authenticated' do
-      before do
-        retro.items.create!(description: 'one happy item', category: :happy, done: false)
-        retro.highlighted_item_id = retro.items.first.id
-        retro.action_items.create!(description: 'opened action', done: false)
-        retro.action_items.create!(description: 'completed action', done: true)
-      end
+    before do
+      retro.items.create!(description: 'one happy item', category: :happy, done: false)
+      retro.highlighted_item_id = retro.items.first.id
+      retro.action_items.create!(description: 'opened action', done: false)
+      retro.action_items.create!(description: 'completed action', done: true)
+    end
 
+    context 'when authenticated' do
       subject do
         put retro_path(retro) + '/archive',
             headers: { HTTP_AUTHORIZATION: token },
             params: { send_archive_email: true },
             as: :json
+      end
+
+      it 'archives all the items' do
+        subject
+
+        get retro_path(retro), headers: { HTTP_AUTHORIZATION: token }, as: :json
+
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['retro']['name']).to eq('My Retro')
+        expect(data['retro']['items'].count).to eq(0)
+        expect(data['retro']['action_items'].count).to eq(1)
       end
 
       it 'defaults to sending an archive email' do
@@ -294,10 +306,16 @@ describe '/retros' do
         put retro_path(retro) + '/archive', as: :json
       end
 
-      it 'does not call the archive service' do
-        allow(RetroArchiveService).to receive(:archive)
+      it 'does not archive the items' do
         subject
-        expect(RetroArchiveService).to_not have_received(:archive)
+
+        get retro_path(retro), headers: { HTTP_AUTHORIZATION: token }, as: :json
+
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['retro']['name']).to eq('My Retro')
+        expect(data['retro']['items'].count).to eq(1)
+        expect(data['retro']['action_items'].count).to eq(2)
       end
 
       it 'returns forbidden' do
