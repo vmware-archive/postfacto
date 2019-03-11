@@ -15,11 +15,18 @@ RUN rbenv install 2.4.0 && rbenv global 2.4.0 && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 RUN gem install bundler
 
-## Install Node
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash
-RUN apt-get update && apt-get install -y nodejs
+# Install Node
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 11.10.1
+RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
+RUN source $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
 
 # Install Chrome WebDriver
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
 RUN CHROMEDRIVER_VERSION='2.45' && \
     mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
     curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
