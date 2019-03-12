@@ -92,8 +92,14 @@ class RetrosController < ApplicationController
 
   def force_relogin_required?
     changes = @retro.previous_changes
-    changed_to_private = [false, true]
-    changes.key?(:is_private) && changes[:is_private] == changed_to_private
+
+    return false unless changes.key?(:is_private)
+
+    switched_from_public_to_private(*changes[:is_private])
+  end
+
+  def switched_from_public_to_private(was_private, is_now_private)
+    !was_private && is_now_private
   end
 
   def retro_errors_hash

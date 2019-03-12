@@ -243,19 +243,31 @@ describe '/retros' do
   end
 
   describe 'PUT /:id/archive' do
-    context 'when authenticated' do
-      before do
-        retro.items.create!(description: 'one happy item', category: :happy, done: false)
-        retro.highlighted_item_id = retro.items.first.id
-        retro.action_items.create!(description: 'opened action', done: false)
-        retro.action_items.create!(description: 'completed action', done: true)
-      end
+    before do
+      retro.items.create!(description: 'one happy item', category: :happy, done: false)
+      retro.highlighted_item_id = retro.items.first.id
+      retro.action_items.create!(description: 'opened action', done: false)
+      retro.action_items.create!(description: 'completed action', done: true)
+    end
 
+    context 'when authenticated' do
       subject do
         put retro_path(retro) + '/archive',
             headers: { HTTP_AUTHORIZATION: token },
             params: { send_archive_email: true },
             as: :json
+      end
+
+      it 'archives all the items' do
+        subject
+
+        get retro_path(retro), headers: { HTTP_AUTHORIZATION: token }, as: :json
+
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['retro']['name']).to eq('My Retro')
+        expect(data['retro']['items'].count).to eq(0)
+        expect(data['retro']['action_items'].count).to eq(1)
       end
 
       it 'defaults to sending an archive email' do
@@ -294,10 +306,16 @@ describe '/retros' do
         put retro_path(retro) + '/archive', as: :json
       end
 
-      it 'does not call the archive service' do
-        allow(RetroArchiveService).to receive(:archive)
+      it 'does not archive the items' do
         subject
-        expect(RetroArchiveService).to_not have_received(:archive)
+
+        get retro_path(retro), headers: { HTTP_AUTHORIZATION: token }, as: :json
+
+        expect(response.status).to eq(200)
+        data = JSON.parse(response.body)
+        expect(data['retro']['name']).to eq('My Retro')
+        expect(data['retro']['items'].count).to eq(1)
+        expect(data['retro']['action_items'].count).to eq(2)
       end
 
       it 'returns forbidden' do
@@ -321,6 +339,10 @@ describe '/retros' do
     end
 
     context 'when private and authenticated' do
+      before do
+        retro.update(is_private: true)
+      end
+
       let(:is_private) { false }
 
       it 'returns the updated retro' do
@@ -338,23 +360,16 @@ describe '/retros' do
       end
 
       it 'broadcasts the updated retro' do
-        allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-        do_request
-
-        expect(RetrosChannel).to have_received(:broadcast).with(retro)
+        expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+            hash_including('retro' => hash_including('name' => 'Your Retro'))
+          )
       end
 
       context 'and changing retro to public' do
         it 'does not broadcast force relogin' do
-          retro.update(is_private: true)
-
-          allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-          do_request
-
-          expect(RetrosChannel).not_to have_received(:broadcast_force_relogin)
-          expect(RetrosChannel).to have_received(:broadcast).with(retro.reload)
+          expect { do_request }.not_to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+              hash_including('command' => 'force_relogin')
+            )
         end
       end
     end
@@ -382,12 +397,9 @@ describe '/retros' do
         let(:is_private) { true }
 
         it 'broadcasts force relogin and updated retro' do
-          allow(RetrosChannel).to receive_messages(broadcast_force_relogin: {}, broadcast: {})
-
-          do_request
-
-          expect(RetrosChannel).to have_received(:broadcast_force_relogin)
-          expect(RetrosChannel).to have_received(:broadcast).with(retro.reload)
+          expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
+              hash_including('command' => 'force_relogin')
+            )
         end
       end
     end
