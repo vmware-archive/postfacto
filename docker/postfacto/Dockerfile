@@ -26,6 +26,9 @@ RUN source $NVM_DIR/nvm.sh \
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
+# Install Python for Node SASS
+RUN apt-get update && apt-get install -y python
+
 
 # Install Chrome WebDriver
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
@@ -43,9 +46,10 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 RUN apt-get -yqq update && apt-get -yqq install google-chrome-stable && rm -rf /var/lib/apt/lists/*
 
 # Install Sqlite dev tools
-RUN apt-get update && apt-get install libsqlite3-dev
+RUN apt-get update && apt-get install -y libsqlite3-dev
 
 # Install zip for packaging
-RUN apt-get update && apt-get install zip
+RUN apt-get update && apt-get install -y zip
 
-RUN apt install -y tmux
+# Install tmux for run/test scripts
+RUN apt-get update && apt-get install -y tmux
