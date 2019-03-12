@@ -388,7 +388,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     expect(page).not_to have_css('.retro-item-timer')
 
     # Highlight an item
-    find('div.retro-item', text: 'this is a meh item').click
+    select_item('this is a meh item')
     expect(page).to have_css('.highlight .item-text', text: 'this is a meh item')
 
     # Timer is now displayed
@@ -405,7 +405,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     expect(page).not_to have_css '.retro-item-timer-clock'
 
     # Retry highlighting
-    find('div.retro-item', text: 'this is a happy item').click
+    select_item('this is a happy item')
 
     within('.highlight .item-text button') do
       expect(page).to have_content('this is a happy item')
@@ -439,7 +439,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
 
     # Re-highlight the done item
     select_item('this is a happy item')
-    
+
     expect(page).to have_css('.highlight .item-text', text: 'this is a happy item')
     expect(page).to have_css('.retro-item-timer-clock')
     within('div.retro-item', text: 'this is a happy item') do
