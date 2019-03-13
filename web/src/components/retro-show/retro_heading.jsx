@@ -42,11 +42,6 @@ export default class RetroHeading extends React.Component {
     retroId: types.string.isRequired,
     archives: types.bool.isRequired,
     isMobile: types.bool.isRequired,
-    showVideoButton: types.bool,
-  };
-
-  static defaultProps = {
-    showVideoButton: false,
   };
 
   constructor(props) {
@@ -133,7 +128,7 @@ export default class RetroHeading extends React.Component {
   }
 
   render() {
-    const {retro, isMobile, showVideoButton} = this.props;
+    const {retro, isMobile} = this.props;
 
     return (
       <div className="retro-heading">
@@ -144,7 +139,7 @@ export default class RetroHeading extends React.Component {
           </div>
           <div className="retro-heading-buttons">
             {
-              showVideoButton ? (
+              retro.video_link ? (
                 <RaisedButton
                   className="retro-heading-button video-button"
                   backgroundColor="#2574a9"
@@ -155,6 +150,7 @@ export default class RetroHeading extends React.Component {
                 />
               ) : null
             }
+
             <RetroMenu isMobile={isMobile} items={this.getMenuItems()}/>
           </div>
         </span>

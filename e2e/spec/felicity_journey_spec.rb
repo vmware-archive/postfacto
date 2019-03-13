@@ -135,18 +135,6 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
       end
     end
 
-    describe 'starting a retro' do
-      specify 'can open video call' do
-        retro_url = create_public_retro
-
-        visit retro_url
-        click_on 'VIDEO'
-
-        select_last_tab
-        expect(current_url).to include("https://appear.in/retro-app-")
-      end
-    end
-
     describe 'changing retro settings' do
       before do
         retro_url = create_public_retro('Settings Retro')
@@ -164,7 +152,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
         expect(current_url).to end_with('/changed-url')
       end
 
-      specify 'can change video url' do
+      specify 'can add video url' do
         fill_in 'video_link', with: 'https://example.com'
         click_on 'Save changes'
 
@@ -173,20 +161,13 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
         expect(current_url).to eq('https://example.com/')
       end
 
-      specify 'deleting video url defaults to appear in link' do
+      specify 'can remove video url' do
         fill_in 'video_link', with: ' '
-        # have to send backspace as filling with "" doesn't trigger change event
         find('#retro_video_link').send_keys(:backspace)
-
         click_on 'Save changes'
 
-        click_on 'VIDEO'
-
-        select_last_tab
-
-        expect(current_url).to include("https://appear.in/retro-app-")
+        expect(page).to_not have_content('VIDEO')
       end
-
     end
 
     describe 'archiving a retro' do
@@ -235,7 +216,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
   end
 
-  specify 'Auto facilitation journey' do
+  fspecify 'Auto facilitation journey' do
     register('felicity-auto-facilitate-user')
     create_public_retro
     retro_url = create_public_retro
@@ -259,7 +240,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
 
     def send_right_key
       # Chrome web driver only allows sending key events on focusable elements, this button has a tabindex so is focusable
-      keyEventReciever = first('.retro-heading-button a')
+      keyEventReciever = first('.retro-item-add-input')
       keyEventReciever.native.send_keys(:right)
     end
 

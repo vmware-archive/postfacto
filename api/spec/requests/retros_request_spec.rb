@@ -54,12 +54,6 @@ describe '/retros' do
                         as: :json
       end
 
-      it 'generates a unique video link' do
-        subject
-
-        assert_match(%r{^https://appear.in/retro-app-[0-9a-zA-Z]{8}$}, Retro.last.video_link)
-      end
-
       it 'returns the retro' do
         expect(response.status).to eq(201)
         data = JSON.parse(response.body)

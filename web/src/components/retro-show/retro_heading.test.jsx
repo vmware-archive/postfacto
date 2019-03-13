@@ -97,6 +97,20 @@ describe('RetroHeading', () => {
         },
       });
     });
+
+    describe('when there is a video link', () => {
+      it('shows the video button', () => {
+        const dom = createShallowRetroHeading({video_link: 'http://the/video/link'});
+        expect(dom.find('.video-button')).toExist();
+      });
+    });
+
+    describe('when there is not a video link', () => {
+      it('hides the video button', () => {
+        const dom = createShallowRetroHeading({video_link: null});
+        expect(dom.find('.video-button')).not.toExist();
+      });
+    });
   });
 
   describe('viewing an archived retro', () => {

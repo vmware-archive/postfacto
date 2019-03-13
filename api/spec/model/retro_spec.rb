@@ -34,10 +34,6 @@ describe Retro do
   describe '#initialize' do
     let(:retro) { Retro.create(name: 'My Retro') }
 
-    it 'should have a video link' do
-      expect(retro.video_link).to_not be_empty
-    end
-
     it 'should have a slug generated from the retro name' do
       expect(retro.slug).not_to eq 'my-retro'
       expect(retro.slug).to start_with 'my-retro'
