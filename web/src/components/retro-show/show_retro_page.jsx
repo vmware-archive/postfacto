@@ -338,7 +338,6 @@ export default class ShowRetroPage extends React.Component {
               retroId={retroId}
               isMobile={false}
               archives={archives}
-              showVideoButton={!archives}
             />
             <div className="retro-item-list">
               <RetroColumn

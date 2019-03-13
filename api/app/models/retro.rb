@@ -38,8 +38,6 @@ class Retro < ActiveRecord::Base
   belongs_to :user
   enum item_order: { time: 'time', votes: 'votes' }
 
-  after_initialize :generate_video_link
-
   MAX_SLUG_LENGTH = 236
 
   friendly_id :generate_slug, use: :slugged
@@ -98,10 +96,5 @@ class Retro < ActiveRecord::Base
     end
 
     slug
-  end
-
-  def generate_video_link
-    self.video_link = video_link.presence ||
-                      'https://appear.in/retro-app-' + Array.new(8) { [*'0'..'9', *'a'..'z'].sample }.join
   end
 end
