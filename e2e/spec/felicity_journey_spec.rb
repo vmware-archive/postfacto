@@ -216,7 +216,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
   end
 
-  fspecify 'Auto facilitation journey' do
+  specify 'Auto facilitation journey' do
     register('felicity-auto-facilitate-user')
     create_public_retro
     retro_url = create_public_retro
@@ -240,7 +240,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
 
     def send_right_key
       # Chrome web driver only allows sending key events on focusable elements, this button has a tabindex so is focusable
-      keyEventReciever = first('.retro-item-add-input')
+      keyEventReciever = first('a')
       keyEventReciever.native.send_keys(:right)
     end
 
