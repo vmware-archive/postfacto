@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y autoconf bison build-essential curl git
 RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc && echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 ENV PATH $PATH:/root/.rbenv/bin:/root/.rbenv/shims
-RUN rbenv install 2.4.0 && rbenv global 2.4.0 && rbenv rehash
+RUN cd /root/.rbenv/plugins/ruby-build && git pull && cd -
+RUN rbenv install 2.6.2 && rbenv global 2.6.2 && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 RUN gem install bundler
 
