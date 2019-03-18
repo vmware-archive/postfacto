@@ -54,3 +54,7 @@ RUN apt-get update && apt-get install -y zip
 
 # Install tmux for run/test scripts
 RUN apt-get update && apt-get install -y tmux
+
+# Cache dependencies
+RUN git clone https://github.com/pivotal/postfacto.git
+RUN cd /postfacto && ./deps.sh && cd .. && rm -rf /postfacto
