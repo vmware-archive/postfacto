@@ -40,4 +40,13 @@ RUN apt-get update && apt-get install libsqlite3-dev
 # Install zip for packaging
 RUN apt-get update && apt-get install zip
 
+<<<<<<< HEAD:docker/postfacto/Dockerfile
 RUN apt install -y tmux
+=======
+# Install tmux for run/test scripts
+RUN apt-get update && apt-get install -y tmux
+
+# Cache dependencies
+RUN git clone https://github.com/pivotal/postfacto.git
+RUN cd /postfacto && ./deps.sh && cd .. && rm -rf /postfacto
+>>>>>>> ae87298... Add deps to docker image:docker/dev/Dockerfile

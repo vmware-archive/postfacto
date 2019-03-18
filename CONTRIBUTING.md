@@ -8,7 +8,7 @@
 * Node 11+
 * chromedriver
 
-To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/postfacto/) for development:
+To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/dev/) for development:
 
 ```bash
 ./docker.sh
