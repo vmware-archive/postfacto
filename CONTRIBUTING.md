@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.4.0
+* Ruby 2.6.2
 * bundler
 * rspec
 * Node 11+
