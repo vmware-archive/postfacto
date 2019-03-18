@@ -28,8 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-ruby '2.4.0'
 source 'https://rubygems.org'
+
+ruby '2.6.2'
 
 group :development, :test do
   gem 'rspec'
