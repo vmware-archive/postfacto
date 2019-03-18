@@ -4,7 +4,6 @@
 
 * Ruby 2.6.2
 * bundler
-* rspec
 * Node 11+
 * chromedriver
 * tmux
