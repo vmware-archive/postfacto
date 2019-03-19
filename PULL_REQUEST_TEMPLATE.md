@@ -13,3 +13,5 @@ Thanks for contributing to postfacto. To speed up the process of reviewing your 
 * [ ] I have run all the tests using `./test.sh`.
 
 * [ ] I have added the [copyright headers](https://github.com/pivotal/postfacto/blob/master/license-header.txt) to each new file added
+
+* [ ] I have given myself credit in the [humans.txt](https://github.com/pivotal/postfacto/blob/master/humans.txt) file (assuming I want to)
