@@ -49,6 +49,6 @@ module UsersAuth
     )
 
     @user = User.find_by_email(email) if email
-    render json: :no_content, status: :unauthorized unless @user
+    render json: :no_content, status: :forbidden unless @user
   end
 end

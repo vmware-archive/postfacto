@@ -84,10 +84,10 @@ describe '/retros' do
     end
 
     context 'when auth header is not provided' do
-      it 'responds with unauthorized' do
+      it 'responds with forbidden' do
         post '/retros', params: { retro: { name: 'the new retro', password: 'the-password' } }, as: :json
 
-        expect(response).to be_unauthorized
+        expect(response).to be_forbidden
       end
     end
 
@@ -129,8 +129,8 @@ describe '/retros' do
         get '/retros', headers: { 'X-AUTH-TOKEN': 'not-a-valid-token' }, as: :json
       end
 
-      it 'returns 401 Unauthorized' do
-        expect(response.status).to eq(401)
+      it 'returns 403 Forbidden' do
+        expect(response).to be_forbidden
       end
     end
 
@@ -139,8 +139,8 @@ describe '/retros' do
         get '/retros', as: :json
       end
 
-      it 'returns 401 Unauthorized' do
-        expect(response.status).to eq(401)
+      it 'returns 403 Forbidden' do
+        expect(response).to be_forbidden
       end
     end
   end
