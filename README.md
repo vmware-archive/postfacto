@@ -25,10 +25,6 @@ Retros are designed to help the team improve and that's hard to do without keepi
 
 You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access it. You can also let users sign up to your instance using Google OAuth or control access with the admin dashboard.
 
-### Use your own video conferencing
-
-Postfacto will auto generate you an [appear.in](https://appear.in) room for your team to chat in during the retro but you can also choose to link to your own conferencing tools.
-
 ### Easily deployable
 
 You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services**, **Pivotal Cloud Foundry** or **Heroku** and stay in control of your own data.
