@@ -79,8 +79,12 @@ export default {
   },
   getRetros() {
     Logger.info('getRetros');
-    return RetroApi.getRetros().then(([, data]) => {
-      this.dispatch({type: 'retrosSuccessfullyFetched', data});
+    return RetroApi.getRetros().then(([status, data]) => {
+      if (status === 403) {
+        this.dispatch({type: 'signOut'});
+      } else {
+        this.dispatch({type: 'retrosSuccessfullyFetched', data});
+      }
     });
   },
   getRetroSettings({data: {id}}) {

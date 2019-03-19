@@ -460,6 +460,17 @@ describe('ApiDispatcher', () => {
         data: {retros: [retro]},
       });
     });
+
+    describe('when forbidden is received', () => {
+      it('dispatches signOut', () => {
+        const request = MockFetch.latestRequest();
+        request.forbidden();
+        Promise.runAll();
+        expect(Dispatcher).toHaveReceived({
+          type: 'signOut',
+        });
+      });
+    });
   });
 
   describe('getRetroLogin', () => {
