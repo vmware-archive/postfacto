@@ -12,7 +12,7 @@ RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && echo 'export PATH="
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 ENV PATH $PATH:/root/.rbenv/bin:/root/.rbenv/shims
 RUN cd /root/.rbenv/plugins/ruby-build && git pull && cd -
-RUN rbenv install 2.6.2 && rbenv global 2.6.2 && rbenv rehash
+RUN rbenv install 2.6.1 && rbenv global 2.6.1 && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 RUN gem install bundler
 
