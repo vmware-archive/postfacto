@@ -1254,18 +1254,22 @@ button:focus {
 }
 
 .footer {
-  padding: 10px 0 10px 1rem;
-  text-align: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 
   a {
     color: $input-happy;
-    padding-left: 1rem;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .links {
-    @media all and (max-width: map-get($breakpoints, large)) {
-      display: block;
-    }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 
@@ -1277,8 +1281,7 @@ button:focus {
   .terms-text {
     margin-right: 1rem;
   }
-
-
+  
   .ok-button {
     margin: 0;
     padding: 0.25rem 1.5rem 0.25rem 1.5rem;

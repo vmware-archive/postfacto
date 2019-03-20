@@ -35,11 +35,11 @@ import types from 'prop-types';
 export default function Footer({config}) {
   return (
     <div className="footer">
-      <span className="links">
+      <div className="links">
         <a href={config.contact}>Contact Us</a>
-        <a target="_blank" href={config.terms}>Terms & Conditions</a>
-        <a target="_blank" href={config.privacy}>Privacy Policy</a>
-      </span>
+        <a target="_blank" href={config.terms} rel="noopener noreferrer">Terms & Conditions</a>
+        <a target="_blank" href={config.privacy} rel="noopener noreferrer">Privacy Policy</a>
+      </div>
     </div>
   );
 }
