@@ -28,8 +28,6 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'securerandom'
-
 class User < ActiveRecord::Base
   has_many :retros
   validates_uniqueness_of :email
