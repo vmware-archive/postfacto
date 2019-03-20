@@ -29,7 +29,7 @@ fi
 pushd "$BASE_DIR/api" >/dev/null
   echo "Migrating database..."
   bundle exec rake db:create db:migrate
-  ADMIN_EMAIL="$ADMIN_USER" ADMIN_PASSWORD="$ADMIN_PASS" rake admin:create_user
+  ADMIN_EMAIL="$ADMIN_USER" ADMIN_PASSWORD="$ADMIN_PASS" bundle exec rake admin:create_user
 popd >/dev/null
 
 export BASE_DIR

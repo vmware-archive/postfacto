@@ -423,7 +423,7 @@ ol ol > li:before {
 
 .retro-settings-sidebar {
   background-color: $page-heading-background;
-  height: 100vh;
+  height: 100%;
 
   @media #{$small-only} {
     display: none;

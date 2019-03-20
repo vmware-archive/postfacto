@@ -73,7 +73,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     this.onNewPasswordChange = this.onChange.bind(this, 'new_password');
     this.onConfirmPasswordChange = this.onChange.bind(this, 'confirm_new_password');
     this.handleSubmitButtonClicked = this.handleSubmitButtonClicked.bind(this);
-    this.handleCancelButtonClicked = this.handleCancelButtonClicked.bind(this);
   }
 
   componentWillMount() {
@@ -100,11 +99,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
   handleBackButtonClicked() {
     const {retroId} = this.props;
     Actions.backPressedFromSettings({retro_id: retroId});
-  }
-
-  handleCancelButtonClicked() {
-    const {retroId} = this.props;
-    Actions.backPressedFromPasswordSettings({retro_id: retroId});
   }
 
   handleSubmitButtonClicked() {
@@ -150,36 +144,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     );
   }
 
-  renderMobileHeading() {
-    const {retro} = this.props;
-    const menuItems = this.getMenuItems();
-
-    return (
-      <div className="retro-settings-heading-mobile">
-        {this.renderBackButton()}
-        <div className="retro-name">
-          <h1>{retro.name}</h1>
-        </div>
-        <RetroMenu isMobile items={menuItems}/>
-      </div>
-    );
-  }
-
-  renderDesktopHeading() {
-    const {retro} = this.props;
-    const menuItems = this.getMenuItems();
-
-    return (
-      <div className="retro-heading">
-        {this.renderBackButton()}
-        <div className="retro-name">
-          <h1>{retro.name}</h1>
-        </div>
-        <RetroMenu isMobile={false} items={menuItems}/>
-      </div>
-    );
-  }
-
   getMenuItems() {
     const items = [
       {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
@@ -199,13 +163,21 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     }
 
     return (
-      <span>
+      <span className="retro-settings-page">
         <div className={retroContainerClasses}>
-          {isMobile ? this.renderMobileHeading() : this.renderDesktopHeading()}
+          <div className="retro-heading row">
+            <div className="small-2 columns back-button">
+              {this.renderBackButton()}
+            </div>
+            <h1 className="small-8 text-center retro-name">
+              {retro.name}
+            </h1>
+            <div className="small-2 menu end">
+              <RetroMenu isMobile={false} items={this.getMenuItems()}/>
+            </div>
+          </div>
           <div>
-            <div className="retro-settings-sidebar large-1 medium-1 columns"/>
-
-            <div className="retro-settings large-11 medium-11 columns">
+            <div className="retro-settings large-12 medium-12 columns">
               <div className="medium-8 small-12 columns">
                 <div className="row">
                   <h1 className="retro-settings-header">Change password</h1>
@@ -256,13 +228,6 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
                     onClick={this.handleSubmitButtonClicked}
                   >
                     Save new password
-                  </button>
-                  <button
-                    className="retro-password-settings-cancel button"
-                    type="button"
-                    onClick={this.handleCancelButtonClicked}
-                  >
-                    Cancel
                   </button>
                 </div>
               </div>

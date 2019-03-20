@@ -79,15 +79,6 @@ describe('ShowRetroPasswordSettingsPage', () => {
       });
     });
 
-    it('goes back to the retro settings page when the cancel button is clicked', () => {
-      dom.find('button.retro-password-settings-cancel').simulate('click');
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'backPressedFromPasswordSettings',
-        data: {retro_id: '13'},
-      });
-    });
-
     it('dispatches updateRetroPassword', () => {
       dom.find('#retro_current_password').simulate('change', {target: {value: 'current password'}});
       dom.find('#retro_new_password').simulate('change', {target: {value: 'new password'}});

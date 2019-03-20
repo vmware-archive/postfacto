@@ -289,9 +289,7 @@ export default class ShowRetroSettingsPage extends React.Component {
             </div>
           </div>
           <div>
-            <div className="retro-settings-sidebar large-1 medium-1 columns"/>
-
-            <div className="retro-settings large-11 medium-11 columns">
+            <div className="retro-settings large-12 medium-12 columns">
               <div className="medium-8 small-12 columns">
                 <div className="row">
                   <h1 className="retro-settings-header">Settings</h1>
