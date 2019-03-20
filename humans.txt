@@ -37,3 +37,6 @@ Contact: matthew@el-chavez.me
 
 Engineer: Mike Stallard
 Contact: mikestallard@gmail.com
+
+Engineer: Max Brauer
+Contact: github.com/mamachanko
