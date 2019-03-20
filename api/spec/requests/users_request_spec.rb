@@ -134,23 +134,6 @@ describe '/users' do
       end
     end
 
-    context 'full_name parameter is not present' do
-      it 'default to name returned by google' do
-        google_user_data = {
-          name: 'Felicity Frog',
-          email: 'felicity@frog.com',
-          hd: 'frog.com'
-        }
-
-        expect(GOOGLE_CLIENT).to receive(:get_user!).with('the-access-token').and_return(google_user_data)
-
-        post '/users', params: { access_token: 'the-access-token', company_name: 'Felicity Corps' }, as: :json
-
-        expect(response).to be_created
-        expect(User.last.name).to eq('Felicity Frog')
-      end
-    end
-
     context 'hosted domain is set' do
       it 'does not allow other domains to sign up' do
         expect(GOOGLE_CLIENT).to receive(:get_user!)

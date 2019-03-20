@@ -34,31 +34,20 @@ class UsersController < ApplicationController
   include UsersAuth
 
   def create
-    google_user = GOOGLE_CLIENT.get_user! params.fetch(:access_token)
-    user = google_user.slice(:email)
+    google_user_details = GOOGLE_CLIENT.get_user! params.fetch(:access_token)
 
-    assign_name_and_company_name_from_params(google_user, user)
-    return_user(google_user, user)
-  rescue GoogleClient::InvalidUserDomain
-    head :forbidden
-  end
-
-  def return_user(google_user, user)
-    if User.exists?(google_user.slice(:email))
+    if User.exists?(email: google_user_details[:email])
       head :multiple_choices
     else
-      user = User.create!(user)
+      user = User.create!(
+        email: google_user_details[:email],
+        name: params[:full_name],
+        company_name: params[:company_name]
+      )
+
       render json: { auth_token: generate_user_token(user) }, status: :created
     end
-  end
-
-  def assign_name_and_company_name_from_params(google_user, user)
-    if params[:company_name].present?
-      user[:company_name] = params.fetch(:company_name)
-    end
-    user[:name] = google_user[:name]
-    if params[:full_name].present?
-      user[:name] = params.fetch(:full_name)
-    end
+  rescue GoogleClient::InvalidUserDomain
+    head :forbidden
   end
 end
