@@ -1,6 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+if [[ -z ${1+web-app-name} || -z ${2+api-app-name} ]]; then
+    echo "Usage: ./deploy.sh <web-app-name> <api-app-name>"
+    exit 1
+fi
 
 WEB_HOST=$1
 API_HOST=$2
@@ -12,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR"/assets
 CONFIG_DIR="$SCRIPT_DIR"/config
 
-cf login -a $CF_URL
+cf login -a $CF_URL --sso
 
 cf push -f "$CONFIG_DIR"/manifest-api.yml -p "$ASSETS_DIR"/api --var api-app-name=$API_HOST --var web-app-name=$WEB_HOST --var pcf-url=$CF_URL --var session-time=$SESSION_TIME
 cf run-task $API_HOST 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'

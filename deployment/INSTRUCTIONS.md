@@ -9,7 +9,12 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 [Pivotal Web Services](https://run.pivotal.io) provides a hosted version of Pivotal's [Cloud Foundry](https://pivotal.io/platform) platform and is probably the easiest place to get Postfacto up and running.
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
-1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
+1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`.
+
+    ```bash
+    cf create-service elephantsql turtle postfacto-db
+    cf create-service rediscloud 30mb postfacto-redis
+    ```
 1. Run the PWS deployment script from the `pws` directory:
 
     ```bash
