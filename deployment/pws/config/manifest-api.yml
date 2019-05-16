@@ -9,6 +9,6 @@ applications:
     - postfacto-db
     - postfacto-redis
   env:
-    CLIENT_ORIGIN: https://((web-app-name)).cfapps.io
+    CLIENT_ORIGIN: https://((web-app-name)).((pcf-url))
     WEBSOCKET_PORT: 4443
     SESSION_TIME: ((session-time))

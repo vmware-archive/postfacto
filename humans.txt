@@ -37,3 +37,9 @@ Contact: matthew@el-chavez.me
 
 Engineer: Mike Stallard
 Contact: mikestallard@gmail.com
+
+Engineer: Steffen Uhlig
+Contact: Steffen.Uhlig@de.ibm.com
+
+Engineer: Matthias Diester
+Contact: matthias.diester@de.ibm.com
