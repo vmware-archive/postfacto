@@ -37,7 +37,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Run the PCF deployment script from the `pcf` directory:
 
     ```bash
-    ./deploy.sh <web-app-name> <api-app-name> <pcf-url>
+    ./deploy.sh <web-app-name> <api-app-name> <cf-api-endpoint> <pcf-url>
     ```
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
@@ -86,7 +86,7 @@ For deployments that do not want to setup Google OAuth, you will need to create 
    create a new project
 1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
 1. Choose a name for your app
-1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`.  For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.cfapps.io`
+1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`. For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.{{pcf-url}}`
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
 1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
