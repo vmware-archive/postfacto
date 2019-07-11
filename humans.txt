@@ -16,6 +16,9 @@ Engineer: Katie Moulang
 Engineer: Jonathan Sharpe
 Contact: mail@jonrshar.pe
 
+Engineer: Tom Brand
+Contact: tom025@me.com
+
 Product Designer: Froso Ellina
 Contact: froso.ellina@gmail.com
 

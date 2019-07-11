@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-* Ruby 2.6.2
+* Ruby 2.6.3
 * bundler
 * Node 11+
 * chromedriver

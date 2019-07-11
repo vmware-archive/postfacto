@@ -1,0 +1,6 @@
+deployment/
+design/
+docker_node_modules/
+node_modules/
+media/
+web/build/

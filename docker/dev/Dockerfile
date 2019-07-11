@@ -12,7 +12,8 @@ RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && echo 'export PATH="
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 ENV PATH $PATH:/root/.rbenv/bin:/root/.rbenv/shims
 RUN cd /root/.rbenv/plugins/ruby-build && git pull && cd -
-RUN rbenv install 2.6.1 && rbenv global 2.6.1 && rbenv rehash
+ENV RUBY_VERSION 2.6.3
+RUN rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
 RUN gem install bundler
 
@@ -33,7 +34,7 @@ RUN apt-get update && apt-get install -y python
 
 # Install Chrome WebDriver
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
-RUN CHROMEDRIVER_VERSION='2.45' && \
+RUN CHROMEDRIVER_VERSION='75.0.3770.90' && \
     mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
     curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
     unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \
@@ -56,5 +57,5 @@ RUN apt-get update && apt-get install -y zip
 RUN apt-get update && apt-get install -y tmux
 
 # Cache dependencies
-RUN git clone https://github.com/pivotal/postfacto.git
+COPY . /postfacto
 RUN cd /postfacto && ./deps.sh && cd .. && rm -rf /postfacto

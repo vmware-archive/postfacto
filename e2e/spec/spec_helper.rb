@@ -34,14 +34,14 @@ require 'selenium/webdriver'
 require 'securerandom'
 
 Capybara.register_driver(:headless_chrome) do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: ['--headless', '--disable-gpu', '--no-sandbox'] }
+  options = ::Selenium::WebDriver::Chrome::Options.new(
+    args: ['--headless', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage']
   )
 
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    desired_capabilities: capabilities
+    options: options
   )
 end
 
