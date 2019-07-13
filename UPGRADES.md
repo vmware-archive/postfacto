@@ -2,7 +2,7 @@
 
 To update the version of Ruby used in Postfacto, the following steps need to be taken:
 
- 1. Update the `.tool-versions` file for anyone using [asdf-vm]
+ 1. Update the `.tool-versions` file for anyone using [asdf-vm][1]
 
  2. In `api/`, update `.ruby-version` and `Gemfile`, then run `bundle install` to update `Gemfile.lock`
 
@@ -25,10 +25,14 @@ To update the version of Ruby used in Postfacto, the following steps need to be 
 
  9. Publish the new image to Docker Hub - this needs to happen *before* the Travis build can complete
 
- 10. Update the pinned buildpacks in `deployment/{pcf,pws}/config/manifest-api.yml`, according to the latest [release]
-    that supports the selected version
+ 10. Update the pinned buildpacks in `deployment/{pcf,pws}/config/manifest-api.yml`, according to the latest
+    [release][2] that supports the selected version
 
- 11. You can now commit and push and make sure everything passes in Travis
+ 11. Update the pinned buildpacks in `deployment/{deploy,upgrade}-heroku.sh`, according to the latest [release][3] that
+    supports the selected version
 
-  [asdf-vm]: https://asdf-vm.com/#/
-  [release]: https://github.com/cloudfoundry/ruby-buildpack/releases
+ 12. You can now commit and push and make sure everything passes in Travis
+
+  [1]: https://asdf-vm.com/#/
+  [2]: https://github.com/cloudfoundry/ruby-buildpack/releases
+  [3]: https://github.com/heroku/heroku-buildpack-ruby/blob/master/CHANGELOG.md
