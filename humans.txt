@@ -47,5 +47,8 @@ Contact: matthias.diester@de.ibm.com
 Engineer: Callum Stott
 Contact: callum@seadowg.com
 
+Engineer: Max Brauer
+Contact: github.com/mamachanko
+
 Engineer: Mike Kenyon
 Contact: mike.kenyon@gmail.com
