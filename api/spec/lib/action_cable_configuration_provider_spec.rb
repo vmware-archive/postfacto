@@ -36,20 +36,39 @@ describe ActionCableConfigurationProvider do
 
   describe '#config' do
     let(:client_origin) { 'fixture-client-origin' }
+    let(:url_root) { nil }
 
     around do |example|
-      ClimateControl.modify('WEBSOCKET_PORT' => websocket_port, 'CLIENT_ORIGIN' => client_origin) do
+      ClimateControl.modify(
+          'WEBSOCKET_PORT' => websocket_port,
+          'CLIENT_ORIGIN' => client_origin,
+          'RAILS_RELATIVE_URL_ROOT' => url_root
+        ) do
         example.run
       end
     end
 
     context 'when WEBSOCKET_PORT is set in the environment' do
       let(:websocket_port) { 'fixture-port' }
-      it 'uses that value in action cable url' do
-        configuration = subject.config(host: 'fixture-host')
 
-        expect(configuration.url).to eq('wss://fixture-host:fixture-port/cable')
-        expect(configuration.allowed_request_origins).to eq(['https://fixture-host', 'fixture-client-origin'])
+      context 'and RAILS_RELATIVE_URL_ROOT is set in the environment' do
+        let(:url_root) { '/foo' }
+
+        it 'uses both values in action cable url' do
+          configuration = subject.config(host: 'fixture-host')
+
+          expect(configuration.url).to eq('wss://fixture-host:fixture-port/foo/cable')
+          expect(configuration.allowed_request_origins).to eq(['https://fixture-host', 'fixture-client-origin'])
+        end
+      end
+
+      context 'and RAILS_RELATIVE_URL_ROOT is NOT set in the environment' do
+        it 'uses that value in action cable url' do
+          configuration = subject.config(host: 'fixture-host')
+
+          expect(configuration.url).to eq('wss://fixture-host:fixture-port/cable')
+          expect(configuration.allowed_request_origins).to eq(['https://fixture-host', 'fixture-client-origin'])
+        end
       end
     end
 
@@ -62,6 +81,16 @@ describe ActionCableConfigurationProvider do
         expect(configuration.url).to eq('wss://fixture-host:443/cable')
         expect(configuration.allowed_request_origins).to eq(['https://fixture-host', 'fixture-client-origin'])
       end
+    end
+  end
+
+  context 'when CLIENT_ORIGIN is NOT set in the environment' do
+    let(:client_origin) { nil }
+
+    it 'does not include an empty allowed request origin' do
+      configuration = subject.config(host: 'fixture-host')
+
+      expect(configuration.allowed_request_origins).to eq(['https://fixture-host'])
     end
   end
 end

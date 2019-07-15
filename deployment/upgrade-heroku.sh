@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Postfacto, a free, open-source and self-hosted retro tool aimed at helping
 # remote teams.
@@ -30,11 +30,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-set -e
+set -euo pipefail
 
 if [ $# -ne 2 ]; then
-  echo "usage: ./upgrade_heroku.sh <web-app-name> <api-app-name>"
-  echo "This will upgrade an existing Postfacto deployment to a .herokuapp.com host of your choosing"
+  echo "usage: ./upgrade.sh <web-app-name> <api-app-name>"
   exit 1
 fi
 

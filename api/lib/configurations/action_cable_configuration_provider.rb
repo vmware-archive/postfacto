@@ -61,8 +61,8 @@ require_relative 'action_cable_configuration'
 
 class ActionCableConfigurationProvider
   def config(host:)
-    url = "wss://#{host}:#{ENV['WEBSOCKET_PORT'] || 443}/cable"
-    allowed_request_origins = ["https://#{host}", ENV['CLIENT_ORIGIN']]
+    url = "wss://#{host}:#{ENV['WEBSOCKET_PORT'] || 443}#{ENV['RAILS_RELATIVE_URL_ROOT'] || ''}/cable"
+    allowed_request_origins = ["https://#{host}", ENV['CLIENT_ORIGIN']].compact
 
     ActionCableConfiguration.new(url, allowed_request_origins)
   end

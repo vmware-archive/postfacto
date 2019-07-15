@@ -34,10 +34,10 @@ window.Retro = {
     "scripts": ["application.js"],
     "stylesheets": ["application.css"],
     "useRevManifest": true,
-    "api_base_url": "https://{{api-app-name}}.{{pcf-url}}",
-    "websocket_url": "wss://{{api-app-name}}.{{pcf-url}}:443/cable",
+    "api_base_url": "https://{{web-app-name}}.{{pcf-url}}/api",
+    "websocket_url": "wss://{{web-app-name}}.{{pcf-url}}:443/api/cable",
     "contact": "",
     "terms": "",
     "privacy": ""
   }
-}
+};

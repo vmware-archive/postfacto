@@ -1,0 +1,27 @@
+---
+applications:
+  - name: ((web-app-name))
+    buildpacks:
+      - staticfile_buildpack
+    memory: 64M
+    path: ../assets/web
+    routes:
+      - route: ((web-app-name)).((pcf-url))
+    env:
+      FORCE_HTTPS: true
+  - name: ((api-app-name))
+    instances: 2
+    buildpacks:
+      - https://github.com/cloudfoundry/ruby-buildpack.git#v1.7.40
+    memory: 256M
+    path: ../assets/api
+    command: bundle exec rake db:migrate && bundle exec rails s -p $PORT -e $RAILS_ENV
+    routes:
+      - route: ((web-app-name)).((pcf-url))/api
+    services:
+      - postfacto-db
+      - postfacto-redis
+    env:
+      RAILS_RELATIVE_URL_ROOT: /api
+      SESSION_TIME: ((session-time))
+      WEBSOCKET_PORT: 443

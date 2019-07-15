@@ -10,14 +10,25 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 1. Sign up for a PWS account, install the CF CLI and set yourself up with an organization and space by following the instructions [here](https://docs.run.pivotal.io/starting/)
 1. Once logged in to PWS, add a database and a Redis service instance to your space from the Marketplace. We recommend the free plans of ElephantSQL and Redis Cloud respectively for this. Name these services `postfacto-db` and `postfacto-redis`
+
+    ```bash
+    cf create-service elephantsql turtle postfacto-db
+    cf create-service rediscloud 30mb postfacto-redis
+    ```
+1. Make sure you're logged into the CF CLI and targeting the appropriate space
+
+    ```bash
+    cf login -a https://api.run.pivotal.io --sso
+    cf services
+    ```
 1. Run the PWS deployment script from the `pws` directory:
 
     ```bash
     ./deploy.sh <web-app-name> <api-app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `{{web-app-name}}.cfapps.io/api/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
+1. Log in to your retro at `{{web-app-name}}.cfapps.io/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 ### Upgrading a deployment
@@ -33,24 +44,35 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 1. Set yourself up with an organization and space in your PCF to deploy your Postfacto to.
 1. Take note of your PCF url, going forward referred to as `pcf-url`
-1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
+1. Add a database (Postgres or MySQL) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
+
+    ```bash
+    cf create-service elephantsql turtle postfacto-db
+    cf create-service rediscloud 30mb postfacto-redis
+    ```
+1. Make sure you're logged into the CF CLI and targeting the appropriate space
+
+    ```bash
+    cf login -a <cf-api-endpoint> --sso
+    cf services
+    ```
 1. Run the PCF deployment script from the `pcf` directory:
 
     ```bash
-    ./deploy.sh <web-app-name> <api-app-name> <cf-api-endpoint> <pcf-url>
+    ./deploy.sh <web-app-name> <api-app-name> <pcf-url>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `{{web-app-name}}.{{pcf-url}}/api/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
+1. Log in to your retro at `{{web-app-name}}.{{pcf-url}}/retros/you-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 ### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pcf` directory:
-  ```bash
-  ./upgrade.sh <web-app-name> <api-app-name>
-  ```
 
+  ```bash
+  ./upgrade.sh <web-app-name> <api-app-name> <pcf-url>
+  ```
 
 ## Heroku
 
