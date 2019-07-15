@@ -153,8 +153,8 @@ export default class ShowRetroPage extends React.Component {
     if (event.target.type === 'textarea') {
       return;
     }
-    const {retroId} = this.props;
-    Actions.nextRetroItem({retro_id: retroId});
+    const {retro} = this.props;
+    Actions.nextRetroItem({retro});
   }
 
   // Handle events

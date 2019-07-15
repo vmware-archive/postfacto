@@ -31,6 +31,7 @@
 
 import React from 'react';
 import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
 import types from 'prop-types';
 import RetroCreatePage from './retro-create/retro_create_page';
 import ListRetrosPage from './retros-list/list_retros_page';
@@ -48,6 +49,7 @@ import ListRetroArchivesPage from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
 import useRouter from './use_router';
+
 
 export class Router extends React.Component {
   static propTypes = {
@@ -91,6 +93,7 @@ export class Router extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // eslint-disable-next-line react/prop-types
     const {api_server_not_found, retro_not_found, not_found} = nextProps;
     if (api_server_not_found) {
       this.setPage(ApiServerNotFoundPage);
@@ -196,4 +199,13 @@ export class Router extends React.Component {
   }
 }
 
-export default useRouter(Router);
+const EnhancedRouter = useRouter(Router);
+
+
+const mapStateToProps = (state) => ({
+  retro: state.retro.currentRetro,
+});
+
+const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
+
+export {EnhancedRouter, ConnectedRouter};

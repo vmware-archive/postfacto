@@ -32,6 +32,7 @@
 import React from 'react';
 import types from 'prop-types';
 import Helmet from 'react-helmet';
+import {connect} from 'react-redux';
 
 const Header = ({config, retro}) => (
   <Helmet
@@ -48,4 +49,11 @@ Header.propTypes = {
   config: types.object.isRequired,
 };
 
-export default Header;
+
+const mapStateToProps = (state) => ({
+  retro: state.retro.currentRetro,
+});
+
+const ConnectedHeader = connect(mapStateToProps)(Header);
+
+export {ConnectedHeader, Header};

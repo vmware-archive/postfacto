@@ -727,12 +727,12 @@ describe('ApiDispatcher', () => {
     it('makes an API POST to /retros/:id/discussion/transitions', () => {
       realDispatchLevels = 2; // allow nextRetroItem and retroItemSuccessfullyDone
 
-      localStorage.setItem('apiToken-1', 'the-token');
-      retro.highlighted_item_id = 2;
+      localStorage.setItem('apiToken-retro-slug-123', 'the-token');
+      retro.highlighted_item_id = null;
       subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'nextRetroItem', data: {retro_id: 1}});
+      subject.dispatch({type: 'nextRetroItem', data: {retro}});
 
-      expect(MockFetch).toHaveRequested('/retros/1/discussion/transitions', {
+      expect(MockFetch).toHaveRequested('/retros/retro-slug-123/discussion/transitions', {
         method: 'POST',
         headers: {
           'accept': 'application/json',
@@ -745,10 +745,6 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({retro});
       Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'checkAllRetroItemsDone',
-      });
     });
   });
 
@@ -976,7 +972,7 @@ describe('ApiDispatcher', () => {
 
       expect(Dispatcher).toHaveReceived({
         type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item},
+        data: {action_item, retro_id: 1},
       });
     });
   });

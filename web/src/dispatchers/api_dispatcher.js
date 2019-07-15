@@ -146,13 +146,12 @@ export default {
       this.dispatch({type: 'retroItemSuccessfullyVoted', data: {item: data.item}});
     });
   },
-  nextRetroItem({data: {retro_id}}) {
+  nextRetroItem({data: {retro}}) {
     Logger.info('nextRetroItem');
-    const retro = this.$store.refine('retro').get();
     if (retro.highlighted_item_id !== null) {
-      this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: retro_id, itemId: retro.highlighted_item_id}});
+      this.dispatch({type: 'retroItemSuccessfullyDone', data: {retro, itemId: retro.highlighted_item_id}});
     }
-    RetroApi.nextRetroItem(retro_id, getApiToken(retro_id));
+    RetroApi.nextRetroItem(retro.slug, getApiToken(retro.slug));
   },
   highlightRetroItem({data: {retro_id, item}}) {
     Logger.info('highlightRetroItem');
@@ -198,7 +197,7 @@ export default {
   doneRetroActionItem({data: {retro_id, action_item_id, done}}) {
     Logger.info('doneRetroActionItem');
     RetroApi.doneRetroActionItem(retro_id, action_item_id, done, getApiToken(retro_id)).then(([, data]) => {
-      this.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data});
+      this.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: data.action_item, retro_id}});
     });
   },
   deleteRetroActionItem({data: {retro_id, action_item}}) {

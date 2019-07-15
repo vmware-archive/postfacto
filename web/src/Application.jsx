@@ -34,8 +34,10 @@ import types from 'prop-types';
 import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import EnhancedRouter from './components/router';
-import Header from './components/shared/header';
+import {Provider} from 'react-redux';
+import {bindActionCreators, combineReducers, createStore} from 'redux';
+import {ConnectedRouter} from './components/router';
+import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
 
 import SessionWebsocket from './components/session_websocket';
@@ -46,10 +48,19 @@ import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import environmentDispatcher from './dispatchers/environment_dispatcher';
+import RetroReducer from './reducers/retro-reducer';
+import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
+
+const reduxStore = createStore(combineReducers({
+  retro: RetroReducer(Actions),
+// eslint-disable-next-line no-underscore-dangle
+}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
 
 class Application extends React.Component {
   static propTypes = {
@@ -77,13 +88,28 @@ class Application extends React.Component {
     const {config, store} = this.props;
     const {websocket_url} = config;
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div className="retro-application">
-          <Header config={config} retro={store.retro}/>
-          <EnhancedRouter config={config} {...store}/>
-          <SessionWebsocket url={websocket_url}/>
-        </div>
-      </MuiThemeProvider>
+      <Provider store={reduxStore}>
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <div className="retro-application">
+
+            <ConnectedHeader config={config}/>
+            <ConnectedRouter
+              config={config}
+              session={store.session}
+              retro_archives={store.retro_archives}
+              archives={store.archives}
+              alert={store.alert}
+              dialog={store.dialog}
+              retros={store.retros}
+              featureFlags={store.featureFlags}
+              countryCode={store.countryCode}
+              environment={store.environment}
+              errors={store.errors}
+            />
+            <SessionWebsocket url={websocket_url}/>
+          </div>
+        </MuiThemeProvider>
+      </Provider>
     );
   }
 }
@@ -94,7 +120,7 @@ export default useStore(
     store: rootStore,
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher,
+      mainDispatcher(reduxActionDispatcher),
       apiDispatcher,
       analyticsDispatcher,
       environmentDispatcher,

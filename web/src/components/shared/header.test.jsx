@@ -32,7 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import Helmet from 'react-helmet';
-import Header from './header';
+import {Header} from './header';
 import '../../spec_helper';
 
 describe('Header', () => {
