@@ -65,7 +65,7 @@ describe RedisConfigurationProvider do
                   'tags' => 'redis',
                   'credentials' => {
                     'hostname' => 'hostname',
-                    'password' => 'pass',
+                    'password' => 'irrelevant',
                     'port' => 234
                   }
                 }
@@ -90,7 +90,7 @@ describe RedisConfigurationProvider do
         let(:redis_url) { nil }
 
         context 'when VCAP_SERVICES is defined in the environment' do
-          context 'and host is declared as host' do
+          context 'and host is declared as hostname' do
             let(:vcap_services) do
               {
                 'redis' => [
@@ -111,7 +111,7 @@ describe RedisConfigurationProvider do
             end
           end
 
-          context 'and host is declared as hostname' do
+          context 'and host is declared as host' do
             let(:vcap_services) do
               {
                 'redis' => [
@@ -129,6 +129,27 @@ describe RedisConfigurationProvider do
 
             it 'builds a URL based upon the redis service described by vcap services' do
               expect(subject.redis_config).to eq('redis://:pass@host:234')
+            end
+          end
+
+          context 'and the password contains special characters' do
+            let(:vcap_services) do
+              {
+                'redis' => [
+                  {
+                    'tags' => 'redis',
+                    'credentials' => {
+                      'hostname' => 'hostname',
+                      'password' => 'pass/wo=d',
+                      'port' => 234
+                    }
+                  }
+                ]
+              }.to_json
+            end
+
+            it 'builds a URL based upon the redis service described by vcap services' do
+              expect(subject.redis_config).to eq('redis://:pass%2Fwo%3Dd@hostname:234')
             end
           end
         end
