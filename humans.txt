@@ -1,8 +1,5 @@
 /* CORE TEAM */
 
-Engineer: Callum Stott
-Contact: callum@seadowg.com
-
 Product Manager: Liam Darmody
 Contact: liamdarmody@gmail.com
 
@@ -46,3 +43,6 @@ Contact: Steffen.Uhlig@de.ibm.com
 
 Engineer: Matthias Diester
 Contact: matthias.diester@de.ibm.com
+
+Engineer: Callum Stott
+Contact: callum@seadowg.com
