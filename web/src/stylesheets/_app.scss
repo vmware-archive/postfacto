@@ -735,14 +735,15 @@ button:focus {
 
 .item-content, .action-content {
 
-  .item-edit, .item-done, .item-discussed, .action-edit {
-    text-align: right;
-  }
-
-  .item-edit, .item-done, .action-edit {
-    :hover {
+  .item-edit, .action-edit, .item-vote > .item-vote-submit {
+    &:hover {
+      color: $highlight;
       cursor: pointer;
     }
+  }
+
+  .item-edit, .item-done, .item-discussed, .action-edit {
+    text-align: right;
   }
 
   .item-text, .action-text {
