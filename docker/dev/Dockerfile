@@ -1,10 +1,10 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER pivotal
 
 SHELL ["/bin/bash", "-c"]
 
 # Install dependencies
-RUN apt-get update && apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
+RUN apt-get update && apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
 
 # Install Rbenv and Ruby
 
@@ -19,8 +19,9 @@ RUN gem install bundler
 
 # Install Node
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 11.10.1
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
+RUN mkdir -p $NVM_DIR
+ENV NODE_VERSION 12.6.0
+RUN curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 RUN source $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
