@@ -135,43 +135,55 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroSuccessfullyCreated', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'retroSuccessfullyCreated', data: {retro}});
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroSuccessfullyCreated({data: {retro}});
     });
 
     it('redirects to the new retro page', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: `/retros/${retro.slug}`});
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'setRoute', data: `/retros/${retro.slug}`});
     });
 
     it('dispatches created retro analytic', () => {
-      expect(Dispatcher).toHaveReceived({
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({
         type: 'createdRetroAnalytics',
         data: {retroId: retro.id},
       });
     });
 
     it('empties the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
   });
 
   describe('retroUnsuccessfullyCreated', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
+
     it('updates the error messages', () => {
-      subject.dispatch({
-        type: 'retroUnsuccessfullyCreated',
+      dispatcher.retroUnsuccessfullyCreated({
         data: {
           errors: ['Sorry! That URL is already taken.'],
         },
       });
 
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That URL is already taken.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
     });
   });
 
@@ -265,10 +277,10 @@ describe('MainDispatcher', () => {
     beforeEach(() => {
       reduxActions = {
         currentRetroUpdated: jest.fn(),
+        clearErrors: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
-      dispatcher.$store = new Cursor({errors: {name: 'error 1'}}, cursorSpy);
       dispatcher.retroSettingsSuccessfullyUpdated({
         data: {
           retro: {
@@ -286,9 +298,7 @@ describe('MainDispatcher', () => {
         slug: 'new-retro-slug',
       });
 
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: {},
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalled();
     });
 
     it('redirects to the retro page url with the new slug', () => {
@@ -297,11 +307,16 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroSettingsUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'retroSettingsUnsuccessfullyUpdated',
+    beforeEach(() => {
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroSettingsUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That URL is already taken.'],
         },
@@ -309,9 +324,7 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That URL is already taken.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
     });
   });
 
@@ -968,14 +981,20 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroPasswordSuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({type: 'retroPasswordSuccessfullyUpdated', data: {retro_id: '42', token: 'new-api-token'}});
+    beforeEach(() => {
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroPasswordSuccessfullyUpdated({data: {retro_id: '42', token: 'new-api-token'}});
     });
 
     it('clears the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
 
     it('updates token in local storage', () => {
@@ -984,11 +1003,16 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroPasswordUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'retroPasswordUnsuccessfullyUpdated',
+    beforeEach(() => {
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroPasswordUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That password does not match the current one.'],
         },
@@ -996,21 +1020,25 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That password does not match the current one.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That password does not match the current one.']);
     });
   });
 
   describe('clearErrors', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({type: 'clearErrors'});
+    beforeEach(() => {
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.clearErrors();
     });
 
     it('clears the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
   });
 

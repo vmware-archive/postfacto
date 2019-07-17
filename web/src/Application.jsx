@@ -50,6 +50,7 @@ import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import environmentDispatcher from './dispatchers/environment_dispatcher';
 import RetroReducer from './reducers/retro-reducer';
 import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
+import MessageReducer from './reducers/message_reducer';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -57,6 +58,7 @@ const muiTheme = getMuiTheme({
 
 const reduxStore = createStore(combineReducers({
   retro: RetroReducer(Actions),
+  messages: MessageReducer(),
 // eslint-disable-next-line no-underscore-dangle
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
@@ -103,7 +105,6 @@ class Application extends React.Component {
               featureFlags={store.featureFlags}
               countryCode={store.countryCode}
               environment={store.environment}
-              errors={store.errors}
             />
             <SessionWebsocket url={websocket_url}/>
           </div>

@@ -44,12 +44,12 @@ export default function (retroActionCreators) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}/relogin`});
     },
     retroSuccessfullyCreated({data}) {
-      this.$store.refine('errors').set({});
+      retroActionCreators.clearErrors();
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}`});
       this.dispatch({type: 'createdRetroAnalytics', data: {retroId: data.retro.id}});
     },
     retroUnsuccessfullyCreated({data}) {
-      this.$store.refine('errors').set(data.errors);
+      retroActionCreators.errorsUpdated(data.errors);
     },
     retroSuccessfullyLoggedIn({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
@@ -139,7 +139,7 @@ export default function (retroActionCreators) {
     },
     retroSettingsSuccessfullyUpdated({data: {retro}}) {
       retroActionCreators.currentRetroUpdated(retro);
-      this.$store.refine('errors').set({});
+      retroActionCreators.clearErrors();
       this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
     },
     retroActionItemSuccessfullyDeleted({data}) {
@@ -221,7 +221,7 @@ export default function (retroActionCreators) {
       this.dispatch({type: 'setRoute', data: '/'});
     },
     retroSettingsUnsuccessfullyUpdated({data}) {
-      this.$store.refine('errors').set(data.errors);
+      retroActionCreators.errorsUpdated(data.errors);
     },
     backPressedFromSettings({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
@@ -230,14 +230,14 @@ export default function (retroActionCreators) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
     },
     retroPasswordSuccessfullyUpdated({data}) {
-      this.$store.refine('errors').set({});
+      retroActionCreators.clearErrors();
       window.localStorage.setItem(`apiToken-${data.retro_id}`, data.token);
     },
     retroPasswordUnsuccessfullyUpdated({data}) {
-      this.$store.refine('errors').set(data.errors);
+      retroActionCreators.errorsUpdated(data.errors);
     },
     clearErrors() {
-      this.$store.refine('errors').set({});
+      retroActionCreators.clearErrors();
     },
     apiServerNotFound() {
       this.$store.merge({api_server_not_found: true});

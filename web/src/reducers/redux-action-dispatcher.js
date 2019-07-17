@@ -62,3 +62,16 @@ export function retrosUpdated(retros) {
     payload: retros,
   };
 }
+
+export function errorsUpdated(errors) {
+  return {
+    type: 'ERRORS_UPDATED',
+    payload: errors,
+  };
+}
+
+export function clearErrors() {
+  return {
+    type: 'CLEAR_ERRORS',
+  };
+}
