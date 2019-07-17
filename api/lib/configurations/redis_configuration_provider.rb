@@ -38,7 +38,12 @@ class RedisConfigurationProvider
     unless ENV['VCAP_SERVICES'].nil?
       c = CF::App::Credentials.find_by_service_tag('redis')
       host = c['hostname'] || c.fetch('host')
-      Addressable::URI.new(scheme: 'redis', host: host, password: c['password'], port: c.fetch('port')).to_s
+      Addressable::URI.new(
+        scheme: 'redis',
+        host: host,
+        password: c['password'],
+        port: c.fetch('port')
+      ).normalize.to_s
     end
   end
 end
