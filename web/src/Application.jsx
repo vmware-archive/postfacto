@@ -100,7 +100,6 @@ class Application extends React.Component {
               archives={store.archives}
               alert={store.alert}
               dialog={store.dialog}
-              retros={store.retros}
               featureFlags={store.featureFlags}
               countryCode={store.countryCode}
               environment={store.environment}

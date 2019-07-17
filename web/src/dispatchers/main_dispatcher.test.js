@@ -201,15 +201,22 @@ describe('MainDispatcher', () => {
   });
 
   describe('retrosSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retros: []}, cursorSpy);
+      reduxActions = {
+        retrosUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('updates the retros', () => {
-      const data = {retros: [{name: 'The Retro Name', slug: 'the-retro-123'}]};
+    it('updates the retro', () => {
+      const retros = [{name: 'The Retro Name', slug: 'the-retro-123'}];
+      dispatcher.retrosSuccessfullyFetched({data: {retros}});
 
-      subject.dispatch({type: 'retrosSuccessfullyFetched', data});
-      expect(cursorSpy).toHaveBeenCalledWith(data);
+      expect(reduxActions.retrosUpdated).toHaveBeenCalledWith(retros);
     });
   });
 

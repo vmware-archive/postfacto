@@ -204,6 +204,7 @@ const EnhancedRouter = useRouter(Router);
 
 const mapStateToProps = (state) => ({
   retro: state.retro.currentRetro,
+  retros: state.retro.retros,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);

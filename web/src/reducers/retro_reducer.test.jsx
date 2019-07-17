@@ -55,6 +55,7 @@ describe('RetroReducer', () => {
         is_private: false,
         send_archive_email: true,
       },
+      retros: [],
     });
   });
 
@@ -76,9 +77,7 @@ describe('RetroReducer', () => {
 
       const state = retroReducer(undefined, action);
 
-      expect(state).toEqual({
-        currentRetro: retro,
-      });
+      expect(state.currentRetro).toEqual(retro);
     });
   });
 
@@ -365,6 +364,37 @@ describe('RetroReducer', () => {
 
       const state = retroReducer({currentRetro: retro}, action);
       expect(state.currentRetro.action_items).toHaveLength(0);
+    });
+  });
+
+  describe('RETROS_UPDATED', () => {
+    it('replaces the current list of retros', () => {
+      const retro1 = {
+        name: 'retro1',
+        video_link: 'video',
+        items: [{}],
+        action_items: [{}],
+        is_private: true,
+        send_archive_email: false,
+      };
+
+      const retro2 = {
+        name: 'retro1',
+        video_link: 'video',
+        items: [{}],
+        action_items: [{}],
+        is_private: true,
+        send_archive_email: false,
+      };
+
+      const action = {
+        type: 'RETROS_UPDATED',
+        payload: [retro1, retro2],
+      };
+
+      const state = retroReducer(undefined, action);
+
+      expect(state.retros).toEqual([retro1, retro2]);
     });
   });
 });

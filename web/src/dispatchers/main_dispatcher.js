@@ -79,7 +79,7 @@ export default function (retroActionCreators) {
       this.$store.merge({retroId: data});
     },
     retrosSuccessfullyFetched({data}) {
-      this.$store.merge({retros: data.retros});
+      retroActionCreators.retrosUpdated(data.retros);
     },
     retroSuccessfullyFetched({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);

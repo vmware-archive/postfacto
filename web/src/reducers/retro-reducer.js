@@ -7,6 +7,7 @@ const initialState = {
     is_private: false,
     send_archive_email: true,
   },
+  retros: [],
 };
 
 const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
@@ -93,6 +94,12 @@ const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
     const updatedActionItems = state.currentRetro.action_items.filter((i) => i.id !== actionItem.id);
 
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, action_items: updatedActionItems}});
+  }
+
+  if (action.type === 'RETROS_UPDATED') {
+    const retros = action.payload;
+
+    return Object.assign({}, state, {retros});
   }
 
   return state;

@@ -55,3 +55,10 @@ export function currentRetroHighlightCleared() {
     type: 'CURRENT_RETRO_HIGHLIGHT_CLEARED',
   };
 }
+
+export function retrosUpdated(retros) {
+  return {
+    type: 'RETROS_UPDATED',
+    payload: retros,
+  };
+}
