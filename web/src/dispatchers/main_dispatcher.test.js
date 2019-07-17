@@ -181,7 +181,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -190,7 +190,7 @@ describe('MainDispatcher', () => {
     it('updates the retro', () => {
       dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
 
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith({name: 'The Retro Name', id: 2});
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name', id: 2});
     });
 
     it('dispatches visited retro analytic', () => {
@@ -219,7 +219,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -229,7 +229,7 @@ describe('MainDispatcher', () => {
       const updatedRetro = {name: 'The Retro Name', slug: 'the-retro-123'};
       dispatcher.getRetroSettingsSuccessfullyReceived({data: {retro: updatedRetro}});
 
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith(updatedRetro);
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updatedRetro);
     });
   });
 
@@ -239,7 +239,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -247,7 +247,7 @@ describe('MainDispatcher', () => {
 
     it('updates the retro name', () => {
       dispatcher.getRetroLoginSuccessfullyReceived({data: {retro: {name: 'The Retro Name'}}});
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith({name: 'The Retro Name'});
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name'});
     });
   });
 
@@ -257,7 +257,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -274,7 +274,7 @@ describe('MainDispatcher', () => {
 
 
     it('updates the retro slug and name, and clears the error message', () => {
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith({
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({
         name: 'new retro name',
         slug: 'new-retro-slug',
       });
@@ -354,7 +354,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroItemUpdated: jest.fn(),
+        currentRetroItemUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -368,7 +368,7 @@ describe('MainDispatcher', () => {
 
 
     it('creates the retro item', () => {
-      expect(reduxActions.retroItemUpdated).toHaveBeenCalledWith({id: 10, category: 'happy'});
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 10, category: 'happy'});
     });
 
     it('dispatches created retro item analytic', () => {
@@ -385,7 +385,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroItemDeleted: jest.fn(),
+        currentRetroItemDeleted: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -394,7 +394,7 @@ describe('MainDispatcher', () => {
     it('deletes the retro item', () => {
       dispatcher.retroItemSuccessfullyDeleted({data: {retro_id: 1, item: retro.items[0]}});
 
-      expect(reduxActions.retroItemDeleted).toHaveBeenCalledWith(retro.items[0]);
+      expect(reduxActions.currentRetroItemDeleted).toHaveBeenCalledWith(retro.items[0]);
     });
   });
 
@@ -404,7 +404,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroItemUpdated: jest.fn(),
+        currentRetroItemUpdated: jest.fn(),
       };
       dispatcher = mainDispatcher(reduxActions);
       dispatcher.dispatch = jest.fn();
@@ -418,7 +418,7 @@ describe('MainDispatcher', () => {
       };
 
       dispatcher.retroItemSuccessfullyVoted({data: {retro_id: 1, item: itemFromApiResponse}});
-      expect(reduxActions.retroItemUpdated).toHaveBeenCalledWith(itemFromApiResponse);
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith(itemFromApiResponse);
     });
   });
 
@@ -428,7 +428,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroItemDoneUpdated: jest.fn(),
+        currentRetroItemDoneUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -437,7 +437,7 @@ describe('MainDispatcher', () => {
     });
 
     it('fires retroItemDoneUpdated with true', () => {
-      expect(reduxActions.retroItemDoneUpdated).toHaveBeenCalledWith(2, true);
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, true);
     });
   });
 
@@ -449,7 +449,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroItemDoneUpdated: jest.fn(),
+        currentRetroItemDoneUpdated: jest.fn(),
       };
 
       item = {id: 2, done: false};
@@ -462,7 +462,7 @@ describe('MainDispatcher', () => {
     it('updates the item to have attribute done = false', () => {
       item.done = false;
       retro.highlighted_item_id = null;
-      expect(reduxActions.retroItemDoneUpdated).toHaveBeenCalledWith(2, false);
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, false);
     });
   });
 
@@ -472,7 +472,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -482,7 +482,7 @@ describe('MainDispatcher', () => {
     it('updates retro in redux', () => {
       dispatcher.retroItemSuccessfullyHighlighted({data: {retro}});
 
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith(retro);
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
@@ -492,7 +492,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroHighlightCleared: jest.fn(),
+        currentRetroHighlightCleared: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -502,7 +502,7 @@ describe('MainDispatcher', () => {
     it('updates retro in redux', () => {
       dispatcher.retroItemSuccessfullyUnhighlighted({data: {retro}});
 
-      expect(reduxActions.retroHighlightCleared).toHaveBeenCalled();
+      expect(reduxActions.currentRetroHighlightCleared).toHaveBeenCalled();
     });
   });
 
@@ -512,7 +512,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroSendArchiveEmailUpdated: jest.fn(),
+        currentRetroSendArchiveEmailUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -522,7 +522,7 @@ describe('MainDispatcher', () => {
     it('toggles archive email value', () => {
       dispatcher.toggleSendArchiveEmail({data: {currentSendArchiveEmail: false}});
 
-      expect(reduxActions.retroSendArchiveEmailUpdated).toHaveBeenCalledWith(true);
+      expect(reduxActions.currentRetroSendArchiveEmailUpdated).toHaveBeenCalledWith(true);
     });
   });
 
@@ -532,7 +532,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -542,7 +542,7 @@ describe('MainDispatcher', () => {
     it('updates retro in redux', () => {
       dispatcher.extendTimerSuccessfullyDone({data: {retro}});
 
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith(retro);
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
@@ -553,7 +553,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroUpdated: jest.fn(),
+        currentRetroUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -570,7 +570,7 @@ describe('MainDispatcher', () => {
 
     it('updates the retro', () => {
       retro.retro_item_end_time = 321;
-      expect(reduxActions.retroUpdated).toHaveBeenCalledWith(updated_retro);
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updated_retro);
     });
 
     it('dispatches archived retro analytics', () => {
@@ -597,7 +597,7 @@ describe('MainDispatcher', () => {
 
       beforeEach(() => {
         reduxActions = {
-          retroUpdated: jest.fn(),
+          currentRetroUpdated: jest.fn(),
         };
 
         dispatcher = mainDispatcher(reduxActions);
@@ -607,7 +607,7 @@ describe('MainDispatcher', () => {
       it('updates store with data from socket', () => {
         dispatcher.websocketRetroDataReceived({data: {retro}});
 
-        expect(reduxActions.retroUpdated).toHaveBeenCalledWith(retro);
+        expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
       });
     });
 
@@ -680,7 +680,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroActionItemUpdated: jest.fn(),
+        currentRetroActionItemUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -690,7 +690,7 @@ describe('MainDispatcher', () => {
     it('updates the store', () => {
       const actionItem = {id: 1, done: true};
       dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: actionItem}});
-      expect(reduxActions.retroActionItemUpdated).toHaveBeenCalledWith(actionItem);
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(actionItem);
     });
 
     describe('when action item is marked as done', () => {
@@ -720,7 +720,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroActionItemDeleted: jest.fn(),
+        currentRetroActionItemDeleted: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -733,7 +733,7 @@ describe('MainDispatcher', () => {
 
       dispatcher.retroActionItemSuccessfullyDeleted({data: {action_item}});
 
-      expect(reduxActions.retroActionItemDeleted).toHaveBeenCalledWith(action_item);
+      expect(reduxActions.currentRetroActionItemDeleted).toHaveBeenCalledWith(action_item);
     });
   });
 
@@ -743,7 +743,7 @@ describe('MainDispatcher', () => {
 
     beforeEach(() => {
       reduxActions = {
-        retroActionItemUpdated: jest.fn(),
+        currentRetroActionItemUpdated: jest.fn(),
       };
 
       dispatcher = mainDispatcher(reduxActions);
@@ -756,7 +756,7 @@ describe('MainDispatcher', () => {
       action_item.description = 'description for action item 1 has been changed';
       dispatcher.retroActionItemSuccessfullyEdited({data: {retroId: 1, action_item}});
 
-      expect(reduxActions.retroActionItemUpdated).toHaveBeenCalledWith(action_item);
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
     });
   });
 

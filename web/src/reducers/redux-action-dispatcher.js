@@ -1,57 +1,57 @@
 
-export function retroUpdated(retro) {
+export function currentRetroUpdated(retro) {
   return {
-    type: 'RETRO_UPDATED',
+    type: 'CURRENT_RETRO_UPDATED',
     payload: retro,
   };
 }
 
-export function retroItemUpdated(item) {
+export function currentRetroItemUpdated(item) {
   return {
-    type: 'RETRO_ITEM_UPDATED',
+    type: 'CURRENT_RETRO_ITEM_UPDATED',
     payload: item,
   };
 }
 
 
-export function retroActionItemUpdated(actionItem) {
+export function currentRetroActionItemUpdated(actionItem) {
   return {
-    type: 'RETRO_ACTION_ITEM_UPDATED',
+    type: 'CURRENT_RETRO_ACTION_ITEM_UPDATED',
     payload: actionItem,
   };
 }
 
-export function retroActionItemDeleted(actionItem) {
+export function currentRetroActionItemDeleted(actionItem) {
   return {
-    type: 'RETRO_ACTION_ITEM_DELETED',
+    type: 'CURRENT_RETRO_ACTION_ITEM_DELETED',
     payload: actionItem,
   };
 }
 
-export function retroItemDeleted(item) {
+export function currentRetroItemDeleted(item) {
   return {
-    type: 'RETRO_ITEM_DELETED',
+    type: 'CURRENT_RETRO_ITEM_DELETED',
     payload: item,
   };
 }
 
-export function retroItemDoneUpdated(itemId, done) {
+export function currentRetroItemDoneUpdated(itemId, done) {
   return {
-    type: 'RETRO_ITEM_DONE_UPDATED',
+    type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
     payload: {itemId, done},
   };
 }
 
 
-export function retroSendArchiveEmailUpdated(status) {
+export function currentRetroSendArchiveEmailUpdated(status) {
   return {
-    type: 'RETRO_SEND_ARCHIVE_EMAIL_UPDATED',
+    type: 'CURRENT_RETRO_SEND_ARCHIVE_EMAIL_UPDATED',
     payload: status,
   };
 }
 
-export function retroHighlightCleared() {
+export function currentRetroHighlightCleared() {
   return {
-    type: 'RETRO_HIGHLIGHT_CLEARED',
+    type: 'CURRENT_RETRO_HIGHLIGHT_CLEARED',
   };
 }

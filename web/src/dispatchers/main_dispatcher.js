@@ -82,42 +82,42 @@ export default function (retroActionCreators) {
       this.$store.merge({retros: data.retros});
     },
     retroSuccessfullyFetched({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
       this.dispatch({type: 'visitedRetroAnalytics', data: {retroId: data.retro.id}});
     },
     getRetroSettingsSuccessfullyReceived({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
     },
     getRetroLoginSuccessfullyReceived({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
     },
     retroItemSuccessfullyCreated({data}) {
-      retroActionCreators.retroItemUpdated(data.item);
+      retroActionCreators.currentRetroItemUpdated(data.item);
       this.dispatch({type: 'createdRetroItemAnalytics', data: {retroId: data.retroId, category: data.item.category}});
     },
     retroItemSuccessfullyDeleted({data}) {
-      retroActionCreators.retroItemDeleted(data.item);
+      retroActionCreators.currentRetroItemDeleted(data.item);
     },
     retroItemSuccessfullyVoted({data}) {
-      retroActionCreators.retroItemUpdated(data.item);
+      retroActionCreators.currentRetroItemUpdated(data.item);
     },
     retroItemSuccessfullyDone({data}) {
-      retroActionCreators.retroItemDoneUpdated(data.itemId, true);
+      retroActionCreators.currentRetroItemDoneUpdated(data.itemId, true);
     },
     retroItemSuccessfullyUndone({data}) {
-      retroActionCreators.retroItemDoneUpdated(data.item.id, false);
+      retroActionCreators.currentRetroItemDoneUpdated(data.item.id, false);
     },
     retroItemSuccessfullyHighlighted({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
     },
     retroItemSuccessfullyUnhighlighted() {
-      retroActionCreators.retroHighlightCleared();
+      retroActionCreators.currentRetroHighlightCleared();
     },
     extendTimerSuccessfullyDone({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
     },
     archiveRetroSuccessfullyDone({data}) {
-      retroActionCreators.retroUpdated(data.retro);
+      retroActionCreators.currentRetroUpdated(data.retro);
       this.dispatch({
         type: 'archivedRetroAnalytics',
         data: {retroId: data.retro.id},
@@ -134,28 +134,28 @@ export default function (retroActionCreators) {
           this.dispatch({type: 'requireRetroRelogin', data: {retro: data.payload.retro}});
         }
       } else {
-        retroActionCreators.retroUpdated(data.retro);
+        retroActionCreators.currentRetroUpdated(data.retro);
       }
     },
     retroSettingsSuccessfullyUpdated({data: {retro}}) {
-      retroActionCreators.retroUpdated(retro);
+      retroActionCreators.currentRetroUpdated(retro);
       this.$store.refine('errors').set({});
       this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
     },
     retroActionItemSuccessfullyDeleted({data}) {
-      retroActionCreators.retroActionItemDeleted(data.action_item);
+      retroActionCreators.currentRetroActionItemDeleted(data.action_item);
     },
     retroActionItemSuccessfullyEdited({data}) {
-      retroActionCreators.retroActionItemUpdated(data.action_item);
+      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
     },
     doneRetroActionItemSuccessfullyToggled({data}) {
-      retroActionCreators.retroActionItemUpdated(data.action_item);
+      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
 
       const analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
       this.dispatch({type: analyticsType, data: {retroId: data.retro_id}});
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
-      retroActionCreators.retroSendArchiveEmailUpdated(!currentSendArchiveEmail);
+      retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
     },
     websocketSessionDataReceived({data}) {
       this.$store.merge({session: data.payload});

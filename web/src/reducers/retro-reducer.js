@@ -10,26 +10,26 @@ const initialState = {
 };
 
 const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
-  if (action.type === 'RETRO_UPDATED') {
+  if (action.type === 'CURRENT_RETRO_UPDATED') {
     return Object.assign({}, state, {currentRetro: action.payload});
   }
 
-  if (action.type === 'RETRO_SEND_ARCHIVE_EMAIL_UPDATED') {
+  if (action.type === 'CURRENT_RETRO_SEND_ARCHIVE_EMAIL_UPDATED') {
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, send_archive_email: action.payload}});
   }
 
-  if (action.type === 'RETRO_HIGHLIGHT_CLEARED') {
+  if (action.type === 'CURRENT_RETRO_HIGHLIGHT_CLEARED') {
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, highlighted_item_id: null}});
   }
 
-  if (action.type === 'RETRO_ITEM_DELETED') {
+  if (action.type === 'CURRENT_RETRO_ITEM_DELETED') {
     const item = action.payload;
     const updatedItems = state.currentRetro.items.filter((i) => i.id !== item.id);
 
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, items: updatedItems}});
   }
 
-  if (action.type === 'RETRO_ITEM_UPDATED') {
+  if (action.type === 'CURRENT_RETRO_ITEM_UPDATED') {
     const item = action.payload;
     const existingItems = state.currentRetro.items;
 
@@ -45,7 +45,7 @@ const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, items: updatedItems}});
   }
 
-  if (action.type === 'RETRO_ITEM_DONE_UPDATED') {
+  if (action.type === 'CURRENT_RETRO_ITEM_DONE_UPDATED') {
     const {itemId, done} = action.payload;
     const existingItems = state.currentRetro.items;
 
@@ -72,7 +72,7 @@ const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
     });
   }
 
-  if (action.type === 'RETRO_ACTION_ITEM_UPDATED') {
+  if (action.type === 'CURRENT_RETRO_ACTION_ITEM_UPDATED') {
     const actionItem = action.payload;
     const existingActionItems = state.currentRetro.action_items;
 
@@ -88,7 +88,7 @@ const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
     return Object.assign({}, state, {currentRetro: {...state.currentRetro, action_items: updatedItems}});
   }
 
-  if (action.type === 'RETRO_ACTION_ITEM_DELETED') {
+  if (action.type === 'CURRENT_RETRO_ACTION_ITEM_DELETED') {
     const actionItem = action.payload;
     const updatedActionItems = state.currentRetro.action_items.filter((i) => i.id !== actionItem.id);
 

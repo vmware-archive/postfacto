@@ -58,7 +58,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_UPDATED', () => {
+  describe('CURRENT_RETRO_UPDATED', () => {
     it('replaces the current retro', () => {
       const retro = {
         name: 'retro1',
@@ -70,7 +70,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_UPDATED',
+        type: 'CURRENT_RETRO_UPDATED',
         payload: retro,
       };
 
@@ -82,7 +82,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_SEND_ARCHIVE_EMAIL_UPDATED', () => {
+  describe('CURRENT_RETRO_SEND_ARCHIVE_EMAIL_UPDATED', () => {
     it('updates send_archive_email the current retro', () => {
       const retro = {
         name: 'retro1',
@@ -94,7 +94,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_SEND_ARCHIVE_EMAIL_UPDATED',
+        type: 'CURRENT_RETRO_SEND_ARCHIVE_EMAIL_UPDATED',
         payload: true,
       };
 
@@ -105,7 +105,7 @@ describe('RetroReducer', () => {
   });
 
 
-  describe('RETRO_HIGHLIGHT_CLEARED', () => {
+  describe('CURRENT_RETRO_HIGHLIGHT_CLEARED', () => {
     it('clears the current highlighed item', () => {
       const retro = {
         name: 'retro1',
@@ -118,7 +118,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_HIGHLIGHT_CLEARED',
+        type: 'CURRENT_RETRO_HIGHLIGHT_CLEARED',
         payload: retro,
       };
 
@@ -128,7 +128,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_ITEM_DELETED', () => {
+  describe('CURRENT_RETRO_ITEM_DELETED', () => {
     it('removes item from state', () => {
       const existingItem = {id: 2, category: 'happy', done: false};
       const retro = {
@@ -142,7 +142,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_ITEM_DELETED',
+        type: 'CURRENT_RETRO_ITEM_DELETED',
         payload: existingItem,
       };
 
@@ -151,7 +151,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_ITEM_UPDATED', () => {
+  describe('CURRENT_RETRO_ITEM_UPDATED', () => {
     it('Adds a new item if if has a unique ID', () => {
       const existingItem = {id: 2, category: 'happy'};
       const retro = {
@@ -165,7 +165,7 @@ describe('RetroReducer', () => {
 
       const uniqueItem = {id: 3, category: 'happy'};
       const uniqueAction = {
-        type: 'RETRO_ITEM_UPDATED',
+        type: 'CURRENT_RETRO_ITEM_UPDATED',
         payload: uniqueItem,
       };
 
@@ -188,7 +188,7 @@ describe('RetroReducer', () => {
 
       const uppdatedItem = {item: {id: 2, category: 'meh'}};
       const updatedAction = {
-        type: 'RETRO_ITEM_UPDATED',
+        type: 'CURRENT_RETRO_ITEM_UPDATED',
         payload: uppdatedItem,
       };
 
@@ -198,7 +198,7 @@ describe('RetroReducer', () => {
       expect(state.currentRetro.items[0]).toEqual(uppdatedItem);
     });
 
-    describe('RETRO_ITEM_DONE_UPDATED', () => {
+    describe('CURRENT_RETRO_ITEM_DONE_UPDATED', () => {
       it('sets done state of item with id to given value and clears highlighed item id', () => {
         const existingItem = {id: 2, category: 'happy', done: false};
         const retro = {
@@ -212,7 +212,7 @@ describe('RetroReducer', () => {
         };
 
         const uniqueAction = {
-          type: 'RETRO_ITEM_DONE_UPDATED',
+          type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
           payload: {itemId: 2, done: true},
         };
 
@@ -236,7 +236,7 @@ describe('RetroReducer', () => {
         };
 
         const doneAction = {
-          type: 'RETRO_ITEM_DONE_UPDATED',
+          type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
           payload: {itemId: 2, done: true},
         };
 
@@ -261,7 +261,7 @@ describe('RetroReducer', () => {
       };
 
       const doneAction = {
-        type: 'RETRO_ITEM_DONE_UPDATED',
+        type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
         payload: {itemId: 2, done: true},
       };
 
@@ -286,7 +286,7 @@ describe('RetroReducer', () => {
       };
 
       const doneAction = {
-        type: 'RETRO_ITEM_DONE_UPDATED',
+        type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
         payload: {itemId: 2, done: true},
       };
 
@@ -296,7 +296,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_ACTION_ITEM_UPDATED', () => {
+  describe('CURRENT_RETRO_ACTION_ITEM_UPDATED', () => {
     it('Adds a new item if if has a unique ID', () => {
       const existingActionItem = {id: 1, description: 'description', done: true};
       const retro = {
@@ -311,7 +311,7 @@ describe('RetroReducer', () => {
 
       const newActionItem = {id: 2, description: 'new description', done: false};
       const action = {
-        type: 'RETRO_ACTION_ITEM_UPDATED',
+        type: 'CURRENT_RETRO_ACTION_ITEM_UPDATED',
         payload: newActionItem,
       };
 
@@ -335,7 +335,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_ACTION_ITEM_UPDATED',
+        type: 'CURRENT_RETRO_ACTION_ITEM_UPDATED',
         payload: {id: 1, description: 'new description', done: false},
       };
 
@@ -345,7 +345,7 @@ describe('RetroReducer', () => {
     });
   });
 
-  describe('RETRO_ACTION_ITEM_DELETED', () => {
+  describe('CURRENT_RETRO_ACTION_ITEM_DELETED', () => {
     it('removes action item from state', () => {
       const existingActionItem = {id: 2, done: false};
       const retro = {
@@ -359,7 +359,7 @@ describe('RetroReducer', () => {
       };
 
       const action = {
-        type: 'RETRO_ACTION_ITEM_DELETED',
+        type: 'CURRENT_RETRO_ACTION_ITEM_DELETED',
         payload: existingActionItem,
       };
 
