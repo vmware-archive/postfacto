@@ -34,9 +34,12 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 ### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pws` directory:
+
   ```bash
   ./upgrade.sh <web-app-name> <api-app-name>
   ```
+
+**Note** that if your admin panel was previously on `{{api-app-name}}.cfapps.io/admin`, it has now moved to `{{web-app-name}}.cfapps.io/api/admin`
 
 ## Pivotal Cloud Foundry
 
@@ -73,6 +76,8 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
   ```bash
   ./upgrade.sh <web-app-name> <api-app-name> <pcf-url>
   ```
+
+**Note** that if your admin panel was previously on `{{api-app-name}}.{{pcf-url}}/admin`, it has now moved to `{{web-app-name}}.{{pcf-url}}/api/admin`
 
 ## Heroku
 

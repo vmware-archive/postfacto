@@ -53,8 +53,10 @@ sed \
   >"$ASSETS_DIR"/web/config.js
 
 cf push \
-    -f "$CONFIG_DIR"/manifest.yml \
-    --var api-app-name=$API_HOST \
-    --var web-app-name=$WEB_HOST \
-    --var pcf-url=${APP_DOMAIN} \
-    --var session-time=$SESSION_TIME
+  -f "$CONFIG_DIR"/manifest.yml \
+  --var api-app-name=$API_HOST \
+  --var web-app-name=$WEB_HOST \
+  --var pcf-url=${APP_DOMAIN} \
+  --var session-time=$SESSION_TIME
+
+cf delete-route ${APP_DOMAIN} --hostname ${API_HOST} -f
