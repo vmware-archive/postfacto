@@ -101,8 +101,6 @@ class Application extends React.Component {
             <ConnectedHeader config={config}/>
             <ConnectedRouter
               config={config}
-              retro_archives={store.retro_archives}
-              archives={store.archives}
               featureFlags={store.featureFlags}
               countryCode={store.countryCode}
               environment={store.environment}

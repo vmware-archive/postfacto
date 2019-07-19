@@ -7,6 +7,15 @@ const initialState = {
     is_private: false,
     send_archive_email: true,
   },
+  retroArchives: [],
+  currentArchivedRetro: {
+    name: '',
+    video_link: '',
+    items: [],
+    action_items: [],
+    is_private: false,
+    send_archive_email: true,
+  },
   retros: [],
 };
 
@@ -91,6 +100,16 @@ const RetroReducer = () => (state = initialState, action) => {
     const retros = action.payload;
 
     return Object.assign({}, state, {retros});
+  }
+
+  if (action.type === 'CURRENT_ARCHIVED_RETRO_UPDATED') {
+    return Object.assign({}, state, {currentArchivedRetro: action.payload});
+  }
+
+  if (action.type === 'RETRO_ARCHIVES_UPDATED') {
+    const retroArchives = action.payload;
+
+    return Object.assign({}, state, {retroArchives});
   }
 
   return state;

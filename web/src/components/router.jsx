@@ -202,6 +202,8 @@ const EnhancedRouter = useRouter(Router);
 const mapStateToProps = (state) => ({
   retro: state.retro.currentRetro,
   retros: state.retro.retros,
+  retro_archives: state.retro.currentArchivedRetro,
+  archives: state.retro.retroArchives,
   errors: state.messages.errors,
   dialog: state.messages.dialog,
   alert: state.messages.alert,

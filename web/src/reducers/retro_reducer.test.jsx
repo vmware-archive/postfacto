@@ -54,6 +54,15 @@ describe('RetroReducer', () => {
         is_private: false,
         send_archive_email: true,
       },
+      retroArchives: [],
+      currentArchivedRetro: {
+        name: '',
+        video_link: '',
+        items: [],
+        action_items: [],
+        is_private: false,
+        send_archive_email: true,
+      },
       retros: [],
     });
   });
@@ -322,6 +331,61 @@ describe('RetroReducer', () => {
       const state = retroReducer(undefined, action);
 
       expect(state.retros).toEqual([retro1, retro2]);
+    });
+  });
+
+
+
+  describe('CURRENT_ARCHIVED_RETRO_UPDATED', () => {
+    it('replaces the current archived retro', () => {
+      const retro = {
+        name: 'retro1',
+        video_link: 'video',
+        items: [{}],
+        action_items: [{}],
+        is_private: true,
+        send_archive_email: false,
+      };
+
+      const action = {
+        type: 'CURRENT_ARCHIVED_RETRO_UPDATED',
+        payload: retro,
+      };
+
+      const state = retroReducer(undefined, action);
+
+      expect(state.currentArchivedRetro).toEqual(retro);
+    });
+  });
+
+  describe('RETRO_ARCHIVES_UPDATED', () => {
+    it('replaces the current list of archived retros', () => {
+      const retro1 = {
+        name: 'retro1',
+        video_link: 'video',
+        items: [{}],
+        action_items: [{}],
+        is_private: true,
+        send_archive_email: false,
+      };
+
+      const retro2 = {
+        name: 'retro1',
+        video_link: 'video',
+        items: [{}],
+        action_items: [{}],
+        is_private: true,
+        send_archive_email: false,
+      };
+
+      const action = {
+        type: 'RETRO_ARCHIVES_UPDATED',
+        payload: [retro1, retro2],
+      };
+
+      const state = retroReducer(undefined, action);
+
+      expect(state.retroArchives).toEqual([retro1, retro2]);
     });
   });
 });

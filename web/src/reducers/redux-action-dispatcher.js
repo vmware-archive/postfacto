@@ -116,3 +116,17 @@ export function updateWebsocketSession(session) {
     payload: session,
   };
 }
+
+export function updateCurrentArchivedRetro(retro) {
+  return {
+    type: 'CURRENT_ARCHIVED_RETRO_UPDATED',
+    payload: retro,
+  };
+}
+
+export function updateRetroArchives(retros) {
+  return {
+    type: 'RETRO_ARCHIVES_UPDATED',
+    payload: retros,
+  };
+}

@@ -793,22 +793,42 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroArchiveSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro_archives: {}}, cursorSpy);
-      subject.dispatch({type: 'retroArchiveSuccessfullyFetched', data: {retro: retro_archives}});
+      reduxActions = {
+        updateCurrentArchivedRetro: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with the archived retro items', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_archives});
+      dispatcher.retroArchiveSuccessfullyFetched({data: {retro: retro_archives}});
+
+      expect(reduxActions.updateCurrentArchivedRetro).toHaveBeenCalledWith(retro_archives);
     });
   });
 
   describe('retroArchivesSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({archives: []}, cursorSpy);
-      subject.dispatch({type: 'retroArchivesSuccessfullyFetched', data: {archives: [{id: 123}]}});
+      reduxActions = {
+        updateRetroArchives: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with the archives', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({archives: [{id: 123}]});
+      dispatcher.retroArchivesSuccessfullyFetched({data: {archives: [{id: 123}]}});
+
+      expect(reduxActions.updateRetroArchives).toHaveBeenCalledWith([{id: 123}]);
     });
   });
 

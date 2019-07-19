@@ -182,10 +182,10 @@ export default function (retroActionCreators, store) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings/password`});
     },
     retroArchiveSuccessfullyFetched({data}) {
-      this.$store.merge({retro_archives: data.retro});
+      retroActionCreators.updateCurrentArchivedRetro(data.retro);
     },
     retroArchivesSuccessfullyFetched({data}) {
-      this.$store.merge({archives: data.archives});
+      retroActionCreators.updateRetroArchives(data.archives);
     },
     backPressedFromArchives({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
