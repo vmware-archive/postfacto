@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../spec_helper';
+import '../../spec_helper';
 import RetroReducer from './retro-reducer';
 
 describe('RetroReducer', () => {
