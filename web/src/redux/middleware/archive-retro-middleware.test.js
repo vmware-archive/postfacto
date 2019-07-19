@@ -118,6 +118,37 @@ describe('ArchiveMiddleware', () => {
     expect(store.dispatch).not.toHaveBeenCalled();
   });
 
+  it('does not fire SHOW_DIALOG if the updating item is not done', () => {
+    const existingItem = {id: 2, category: 'happy', done: false};
+    const retro = {
+      name: 'retro1',
+      id: 5,
+      video_link: 'video',
+      items: [{id: 1, category: 'happy', done: true}, existingItem],
+      action_items: [{}],
+      is_private: true,
+      send_archive_email: false,
+      highlighted_item_id: 2,
+    };
+
+    const store = {
+      getState: () => ({retro: {currentRetro: retro}}),
+      dispatch: jest.fn(),
+    };
+
+    const doneAction = {
+      type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
+      payload: {itemId: 2, done: false},
+    };
+
+    const next = jest.fn();
+    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
+    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+
+    expect(next).toHaveBeenCalledWith(doneAction);
+    expect(store.dispatch).not.toHaveBeenCalled();
+  });
+
   it('Fires analytics event when item done', () => {
     const existingItem = {id: 2, category: 'happy', done: true};
     const retro = {
