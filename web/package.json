@@ -29,7 +29,6 @@
     "fast-deep-equal": "^2.0.1",
     "jest-enzyme": "^7.0.1",
     "promise-mock": "^2.1.0",
-    "pui-cursor": "^3.0.5",
     "serve": "^10.1.1"
   },
   "scripts": {

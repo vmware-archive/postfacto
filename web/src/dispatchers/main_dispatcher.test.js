@@ -29,21 +29,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cursor from 'pui-cursor';
 import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 import mainDispatcher from './main_dispatcher';
 
 describe('MainDispatcher', () => {
   let subject;
-  let cursorSpy;
   let retro;
   let retro_archives;
   let router;
 
   beforeEach(() => {
-    Cursor.async = false;
-    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
@@ -1169,7 +1165,6 @@ describe('MainDispatcher', () => {
 
   describe('redirectToRegistration', () => {
     it('redirects to the registration page with the correct url parameters', () => {
-      subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'redirectToRegistration',
         data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},

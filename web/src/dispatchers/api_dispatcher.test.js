@@ -30,7 +30,6 @@
  */
 
 import PromiseMock from 'promise-mock';
-import Cursor from 'pui-cursor';
 import Grapnel from 'grapnel';
 import {Dispatcher} from 'p-flux';
 import MockFetch from '../test_support/fetch_matchers';
@@ -38,15 +37,12 @@ import '../spec_helper';
 
 describe('ApiDispatcher', () => {
   let subject;
-  let cursorSpy;
   let retro;
   let realDispatchLevels;
 
   beforeEach(() => {
     PromiseMock.install();
 
-    Cursor.async = false;
-    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
@@ -173,7 +169,6 @@ describe('ApiDispatcher', () => {
     }
 
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
       // test appears to be set up badly and requires both retro ID types:
       // (previously responded to all getItem calls with the token)
       localStorage.setItem('apiToken-retro-slug-123', 'the-auth-token');
@@ -313,7 +308,6 @@ describe('ApiDispatcher', () => {
 
   describe('updateRetroPassword', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-13', 'the-auth-token');
 
       subject.dispatch({
@@ -390,7 +384,6 @@ describe('ApiDispatcher', () => {
 
   describe('getRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
       localStorage.setItem('apiToken-1', 'the-token');
       subject.dispatch({type: 'getRetro', data: {id: 1}});
     });
@@ -439,7 +432,6 @@ describe('ApiDispatcher', () => {
   describe('getRetros', () => {
     beforeEach(() => {
       localStorage.setItem('authToken', 'the-auth-token');
-      subject.$store = new Cursor({retros: []}, cursorSpy);
       subject.dispatch({type: 'getRetros'});
     });
 
@@ -475,7 +467,6 @@ describe('ApiDispatcher', () => {
 
   describe('getRetroLogin', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro: null}, cursorSpy);
       subject.dispatch({type: 'getRetroLogin', data: {retro_id: 1}});
     });
 
@@ -509,7 +500,6 @@ describe('ApiDispatcher', () => {
 
   describe('getRetroSettings', () => {
     const doSetup = () => {
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroSettings', data: {id: 'retro-slug-123'}});
     };
 
@@ -558,7 +548,6 @@ describe('ApiDispatcher', () => {
 
   describe('loginToRetro', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'loginToRetro', data: {retro_id: 15, password: 'pa55word'}});
     });
 
@@ -593,7 +582,6 @@ describe('ApiDispatcher', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
       subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
@@ -616,7 +604,6 @@ describe('ApiDispatcher', () => {
   describe('createRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroItem', data: {retro_id: 1, description: 'happy item', category: 'happy'}});
     });
 
@@ -673,7 +660,6 @@ describe('ApiDispatcher', () => {
     let item;
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       item = retro.items[0];
       subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
     });
@@ -699,7 +685,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/items/:item_id/vote', () => {
@@ -729,7 +714,6 @@ describe('ApiDispatcher', () => {
 
       localStorage.setItem('apiToken-retro-slug-123', 'the-token');
       retro.highlighted_item_id = null;
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'nextRetroItem', data: {retro}});
 
       expect(MockFetch).toHaveRequested('/retros/retro-slug-123/discussion/transitions', {
@@ -753,7 +737,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item}});
     });
     it('makes an api POST to /retros/:id/discussion', () => {
@@ -781,7 +764,6 @@ describe('ApiDispatcher', () => {
   describe('unhighlightRetroItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'unhighlightRetroItem', data: {retro_id: 1}});
     });
     it('makes an api DELETE to /retros/:id/discussion', () => {
@@ -802,7 +784,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item}});
     });
     it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
@@ -834,7 +815,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       item = retro.items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item}});
     });
 
@@ -865,7 +845,6 @@ describe('ApiDispatcher', () => {
   describe('extendTimer', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'extendTimer', data: {retro_id: 1}});
     });
 
@@ -893,7 +872,6 @@ describe('ApiDispatcher', () => {
   describe('archiveRetro', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'archiveRetro', data: {retro: {slug: 1, send_archive_email: true}}});
     });
 
@@ -924,7 +902,6 @@ describe('ApiDispatcher', () => {
   describe('createRetroActionItem', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'createRetroActionItem', data: {retro_id: 1, description: 'a new action item'}});
     });
 
@@ -949,7 +926,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'doneRetroActionItem', data: {retro_id: 1, action_item_id: 1, done: true}});
     });
 
@@ -982,7 +958,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item}});
     });
 
@@ -1007,7 +982,6 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
 
       subject.dispatch({
         type: 'editRetroActionItem',
@@ -1039,7 +1013,6 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchives', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchives', data: {retro_id: '1'}});
     });
 
@@ -1072,7 +1045,6 @@ describe('ApiDispatcher', () => {
   describe('getRetroArchive', () => {
     beforeEach(() => {
       localStorage.setItem('apiToken-1', 'the-token');
-      subject.$store = new Cursor({retro}, cursorSpy);
       subject.dispatch({type: 'getRetroArchive', data: {retro_id: '1', archive_id: '1'}});
     });
 
@@ -1104,7 +1076,6 @@ describe('ApiDispatcher', () => {
 
   describe('createUser', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createUser',
         data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'},
@@ -1141,7 +1112,6 @@ describe('ApiDispatcher', () => {
 
   describe('createSession', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'createSession',
         data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'},
@@ -1192,7 +1162,6 @@ describe('ApiDispatcher', () => {
 
   describe('retrieveConfig', () => {
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({type: 'retrieveConfig', data: undefined});
     });
 
