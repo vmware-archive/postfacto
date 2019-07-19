@@ -32,7 +32,7 @@
 const ALERT_DURATION = 3500;
 let alertTimeout = null;
 
-export default function (retroActionCreators) {
+export default function (retroActionCreators, store) {
   return {
     setRoute({data}) {
       this.router.navigate(data);
@@ -129,13 +129,16 @@ export default function (retroActionCreators) {
     },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
-        const session = this.$store.get('session');
+        const session = store.getState().user.websocketSession;
         if (session.request_uuid !== data.payload.originator_id) {
           this.dispatch({type: 'requireRetroRelogin', data: {retro: data.payload.retro}});
         }
       } else {
         retroActionCreators.currentRetroUpdated(data.retro);
       }
+    },
+    websocketSessionDataReceived({data}) {
+      retroActionCreators.updateWebsocketSession(data.payload);
     },
     retroSettingsSuccessfullyUpdated({data: {retro}}) {
       retroActionCreators.currentRetroUpdated(retro);
@@ -156,9 +159,6 @@ export default function (retroActionCreators) {
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
       retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
-    },
-    websocketSessionDataReceived({data}) {
-      this.$store.merge({session: data.payload});
     },
     routeToHome() {
       this.dispatch({type: 'setRoute', data: '/'});

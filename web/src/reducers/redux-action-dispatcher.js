@@ -109,3 +109,10 @@ export function setNotFound(notFound) {
     payload: notFound,
   };
 }
+
+export function updateWebsocketSession(session) {
+  return {
+    type: 'WEBSOCKET_SESSION_UPDATED',
+    payload: session,
+  };
+}

@@ -52,6 +52,7 @@ import RetroReducer from './reducers/retro-reducer';
 import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
 import MessageReducer from './reducers/message_reducer';
 import ArchiveMiddleware from './reducers/archive-retro-middleware';
+import UserReducer from './reducers/user_reducer';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -62,6 +63,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const reduxStore = createStore(combineReducers({
   retro: RetroReducer(),
   messages: MessageReducer(),
+  user: UserReducer(),
 }), composeEnhancers(applyMiddleware(ArchiveMiddleware(Actions))));
 
 const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
@@ -99,7 +101,6 @@ class Application extends React.Component {
             <ConnectedHeader config={config}/>
             <ConnectedRouter
               config={config}
-              session={store.session}
               retro_archives={store.retro_archives}
               archives={store.archives}
               featureFlags={store.featureFlags}
@@ -120,7 +121,7 @@ export default useStore(
     store: rootStore,
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher),
+      mainDispatcher(reduxActionDispatcher, reduxStore),
       apiDispatcher,
       analyticsDispatcher,
       environmentDispatcher,

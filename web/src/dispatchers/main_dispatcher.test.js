@@ -632,17 +632,22 @@ describe('MainDispatcher', () => {
     });
 
     describe('when the command is force_relogin', () => {
-      let initialStore;
+      let dispatcher;
+      let reduxActions;
 
       beforeEach(() => {
-        initialStore = {session: {request_uuid: 'fake-request-uuid-1'}};
-        subject.$store = new Cursor(initialStore, cursorSpy);
+        reduxActions = {
+          currentRetroUpdated: jest.fn(),
+        };
+
+        const store = {getState: () => ({user: {websocketSession: {request_uuid: 'fake-request-uuid-1'}}})};
+        dispatcher = mainDispatcher(reduxActions, store);
+        dispatcher.dispatch = jest.fn();
       });
 
       describe('when the command was originated by someone else', () => {
         it('dispatches show alert with a password changed message', () => {
-          subject.dispatch({
-            type: 'websocketRetroDataReceived',
+          dispatcher.websocketRetroDataReceived({
             data: {
               command: 'force_relogin',
               payload: {
@@ -654,7 +659,7 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect(Dispatcher).toHaveReceived({
+          expect(dispatcher.dispatch).toHaveBeenCalledWith({
             type: 'requireRetroRelogin',
             data: {
               retro: {
@@ -667,8 +672,7 @@ describe('MainDispatcher', () => {
 
       describe('when the command was originated by me', () => {
         it('does not dispatch show alert', () => {
-          subject.dispatch({
-            type: 'websocketRetroDataReceived',
+          dispatcher.websocketRetroDataReceived({
             data: {
               command: 'force_relogin',
               payload: {
@@ -677,20 +681,28 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect(Dispatcher).not.toHaveReceived('requireRetroRelogin');
+          expect(dispatcher.dispatch).not.toHaveBeenCalled();
         });
       });
     });
   });
 
   describe('websocketSessionDataReceived', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        updateWebsocketSession: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('updates store with data from socket', () => {
-      subject.dispatch({type: 'websocketSessionDataReceived', data: {payload: {request_uuid: 'some-request-uuid'}}});
-      expect(cursorSpy).toHaveBeenCalledWith({session: {request_uuid: 'some-request-uuid'}});
+      dispatcher.websocketSessionDataReceived({data: {payload: {request_uuid: 'some-request-uuid'}}});
+      expect(reduxActions.updateWebsocketSession).toHaveBeenCalledWith({request_uuid: 'some-request-uuid'});
     });
   });
 

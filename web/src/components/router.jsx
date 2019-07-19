@@ -206,6 +206,7 @@ const mapStateToProps = (state) => ({
   dialog: state.messages.dialog,
   alert: state.messages.alert,
   not_found: state.messages.not_found,
+  session: state.user.websocketSession,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
