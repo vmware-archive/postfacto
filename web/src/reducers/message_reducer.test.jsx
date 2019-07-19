@@ -44,6 +44,7 @@ describe('MessageReducer', () => {
     expect(state).toEqual({
       errors: {},
       dialog: null,
+      alert: null,
     });
   });
 
@@ -114,6 +115,42 @@ describe('MessageReducer', () => {
       const updatedState = messageReducer(state, action);
 
       expect(updatedState.dialog).toEqual(null);
+    });
+  });
+
+
+  describe('SHOW_ALERT', () => {
+    it('sets the alert state', () => {
+      const alert = {
+        message: 'hi',
+      };
+
+      const action = {
+        type: 'SHOW_ALERT',
+        payload: alert,
+      };
+
+      const state = messageReducer(undefined, action);
+
+      expect(state.alert).toEqual(alert);
+    });
+  });
+
+  describe('CLEAR_ALERT', () => {
+    it('clears the alert', () => {
+      const state = {
+        alert: {
+          message: 'hi',
+        },
+      };
+
+      const action = {
+        type: 'CLEAR_ALERT',
+      };
+
+      const updatedState = messageReducer(state, action);
+
+      expect(updatedState.alert).toEqual(null);
     });
   });
 });

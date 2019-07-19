@@ -54,23 +54,26 @@ export default function (retroActionCreators) {
     retroSuccessfullyLoggedIn({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
     },
-    retroNotFound() {
-      this.$store.merge({retro_not_found: true});
-    },
     retroLoginFailed() {
       this.$store.merge({login_error_message: 'Oops, wrong password!'});
     },
-    notFound() {
-      this.$store.merge({not_found: true});
-    },
-    resetApiServerNotFound() {
-      this.$store.merge({api_server_not_found: false});
+    retroNotFound() {
+      this.$store.merge({retro_not_found: true});
     },
     resetRetroNotFound() {
       this.$store.merge({retro_not_found: false});
     },
+    notFound() {
+      this.$store.merge({not_found: true});
+    },
     resetNotFound() {
       this.$store.merge({not_found: false});
+    },
+    apiServerNotFound() {
+      this.$store.merge({api_server_not_found: true});
+    },
+    resetApiServerNotFound() {
+      this.$store.merge({api_server_not_found: false});
     },
     redirectToRetroCreatePage() {
       this.dispatch({type: 'setRoute', data: '/retros/new'});
@@ -189,15 +192,15 @@ export default function (retroActionCreators) {
     },
     showAlert({data}) {
       clearTimeout(alertTimeout);
-      alertTimeout = setTimeout(() => this.dispatch({type: 'hideAlert'}), ALERT_DURATION);
+      alertTimeout = setTimeout(() => retroActionCreators.clearAlert(), ALERT_DURATION);
 
-      this.$store.merge({alert: data});
+      retroActionCreators.showAlert(data);
     },
     hideAlert() {
       clearTimeout(alertTimeout);
       alertTimeout = null;
 
-      this.$store.merge({alert: null});
+      retroActionCreators.clearAlert();
     },
     showDialog({data}) {
       retroActionCreators.showDialog(data);
@@ -235,9 +238,6 @@ export default function (retroActionCreators) {
     },
     clearErrors() {
       retroActionCreators.clearErrors();
-    },
-    apiServerNotFound() {
-      this.$store.merge({api_server_not_found: true});
     },
     redirectToRegistration({data}) {
       this.dispatch({type: 'setRoute', data: `/registration/${data.access_token}/${data.email}/${data.name}`});

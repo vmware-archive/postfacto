@@ -88,3 +88,17 @@ export function clearDialog() {
     type: 'CLEAR_DIALOG',
   };
 }
+
+
+export function showAlert(alert) {
+  return {
+    type: 'SHOW_ALERT',
+    payload: alert,
+  };
+}
+
+export function clearAlert() {
+  return {
+    type: 'CLEAR_ALERT',
+  };
+}

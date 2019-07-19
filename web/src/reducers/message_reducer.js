@@ -1,6 +1,7 @@
 const initialState = {
   errors: {},
   dialog: null,
+  alert: null,
 };
 
 const MessageReducer = () => (state = initialState, action) => {
@@ -18,6 +19,14 @@ const MessageReducer = () => (state = initialState, action) => {
 
   if (action.type === 'CLEAR_DIALOG') {
     return Object.assign({}, state, {dialog: null});
+  }
+
+  if (action.type === 'SHOW_ALERT') {
+    return Object.assign({}, state, {alert: action.payload});
+  }
+
+  if (action.type === 'CLEAR_ALERT') {
+    return Object.assign({}, state, {alert: null});
   }
 
   return state;

@@ -819,10 +819,18 @@ describe('MainDispatcher', () => {
   });
 
   describe('showAlert', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({
-        type: 'showAlert',
+      reduxActions = {
+        showAlert: jest.fn(),
+        clearAlert: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.showAlert({
         data: {
           message: 'this is a message',
         },
@@ -830,43 +838,50 @@ describe('MainDispatcher', () => {
     });
 
     it('adds the alert message to the store', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        alert: {message: 'this is a message'},
-      });
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'this is a message'});
     });
 
     it('schedules removal of the message after a delay', () => {
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
 
     it('resets the removal countdown if the message updates', () => {
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
-      subject.dispatch({
-        type: 'showAlert',
+      dispatcher.showAlert({
         data: {message: 'a new message'},
       });
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
   });
 
   describe('hideAlert', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'hideAlert'});
+      reduxActions = {
+        showAlert: jest.fn(),
+        clearAlert: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.hideAlert();
     });
+
     it('clears the alert message from the store', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({alert: null});
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
   });
 

@@ -202,6 +202,7 @@ const mapStateToProps = (state) => ({
   retros: state.retro.retros,
   errors: state.messages.errors,
   dialog: state.messages.dialog,
+  alert: state.messages.alert,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
