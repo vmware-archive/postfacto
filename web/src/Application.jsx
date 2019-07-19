@@ -35,7 +35,7 @@ import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
-import {applyMiddleware, bindActionCreators, combineReducers, compose, createStore} from 'redux';
+import {bindActionCreators} from 'redux';
 import {ConnectedRouter} from './components/router';
 import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
@@ -45,27 +45,12 @@ import SessionWebsocket from './components/session_websocket';
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import RetroReducer from './redux/reducers/retro-reducer';
 import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
-import MessageReducer from './redux/reducers/message_reducer';
-import ArchiveMiddleware from './redux/middleware/archive-retro-middleware';
-import UserReducer from './redux/reducers/user_reducer';
-import ConfigReducer from './redux/reducers/config_reducer';
+import reduxStore from './redux/store';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
-
-// eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const reduxStore = createStore(combineReducers({
-  retro: RetroReducer(),
-  messages: MessageReducer(),
-  user: UserReducer(),
-  config: ConfigReducer(),
-}), composeEnhancers(applyMiddleware(ArchiveMiddleware(Actions))));
-
-const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
 
 class Application extends React.Component {
   static propTypes = {
@@ -113,6 +98,7 @@ class Application extends React.Component {
   }
 }
 
+const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
 export default useStore(
   Application,
   {
