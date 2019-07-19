@@ -66,13 +66,13 @@ describe('Router', () => {
   });
 
   it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
-    rendered.setProps({api_server_not_found: true});
+    rendered.setProps({not_found: {api_server_not_found: true}});
 
     expect(rendered.find(ApiServerNotFoundPage)).toExist();
   });
 
   it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
-    rendered.setProps({api_server_not_found: false});
+    rendered.setProps({not_found: {api_server_not_found: false}});
 
     expect(rendered.find(ApiServerNotFoundPage)).not.toExist();
   });

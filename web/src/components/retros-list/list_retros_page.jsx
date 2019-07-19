@@ -33,10 +33,11 @@ import React from 'react';
 import {Actions} from 'p-flux';
 import {RaisedButton} from 'material-ui';
 import types from 'prop-types';
+import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
 
-export default class ListRetrosPage extends React.Component {
+class ListRetrosPage extends React.Component {
   static propTypes = {
     retros: types.array.isRequired,
     config: types.object.isRequired,
@@ -110,3 +111,11 @@ export default class ListRetrosPage extends React.Component {
     );
   }
 }
+
+
+const mapStateToProps = (state) => ({
+  retros: state.retro.retros,
+});
+
+const ConnectedListRetrosPage = connect(mapStateToProps)(ListRetrosPage);
+export {ListRetrosPage, ConnectedListRetrosPage};

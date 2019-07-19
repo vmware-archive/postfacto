@@ -28,32 +28,26 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
-import types from 'prop-types';
-import Helmet from 'react-helmet';
-import {connect} from 'react-redux';
-
-const Header = ({config, retro}) => (
-  <Helmet
-    title={retro.name ? retro.name + ' - ' + config.title : config.title}
-    link={[
-      {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
-      {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
-    ]}
-  />
-);
-
-Header.propTypes = {
-  retro: types.object.isRequired,
-  config: types.object.isRequired,
+const initialState = {
+  featureFlags: {
+    archiveEmails: false,
+  },
+  environment: {
+    isMobile1030: false,
+    isMobile640: false,
+  },
 };
 
+const ConfigReducer = () => (state = initialState, action) => {
+  if (action.type === 'FEATURE_FLAGS_UPDATED') {
+    return Object.assign({}, state, {featureFlags: action.payload});
+  }
 
-const mapStateToProps = (state) => ({
-  retro: state.retro.currentRetro,
-});
+  if (action.type === 'WINDOW_SIZE_UPDATED') {
+    return Object.assign({}, state, {environment: action.payload});
+  }
 
-const ConnectedHeader = connect(mapStateToProps)(Header);
+  return state;
+};
 
-export {ConnectedHeader, Header};
+export default ConfigReducer;

@@ -34,6 +34,7 @@ import {Actions} from 'p-flux';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import types from 'prop-types';
+import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
 import RetroFooter from '../shared/footer';
 
@@ -49,7 +50,7 @@ function makeDateString(date) {
 const createdAtDesc = (a, b) => (new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
 // not pure: uses window.localStorage to check login status
-export default class ListRetroArchivesPage extends React.Component {
+class ListRetroArchivesPage extends React.Component {
   static propTypes = {
     archives: types.array,
     retroId: types.string.isRequired,
@@ -135,3 +136,11 @@ export default class ListRetroArchivesPage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  archives: state.retro.retroArchives,
+  environment: state.config.environment,
+});
+
+const ConnectedListRetroArchivesPage = connect(mapStateToProps)(ListRetroArchivesPage);
+export {ListRetroArchivesPage, ConnectedListRetroArchivesPage};

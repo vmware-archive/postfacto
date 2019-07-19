@@ -34,10 +34,11 @@ import FontIcon from 'material-ui/FontIcon';
 import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
 import EmptyPage from '../shared/empty_page';
 
-export default class ShowRetroPasswordSettingsPage extends React.Component {
+class ShowRetroPasswordSettingsPage extends React.Component {
   static propTypes = {
     retro: types.object,
     retroId: types.string.isRequired,
@@ -238,3 +239,13 @@ export default class ShowRetroPasswordSettingsPage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  retro: state.retro.currentRetro,
+  errors: state.messages.errors,
+  session: state.user.websocketSession,
+  environment: state.config.environment,
+});
+
+const ConnectedShowRetroPasswordSettingsPage = connect(mapStateToProps)(ShowRetroPasswordSettingsPage);
+export {ShowRetroPasswordSettingsPage, ConnectedShowRetroPasswordSettingsPage};

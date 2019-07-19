@@ -29,31 +29,37 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import types from 'prop-types';
-import Helmet from 'react-helmet';
-import {connect} from 'react-redux';
+import '../../spec_helper';
+import UserReducer from './user_reducer';
 
-const Header = ({config, retro}) => (
-  <Helmet
-    title={retro.name ? retro.name + ' - ' + config.title : config.title}
-    link={[
-      {'rel': 'icon', 'href': '/images/favicon.png?v=2'},
-      {'type': 'text/plain', 'rel': 'author', 'href': '/humans.txt'},
-    ]}
-  />
-);
+describe('UserReducer', () => {
+  let sessionReducer;
+  beforeEach(() => {
+    sessionReducer = UserReducer();
+  });
 
-Header.propTypes = {
-  retro: types.object.isRequired,
-  config: types.object.isRequired,
-};
+  it('sets initial state', () => {
+    const state = sessionReducer(undefined, {});
 
+    expect(state).toEqual({
+      websocketSession: {},
+    });
+  });
 
-const mapStateToProps = (state) => ({
-  retro: state.retro.currentRetro,
+  describe('WEBSOCKET_SESSION_UPDATED', () => {
+    it('replaces the session', () => {
+      const session = {
+        request_uuid: '111',
+      };
+
+      const action = {
+        type: 'WEBSOCKET_SESSION_UPDATED',
+        payload: session,
+      };
+
+      const state = sessionReducer(undefined, action);
+
+      expect(state.websocketSession).toEqual(session);
+    });
+  });
 });
-
-const ConnectedHeader = connect(mapStateToProps)(Header);
-
-export {ConnectedHeader, Header};

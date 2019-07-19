@@ -35,7 +35,7 @@ import {MuiThemeProvider} from 'material-ui';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
-import ListRetrosPage from './list_retros_page';
+import {ListRetrosPage} from './list_retros_page';
 
 function createRetros(count = 1) {
   const retros = [];

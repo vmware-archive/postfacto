@@ -36,7 +36,7 @@ import {Dispatcher} from 'p-flux';
 import {getMenuLabels} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
-import ListRetroArchivesPage from './list_retro_archives_page';
+import {ListRetroArchivesPage} from './list_retro_archives_page';
 
 describe('ListRetroArchivesPage', () => {
   const archives = [

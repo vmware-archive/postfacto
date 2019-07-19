@@ -36,7 +36,7 @@ import {Dispatcher} from 'p-flux';
 import {invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
-import ShowRetroPage from './show_retro_page';
+import {ShowRetroPage} from './show_retro_page';
 
 const config = {
   title: 'Retro',

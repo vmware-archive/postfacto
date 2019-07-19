@@ -35,7 +35,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
-import RetroCreatePage from './retro_create_page';
+import {RetroCreatePage} from './retro_create_page';
 
 function getAllErrors(dom) {
   return dom.find('.error-message').map((o) => o.text());

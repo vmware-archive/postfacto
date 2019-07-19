@@ -34,7 +34,7 @@ import {mount, shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
-import LoginToRetroPage from './login_to_retro_page';
+import {LoginToRetroPage} from './login_to_retro_page';
 
 describe('LoginToRetroPage', () => {
   const retro = {
@@ -93,7 +93,7 @@ describe('LoginToRetroPage', () => {
 
     it('displays error messages dynamically', () => {
       dom.setProps({
-        login_error_message: 'uh-oh',
+        errors: {login_error_message: 'uh-oh'},
       });
 
       expect(dom.find('.error-message')).toIncludeText('uh-oh');

@@ -28,29 +28,16 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-export default {
-  retro: {
-    name: '',
-    video_link: '',
-    items: [],
-    action_items: [],
-    is_private: false,
-    send_archive_email: true,
-  },
-  session: {
-    request_uuid: '',
-  },
-  retro_archives: {},
-  alert: null,
-  retros: [],
-  featureFlags: {
-    archiveEmails: false,
-  },
-  countryCode: 'GB',
-  environment: {
-    isMobile640: false,
-    isMobile1030: false,
-    isMobile1084: false,
-  },
+const initialState = {
+  websocketSession: {},
 };
+
+const UserReducer = () => (state = initialState, action) => {
+  if (action.type === 'WEBSOCKET_SESSION_UPDATED') {
+    return Object.assign({}, state, {websocketSession: action.payload});
+  }
+
+  return state;
+};
+
+export default UserReducer;

@@ -31,38 +31,38 @@
 
 import React from 'react';
 import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
 import types from 'prop-types';
-import RetroCreatePage from './retro-create/retro_create_page';
-import ListRetrosPage from './retros-list/list_retros_page';
-import ShowRetroPage from './retro-show/show_retro_page';
-import ShowRetroSettingsPage from './retro-settings/show_retro_settings_page';
-import ShowRetroPasswordSettingsPage from './retro-settings/show_retro_password_settings_page';
-import LoginToRetroPage from './retro-login/login_to_retro_page';
+import {ConnectedRetroCreatePage} from './retro-create/retro_create_page';
+import {ConnectedListRetrosPage} from './retros-list/list_retros_page';
+import {ConnectedShowRetroPage} from './retro-show/show_retro_page';
+import {ConnectedShowRetroSettingsPage} from './retro-settings/show_retro_settings_page';
+import {ConnectedShowRetroPasswordSettingsPage} from './retro-settings/show_retro_password_settings_page';
+import {ConnectedLoginToRetroPage} from './retro-login/login_to_retro_page';
 import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 import RetroNotFoundPage from './retro-not-found/retro_not_found_page';
 import NotFoundPage from './not-found/not_found_page';
 import NewTermsPage from './terms/new_terms_page';
 import EmptyPage from './shared/empty_page';
 import HomePage from './home/home_page';
-import ListRetroArchivesPage from './retro-archives/list_retro_archives_page';
+import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
 import useRouter from './use_router';
 
+
 export class Router extends React.Component {
   static propTypes = {
     router: types.object.isRequired,
-    retro: types.object,
     config: types.object,
     alert: types.object,
-    featureFlags: types.object,
+    not_found: types.object,
   };
 
   static defaultProps = {
-    retro: null,
     config: null,
     alert: null,
-    featureFlags: {},
+    not_found: {},
   };
 
   constructor(props) {
@@ -91,7 +91,8 @@ export class Router extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {api_server_not_found, retro_not_found, not_found} = nextProps;
+    // eslint-disable-next-line react/prop-types
+    const {api_server_not_found, retro_not_found, not_found} = nextProps.not_found;
     if (api_server_not_found) {
       this.setPage(ApiServerNotFoundPage);
     }
@@ -112,40 +113,35 @@ export class Router extends React.Component {
   showRetro = (req) => {
     const {retroId} = req.params;
     if (retroId === 'new') {
-      this.setPage(RetroCreatePage);
+      this.setPage(ConnectedRetroCreatePage);
       return;
     }
 
-    Actions.retroIdRouted(retroId);
-    this.setPage(ShowRetroPage, {retroId, archives: false});
+    this.setPage(ConnectedShowRetroPage, {retroId, archives: false});
   };
 
   listRetros = () => {
-    this.setPage(ListRetrosPage);
+    this.setPage(ConnectedListRetrosPage);
   };
 
   listRetroArchives = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
-    this.setPage(ListRetroArchivesPage, {retroId});
+    this.setPage(ConnectedListRetroArchivesPage, {retroId});
   };
 
   showRetroArchive = (req) => {
     const {retroId, archiveId} = req.params;
-    Actions.retroIdRouted(retroId);
-    this.setPage(ShowRetroPage, {retroId, archives: true, archiveId});
+    this.setPage(ConnectedShowRetroPage, {retroId, archives: true, archiveId});
   };
 
   showRetroSettings = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
-    this.setPage(ShowRetroSettingsPage, {retroId});
+    this.setPage(ConnectedShowRetroSettingsPage, {retroId});
   };
 
   showRetroPasswordSettings = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
-    this.setPage(ShowRetroPasswordSettingsPage, {retroId});
+    this.setPage(ConnectedShowRetroPasswordSettingsPage, {retroId});
   };
 
   showNotFound = () => {
@@ -158,12 +154,12 @@ export class Router extends React.Component {
 
   loginToRetro = (req) => {
     const {retroId} = req.params;
-    this.setPage(LoginToRetroPage, {retroId});
+    this.setPage(ConnectedLoginToRetroPage, {retroId});
   };
 
   reloginToRetro = (req) => {
     const {retroId} = req.params;
-    this.setPage(LoginToRetroPage, {retroId, force_relogin: true});
+    this.setPage(ConnectedLoginToRetroPage, {retroId, force_relogin: true});
   };
 
   showHome = () => {
@@ -186,7 +182,7 @@ export class Router extends React.Component {
     return (
       <div>
         <Alert alert={alert}/>
-        <Page {...this.props} {...additionalProps}/>
+        <Page config={this.props.config} {...additionalProps}/>
       </div>
     );
   }
@@ -196,4 +192,14 @@ export class Router extends React.Component {
   }
 }
 
-export default useRouter(Router);
+const EnhancedRouter = useRouter(Router);
+
+
+const mapStateToProps = (state) => ({
+  alert: state.messages.alert,
+  not_found: state.messages.not_found,
+});
+
+const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
+
+export {EnhancedRouter, ConnectedRouter};

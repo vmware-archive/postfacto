@@ -34,18 +34,19 @@ import types from 'prop-types';
 import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import EnhancedRouter from './components/router';
-import Header from './components/shared/header';
+import {Provider} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {ConnectedRouter} from './components/router';
+import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
 
 import SessionWebsocket from './components/session_websocket';
 
-import rootStore from './dispatchers/store';
-
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import environmentDispatcher from './dispatchers/environment_dispatcher';
+import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
+import reduxStore from './redux/store';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -54,7 +55,6 @@ const muiTheme = getMuiTheme({
 class Application extends React.Component {
   static propTypes = {
     config: types.object.isRequired,
-    store: types.object.isRequired,
   };
 
   componentDidMount() {
@@ -70,34 +70,43 @@ class Application extends React.Component {
   }
 
   handleResize = () => {
-    Actions.setWindowSize({width: window.innerWidth});
+    const width = window.innerWidth;
+    reduxStore.dispatch({
+      type: 'WINDOW_SIZE_UPDATED',
+      payload: {
+        isMobile640: width < 640,
+        isMobile1030: width <= 1030,
+      },
+    });
   };
 
   render() {
-    const {config, store} = this.props;
+    const {config} = this.props;
     const {websocket_url} = config;
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div className="retro-application">
-          <Header config={config} retro={store.retro}/>
-          <EnhancedRouter config={config} {...store}/>
-          <SessionWebsocket url={websocket_url}/>
-        </div>
-      </MuiThemeProvider>
+      <Provider store={reduxStore}>
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <div className="retro-application">
+
+            <ConnectedHeader config={config}/>
+            <ConnectedRouter config={config}/>
+            <SessionWebsocket url={websocket_url}/>
+          </div>
+        </MuiThemeProvider>
+      </Provider>
     );
   }
 }
 
+const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
 export default useStore(
   Application,
   {
-    store: rootStore,
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher,
+      mainDispatcher(reduxActionDispatcher, reduxStore),
       apiDispatcher,
       analyticsDispatcher,
-      environmentDispatcher,
     ],
     onDispatch: (event) => {
       /* eslint-disable no-console */

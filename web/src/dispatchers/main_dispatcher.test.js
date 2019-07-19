@@ -29,25 +29,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cursor from 'pui-cursor';
 import {Dispatcher} from 'p-flux';
 import '../spec_helper';
-
-function latestCall(spy) {
-  const calls = spy.mock.calls;
-  return calls[calls.length - 1];
-}
+import mainDispatcher from './main_dispatcher';
 
 describe('MainDispatcher', () => {
   let subject;
-  let cursorSpy;
   let retro;
   let retro_archives;
   let router;
 
   beforeEach(() => {
-    Cursor.async = false;
-    cursorSpy = jest.fn().mockName('callback');
     subject = Dispatcher;
 
     // dispatch is spied on in spec_helper
@@ -57,7 +49,8 @@ describe('MainDispatcher', () => {
     jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
 
     router = {
-      navigate: () => {},
+      navigate: () => {
+      },
     };
     subject.router = router;
     jest.spyOn(router, 'navigate').mockReturnValue(null);
@@ -138,116 +131,153 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroSuccessfullyCreated', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'retroSuccessfullyCreated', data: {retro}});
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroSuccessfullyCreated({data: {retro}});
     });
 
     it('redirects to the new retro page', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: `/retros/${retro.slug}`});
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'setRoute', data: `/retros/${retro.slug}`});
     });
 
     it('dispatches created retro analytic', () => {
-      expect(Dispatcher).toHaveReceived({
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({
         type: 'createdRetroAnalytics',
         data: {retroId: retro.id},
       });
     });
 
     it('empties the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
   });
 
   describe('retroUnsuccessfullyCreated', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
+
     it('updates the error messages', () => {
-      subject.dispatch({
-        type: 'retroUnsuccessfullyCreated',
+      dispatcher.retroUnsuccessfullyCreated({
         data: {
           errors: ['Sorry! That URL is already taken.'],
         },
       });
 
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That URL is already taken.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
     });
   });
 
   describe('retroSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro: {name: ''}}, cursorSpy);
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('updates the retro', () => {
-      subject.dispatch({type: 'retroSuccessfullyFetched', data: {retro: {name: 'The Retro Name'}}});
-      expect(cursorSpy).toHaveBeenCalledWith({retro: {name: 'The Retro Name'}});
+      dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
+
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name', id: 2});
     });
 
     it('dispatches visited retro analytic', () => {
-      subject.dispatch({type: 'retroSuccessfullyFetched', data: {retro}});
-      expect(Dispatcher).toHaveReceived({
-        type: 'visitedRetroAnalytics',
-        data: {retroId: retro.id},
-      });
+      dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
+
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'visitedRetroAnalytics', data: {retroId: 2}});
     });
   });
 
   describe('retrosSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retros: []}, cursorSpy);
+      reduxActions = {
+        retrosUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('updates the retros', () => {
-      const data = {retros: [{name: 'The Retro Name', slug: 'the-retro-123'}]};
+    it('updates the retro', () => {
+      const retros = [{name: 'The Retro Name', slug: 'the-retro-123'}];
+      dispatcher.retrosSuccessfullyFetched({data: {retros}});
 
-      subject.dispatch({type: 'retrosSuccessfullyFetched', data});
-      expect(cursorSpy).toHaveBeenCalledWith(data);
+      expect(reduxActions.retrosUpdated).toHaveBeenCalledWith(retros);
     });
   });
 
   describe('getRetroSettingsSuccessfullyReceived', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro: {name: ''}}, cursorSpy);
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('updates the retro', () => {
-      const data = {retro: {name: 'The Retro Name', slug: 'the-retro-123'}};
+      const updatedRetro = {name: 'The Retro Name', slug: 'the-retro-123'};
+      dispatcher.getRetroSettingsSuccessfullyReceived({data: {retro: updatedRetro}});
 
-      subject.dispatch({type: 'getRetroSettingsSuccessfullyReceived', data});
-      expect(cursorSpy).toHaveBeenCalledWith(data);
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updatedRetro);
     });
   });
 
   describe('getRetroLoginSuccessfullyReceived', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro: {name: ''}}, cursorSpy);
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('updates the retro name', () => {
-      subject.dispatch({type: 'retroSuccessfullyFetched', data: {retro: {name: 'The Retro Name'}}});
-      expect(cursorSpy).toHaveBeenCalledWith({retro: {name: 'The Retro Name'}});
+      dispatcher.getRetroLoginSuccessfullyReceived({data: {retro: {name: 'The Retro Name'}}});
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name'});
     });
   });
 
   describe('retroSettingsSuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor(
-        {
-          retro: {
-            name: 'old retro name',
-            slug: 'old-retro-slug',
-          },
-        },
-        cursorSpy,
-      );
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'retroSettingsSuccessfullyUpdated',
+    beforeEach(() => {
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroSettingsSuccessfullyUpdated({
         data: {
           retro: {
             name: 'new retro name',
@@ -257,27 +287,32 @@ describe('MainDispatcher', () => {
       });
     });
 
+
     it('updates the retro slug and name, and clears the error message', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: {
-          name: 'new retro name',
-          slug: 'new-retro-slug',
-        },
-        errors: {},
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({
+        name: 'new retro name',
+        slug: 'new-retro-slug',
       });
+
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalled();
     });
 
     it('redirects to the retro page url with the new slug', () => {
-      expect(router.navigate.mock.calls).toEqual([['/retros/new-retro-slug']]);
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'setRoute', data: '/retros/new-retro-slug'});
     });
   });
 
   describe('retroSettingsUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'retroSettingsUnsuccessfullyUpdated',
+    beforeEach(() => {
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroSettingsUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That URL is already taken.'],
         },
@@ -285,9 +320,7 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That URL is already taken.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
     });
   });
 
@@ -332,12 +365,16 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyCreated', () => {
-    let store = null;
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      store = {retro};
-      subject.$store = new Cursor(store, cursorSpy);
-      subject.dispatch({
-        type: 'retroItemSuccessfullyCreated',
+      reduxActions = {
+        currentRetroItemUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroItemSuccessfullyCreated({
         data: {
           item: {id: 10, category: 'happy'},
           retroId: retro.id,
@@ -345,253 +382,198 @@ describe('MainDispatcher', () => {
       });
     });
 
+
     it('creates the retro item', () => {
-      retro.items.push({id: 10, category: 'happy'});
-      expect(cursorSpy).toHaveBeenCalledWith({retro});
-      expect(store.retro.items.filter((o) => (o.id === 10)).length).toEqual(1);
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 10, category: 'happy'});
     });
 
     it('dispatches created retro item analytic', () => {
-      expect(Dispatcher).toHaveReceived({
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({
         type: 'createdRetroItemAnalytics',
         data: {retroId: retro.id, category: 'happy'},
       });
     });
-
-    it('deduplicates by ID', () => {
-      expect(store.retro.items.filter((o) => (o.id === 2)).length).toEqual(1);
-
-      subject.dispatch({
-        type: 'retroItemSuccessfullyCreated',
-        data: {
-          item: {id: 2, category: 'happy'},
-          retroId: retro.id,
-        },
-      });
-
-      expect(store.retro.items.filter((o) => (o.id === 2)).length).toEqual(1);
-    });
   });
 
   describe('retroItemSuccessfullyDeleted', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
+      reduxActions = {
+        currentRetroItemDeleted: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('deletes the retro item', () => {
-      subject.dispatch({type: 'retroItemSuccessfullyDeleted', data: {retro_id: 1, item: retro.items[0]}});
-      expect(latestCall(cursorSpy)[0].retro.items).not.toContain(retro.items[0]);
+      dispatcher.retroItemSuccessfullyDeleted({data: {retro_id: 1, item: retro.items[0]}});
+
+      expect(reduxActions.currentRetroItemDeleted).toHaveBeenCalledWith(retro.items[0]);
     });
   });
 
   describe('retroItemSuccessfullyVoted', () => {
-    let itemFromApiResponse;
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      const item = retro.items[0];
-      item.vote_count = 50;
-      item.updated_at = '2016-10-04T23:19:05.269Z';
-      itemFromApiResponse = {
-        id: item.id,
+      reduxActions = {
+        currentRetroItemUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the vote count on the retro item', () => {
+      const itemFromApiResponse = {
+        id: 1,
         vote_count: 50,
         updated_at: '2016-10-04T23:19:05.269Z',
       };
 
-      subject.$store = new Cursor({retro}, cursorSpy);
-    });
-
-    it('updates the vote count on the retro item', () => {
-      subject.dispatch({type: 'retroItemSuccessfullyVoted', data: {retro_id: 1, item: itemFromApiResponse}});
-      expect(cursorSpy).toHaveBeenCalledWith({retro});
+      dispatcher.retroItemSuccessfullyVoted({data: {retro_id: 1, item: itemFromApiResponse}});
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith(itemFromApiResponse);
     });
   });
 
   describe('retroItemSuccessfullyDone', () => {
-    let item;
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      retro.highlighted_item_id = 2;
-      item = retro.items[0];
-      subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId: 1, itemId: item.id}});
+      reduxActions = {
+        currentRetroItemDoneUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroItemSuccessfullyDone({data: {retroId: 1, itemId: 2}});
     });
 
-    it('updates the item to have attribute done = true', () => {
-      item.done = true;
-      retro.highlighted_item_id = null;
-      expect(cursorSpy).toHaveBeenCalledWith({retro});
-    });
-
-    it('dispatches completed retro item analytic', () => {
-      expect(Dispatcher).toHaveReceived({
-        type: 'completedRetroItemAnalytics',
-        data: {retroId: retro.id, category: 'happy'},
-      });
-    });
-
-    it('checks whether all retro items have been marked as done', () => {
-      expect(Dispatcher).toHaveReceived('checkAllRetroItemsDone');
+    it('fires retroItemDoneUpdated with true', () => {
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, true);
     });
   });
 
   describe('retroItemSuccessfullyUndone', () => {
+    let dispatcher;
+    let reduxActions;
+
     let item;
 
     beforeEach(() => {
-      retro.highlighted_item_id = 2;
-      item = retro.items[0];
-      subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId: 1, item}});
+      reduxActions = {
+        currentRetroItemDoneUpdated: jest.fn(),
+      };
+
+      item = {id: 2, done: false};
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroItemSuccessfullyUndone({data: {retroId: 1, item}});
     });
+
 
     it('updates the item to have attribute done = false', () => {
       item.done = false;
       retro.highlighted_item_id = null;
-      expect(cursorSpy).toHaveBeenCalledWith({retro});
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, false);
     });
   });
 
   describe('retroItemSuccessfullyHighlighted', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('updates the highlighted retro item', () => {
-      retro.highlighted_item_id = 2;
-      subject.dispatch({type: 'retroItemSuccessfullyHighlighted', data: {retro}});
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: expect.objectContaining({
-          highlighted_item_id: 2,
-        }),
-      });
-    });
+    it('updates retro in redux', () => {
+      dispatcher.retroItemSuccessfullyHighlighted({data: {retro}});
 
-    it('initializes countdown timer', () => {
-      retro.retro_item_end_time = 123;
-      subject.dispatch({type: 'retroItemSuccessfullyHighlighted', data: {retro}});
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: expect.objectContaining({
-          retro_item_end_time: 123,
-        }),
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
   describe('retroItemSuccessfullyUnhighlighted', () => {
-    beforeEach(() => {
-      retro.highlighted_item_id = 2;
+    let dispatcher;
+    let reduxActions;
 
-      subject.$store = new Cursor({retro}, cursorSpy);
+    beforeEach(() => {
+      reduxActions = {
+        currentRetroHighlightCleared: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('removes the highlight of the currently highlighted retro item', () => {
-      subject.dispatch({type: 'retroItemSuccessfullyUnhighlighted'});
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: expect.objectContaining({
-          highlighted_item_id: null,
-        }),
-      });
+    it('updates retro in redux', () => {
+      dispatcher.retroItemSuccessfullyUnhighlighted({data: {retro}});
+
+      expect(reduxActions.currentRetroHighlightCleared).toHaveBeenCalled();
     });
   });
 
-  describe('checkAllRetroItemsDone', () => {
-    describe('when all retro items are done', () => {
-      beforeEach(() => {
-        retro.items = [
-          {
-            id: 1,
-            description: 'item 1',
-            category: 'happy',
-            vote_count: 1,
-            done: true,
-          },
-          {
-            id: 2,
-            description: 'item 2',
-            category: 'happy',
-            vote_count: 2,
-            done: true,
-          },
-          {
-            id: 3,
-            description: 'item 3',
-            category: 'happy',
-            vote_count: 3,
-            done: true,
-          },
-        ];
+  describe('toggleSendArchiveEmail', () => {
+    let dispatcher;
+    let reduxActions;
 
-        subject.$store = new Cursor({retro}, cursorSpy);
-      });
+    beforeEach(() => {
+      reduxActions = {
+        currentRetroSendArchiveEmailUpdated: jest.fn(),
+      };
 
-      it('dispatches showDialog', () => {
-        subject.dispatch({type: 'checkAllRetroItemsDone'});
-        expect(Dispatcher).toHaveReceived({
-          type: 'showDialog',
-          data: {
-            title: 'Archive this retro?',
-            message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.',
-          },
-        });
-      });
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    describe('when not all retro items are done', () => {
-      beforeEach(() => {
-        retro.items = [
-          {
-            id: 1,
-            description: 'item 1',
-            category: 'happy',
-            vote_count: 1,
-            done: true,
-          },
-          {
-            id: 2,
-            description: 'item 2',
-            category: 'happy',
-            vote_count: 2,
-            done: false,
-          },
-          {
-            id: 3,
-            description: 'item 3',
-            category: 'happy',
-            vote_count: 3,
-            done: true,
-          },
-        ];
+    it('toggles archive email value', () => {
+      dispatcher.toggleSendArchiveEmail({data: {currentSendArchiveEmail: false}});
 
-        subject.$store = new Cursor({retro}, cursorSpy);
-      });
-
-      it('does not dispatch showDialog', () => {
-        subject.dispatch({type: 'checkAllRetroItemsDone'});
-        expect(Dispatcher).not.toHaveReceived('showDialog');
-      });
+      expect(reduxActions.currentRetroSendArchiveEmailUpdated).toHaveBeenCalledWith(true);
     });
   });
 
   describe('extendTimerSuccessfullyDone', () => {
-    beforeEach(() => {
-      retro.retro_item_end_time = null;
+    let dispatcher;
+    let reduxActions;
 
-      subject.$store = new Cursor({retro}, cursorSpy);
+    beforeEach(() => {
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('add more minutes to the timer', () => {
-      retro.retro_item_end_time = 321;
-      subject.dispatch({type: 'extendTimerSuccessfullyDone', data: {retro}});
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: expect.objectContaining({
-          retro_item_end_time: 321,
-        }),
-      });
+    it('updates retro in redux', () => {
+      dispatcher.extendTimerSuccessfullyDone({data: {retro}});
+
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
   describe('archiveRetroSuccessfullyDone', () => {
+    let dispatcher;
+    let reduxActions;
     let updated_retro;
 
     beforeEach(() => {
+      reduxActions = {
+        currentRetroUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
       updated_retro = {
         id: retro.id,
         name: retro.name,
@@ -599,26 +581,23 @@ describe('MainDispatcher', () => {
         action_items: [retro.action_items[0]],
       };
 
-      subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'archiveRetroSuccessfullyDone', data: {retro: updated_retro}});
+      dispatcher.archiveRetroSuccessfullyDone({data: {retro: updated_retro}});
     });
 
     it('updates the retro', () => {
       retro.retro_item_end_time = 321;
-      expect(cursorSpy).toHaveBeenCalledWith({
-        retro: updated_retro,
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updated_retro);
     });
 
     it('dispatches archived retro analytics', () => {
-      expect(Dispatcher).toHaveReceived({
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({
         type: 'archivedRetroAnalytics',
         data: {retroId: retro.id},
       });
     });
 
     it('displays an alert', () => {
-      expect(Dispatcher).toHaveReceived({
+      expect(dispatcher.dispatch).toHaveBeenCalledWith({
         type: 'showAlert',
         data: {
           message: 'Archived!',
@@ -628,25 +607,43 @@ describe('MainDispatcher', () => {
   });
 
   describe('websocketRetroDataReceived', () => {
-    let initialStore;
-
-    beforeEach(() => {
-      initialStore = {session: {request_uuid: 'fake-request-uuid-1'}};
-      subject.$store = new Cursor(initialStore, cursorSpy);
-    });
-
     describe('when the retro is updated', () => {
+      let dispatcher;
+      let reduxActions;
+
+      beforeEach(() => {
+        reduxActions = {
+          currentRetroUpdated: jest.fn(),
+        };
+
+        dispatcher = mainDispatcher(reduxActions);
+        dispatcher.dispatch = jest.fn();
+      });
+
       it('updates store with data from socket', () => {
-        subject.dispatch({type: 'websocketRetroDataReceived', data: {retro}});
-        expect(cursorSpy).toHaveBeenCalledWith({retro, ...initialStore});
+        dispatcher.websocketRetroDataReceived({data: {retro}});
+
+        expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
       });
     });
 
     describe('when the command is force_relogin', () => {
+      let dispatcher;
+      let reduxActions;
+
+      beforeEach(() => {
+        reduxActions = {
+          currentRetroUpdated: jest.fn(),
+        };
+
+        const store = {getState: () => ({user: {websocketSession: {request_uuid: 'fake-request-uuid-1'}}})};
+        dispatcher = mainDispatcher(reduxActions, store);
+        dispatcher.dispatch = jest.fn();
+      });
+
       describe('when the command was originated by someone else', () => {
         it('dispatches show alert with a password changed message', () => {
-          subject.dispatch({
-            type: 'websocketRetroDataReceived',
+          dispatcher.websocketRetroDataReceived({
             data: {
               command: 'force_relogin',
               payload: {
@@ -658,7 +655,7 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect(Dispatcher).toHaveReceived({
+          expect(dispatcher.dispatch).toHaveBeenCalledWith({
             type: 'requireRetroRelogin',
             data: {
               retro: {
@@ -671,8 +668,7 @@ describe('MainDispatcher', () => {
 
       describe('when the command was originated by me', () => {
         it('does not dispatch show alert', () => {
-          subject.dispatch({
-            type: 'websocketRetroDataReceived',
+          dispatcher.websocketRetroDataReceived({
             data: {
               command: 'force_relogin',
               payload: {
@@ -681,105 +677,154 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect(Dispatcher).not.toHaveReceived('requireRetroRelogin');
+          expect(dispatcher.dispatch).not.toHaveBeenCalled();
         });
       });
     });
   });
 
   describe('websocketSessionDataReceived', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        updateWebsocketSession: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('updates store with data from socket', () => {
-      subject.dispatch({type: 'websocketSessionDataReceived', data: {payload: {request_uuid: 'some-request-uuid'}}});
-      expect(cursorSpy).toHaveBeenCalledWith({session: {request_uuid: 'some-request-uuid'}});
+      dispatcher.websocketSessionDataReceived({data: {payload: {request_uuid: 'some-request-uuid'}}});
+      expect(reduxActions.updateWebsocketSession).toHaveBeenCalledWith({request_uuid: 'some-request-uuid'});
     });
   });
 
   describe('doneRetroActionItemSuccessfullyToggled', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro}, cursorSpy);
+      reduxActions = {
+        currentRetroActionItemUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store', () => {
+      const actionItem = {id: 1, done: true};
+      dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: actionItem}});
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(actionItem);
     });
 
     describe('when action item is marked as done', () => {
       it('dispatches completed retro action item analytic', () => {
-        subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: true}}});
-        expect(Dispatcher).toHaveReceived({
+        dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 1, done: true}, retro_id: 222}});
+        expect(dispatcher.dispatch).toHaveBeenCalledWith({
           type: 'doneActionItemAnalytics',
-          data: {retroId: retro.id},
+          data: {retroId: 222},
         });
-      });
-
-      it('updates the store', () => {
-        subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: true}}});
-        expect(latestCall(cursorSpy)[0].retro.action_items[0].done).toBeTruthy();
       });
     });
 
     describe('when action item is marked as undone', () => {
       it('does not dispatch anything', () => {
-        subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 2, done: false}}});
-        expect(Dispatcher).toHaveReceived({
+        dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 2, done: false}, retro_id: 222}});
+        expect(dispatcher.dispatch).toHaveBeenCalledWith({
           type: 'undoneActionItemAnalytics',
-          data: {retroId: retro.id},
+          data: {retroId: 222},
         });
-      });
-
-      it('updates the store', () => {
-        subject.dispatch({type: 'doneRetroActionItemSuccessfullyToggled', data: {action_item: {id: 1, done: false}}});
-        expect(latestCall(cursorSpy)[0].retro.action_items[0].done).toBeFalsy();
       });
     });
   });
 
   describe('retroActionItemSuccessfullyDeleted', () => {
-    let action_item;
+    let dispatcher;
+    let reduxActions;
 
     beforeEach(() => {
-      action_item = retro.action_items[0];
-      subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item}});
+      reduxActions = {
+        currentRetroActionItemDeleted: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
+
     it('updates the store and removes the retro action item', () => {
-      expect(latestCall(cursorSpy)[0].retro.action_items).not.toContain(action_item);
+      const action_item = retro.action_items[0];
+
+      dispatcher.retroActionItemSuccessfullyDeleted({data: {action_item}});
+
+      expect(reduxActions.currentRetroActionItemDeleted).toHaveBeenCalledWith(action_item);
     });
   });
 
   describe('retroActionItemSuccessfullyEdited', () => {
-    let action_item;
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      action_item = retro.action_items[0];
-      action_item.description = 'description for action item 1 has been changed';
-      subject.$store = new Cursor({retro}, cursorSpy);
-      subject.dispatch({type: 'retroActionItemSuccessfullyEdited', data: {retroId: 1, action_item}});
+      reduxActions = {
+        currentRetroActionItemUpdated: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
+
     it('updates description of the action item', () => {
+      const action_item = retro.action_items[0];
       action_item.description = 'description for action item 1 has been changed';
-      expect(latestCall(cursorSpy)[0].retro.action_items).toContain(action_item);
+      dispatcher.retroActionItemSuccessfullyEdited({data: {retroId: 1, action_item}});
+
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
     });
   });
 
   describe('retroArchiveSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({retro_archives: {}}, cursorSpy);
-      subject.dispatch({type: 'retroArchiveSuccessfullyFetched', data: {retro: retro_archives}});
+      reduxActions = {
+        updateCurrentArchivedRetro: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with the archived retro items', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_archives});
+      dispatcher.retroArchiveSuccessfullyFetched({data: {retro: retro_archives}});
+
+      expect(reduxActions.updateCurrentArchivedRetro).toHaveBeenCalledWith(retro_archives);
     });
   });
 
   describe('retroArchivesSuccessfullyFetched', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({archives: []}, cursorSpy);
-      subject.dispatch({type: 'retroArchivesSuccessfullyFetched', data: {archives: [{id: 123}]}});
+      reduxActions = {
+        updateRetroArchives: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with the archives', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({archives: [{id: 123}]});
+      dispatcher.retroArchivesSuccessfullyFetched({data: {archives: [{id: 123}]}});
+
+      expect(reduxActions.updateRetroArchives).toHaveBeenCalledWith([{id: 123}]);
     });
   });
 
@@ -802,10 +847,18 @@ describe('MainDispatcher', () => {
   });
 
   describe('showAlert', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({
-        type: 'showAlert',
+      reduxActions = {
+        showAlert: jest.fn(),
+        clearAlert: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.showAlert({
         data: {
           message: 'this is a message',
         },
@@ -813,127 +866,212 @@ describe('MainDispatcher', () => {
     });
 
     it('adds the alert message to the store', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        alert: {message: 'this is a message'},
-      });
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'this is a message'});
     });
 
     it('schedules removal of the message after a delay', () => {
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
 
     it('resets the removal countdown if the message updates', () => {
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
-      subject.dispatch({
-        type: 'showAlert',
+      dispatcher.showAlert({
         data: {message: 'a new message'},
       });
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).not.toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(2000);
-      expect(Dispatcher).toHaveReceived('hideAlert');
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
   });
 
   describe('hideAlert', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'hideAlert'});
+      reduxActions = {
+        showAlert: jest.fn(),
+        clearAlert: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.hideAlert();
     });
+
     it('clears the alert message from the store', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({alert: null});
+      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
   });
 
   describe('showDialog', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        showDialog: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('adds dialog to the store', () => {
-      subject.dispatch({
-        type: 'showDialog',
+      dispatcher.showDialog({
         data: {
           title: 'Some title',
           message: 'Some message',
         },
       });
 
-      expect(cursorSpy).toHaveBeenCalledWith({
-        dialog: {
-          title: 'Some title',
-          message: 'Some message',
-        },
+      expect(reduxActions.showDialog).toHaveBeenCalledWith({
+        title: 'Some title',
+        message: 'Some message',
       });
     });
   });
 
   describe('hideDialog', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        clearDialog: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('clears the dialog from the store', () => {
-      subject.dispatch({type: 'hideDialog'});
+      dispatcher.hideDialog();
 
-      expect(cursorSpy).toHaveBeenCalledWith({dialog: null});
+      expect(reduxActions.clearDialog).toHaveBeenCalled();
     });
   });
 
   describe('retroNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'retroNotFound'});
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with retro not found', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_not_found: true});
+      dispatcher.retroNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
     });
   });
 
   describe('resetRetroNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetRetroNotFound'});
-    });
-    it('updates the store with retro not found to false', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_not_found: false});
-    });
-  });
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
 
-  describe('resetNotFound', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetNotFound'});
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
-    it('updates the store with not found to false', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({not_found: false});
-    });
-  });
 
-  describe('resetApiServerNotFound', () => {
-    it('updates the store with not found to false', () => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetApiServerNotFound'});
-
-      expect(cursorSpy).toHaveBeenCalledWith({api_server_not_found: false});
+    it('updates the store with retro not found', () => {
+      dispatcher.resetRetroNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: false});
     });
   });
 
   describe('notFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'notFound'});
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
-    it('updates the store with not found', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({not_found: true});
+
+    it('updates the store with retro not found', () => {
+      dispatcher.notFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: true});
+    });
+  });
+
+  describe('resetNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with retro not found', () => {
+      dispatcher.resetNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: false});
+    });
+  });
+
+  describe('apiServerNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with retro not found', () => {
+      dispatcher.apiServerNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: true});
+    });
+  });
+
+  describe('resetApiServerNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with not found to false', () => {
+      dispatcher.resetApiServerNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: false});
     });
   });
 
@@ -964,14 +1102,20 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroPasswordSuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({type: 'retroPasswordSuccessfullyUpdated', data: {retro_id: '42', token: 'new-api-token'}});
+    beforeEach(() => {
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroPasswordSuccessfullyUpdated({data: {retro_id: '42', token: 'new-api-token'}});
     });
 
     it('clears the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
 
     it('updates token in local storage', () => {
@@ -980,11 +1124,16 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroPasswordUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'retroPasswordUnsuccessfullyUpdated',
+    beforeEach(() => {
+      reduxActions = {
+        errorsUpdated: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.retroPasswordUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That password does not match the current one.'],
         },
@@ -992,36 +1141,30 @@ describe('MainDispatcher', () => {
     });
 
     it('updates the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        errors: ['Sorry! That password does not match the current one.'],
-      });
+      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That password does not match the current one.']);
     });
   });
 
   describe('clearErrors', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({type: 'clearErrors'});
+    beforeEach(() => {
+      reduxActions = {
+        clearErrors: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+      dispatcher.clearErrors();
     });
 
     it('clears the error messages', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({errors: {}});
-    });
-  });
-
-  describe('apiServerNotFound', () => {
-    it('updates the store with api server not found', () => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'apiServerNotFound'});
-
-      expect(cursorSpy).toHaveBeenCalledWith({api_server_not_found: true});
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
   });
 
   describe('redirectToRegistration', () => {
     it('redirects to the registration page with the correct url parameters', () => {
-      subject.$store = new Cursor({}, cursorSpy);
       subject.dispatch({
         type: 'redirectToRegistration',
         data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},
@@ -1035,21 +1178,27 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('setCountryCode', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+  describe('setConfig', () => {
+    let dispatcher;
+    let reduxActions;
 
-      subject.dispatch({
-        type: 'setCountryCode',
-        data: {
-          countryCode: 'anything',
-        },
-      });
+    beforeEach(() => {
+      reduxActions = {
+        updateFeatureFlags: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
-    it('updates the all the flags', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        countryCode: 'anything',
+    it('sets feature flags', () => {
+      dispatcher.setConfig({
+        data: {
+          archive_emails: true,
+        },
+      });
+
+      expect(reduxActions.updateFeatureFlags).toHaveBeenCalledWith({
+        archiveEmails: true,
       });
     });
   });
