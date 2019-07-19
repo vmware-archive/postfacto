@@ -29,16 +29,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../../spec_helper';
 import PromiseMock from 'promise-mock';
 import RetroMiddleware from './retro-middleware';
 import MockFetch from '../../test_support/fetch_matchers';
 import {retrosUpdated, signOut} from '../../dispatchers/redux-action-dispatcher';
+import RetroClient from '../../api/retro_client';
 
 describe('RetroMiddleware', () => {
+  const client = new RetroClient(() => 'https://example.com', () => 'the-auth-token');
+
   beforeEach(() => {
-    global.Retro = {config: {api_base_url: 'https://example.com', enable_analytics: false}};
-    localStorage.setItem('authToken', 'the-auth-token');
+    PromiseMock.install();
+    MockFetch.install();
+  });
+
+  afterEach(() => {
+    PromiseMock.uninstall();
+    MockFetch.uninstall();
   });
 
   it('calls next with action if action type not recognised', () => {
@@ -48,7 +55,7 @@ describe('RetroMiddleware', () => {
 
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
-    RetroMiddleware()(store)(next)(action);
+    RetroMiddleware(client)(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
   });
@@ -56,20 +63,13 @@ describe('RetroMiddleware', () => {
   describe('getRetros', () => {
     let store;
     beforeEach(() => {
-      PromiseMock.install();
-      MockFetch.install();
       const action = {
         type: 'GET_RETROS',
       };
 
       const next = jest.fn();
       store = {dispatch: jest.fn()};
-      RetroMiddleware()(store)(next)(action);
-    });
-
-    afterEach(() => {
-      PromiseMock.uninstall();
-      MockFetch.uninstall();
+      RetroMiddleware(client)(store)(next)(action);
     });
 
     it('makes an API GET to /retros', () => {

@@ -28,12 +28,11 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import RetroApi from '../../api/retro_api';
 import {retrosUpdated, signOut} from '../../dispatchers/redux-action-dispatcher';
 
-const RetroMiddleware = () => (store) => (next) => (action) => {
+const RetroMiddleware = (retroClient) => (store) => (next) => (action) => {
   if (action.type === 'GET_RETROS') {
-    RetroApi.getRetros().then(([status, data]) => {
+    retroClient.getRetros().then(([status, data]) => {
       if (status === 403) {
         store.dispatch(signOut());
       } else {

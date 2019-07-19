@@ -48,6 +48,7 @@ import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
 import makeReduxStore from './redux/store';
+import RetroClient from './api/retro_client';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -56,7 +57,8 @@ const muiTheme = getMuiTheme({
 
 const router = new Grapnel({pushState: true});
 Dispatcher.router = router;
-const reduxStore = makeReduxStore(router);
+const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
+const reduxStore = makeReduxStore(router, retroClient);
 
 class Application extends React.Component {
   static propTypes = {

@@ -11,7 +11,7 @@ import RetroMiddleware from './middleware/retro-middleware';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const getReduxStore = (router) => createStore(combineReducers({
+const getReduxStore = (router, retroClient) => createStore(combineReducers({
   retro: RetroReducer(),
   messages: MessageReducer(),
   user: UserReducer(),
@@ -20,7 +20,7 @@ const getReduxStore = (router) => createStore(combineReducers({
   ArchiveMiddleware(Actions),
   RouterMiddleware(router),
   AuthMiddleware(window.localStorage),
-  RetroMiddleware(),
+  RetroMiddleware(retroClient),
 )));
 
 
