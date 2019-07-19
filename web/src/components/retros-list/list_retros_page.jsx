@@ -36,11 +36,13 @@ import types from 'prop-types';
 import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
+import {newRetro, showRetro} from '../../redux/RouterActions';
 
 class ListRetrosPage extends React.Component {
   static propTypes = {
     retros: types.array.isRequired,
     config: types.object.isRequired,
+    navigateTo: types.func.isRequired,
   };
 
   constructor(props) {
@@ -55,11 +57,11 @@ class ListRetrosPage extends React.Component {
   }
 
   handleRetroListItemClicked(retro) {
-    Actions.routeToShowRetro(retro);
+    this.props.navigateTo(showRetro(retro));
   }
 
   handleNewRetroButtonClicked() {
-    Actions.routeToNewRetro();
+    this.props.navigateTo(newRetro());
   }
 
   handleSignOutButtonClicked() {
@@ -117,5 +119,9 @@ const mapStateToProps = (state) => ({
   retros: state.retro.retros,
 });
 
-const ConnectedListRetrosPage = connect(mapStateToProps)(ListRetrosPage);
+const mapDispatchToProps = (dispatch) => ({
+  navigateTo: (location) => dispatch(location),
+});
+
+const ConnectedListRetrosPage = connect(mapStateToProps, mapDispatchToProps)(ListRetrosPage);
 export {ListRetrosPage, ConnectedListRetrosPage};

@@ -48,10 +48,9 @@ import HomePage from './home/home_page';
 import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
-import useRouter from './use_router';
 
 
-export class Router extends React.Component {
+class Router extends React.Component {
   static propTypes = {
     router: types.object.isRequired,
     config: types.object,
@@ -192,14 +191,12 @@ export class Router extends React.Component {
   }
 }
 
-const EnhancedRouter = useRouter(Router);
-
 
 const mapStateToProps = (state) => ({
   alert: state.messages.alert,
   not_found: state.messages.not_found,
 });
 
-const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
+const ConnectedRouter = connect(mapStateToProps)(Router);
 
-export {EnhancedRouter, ConnectedRouter};
+export {Router, ConnectedRouter};

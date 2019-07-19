@@ -28,34 +28,14 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+const RouterMiddleware = (router) => () => (next) => (action) => {
+  if (action.type === 'SET_ROUTE') {
+    /* eslint-disable no-console */
+    console.log('Navigating to: ', action.payload);
+    router.navigate(action.payload);
+    return;
+  }
+  next(action);
+};
 
-import React from 'react';
-import {mount} from 'enzyme';
-import '../spec_helper';
-
-import PropTypes from 'prop-types';
-import useRouter from './use_router';
-
-describe('useRouter', () => {
-  it('routes', () => {
-    const routeSpy = jest.fn().mockName('route');
-
-    const Application = ({router}) => {
-      router.get('/test', routeSpy);
-      return (
-        <div className="application">
-          <button type="button" onClick={() => router.navigate('/test')}>Route</button>
-        </div>
-      );
-    };
-    Application.propTypes = {
-      router: PropTypes.object.isRequired,
-    };
-
-    const TestRouter = useRouter(Application);
-    const dom = mount(<TestRouter/>);
-
-    dom.find('.application button').simulate('click');
-    expect(routeSpy).toHaveBeenCalled();
-  });
-});
+export default RouterMiddleware;

@@ -31,11 +31,12 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions, useStore} from 'p-flux';
+import {Actions, Dispatcher, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Grapnel from 'grapnel';
 import {ConnectedRouter} from './components/router';
 import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
@@ -46,11 +47,16 @@ import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
-import reduxStore from './redux/store';
+import makeReduxStore from './redux/store';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
+
+
+const router = new Grapnel({pushState: true});
+Dispatcher.router = router;
+const reduxStore = makeReduxStore(router);
 
 class Application extends React.Component {
   static propTypes = {
@@ -89,7 +95,7 @@ class Application extends React.Component {
           <div className="retro-application">
 
             <ConnectedHeader config={config}/>
-            <ConnectedRouter config={config}/>
+            <ConnectedRouter config={config} router={router}/>
             <SessionWebsocket url={websocket_url}/>
           </div>
         </MuiThemeProvider>
