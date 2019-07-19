@@ -32,8 +32,9 @@
 import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
 
-export default class LoginToRetroPage extends React.Component {
+class LoginToRetroPage extends React.Component {
   static propTypes = {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
@@ -160,3 +161,11 @@ export default class LoginToRetroPage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  errors: state.messages.errors,
+  retro: state.retro.currentRetro,
+});
+
+const ConnectedLoginToRetroPage = connect(mapStateToProps)(LoginToRetroPage);
+export {LoginToRetroPage, ConnectedLoginToRetroPage};

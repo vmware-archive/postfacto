@@ -35,6 +35,7 @@ import React from 'react';
 import types from 'prop-types';
 import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
+import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
 import EmptyPage from '../shared/empty_page';
 import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../shared/constants';
@@ -62,7 +63,7 @@ function getStateUpdateFor(retro, errors) {
   return stateUpdate;
 }
 
-export default class ShowRetroSettingsPage extends React.Component {
+class ShowRetroSettingsPage extends React.Component {
   static propTypes = {
     errors: types.object,
     retro: types.object,
@@ -385,3 +386,13 @@ export default class ShowRetroSettingsPage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  retro: state.retro.currentRetro,
+  errors: state.messages.errors,
+  session: state.user.websocketSession,
+  environment: state.config.environment,
+});
+
+const ConnectedShowRetroSettingsPage = connect(mapStateToProps)(ShowRetroSettingsPage);
+export {ShowRetroSettingsPage, ConnectedShowRetroSettingsPage};

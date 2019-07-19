@@ -37,6 +37,7 @@ import types from 'prop-types';
 import {Actions} from 'p-flux';
 
 import {HotKeys} from 'react-hotkeys';
+import {connect} from 'react-redux';
 import RetroColumn from './retro_column';
 import RetroActionPanel from './retro_action_panel';
 import RetroWebsocket from './retro_websocket';
@@ -55,7 +56,7 @@ function getItemArchiveTime(item) {
   return new Date(item.archived_at).getTime();
 }
 
-export default class ShowRetroPage extends React.Component {
+class ShowRetroPage extends React.Component {
   static propTypes = {
     retro: types.object.isRequired,
     retro_archives: types.object,
@@ -388,3 +389,14 @@ export default class ShowRetroPage extends React.Component {
     return this.renderDesktop(retro_object);
   }
 }
+
+const mapStateToProps = (state) => ({
+  retro: state.retro.currentRetro,
+  retro_archives: state.retro.currentArchivedRetro,
+  dialog: state.messages.dialog,
+  featureFlags: state.config.featureFlags,
+  environment: state.config.environment,
+});
+
+const ConnectedShowRetroPage = connect(mapStateToProps)(ShowRetroPage);
+export {ShowRetroPage, ConnectedShowRetroPage};

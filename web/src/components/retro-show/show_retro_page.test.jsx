@@ -36,7 +36,7 @@ import Dialog from 'material-ui/Dialog';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
-import ShowRetroPage from './show_retro_page';
+import {ShowRetroPage} from './show_retro_page';
 
 const config = {
   title: 'Retro',

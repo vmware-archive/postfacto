@@ -42,8 +42,6 @@ import Logger from './helpers/logger';
 
 import SessionWebsocket from './components/session_websocket';
 
-import rootStore from './dispatchers/store';
-
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
@@ -118,7 +116,6 @@ class Application extends React.Component {
 export default useStore(
   Application,
   {
-    store: rootStore,
     actions: [],
     dispatcherHandlers: [
       mainDispatcher(reduxActionDispatcher, reduxStore),

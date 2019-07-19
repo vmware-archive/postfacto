@@ -34,7 +34,7 @@ import {mount, shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
-import LoginToRetroPage from './login_to_retro_page';
+import {LoginToRetroPage} from './login_to_retro_page';
 
 describe('LoginToRetroPage', () => {
   const retro = {

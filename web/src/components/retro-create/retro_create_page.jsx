@@ -33,11 +33,12 @@ import React from 'react';
 import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
 import types from 'prop-types';
+import {connect} from 'react-redux';
 import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../shared/constants';
 import iconLockedSvg from '../../images/icon-locked.svg';
 import iconEyeSvg from '../../images/icon-eye.svg';
 
-export default class RetroCreatePage extends React.Component {
+class RetroCreatePage extends React.Component {
   static propTypes = {
     errors: types.shape({
       slug: types.string,
@@ -292,3 +293,10 @@ export default class RetroCreatePage extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  errors: state.messages.errors,
+});
+
+const ConnectedRetroCreatePage = connect(mapStateToProps)(RetroCreatePage);
+export {RetroCreatePage, ConnectedRetroCreatePage};
