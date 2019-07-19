@@ -46,7 +46,7 @@ import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import RetroReducer from './reducers/retro-reducer';
-import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
+import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
 import MessageReducer from './reducers/message_reducer';
 import ArchiveMiddleware from './reducers/archive-retro-middleware';
 import UserReducer from './reducers/user_reducer';
