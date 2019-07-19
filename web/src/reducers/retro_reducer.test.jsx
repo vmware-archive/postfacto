@@ -334,8 +334,6 @@ describe('RetroReducer', () => {
     });
   });
 
-
-
   describe('CURRENT_ARCHIVED_RETRO_UPDATED', () => {
     it('replaces the current archived retro', () => {
       const retro = {

@@ -45,6 +45,10 @@ describe('ConfigReducer', () => {
       featureFlags: {
         archiveEmails: false,
       },
+      environment: {
+        isMobile640: false,
+        isMobile1030: false,
+      },
     });
   });
 
@@ -62,6 +66,24 @@ describe('ConfigReducer', () => {
       const state = configReducer(undefined, action);
 
       expect(state.featureFlags).toEqual(featureFlags);
+    });
+  });
+
+  describe('WINDOW_SIZE_UPDATED', () => {
+    it('replaces the environment flags', () => {
+      const newEnvironment = {
+        isMobile640: false,
+        isMobile1030: true,
+      };
+
+      const action = {
+        type: 'WINDOW_SIZE_UPDATED',
+        payload: newEnvironment,
+      };
+
+      const state = configReducer(undefined, action);
+
+      expect(state.environment).toEqual(newEnvironment);
     });
   });
 });

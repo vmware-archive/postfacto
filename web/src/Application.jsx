@@ -47,13 +47,12 @@ import rootStore from './dispatchers/store';
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import environmentDispatcher from './dispatchers/environment_dispatcher';
 import RetroReducer from './reducers/retro-reducer';
 import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
 import MessageReducer from './reducers/message_reducer';
 import ArchiveMiddleware from './reducers/archive-retro-middleware';
 import UserReducer from './reducers/user_reducer';
-import ConfigReducer from "./reducers/config_reducer";
+import ConfigReducer from './reducers/config_reducer';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -73,7 +72,6 @@ const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxSto
 class Application extends React.Component {
   static propTypes = {
     config: types.object.isRequired,
-    store: types.object.isRequired,
   };
 
   componentDidMount() {
@@ -89,11 +87,18 @@ class Application extends React.Component {
   }
 
   handleResize = () => {
-    Actions.setWindowSize({width: window.innerWidth});
+    const width = window.innerWidth;
+    reduxStore.dispatch({
+      type: 'WINDOW_SIZE_UPDATED',
+      payload: {
+        isMobile640: width < 640,
+        isMobile1030: width <= 1030,
+      },
+    });
   };
 
   render() {
-    const {config, store} = this.props;
+    const {config} = this.props;
     const {websocket_url} = config;
     return (
       <Provider store={reduxStore}>
@@ -101,10 +106,7 @@ class Application extends React.Component {
           <div className="retro-application">
 
             <ConnectedHeader config={config}/>
-            <ConnectedRouter
-              config={config}
-              environment={store.environment}
-            />
+            <ConnectedRouter config={config}/>
             <SessionWebsocket url={websocket_url}/>
           </div>
         </MuiThemeProvider>
@@ -122,7 +124,6 @@ export default useStore(
       mainDispatcher(reduxActionDispatcher, reduxStore),
       apiDispatcher,
       analyticsDispatcher,
-      environmentDispatcher,
     ],
     onDispatch: (event) => {
       /* eslint-disable no-console */

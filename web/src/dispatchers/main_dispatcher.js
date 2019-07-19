@@ -48,11 +48,64 @@ export default function (retroActionCreators, store) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}`});
       this.dispatch({type: 'createdRetroAnalytics', data: {retroId: data.retro.id}});
     },
-    retroUnsuccessfullyCreated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
     retroSuccessfullyLoggedIn({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+    },
+    redirectToRetroCreatePage() {
+      this.dispatch({type: 'setRoute', data: '/retros/new'});
+    },
+    retroSettingsSuccessfullyUpdated({data: {retro}}) {
+      retroActionCreators.currentRetroUpdated(retro);
+      retroActionCreators.clearErrors();
+      this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
+    },
+    routeToHome() {
+      this.dispatch({type: 'setRoute', data: '/'});
+    },
+    routeToShowRetro({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.slug}/`});
+    },
+    routeToNewRetro() {
+      this.dispatch({type: 'setRoute', data: '/retros/new'});
+    },
+    routeToRetroArchives({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives`});
+    },
+    routeToRetroArchive({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives/${data.archive_id}`});
+    },
+    routeToRetroSettings({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
+    },
+    routeToRetroPasswordSettings({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings/password`});
+    },
+    backPressedFromArchives({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+    },
+    loggedInSuccessfully({data}) {
+      localStorage.setItem('authToken', data.auth_token);
+      if (data.new_user) {
+        this.dispatch({type: 'setRoute', data: '/retros/new'});
+      } else {
+        this.dispatch({type: 'setRoute', data: '/'});
+      }
+    },
+    signOut() {
+      window.localStorage.clear();
+      this.dispatch({type: 'setRoute', data: '/'});
+    },
+    backPressedFromSettings({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+    },
+    backPressedFromPasswordSettings({data}) {
+      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
+    },
+    redirectToRegistration({data}) {
+      this.dispatch({type: 'setRoute', data: `/registration/${data.access_token}/${data.email}/${data.name}`});
+    },
+    retroUnsuccessfullyCreated({data}) {
+      retroActionCreators.errorsUpdated(data.errors);
     },
     retroLoginFailed() {
       retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
@@ -74,9 +127,6 @@ export default function (retroActionCreators, store) {
     },
     resetApiServerNotFound() {
       retroActionCreators.setNotFound({api_server_not_found: false});
-    },
-    redirectToRetroCreatePage() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
     },
     retrosSuccessfullyFetched({data}) {
       retroActionCreators.retrosUpdated(data.retros);
@@ -140,11 +190,6 @@ export default function (retroActionCreators, store) {
     websocketSessionDataReceived({data}) {
       retroActionCreators.updateWebsocketSession(data.payload);
     },
-    retroSettingsSuccessfullyUpdated({data: {retro}}) {
-      retroActionCreators.currentRetroUpdated(retro);
-      retroActionCreators.clearErrors();
-      this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
-    },
     retroActionItemSuccessfullyDeleted({data}) {
       retroActionCreators.currentRetroActionItemDeleted(data.action_item);
     },
@@ -160,35 +205,11 @@ export default function (retroActionCreators, store) {
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
       retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
     },
-    routeToHome() {
-      this.dispatch({type: 'setRoute', data: '/'});
-    },
-    routeToShowRetro({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.slug}/`});
-    },
-    routeToNewRetro() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
-    },
-    routeToRetroArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives`});
-    },
-    routeToRetroArchive({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives/${data.archive_id}`});
-    },
-    routeToRetroSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
-    },
-    routeToRetroPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings/password`});
-    },
     retroArchiveSuccessfullyFetched({data}) {
       retroActionCreators.updateCurrentArchivedRetro(data.retro);
     },
     retroArchivesSuccessfullyFetched({data}) {
       retroActionCreators.updateRetroArchives(data.archives);
-    },
-    backPressedFromArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
     },
     showAlert({data}) {
       clearTimeout(alertTimeout);
@@ -208,26 +229,8 @@ export default function (retroActionCreators, store) {
     hideDialog() {
       retroActionCreators.clearDialog();
     },
-    loggedInSuccessfully({data}) {
-      localStorage.setItem('authToken', data.auth_token);
-      if (data.new_user) {
-        this.dispatch({type: 'setRoute', data: '/retros/new'});
-      } else {
-        this.dispatch({type: 'setRoute', data: '/'});
-      }
-    },
-    signOut() {
-      window.localStorage.clear();
-      this.dispatch({type: 'setRoute', data: '/'});
-    },
     retroSettingsUnsuccessfullyUpdated({data}) {
       retroActionCreators.errorsUpdated(data.errors);
-    },
-    backPressedFromSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
-    },
-    backPressedFromPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
     },
     retroPasswordSuccessfullyUpdated({data}) {
       retroActionCreators.clearErrors();
@@ -238,9 +241,6 @@ export default function (retroActionCreators, store) {
     },
     clearErrors() {
       retroActionCreators.clearErrors();
-    },
-    redirectToRegistration({data}) {
-      this.dispatch({type: 'setRoute', data: `/registration/${data.access_token}/${data.email}/${data.name}`});
     },
     setConfig(action) {
       retroActionCreators.updateFeatureFlags({

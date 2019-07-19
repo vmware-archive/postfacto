@@ -210,6 +210,7 @@ const mapStateToProps = (state) => ({
   not_found: state.messages.not_found,
   session: state.user.websocketSession,
   featureFlags: state.config.featureFlags,
+  environment: state.config.environment,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);
