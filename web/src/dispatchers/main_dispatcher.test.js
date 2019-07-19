@@ -871,37 +871,50 @@ describe('MainDispatcher', () => {
   });
 
   describe('showDialog', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        showDialog: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('adds dialog to the store', () => {
-      subject.dispatch({
-        type: 'showDialog',
+      dispatcher.showDialog({
         data: {
           title: 'Some title',
           message: 'Some message',
         },
       });
 
-      expect(cursorSpy).toHaveBeenCalledWith({
-        dialog: {
-          title: 'Some title',
-          message: 'Some message',
-        },
+      expect(reduxActions.showDialog).toHaveBeenCalledWith({
+        title: 'Some title',
+        message: 'Some message',
       });
     });
   });
 
   describe('hideDialog', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
+      reduxActions = {
+        clearDialog: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
 
     it('clears the dialog from the store', () => {
-      subject.dispatch({type: 'hideDialog'});
+      dispatcher.hideDialog();
 
-      expect(cursorSpy).toHaveBeenCalledWith({dialog: null});
+      expect(reduxActions.clearDialog).toHaveBeenCalled();
     });
   });
 

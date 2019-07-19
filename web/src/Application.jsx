@@ -35,7 +35,7 @@ import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
-import {bindActionCreators, combineReducers, createStore} from 'redux';
+import {applyMiddleware, bindActionCreators, combineReducers, compose, createStore} from 'redux';
 import {ConnectedRouter} from './components/router';
 import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
@@ -51,16 +51,18 @@ import environmentDispatcher from './dispatchers/environment_dispatcher';
 import RetroReducer from './reducers/retro-reducer';
 import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
 import MessageReducer from './reducers/message_reducer';
+import ArchiveMiddleware from './reducers/archive-retro-middleware';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
 
-const reduxStore = createStore(combineReducers({
-  retro: RetroReducer(Actions),
-  messages: MessageReducer(),
 // eslint-disable-next-line no-underscore-dangle
-}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const reduxStore = createStore(combineReducers({
+  retro: RetroReducer(),
+  messages: MessageReducer(),
+}), composeEnhancers(applyMiddleware(ArchiveMiddleware(Actions))));
 
 const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
 
@@ -101,7 +103,6 @@ class Application extends React.Component {
               retro_archives={store.retro_archives}
               archives={store.archives}
               alert={store.alert}
-              dialog={store.dialog}
               featureFlags={store.featureFlags}
               countryCode={store.countryCode}
               environment={store.environment}

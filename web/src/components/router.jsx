@@ -206,6 +206,7 @@ const mapStateToProps = (state) => ({
   retro: state.retro.currentRetro,
   retros: state.retro.retros,
   errors: state.messages.errors,
+  dialog: state.messages.dialog,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);

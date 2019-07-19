@@ -43,6 +43,7 @@ describe('MessageReducer', () => {
 
     expect(state).toEqual({
       errors: {},
+      dialog: null,
     });
   });
 
@@ -78,6 +79,41 @@ describe('MessageReducer', () => {
       const updatedState = messageReducer(state, action);
 
       expect(updatedState.errors).toEqual({});
+    });
+  });
+
+  describe('SHOW_DIALOG', () => {
+    it('sets the dialog state', () => {
+      const dialog = {
+        message: 'hi',
+      };
+
+      const action = {
+        type: 'SHOW_DIALOG',
+        payload: dialog,
+      };
+
+      const state = messageReducer(undefined, action);
+
+      expect(state.dialog).toEqual(dialog);
+    });
+  });
+
+  describe('CLEAR_DIALOG', () => {
+    it('clears the dialog', () => {
+      const state = {
+        dialog: {
+          message: 'hi',
+        },
+      };
+
+      const action = {
+        type: 'CLEAR_DIALOG',
+      };
+
+      const updatedState = messageReducer(state, action);
+
+      expect(updatedState.dialog).toEqual(null);
     });
   });
 });

@@ -37,7 +37,6 @@ describe('RetroReducer', () => {
   let retroReducer;
   beforeEach(() => {
     actionDispatcher = {
-      showDialog: jest.fn(),
       completedRetroItemAnalytics: jest.fn(),
     };
     retroReducer = RetroReducer(actionDispatcher);
@@ -220,78 +219,6 @@ describe('RetroReducer', () => {
         expect(state.currentRetro.items[0].done).toEqual(true);
         expect(state.currentRetro.highlighted_item_id).toEqual(null);
       });
-
-      it('fires analytics event', () => {
-        const existingItem = {id: 2, category: 'happy', done: false};
-        const retro = {
-          retroId: 5,
-          name: 'retro1',
-          video_link: 'video',
-          items: [existingItem],
-          action_items: [{}],
-          is_private: true,
-          send_archive_email: false,
-          highlighted_item_id: 2,
-        };
-
-        const doneAction = {
-          type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
-          payload: {itemId: 2, done: true},
-        };
-
-        retroReducer({currentRetro: retro}, doneAction);
-
-        expect(actionDispatcher.completedRetroItemAnalytics).toHaveBeenCalledWith({
-          data: {retroId: 5, category: 'happy'},
-        });
-      });
-    });
-
-    it('fires archive dialog when all items complete', () => {
-      const existingItem = {id: 2, category: 'happy', done: false};
-      const retro = {
-        name: 'retro1',
-        video_link: 'video',
-        items: [{id: 1, category: 'happy', done: true}, existingItem],
-        action_items: [{}],
-        is_private: true,
-        send_archive_email: false,
-        highlighted_item_id: 2,
-      };
-
-      const doneAction = {
-        type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
-        payload: {itemId: 2, done: true},
-      };
-
-      retroReducer({currentRetro: retro}, doneAction);
-
-      expect(actionDispatcher.showDialog).toHaveBeenCalledWith({
-        title: 'Archive this retro?',
-        message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.',
-      });
-    });
-
-    it('fires does not fire archive dialog when not all items complete', () => {
-      const existingItem = {id: 2, category: 'happy', done: false};
-      const retro = {
-        name: 'retro1',
-        video_link: 'video',
-        items: [{id: 1, category: 'happy', done: false}, existingItem],
-        action_items: [{}],
-        is_private: true,
-        send_archive_email: false,
-        highlighted_item_id: 2,
-      };
-
-      const doneAction = {
-        type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
-        payload: {itemId: 2, done: true},
-      };
-
-      retroReducer({currentRetro: retro}, doneAction);
-
-      expect(actionDispatcher.showDialog).not.toHaveBeenCalled();
     });
   });
 

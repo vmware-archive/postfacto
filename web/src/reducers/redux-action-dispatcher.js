@@ -75,3 +75,16 @@ export function clearErrors() {
     type: 'CLEAR_ERRORS',
   };
 }
+
+export function showDialog(dialog) {
+  return {
+    type: 'SHOW_DIALOG',
+    payload: dialog,
+  };
+}
+
+export function clearDialog() {
+  return {
+    type: 'CLEAR_DIALOG',
+  };
+}

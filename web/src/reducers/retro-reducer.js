@@ -10,7 +10,7 @@ const initialState = {
   retros: [],
 };
 
-const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
+const RetroReducer = () => (state = initialState, action) => {
   if (action.type === 'CURRENT_RETRO_UPDATED') {
     return Object.assign({}, state, {currentRetro: action.payload});
   }
@@ -54,15 +54,6 @@ const RetroReducer = (actionDispatcher) => (state = initialState, action) => {
     const updatedItems = [].concat(existingItems);
     const item = updatedItems[position];
     item.done = done;
-
-    if (updatedItems.every((i) => i.done)) {
-      actionDispatcher.showDialog({
-        title: 'Archive this retro?',
-        message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.',
-      });
-    }
-
-    actionDispatcher.completedRetroItemAnalytics({data: {retroId: state.currentRetro.retroId, category: item.category}});
 
     return Object.assign({}, state, {
       currentRetro: {

@@ -203,10 +203,10 @@ export default function (retroActionCreators) {
       this.$store.merge({alert: null});
     },
     showDialog({data}) {
-      this.$store.merge({dialog: data});
+      retroActionCreators.showDialog(data);
     },
     hideDialog() {
-      this.$store.merge({dialog: null});
+      retroActionCreators.clearDialog();
     },
     loggedInSuccessfully({data}) {
       localStorage.setItem('authToken', data.auth_token);
