@@ -58,6 +58,7 @@ export class Router extends React.Component {
     config: types.object,
     alert: types.object,
     featureFlags: types.object,
+    not_found: types.object,
   };
 
   static defaultProps = {
@@ -65,6 +66,7 @@ export class Router extends React.Component {
     config: null,
     alert: null,
     featureFlags: {},
+    not_found: {},
   };
 
   constructor(props) {
@@ -94,7 +96,7 @@ export class Router extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // eslint-disable-next-line react/prop-types
-    const {api_server_not_found, retro_not_found, not_found} = nextProps;
+    const {api_server_not_found, retro_not_found, not_found} = nextProps.not_found;
     if (api_server_not_found) {
       this.setPage(ApiServerNotFoundPage);
     }
@@ -203,6 +205,7 @@ const mapStateToProps = (state) => ({
   errors: state.messages.errors,
   dialog: state.messages.dialog,
   alert: state.messages.alert,
+  not_found: state.messages.not_found,
 });
 
 const ConnectedRouter = connect(mapStateToProps)(EnhancedRouter);

@@ -934,51 +934,116 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'retroNotFound'});
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
+
     it('updates the store with retro not found', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_not_found: true});
+      dispatcher.retroNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
     });
   });
 
   describe('resetRetroNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetRetroNotFound'});
-    });
-    it('updates the store with retro not found to false', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({retro_not_found: false});
-    });
-  });
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
 
-  describe('resetNotFound', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetNotFound'});
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
-    it('updates the store with not found to false', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({not_found: false});
-    });
-  });
 
-  describe('resetApiServerNotFound', () => {
-    it('updates the store with not found to false', () => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'resetApiServerNotFound'});
-
-      expect(cursorSpy).toHaveBeenCalledWith({api_server_not_found: false});
+    it('updates the store with retro not found', () => {
+      dispatcher.resetRetroNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: false});
     });
   });
 
   describe('notFound', () => {
+    let dispatcher;
+    let reduxActions;
+
     beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'notFound'});
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
     });
-    it('updates the store with not found', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({not_found: true});
+
+    it('updates the store with retro not found', () => {
+      dispatcher.notFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: true});
+    });
+  });
+
+  describe('resetNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with retro not found', () => {
+      dispatcher.resetNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: false});
+    });
+  });
+
+  describe('apiServerNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with retro not found', () => {
+      dispatcher.apiServerNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: true});
+    });
+  });
+
+  describe('resetApiServerNotFound', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        setNotFound: jest.fn(),
+      };
+
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('updates the store with not found to false', () => {
+      dispatcher.resetApiServerNotFound();
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: false});
     });
   });
 
@@ -1067,15 +1132,6 @@ describe('MainDispatcher', () => {
 
     it('clears the error messages', () => {
       expect(reduxActions.clearErrors).toHaveBeenCalled();
-    });
-  });
-
-  describe('apiServerNotFound', () => {
-    it('updates the store with api server not found', () => {
-      subject.$store = new Cursor({}, cursorSpy);
-      subject.dispatch({type: 'apiServerNotFound'});
-
-      expect(cursorSpy).toHaveBeenCalledWith({api_server_not_found: true});
     });
   });
 

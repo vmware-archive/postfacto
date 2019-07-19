@@ -102,3 +102,10 @@ export function clearAlert() {
     type: 'CLEAR_ALERT',
   };
 }
+
+export function setNotFound(notFound) {
+  return {
+    type: 'SET_NOT_FOUND',
+    payload: notFound,
+  };
+}

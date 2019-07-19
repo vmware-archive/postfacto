@@ -37,7 +37,7 @@ export default class LoginToRetroPage extends React.Component {
   static propTypes = {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
-    login_error_message: types.string,
+    errors: types.object,
     force_relogin: types.bool,
     config: types.shape({
       terms: types.string.isRequired,
@@ -46,7 +46,7 @@ export default class LoginToRetroPage extends React.Component {
   };
 
   static defaultProps = {
-    login_error_message: '',
+    errors: {login_error_message: ''},
     force_relogin: false,
   };
 
@@ -74,7 +74,7 @@ export default class LoginToRetroPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {login_error_message} = nextProps;
+    const {login_error_message} = nextProps.errors;
 
     this.setState({
       errors: [login_error_message],

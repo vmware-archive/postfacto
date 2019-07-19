@@ -2,6 +2,11 @@ const initialState = {
   errors: {},
   dialog: null,
   alert: null,
+  not_found: {
+    retro_not_found: false,
+    not_found: false,
+    api_server_not_found: false,
+  },
 };
 
 const MessageReducer = () => (state = initialState, action) => {
@@ -27,6 +32,10 @@ const MessageReducer = () => (state = initialState, action) => {
 
   if (action.type === 'CLEAR_ALERT') {
     return Object.assign({}, state, {alert: null});
+  }
+
+  if (action.type === 'SET_NOT_FOUND') {
+    return Object.assign({}, state, {not_found: action.payload});
   }
 
   return state;

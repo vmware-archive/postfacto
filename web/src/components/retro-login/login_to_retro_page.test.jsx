@@ -93,7 +93,7 @@ describe('LoginToRetroPage', () => {
 
     it('displays error messages dynamically', () => {
       dom.setProps({
-        login_error_message: 'uh-oh',
+        errors: {login_error_message: 'uh-oh'},
       });
 
       expect(dom.find('.error-message')).toIncludeText('uh-oh');

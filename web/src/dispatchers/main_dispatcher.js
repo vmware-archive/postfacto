@@ -55,25 +55,25 @@ export default function (retroActionCreators) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
     },
     retroLoginFailed() {
-      this.$store.merge({login_error_message: 'Oops, wrong password!'});
+      retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
     },
     retroNotFound() {
-      this.$store.merge({retro_not_found: true});
+      retroActionCreators.setNotFound({retro_not_found: true});
     },
     resetRetroNotFound() {
-      this.$store.merge({retro_not_found: false});
+      retroActionCreators.setNotFound({retro_not_found: false});
     },
     notFound() {
-      this.$store.merge({not_found: true});
+      retroActionCreators.setNotFound({not_found: true});
     },
     resetNotFound() {
-      this.$store.merge({not_found: false});
+      retroActionCreators.setNotFound({not_found: false});
     },
     apiServerNotFound() {
-      this.$store.merge({api_server_not_found: true});
+      retroActionCreators.setNotFound({api_server_not_found: true});
     },
     resetApiServerNotFound() {
-      this.$store.merge({api_server_not_found: false});
+      retroActionCreators.setNotFound({api_server_not_found: false});
     },
     redirectToRetroCreatePage() {
       this.dispatch({type: 'setRoute', data: '/retros/new'});
