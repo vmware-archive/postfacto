@@ -1182,4 +1182,29 @@ describe('MainDispatcher', () => {
       expect(router.navigate.mock.calls).toEqual([['/registration/the-access-token/a@a.a/my full name']]);
     });
   });
+
+  describe('setConfig', () => {
+    let dispatcher;
+    let reduxActions;
+
+    beforeEach(() => {
+      reduxActions = {
+        updateFeatureFlags: jest.fn(),
+      };
+      dispatcher = mainDispatcher(reduxActions);
+      dispatcher.dispatch = jest.fn();
+    });
+
+    it('sets feature flags', () => {
+      dispatcher.setConfig({
+        data: {
+          archive_emails: true,
+        },
+      });
+
+      expect(reduxActions.updateFeatureFlags).toHaveBeenCalledWith({
+        archiveEmails: true,
+      });
+    });
+  });
 });

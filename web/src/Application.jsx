@@ -53,6 +53,7 @@ import * as ReduxActionDispatcher from './reducers/redux-action-dispatcher';
 import MessageReducer from './reducers/message_reducer';
 import ArchiveMiddleware from './reducers/archive-retro-middleware';
 import UserReducer from './reducers/user_reducer';
+import ConfigReducer from "./reducers/config_reducer";
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -64,6 +65,7 @@ const reduxStore = createStore(combineReducers({
   retro: RetroReducer(),
   messages: MessageReducer(),
   user: UserReducer(),
+  config: ConfigReducer(),
 }), composeEnhancers(applyMiddleware(ArchiveMiddleware(Actions))));
 
 const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
@@ -101,7 +103,6 @@ class Application extends React.Component {
             <ConnectedHeader config={config}/>
             <ConnectedRouter
               config={config}
-              featureFlags={store.featureFlags}
               environment={store.environment}
             />
             <SessionWebsocket url={websocket_url}/>

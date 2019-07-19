@@ -130,3 +130,10 @@ export function updateRetroArchives(retros) {
     payload: retros,
   };
 }
+
+export function updateFeatureFlags(featureFlags) {
+  return {
+    type: 'FEATURE_FLAGS_UPDATED',
+    payload: featureFlags,
+  };
+}
