@@ -1182,23 +1182,4 @@ describe('MainDispatcher', () => {
       expect(router.navigate.mock.calls).toEqual([['/registration/the-access-token/a@a.a/my full name']]);
     });
   });
-
-  describe('setCountryCode', () => {
-    beforeEach(() => {
-      subject.$store = new Cursor({}, cursorSpy);
-
-      subject.dispatch({
-        type: 'setCountryCode',
-        data: {
-          countryCode: 'anything',
-        },
-      });
-    });
-
-    it('updates the all the flags', () => {
-      expect(cursorSpy).toHaveBeenCalledWith({
-        countryCode: 'anything',
-      });
-    });
-  });
 });

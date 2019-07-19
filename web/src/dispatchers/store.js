@@ -47,7 +47,6 @@ export default {
   featureFlags: {
     archiveEmails: false,
   },
-  countryCode: 'GB',
   environment: {
     isMobile640: false,
     isMobile1030: false,

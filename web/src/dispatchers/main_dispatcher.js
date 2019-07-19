@@ -247,11 +247,5 @@ export default function (retroActionCreators, store) {
         archiveEmails: data.archive_emails,
       });
     },
-    setCountryCode({data}) {
-      this.$store.merge({
-        countryCode: data.countryCode,
-
-      });
-    },
   };
 }

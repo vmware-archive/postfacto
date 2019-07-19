@@ -102,7 +102,6 @@ class Application extends React.Component {
             <ConnectedRouter
               config={config}
               featureFlags={store.featureFlags}
-              countryCode={store.countryCode}
               environment={store.environment}
             />
             <SessionWebsocket url={websocket_url}/>
