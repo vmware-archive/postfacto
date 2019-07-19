@@ -119,7 +119,6 @@ export class Router extends React.Component {
       return;
     }
 
-    Actions.retroIdRouted(retroId);
     this.setPage(ShowRetroPage, {retroId, archives: false});
   };
 
@@ -129,25 +128,21 @@ export class Router extends React.Component {
 
   listRetroArchives = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
     this.setPage(ListRetroArchivesPage, {retroId});
   };
 
   showRetroArchive = (req) => {
     const {retroId, archiveId} = req.params;
-    Actions.retroIdRouted(retroId);
     this.setPage(ShowRetroPage, {retroId, archives: true, archiveId});
   };
 
   showRetroSettings = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
     this.setPage(ShowRetroSettingsPage, {retroId});
   };
 
   showRetroPasswordSettings = (req) => {
     const {retroId} = req.params;
-    Actions.retroIdRouted(retroId);
     this.setPage(ShowRetroPasswordSettingsPage, {retroId});
   };
 

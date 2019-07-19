@@ -75,9 +75,6 @@ export default function (retroActionCreators) {
     redirectToRetroCreatePage() {
       this.dispatch({type: 'setRoute', data: '/retros/new'});
     },
-    retroIdRouted({data}) {
-      this.$store.merge({retroId: data});
-    },
     retrosSuccessfullyFetched({data}) {
       retroActionCreators.retrosUpdated(data.retros);
     },
