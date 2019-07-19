@@ -208,26 +208,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retrosSuccessfullyFetched', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        retrosUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
-    it('updates the retro', () => {
-      const retros = [{name: 'The Retro Name', slug: 'the-retro-123'}];
-      dispatcher.retrosSuccessfullyFetched({data: {retros}});
-
-      expect(reduxActions.retrosUpdated).toHaveBeenCalledWith(retros);
-    });
-  });
-
   describe('getRetroSettingsSuccessfullyReceived', () => {
     let dispatcher;
     let reduxActions;

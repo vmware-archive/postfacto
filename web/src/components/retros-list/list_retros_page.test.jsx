@@ -61,10 +61,18 @@ describe('List Retros Page', () => {
 
   let dom;
   let navigateTo;
+  let signOut;
+  let getRetros;
 
   beforeEach(() => {
     navigateTo = jest.fn();
-    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)} navigateTo={navigateTo} config={config}/></MuiThemeProvider>);
+    signOut = jest.fn();
+    getRetros = jest.fn();
+    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)} getRetros={getRetros} navigateTo={navigateTo} signOut={signOut} config={config}/></MuiThemeProvider>);
+  });
+
+  it('gets retros on mount', () => {
+    expect(getRetros).toHaveBeenCalled();
   });
 
   it('shows multiple retros', () => {
@@ -81,5 +89,11 @@ describe('List Retros Page', () => {
     dom.find('.new-retro button').simulate('click');
 
     expect(navigateTo).toHaveBeenCalledWith(newRetro());
+  });
+
+  it('includes a link to log out', () => {
+    dom.find('.sign-out button').simulate('click');
+
+    expect(signOut).toHaveBeenCalled();
   });
 });

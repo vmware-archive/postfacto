@@ -166,3 +166,9 @@ export function updateFeatureFlags(featureFlags) {
     payload: featureFlags,
   };
 }
+
+export function signOut() {
+  return {
+    type: 'SIGN_OUT',
+  };
+}

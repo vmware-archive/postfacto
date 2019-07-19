@@ -429,42 +429,6 @@ describe('ApiDispatcher', () => {
     });
   });
 
-  describe('getRetros', () => {
-    beforeEach(() => {
-      localStorage.setItem('authToken', 'the-auth-token');
-      subject.dispatch({type: 'getRetros'});
-    });
-
-    it('makes an API GET to /retros', () => {
-      expect(MockFetch).toHaveRequested('/retros', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retros: [retro]});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retrosSuccessfullyFetched',
-        data: {retros: [retro]},
-      });
-    });
-
-    describe('when forbidden is received', () => {
-      it('dispatches signOut', () => {
-        const request = MockFetch.latestRequest();
-        request.forbidden();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'signOut',
-        });
-      });
-    });
-  });
-
   describe('getRetroLogin', () => {
     beforeEach(() => {
       subject.dispatch({type: 'getRetroLogin', data: {retro_id: 1}});

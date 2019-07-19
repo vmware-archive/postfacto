@@ -77,16 +77,6 @@ export default {
       }
     });
   },
-  getRetros() {
-    Logger.info('getRetros');
-    return RetroApi.getRetros().then(([status, data]) => {
-      if (status === 403) {
-        this.dispatch({type: 'signOut'});
-      } else {
-        this.dispatch({type: 'retrosSuccessfullyFetched', data});
-      }
-    });
-  },
   getRetroSettings({data: {id}}) {
     Logger.info('getRetroSettings');
     return RetroApi.getRetroSettings(id, getApiToken(id)).then(([status, data]) => {

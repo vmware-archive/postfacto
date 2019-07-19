@@ -128,9 +128,6 @@ export default function (retroActionCreators, store) {
     resetApiServerNotFound() {
       retroActionCreators.setNotFound({api_server_not_found: false});
     },
-    retrosSuccessfullyFetched({data}) {
-      retroActionCreators.retrosUpdated(data.retros);
-    },
     retroSuccessfullyFetched({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);
       this.dispatch({type: 'visitedRetroAnalytics', data: {retroId: data.retro.id}});

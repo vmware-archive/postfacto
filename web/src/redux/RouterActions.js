@@ -6,5 +6,7 @@ const navigate = (url) => ({
 
 const newRetro = () => navigate('/retros/new');
 const showRetro = (retro) => navigate(`/retros/${retro.slug}/`);
+const home = () => navigate('/');
 
-export {newRetro, showRetro};
+
+export {home, newRetro, showRetro};

@@ -30,7 +30,6 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import {RaisedButton} from 'material-ui';
 import types from 'prop-types';
 import {connect} from 'react-redux';
@@ -43,6 +42,8 @@ class ListRetrosPage extends React.Component {
     retros: types.array.isRequired,
     config: types.object.isRequired,
     navigateTo: types.func.isRequired,
+    getRetros: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   constructor(props) {
@@ -53,7 +54,7 @@ class ListRetrosPage extends React.Component {
   }
 
   componentWillMount() {
-    Actions.getRetros();
+    this.props.getRetros();
   }
 
   handleRetroListItemClicked(retro) {
@@ -65,7 +66,7 @@ class ListRetrosPage extends React.Component {
   }
 
   handleSignOutButtonClicked() {
-    Actions.signOut();
+    this.props.signOut();
   }
 
   render() {
@@ -121,6 +122,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => dispatch(location),
+  signOut: () => dispatch({type: 'SIGN_OUT'}),
+  getRetros: () => dispatch({type: 'GET_RETROS'}),
 });
 
 const ConnectedListRetrosPage = connect(mapStateToProps, mapDispatchToProps)(ListRetrosPage);
