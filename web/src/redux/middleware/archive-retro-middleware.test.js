@@ -36,7 +36,6 @@ describe('ArchiveMiddleware', () => {
   beforeEach(() => {
   });
 
-  // TODO could actually modify items here and fire CURRENT_RETRO_ITEM_UPDATED to simplfy reducer
   it('calls next with action if action type not recognised', () => {
     const doneAction = {
       type: 'OTHER',
