@@ -168,19 +168,21 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
     undoneRetroItem({data: {retroId, item}}) {
       Logger.info('undoneRetroItem');
       retroClient.undoneRetroItem(retroId, item.id, getApiToken(retroId));
-      this.dispatch({type: 'retroItemSuccessfullyUndone', data: {retroId, item}});
+      retroActionCreators.currentRetroItemDoneUpdated(item.id, false);
     },
     extendTimer({data: {retro_id}}) {
       Logger.info('extendTimer');
       retroClient.extendTimer(retro_id, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({type: 'extendTimerSuccessfullyDone', data});
+        retroActionCreators.currentRetroUpdated(data.retro);
       });
     },
     archiveRetro({data: {retro}}) {
       Logger.info('archiveRetro');
       retroClient.archiveRetro(retro.slug, getApiToken(retro.slug), retro.send_archive_email).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'archiveRetroSuccessfullyDone', data});
+          retroActionCreators.currentRetroUpdated(data.retro);
+          analyticsDispatcher.archivedRetro(data.retro.id);
+          retroActionCreators.showAlert({message: 'Archived!'});
         } else if (status === 403) {
           routerActionDispatcher.retroLogin(retro.slug);
         }
@@ -193,21 +195,24 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
     doneRetroActionItem({data: {retro_id, action_item_id, done}}) {
       Logger.info('doneRetroActionItem');
       retroClient.doneRetroActionItem(retro_id, action_item_id, done, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({
-          type: 'doneRetroActionItemSuccessfullyToggled',
-          data: {action_item: data.action_item, retro_id},
-        });
+        retroActionCreators.currentRetroActionItemUpdated(data.action_item);
+
+        if (data.action_item.done) {
+          analyticsDispatcher.doneActionItem(retro_id);
+        } else {
+          analyticsDispatcher.undoneActionItem(retro_id);
+        }
       });
     },
     deleteRetroActionItem({data: {retro_id, action_item}}) {
       Logger.info('deleteRetroActionItem');
       retroClient.deleteRetroActionItem(retro_id, action_item.id, getApiToken(retro_id));
-      this.dispatch({type: 'retroActionItemSuccessfullyDeleted', data: {action_item}});
+      retroActionCreators.currentRetroActionItemDeleted(action_item);
     },
     editRetroActionItem({data: {retro_id, action_item_id, description}}) {
       Logger.info('editRetroActionItem');
       retroClient.editRetroActionItem(retro_id, action_item_id, description, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({type: 'retroActionItemSuccessfullyEdited', data});
+        retroActionCreators.currentRetroActionItemUpdated(data.action_item);
       });
     },
     getRetroArchive({data: {retro_id, archive_id}}) {

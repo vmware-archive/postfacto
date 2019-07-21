@@ -183,62 +183,11 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retroItemSuccessfullyUndone', () => {
-    let item;
-
-    beforeEach(() => {
-      item = {id: 2, done: false};
-      dispatcher.retroItemSuccessfullyUndone({data: {retroId: 1, item}});
-    });
-
-
-    it('updates the item to have attribute done = false', () => {
-      item.done = false;
-      retro.highlighted_item_id = null;
-      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, false);
-    });
-  });
-
   describe('toggleSendArchiveEmail', () => {
     it('toggles archive email value', () => {
       dispatcher.toggleSendArchiveEmail({data: {currentSendArchiveEmail: false}});
 
       expect(reduxActions.currentRetroSendArchiveEmailUpdated).toHaveBeenCalledWith(true);
-    });
-  });
-
-  describe('extendTimerSuccessfullyDone', () => {
-    it('updates retro in redux', () => {
-      dispatcher.extendTimerSuccessfullyDone({data: {retro}});
-
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
-    });
-  });
-
-  describe('archiveRetroSuccessfullyDone', () => {
-    let updated_retro;
-    beforeEach(() => {
-      updated_retro = {
-        id: retro.id,
-        name: retro.name,
-        items: [],
-        action_items: [retro.action_items[0]],
-      };
-
-      dispatcher.archiveRetroSuccessfullyDone({data: {retro: updated_retro}});
-    });
-
-    it('updates the retro', () => {
-      retro.retro_item_end_time = 321;
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updated_retro);
-    });
-
-    it('dispatches archived retro analytics', () => {
-      expect(analyticsActionDispatcher.archivedRetro).toHaveBeenCalledWith(retro.id);
-    });
-
-    it('displays an alert', () => {
-      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'Archived!'});
     });
   });
 
@@ -280,48 +229,6 @@ describe('MainDispatcher', () => {
     it('updates store with data from socket', () => {
       dispatcher.websocketSessionDataReceived({data: {payload: {request_uuid: 'some-request-uuid'}}});
       expect(reduxActions.updateWebsocketSession).toHaveBeenCalledWith({request_uuid: 'some-request-uuid'});
-    });
-  });
-
-  describe('doneRetroActionItemSuccessfullyToggled', () => {
-    it('updates the store', () => {
-      const actionItem = {id: 1, done: true};
-      dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: actionItem}});
-      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(actionItem);
-    });
-
-    describe('when action item is marked as done', () => {
-      it('dispatches completed retro action item analytic', () => {
-        dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 1, done: true}, retro_id: 222}});
-        expect(analyticsActionDispatcher.doneActionItem).toHaveBeenCalledWith(222);
-      });
-    });
-
-    describe('when action item is marked as undone', () => {
-      it('does not dispatch anything', () => {
-        dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 2, done: false}, retro_id: 222}});
-        expect(analyticsActionDispatcher.undoneActionItem).toHaveBeenCalledWith(222);
-      });
-    });
-  });
-
-  describe('retroActionItemSuccessfullyDeleted', () => {
-    it('updates the store and removes the retro action item', () => {
-      const action_item = retro.action_items[0];
-
-      dispatcher.retroActionItemSuccessfullyDeleted({data: {action_item}});
-
-      expect(reduxActions.currentRetroActionItemDeleted).toHaveBeenCalledWith(action_item);
-    });
-  });
-
-  describe('retroActionItemSuccessfullyEdited', () => {
-    it('updates description of the action item', () => {
-      const action_item = retro.action_items[0];
-      action_item.description = 'description for action item 1 has been changed';
-      dispatcher.retroActionItemSuccessfullyEdited({data: {retroId: 1, action_item}});
-
-      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
     });
   });
 

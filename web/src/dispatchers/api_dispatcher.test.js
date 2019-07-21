@@ -607,7 +607,11 @@ describe('ApiDispatcher', () => {
       request.ok({item: {id: 2, category: 'happy', description: 'this is an item'}});
       Promise.runAll();
 
-      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 2, category: 'happy', description: 'this is an item'});
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({
+        id: 2,
+        category: 'happy',
+        description: 'this is an item',
+      });
       expect(analyticsActionDispatcher.createdRetroItem).toHaveBeenCalledWith(1, 'happy');
     });
   });
@@ -803,10 +807,7 @@ describe('ApiDispatcher', () => {
       request.noContent();
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyUndone',
-        data: {retroId: 1, item},
-      });
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(item.id, false);
     });
   });
 
@@ -830,10 +831,7 @@ describe('ApiDispatcher', () => {
       request.ok({retro});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'extendTimerSuccessfullyDone',
-        data: {retro},
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
@@ -860,10 +858,9 @@ describe('ApiDispatcher', () => {
       request.ok({retro});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'archiveRetroSuccessfullyDone',
-        data: {retro},
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
+      expect(analyticsActionDispatcher.archivedRetro).toHaveBeenCalledWith(retro.id);
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'Archived!'});
     });
   });
 
@@ -894,10 +891,11 @@ describe('ApiDispatcher', () => {
     beforeEach(() => {
       action_item = retro.action_items[0];
       localStorage.setItem('apiToken-1', 'the-token');
-      dispatcher.doneRetroActionItem({data: {retro_id: 1, action_item_id: 1, done: true}});
     });
 
-    it('makes an api PATCH to /retros/:id/action_items/:action_item_id', () => {
+    it('makes an api PATCH to /retros/:id/action_items/:action_item_id and updates store', () => {
+      dispatcher.doneRetroActionItem({data: {retro_id: 1, action_item_id: 1, done: true}});
+
       expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
         method: 'PATCH',
         headers: {
@@ -914,10 +912,31 @@ describe('ApiDispatcher', () => {
       request.ok({action_item});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item, retro_id: 1},
-      });
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
+    });
+
+    it('calls done item analytics call when item is done', () => {
+      action_item.done = true;
+
+      dispatcher.doneRetroActionItem({data: {retro_id: 1, action_item_id: 1, done: true}});
+
+      const request = MockFetch.latestRequest();
+      request.ok({action_item});
+      Promise.runAll();
+
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
+      expect(analyticsActionDispatcher.doneActionItem).toHaveBeenCalledWith(1);
+    });
+
+    it('calls undone item analytics call when item is not done', () => {
+      dispatcher.doneRetroActionItem({data: {retro_id: 1, action_item_id: 1, done: true}});
+
+      const request = MockFetch.latestRequest();
+      request.ok({action_item});
+      Promise.runAll();
+
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
+      expect(analyticsActionDispatcher.undoneActionItem).toHaveBeenCalledWith(1);
     });
   });
 
@@ -938,10 +957,8 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroActionItemSuccessfullyDeleted',
-        data: {action_item},
-      });
+
+      expect(reduxActions.currentRetroActionItemDeleted).toHaveBeenCalledWith(action_item);
     });
   });
 
@@ -970,10 +987,7 @@ describe('ApiDispatcher', () => {
       request.ok({action_item});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroActionItemSuccessfullyEdited',
-        data: {action_item},
-      });
+      expect(reduxActions.currentRetroActionItemUpdated).toHaveBeenCalledWith(action_item);
     });
   });
 

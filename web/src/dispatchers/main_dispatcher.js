@@ -35,7 +35,7 @@
  *  5. Remove main_dispatcher and analytics_dispatcher
  *  6. Move api-dispatcher to middleware
  */
-export default function (retroActionCreators, routerActionDispatcher, analyticsDispatcher) {
+export default function (retroActionCreators, routerActionDispatcher) {
   return {
     redirectToHome() {
       routerActionDispatcher.home();
@@ -105,17 +105,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     resetApiServerNotFound() {
       retroActionCreators.setNotFound({api_server_not_found: false});
     },
-    retroItemSuccessfullyUndone({data}) {
-      retroActionCreators.currentRetroItemDoneUpdated(data.item.id, false);
-    },
-    extendTimerSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    archiveRetroSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-      analyticsDispatcher.archivedRetro(data.retro.id);
-      retroActionCreators.showAlert({message: 'Archived!'});
-    },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
         retroActionCreators.forceRelogin(data.payload.originator_id, data.payload.retro.slug);
@@ -125,21 +114,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     },
     websocketSessionDataReceived({data}) {
       retroActionCreators.updateWebsocketSession(data.payload);
-    },
-    retroActionItemSuccessfullyDeleted({data}) {
-      retroActionCreators.currentRetroActionItemDeleted(data.action_item);
-    },
-    retroActionItemSuccessfullyEdited({data}) {
-      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
-    },
-    doneRetroActionItemSuccessfullyToggled({data}) {
-      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
-
-      if (data.action_item.done) {
-        analyticsDispatcher.doneActionItem(data.retro_id);
-      } else {
-        analyticsDispatcher.undoneActionItem(data.retro_id);
-      }
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
       retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
