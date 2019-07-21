@@ -31,7 +31,7 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions, Dispatcher, useStore} from 'p-flux';
+import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
@@ -117,7 +117,7 @@ export default useStore(
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
+      mainDispatcher(reduxActionDispatcher, routerActionDispatcher),
       apiDispatcher(retroClient, reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
       analyticsDispatcher(analyticsClient),
     ],

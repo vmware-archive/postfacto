@@ -29,12 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
- * TODO
- *  4. Pull functions up to api dispatcher where possible
- *  5. Remove main_dispatcher and analytics_dispatcher
- *  6. Move api-dispatcher to middleware
- */
 export default function (retroActionCreators, routerActionDispatcher) {
   return {
     redirectToHome() {
