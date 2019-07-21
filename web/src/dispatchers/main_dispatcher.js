@@ -32,6 +32,15 @@
 const ALERT_DURATION = 3500;
 let alertTimeout = null;
 
+/*
+ * TODO
+ *  1. Add analytics middleware  (LIKE ROUTER)
+ *  2. Pass bound actions and bound router and bound analytics actions to api dispatcher
+ *  3. Pull out all setRoute events
+ *  4. Pull retroActionCreators up to api dispatcher where possible
+ *  5. Remove main_dispatcher and analytics_dispatcher
+ *  6. Move api-dispatcher to middleware
+ */
 export default function (retroActionCreators, store) {
   return {
     setRoute({data}) {
@@ -58,15 +67,6 @@ export default function (retroActionCreators, store) {
       retroActionCreators.currentRetroUpdated(retro);
       retroActionCreators.clearErrors();
       this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
-    },
-    routeToHome() {
-      this.dispatch({type: 'setRoute', data: '/'});
-    },
-    routeToShowRetro({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.slug}/`});
-    },
-    routeToNewRetro() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
     },
     routeToRetroArchives({data}) {
       this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives`});

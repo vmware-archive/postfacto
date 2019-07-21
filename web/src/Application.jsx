@@ -49,6 +49,7 @@ import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
+import AnalyticsClient from './helpers/analytics_client';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -58,6 +59,7 @@ const muiTheme = getMuiTheme({
 const router = new Grapnel({pushState: true});
 Dispatcher.router = router;
 const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
+const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
 const reduxStore = makeReduxStore(router, retroClient);
 
 class Application extends React.Component {
@@ -113,8 +115,8 @@ export default useStore(
     actions: [],
     dispatcherHandlers: [
       mainDispatcher(reduxActionDispatcher, reduxStore),
-      apiDispatcher,
-      analyticsDispatcher,
+      apiDispatcher(retroClient),
+      analyticsDispatcher(analyticsClient),
     ],
     onDispatch: (event) => {
       /* eslint-disable no-console */

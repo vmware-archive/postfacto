@@ -28,23 +28,14 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import Mixpanel from 'mixpanel-browser';
-
-const POSTFACTO_TEAM_ANALYTICS_TOKEN = 'd4de349453cc697734eced9ebedcdb22';
-
-export default class Analytics {
-  static initialized = false;
-
-  static track(event, options = {}) {
-    if (global.Retro.config.enable_analytics) {
-      if (!Analytics.initialized) {
-        Mixpanel.init(POSTFACTO_TEAM_ANALYTICS_TOKEN);
-        Analytics.initialized = true;
-      }
-
-      Mixpanel.track(event, Object.assign({
-        timestamp: (new Date()).toJSON(),
-      }, options));
-    }
+const AnalyticsMiddleware = (router) => () => (next) => (action) => {
+  if (action.type === 'SET_ROUTE') {
+    /* eslint-disable no-console */
+    console.log('Navigating to: ', action.payload);
+    router.navigate(action.payload);
+    return;
   }
-}
+  next(action);
+};
+
+export default AnalyticsMiddleware;

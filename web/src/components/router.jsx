@@ -90,7 +90,6 @@ class Router extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // eslint-disable-next-line react/prop-types
     const {api_server_not_found, retro_not_found, not_found} = nextProps.not_found;
     if (api_server_not_found) {
       this.setPage(ApiServerNotFoundPage);
