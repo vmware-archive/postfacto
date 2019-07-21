@@ -183,34 +183,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retroItemSuccessfullyDeleted', () => {
-    it('deletes the retro item', () => {
-      dispatcher.retroItemSuccessfullyDeleted({data: {retro_id: 1, item: retro.items[0]}});
-
-      expect(reduxActions.currentRetroItemDeleted).toHaveBeenCalledWith(retro.items[0]);
-    });
-  });
-
-  describe('retroItemSuccessfullyVoted', () => {
-    it('updates the vote count on the retro item', () => {
-      const itemFromApiResponse = {
-        id: 1,
-        vote_count: 50,
-        updated_at: '2016-10-04T23:19:05.269Z',
-      };
-
-      dispatcher.retroItemSuccessfullyVoted({data: {retro_id: 1, item: itemFromApiResponse}});
-      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith(itemFromApiResponse);
-    });
-  });
-
-  describe('retroItemSuccessfullyDone', () => {
-    it('fires retroItemDoneUpdated with true', () => {
-      dispatcher.retroItemSuccessfullyDone({data: {retroId: 1, itemId: 2}});
-      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, true);
-    });
-  });
-
   describe('retroItemSuccessfullyUndone', () => {
     let item;
 
@@ -224,22 +196,6 @@ describe('MainDispatcher', () => {
       item.done = false;
       retro.highlighted_item_id = null;
       expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, false);
-    });
-  });
-
-  describe('retroItemSuccessfullyHighlighted', () => {
-    it('updates retro in redux', () => {
-      dispatcher.retroItemSuccessfullyHighlighted({data: {retro}});
-
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
-    });
-  });
-
-  describe('retroItemSuccessfullyUnhighlighted', () => {
-    it('updates retro in redux', () => {
-      dispatcher.retroItemSuccessfullyUnhighlighted({data: {retro}});
-
-      expect(reduxActions.currentRetroHighlightCleared).toHaveBeenCalled();
     });
   });
 

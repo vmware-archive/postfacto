@@ -105,23 +105,8 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     resetApiServerNotFound() {
       retroActionCreators.setNotFound({api_server_not_found: false});
     },
-    retroItemSuccessfullyDeleted({data}) {
-      retroActionCreators.currentRetroItemDeleted(data.item);
-    },
-    retroItemSuccessfullyVoted({data}) {
-      retroActionCreators.currentRetroItemUpdated(data.item);
-    },
-    retroItemSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroItemDoneUpdated(data.itemId, true);
-    },
     retroItemSuccessfullyUndone({data}) {
       retroActionCreators.currentRetroItemDoneUpdated(data.item.id, false);
-    },
-    retroItemSuccessfullyHighlighted({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    retroItemSuccessfullyUnhighlighted() {
-      retroActionCreators.currentRetroHighlightCleared();
     },
     extendTimerSuccessfullyDone({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);

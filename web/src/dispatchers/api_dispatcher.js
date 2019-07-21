@@ -133,36 +133,37 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
     deleteRetroItem({data: {retro_id, item}}) {
       Logger.info('deleteRetroItem');
       retroClient.deleteRetroItem(retro_id, item.id, getApiToken(retro_id));
-      this.dispatch({type: 'retroItemSuccessfullyDeleted', data: {retro_id, item}});
+      retroActionCreators.currentRetroItemDeleted(item);
     },
     voteRetroItem({data: {retro_id, item}}) {
       Logger.info('voteRetroItem');
       retroClient.voteRetroItem(retro_id, item.id, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({type: 'retroItemSuccessfullyVoted', data: {item: data.item}});
+        retroActionCreators.currentRetroItemUpdated(data.item);
       });
     },
     nextRetroItem({data: {retro}}) {
       Logger.info('nextRetroItem');
       if (retro.highlighted_item_id !== null) {
-        this.dispatch({type: 'retroItemSuccessfullyDone', data: {retro, itemId: retro.highlighted_item_id}});
+        retroActionCreators.currentRetroItemDoneUpdated(retro.highlighted_item_id, true);
       }
       retroClient.nextRetroItem(retro.slug, getApiToken(retro.slug));
     },
     highlightRetroItem({data: {retro_id, item}}) {
       Logger.info('highlightRetroItem');
       retroClient.highlightRetroItem(retro_id, item.id, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({type: 'retroItemSuccessfullyHighlighted', data});
+        retroActionCreators.currentRetroUpdated(data.retro);
       });
     },
-    unhighlightRetroItem({data: {retro_id, item_id}}) {
+    unhighlightRetroItem({data: {retro_id}}) {
       Logger.info('unhighlightRetroItem');
       retroClient.unhighlightRetroItem(retro_id, getApiToken(retro_id));
-      this.dispatch({type: 'retroItemSuccessfullyUnhighlighted', data: {highlighted_item_id: item_id}});
+      retroActionCreators.currentRetroHighlightCleared();
     },
     doneRetroItem({data: {retroId, item}}) {
       Logger.info('doneRetroItem');
       retroClient.doneRetroItem(retroId, item.id, getApiToken(retroId));
-      this.dispatch({type: 'retroItemSuccessfullyDone', data: {retroId, itemId: item.id}});
+
+      retroActionCreators.currentRetroItemDoneUpdated(item.id, true);
     },
     undoneRetroItem({data: {retroId, item}}) {
       Logger.info('undoneRetroItem');

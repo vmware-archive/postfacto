@@ -577,10 +577,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item},
-      });
+      expect(reduxActions.currentRetroItemDeleted).toHaveBeenCalledWith(item);
     });
   });
 
@@ -655,10 +652,7 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item},
-      });
+      expect(reduxActions.currentRetroItemDeleted).toHaveBeenCalledWith(item);
     });
   });
 
@@ -683,17 +677,14 @@ describe('ApiDispatcher', () => {
       request.ok({item});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyVoted',
-        data: {item},
-      });
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith(item);
     });
   });
 
   describe('nextRetroItem', () => {
     it('makes an API POST to /retros/:id/discussion/transitions', () => {
       localStorage.setItem('apiToken-retro-slug-123', 'the-token');
-      retro.highlighted_item_id = null;
+      retro.highlighted_item_id = 123;
       dispatcher.nextRetroItem({data: {retro}});
 
       expect(MockFetch).toHaveRequested('/retros/retro-slug-123/discussion/transitions', {
@@ -709,6 +700,8 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({retro});
       Promise.runAll();
+
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(123, true);
     });
   });
 
@@ -734,10 +727,7 @@ describe('ApiDispatcher', () => {
       request.ok({retro});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyHighlighted',
-        data: {retro},
-      });
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
     });
   });
 
@@ -755,10 +745,8 @@ describe('ApiDispatcher', () => {
           'authorization': 'Bearer the-token',
         },
       });
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyUnhighlighted',
-        data: {highlighted_item_id: 2},
-      });
+
+      expect(reduxActions.currentRetroHighlightCleared).toHaveBeenCalled();
     });
   });
 
@@ -785,10 +773,7 @@ describe('ApiDispatcher', () => {
       request.ok({item});
       Promise.runAll();
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyDone',
-        data: {retroId: 1, itemId: item.id},
-      });
+      expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(item.id, true);
     });
   });
 
