@@ -29,7 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../../spec_helper';
 import AuthMiddleware from './auth-middleware';
 import {home, retroRelogin} from '../actions/router_actions';
 import {forceRelogin} from '../actions/state_change_actions';
