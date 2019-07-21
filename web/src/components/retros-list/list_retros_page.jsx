@@ -35,7 +35,7 @@ import types from 'prop-types';
 import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
-import {newRetro, showRetro} from '../../redux/RouterActions';
+import {newRetro, showRetro} from '../../redux/actions/router_actions';
 
 class ListRetrosPage extends React.Component {
   static propTypes = {

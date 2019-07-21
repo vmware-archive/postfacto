@@ -46,7 +46,7 @@ import SessionWebsocket from './components/session_websocket';
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
+import * as stateChangeActions from './redux/actions/state_change_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
@@ -108,7 +108,7 @@ class Application extends React.Component {
   }
 }
 
-const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
+const reduxActionDispatcher = bindActionCreators(stateChangeActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {

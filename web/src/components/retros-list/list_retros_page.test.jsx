@@ -35,7 +35,7 @@ import {MuiThemeProvider} from 'material-ui';
 import '../../spec_helper';
 
 import {ListRetrosPage} from './list_retros_page';
-import {newRetro, showRetro} from '../../redux/RouterActions';
+import {newRetro, showRetro} from '../../redux/actions/router_actions';
 
 function createRetros(count = 1) {
   const retros = [];

@@ -31,7 +31,7 @@
 
 import '../../spec_helper';
 import AuthMiddleware from './auth-middleware';
-import {home} from '../RouterActions';
+import {home} from '../actions/router_actions';
 
 describe('AuthMiddleware', () => {
   beforeEach(() => {

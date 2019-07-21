@@ -28,7 +28,7 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {home} from '../RouterActions';
+import {home} from '../actions/router_actions';
 
 const AuthMiddleware = (localStorage) => (store) => (next) => (action) => {
   if (action.type === 'SIGN_OUT') {

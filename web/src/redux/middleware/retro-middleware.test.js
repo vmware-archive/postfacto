@@ -32,7 +32,7 @@
 import PromiseMock from 'promise-mock';
 import RetroMiddleware from './retro-middleware';
 import MockFetch from '../../test_support/fetch_matchers';
-import {retrosUpdated, signOut} from '../../dispatchers/redux-action-dispatcher';
+import {retrosUpdated, signOut} from '../actions/state_change_actions';
 import RetroClient from '../../api/retro_client';
 
 describe('RetroMiddleware', () => {

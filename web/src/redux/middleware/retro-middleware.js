@@ -28,7 +28,7 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {retrosUpdated, signOut} from '../../dispatchers/redux-action-dispatcher';
+import {retrosUpdated, signOut} from '../actions/state_change_actions';
 
 const RetroMiddleware = (retroClient) => (store) => (next) => (action) => {
   if (action.type === 'GET_RETROS') {
