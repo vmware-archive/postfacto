@@ -36,6 +36,7 @@ import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
 import {newRetro, showRetro} from '../../redux/actions/router_actions';
+import {signOut, getRetros} from '../../redux/actions/state_change_actions';
 
 class ListRetrosPage extends React.Component {
   static propTypes = {
@@ -122,8 +123,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   navigateTo: (location) => dispatch(location),
-  signOut: () => dispatch({type: 'SIGN_OUT'}),
-  getRetros: () => dispatch({type: 'GET_RETROS'}),
+  signOut: () => dispatch(signOut()),
+  getRetros: () => dispatch(getRetros()),
 });
 
 const ConnectedListRetrosPage = connect(mapStateToProps, mapDispatchToProps)(ListRetrosPage);

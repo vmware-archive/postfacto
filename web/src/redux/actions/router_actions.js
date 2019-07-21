@@ -9,7 +9,7 @@ const newRetro = () => navigate('/retros/new');
 const showRetro = (retro) => navigate(`/retros/${retro.slug}`);
 const showRetroForId = (retro_id) => navigate(`/retros/${retro_id}`);
 const retroLogin = (retro_id) => navigate(`/retros/${retro_id}/login`);
-const retroRelogin = (retro) => navigate(`/retros/${retro.slug}/relogin`);
+const retroRelogin = (retro_id) => navigate(`/retros/${retro_id}/relogin`);
 const retroArchives = (retroId) => navigate(`/retros/${retroId}/archives`);
 const retroArchive = (retroId, archiveId) => navigate(`/retros/${retroId}/archives/${archiveId}`);
 const retroSettings = (retroId) => navigate(`/retros/${retroId}/settings`);

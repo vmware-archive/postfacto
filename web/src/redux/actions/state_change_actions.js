@@ -92,6 +92,12 @@ export function retrosUpdated(retros) {
   };
 }
 
+export function getRetros() {
+  return {
+    type: 'GET_RETROS',
+  };
+}
+
 export function errorsUpdated(errors) {
   return {
     type: 'ERRORS_UPDATED',

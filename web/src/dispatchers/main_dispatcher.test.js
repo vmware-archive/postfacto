@@ -237,14 +237,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('requireRetroRelogin', () => {
-    it('dispatches a set Route', () => {
-      const r = {slug: 'retro-slug-1'};
-      dispatcher.requireRetroRelogin({data: {retro: r}});
-      expect(routerActionDispatcher.retroRelogin).toHaveBeenCalledWith(r);
-    });
-  });
-
   describe('redirectToRetroCreatePage', () => {
     it('dispatches a set Route to new retro page', () => {
       dispatcher.redirectToRetroCreatePage({});

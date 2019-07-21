@@ -43,9 +43,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     requireRetroLogin({data}) {
       routerActionDispatcher.retroLogin(data.retro_id);
     },
-    requireRetroRelogin({data}) {
-      routerActionDispatcher.retroRelogin(data.retro);
-    },
     retroSuccessfullyCreated({data}) {
       retroActionCreators.clearErrors();
       routerActionDispatcher.showRetro(data.retro);
