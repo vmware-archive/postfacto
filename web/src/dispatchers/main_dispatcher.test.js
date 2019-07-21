@@ -128,22 +128,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('getRetroSettingsSuccessfullyReceived', () => {
-    it('updates the retro', () => {
-      const updatedRetro = {name: 'The Retro Name', slug: 'the-retro-123'};
-      dispatcher.getRetroSettingsSuccessfullyReceived({data: {retro: updatedRetro}});
-
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(updatedRetro);
-    });
-  });
-
-  describe('getRetroLoginSuccessfullyReceived', () => {
-    it('updates the retro name', () => {
-      dispatcher.getRetroLoginSuccessfullyReceived({data: {retro: {name: 'The Retro Name'}}});
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name'});
-    });
-  });
-
   describe('retroSettingsSuccessfullyUpdated', () => {
     const settingUpdatedRetro = {
       name: 'new retro name',
@@ -196,32 +180,6 @@ describe('MainDispatcher', () => {
     it('dispatches a set Route to new retro page', () => {
       dispatcher.redirectToRetroCreatePage({});
       expect(routerActionDispatcher.newRetro).toHaveBeenCalled();
-    });
-  });
-
-  describe('retroSuccessfullyLoggedIn', () => {
-    it('dispatches a set Route', () => {
-      dispatcher.retroSuccessfullyLoggedIn({data: {retro_id: 1}});
-      expect(routerActionDispatcher.showRetroForId).toHaveBeenCalledWith(1);
-    });
-  });
-
-  describe('retroItemSuccessfullyCreated', () => {
-    beforeEach(() => {
-      dispatcher.retroItemSuccessfullyCreated({
-        data: {
-          item: {id: 10, category: 'happy'},
-          retroId: retro.id,
-        },
-      });
-    });
-
-    it('creates the retro item', () => {
-      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 10, category: 'happy'});
-    });
-
-    it('dispatches created retro item analytic', () => {
-      expect(analyticsActionDispatcher.createdRetroItem).toHaveBeenCalledWith(retro.id, 'happy');
     });
   });
 

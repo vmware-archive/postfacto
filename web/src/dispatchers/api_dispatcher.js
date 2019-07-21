@@ -85,7 +85,7 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroSettings');
       return retroClient.getRetroSettings(id, getApiToken(id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'getRetroSettingsSuccessfullyReceived', data});
+          retroActionCreators.currentRetroUpdated(data.retro);
         } else if (status === 403) {
           routerActionDispatcher.retroLogin(id);
         } else if (status === 404) {
@@ -98,7 +98,7 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroLogin');
       return retroClient.getRetroLogin(retro_id).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'getRetroLoginSuccessfullyReceived', data});
+          retroActionCreators.currentRetroUpdated(data.retro);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${retro_id}`);
           retroActionCreators.setNotFound({retro_not_found: true});
@@ -113,16 +113,17 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
           if (token) {
             setApiToken(data.retro_id, token);
           }
-          this.dispatch({type: 'retroSuccessfullyLoggedIn', data: {retro_id: data.retro_id}});
+          routerActionDispatcher.showRetroForId(data.retro_id);
         } else {
-          this.dispatch({type: 'retroLoginFailed'});
+          retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
         }
       });
     },
     createRetroItem({data: {retro_id, category, description}}) {
       Logger.info('createRetroItem');
       return retroClient.createRetroItem(retro_id, category, description, getApiToken(retro_id)).then(([, data]) => {
-        this.dispatch({type: 'retroItemSuccessfullyCreated', data: {item: data.item, retroId: retro_id}});
+        retroActionCreators.currentRetroItemUpdated(data.item);
+        analyticsDispatcher.createdRetroItem(retro_id, data.item.category);
       });
     },
     updateRetroItem({data: {retro_id, item, description}}) {

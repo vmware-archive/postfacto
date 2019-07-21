@@ -473,9 +473,10 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'getRetroLoginSuccessfullyReceived',
-        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}},
+
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({
+        id: 1,
+        name: 'the-fetched-retro-login-name',
       });
     });
 
@@ -510,10 +511,8 @@ describe('ApiDispatcher', () => {
         const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
         request.ok(response);
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'getRetroSettingsSuccessfullyReceived',
-          data: response,
-        });
+
+        expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(response.retro);
       });
 
       it('is forbidden when not authenticated', () => {
@@ -548,10 +547,8 @@ describe('ApiDispatcher', () => {
       request.ok({token: 'the-token'});
       Promise.runAll();
       expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroSuccessfullyLoggedIn',
-        data: {retro_id: 15},
-      });
+
+      expect(routerActionDispatcher.showRetroForId).toHaveBeenCalledWith(15);
     });
 
     describe('when password is wrong', () => {
@@ -559,9 +556,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroLoginFailed',
-        });
+        expect(reduxActions.errorsUpdated).toHaveBeenCalledWith({login_error_message: 'Oops, wrong password!'});
       });
     });
   });
@@ -612,12 +607,11 @@ describe('ApiDispatcher', () => {
 
     it('dispatches retroItemSuccessfullyCreated with the response', () => {
       const request = MockFetch.latestRequest();
-      request.ok({item: {id: 1, category: 'happy', description: 'this is an item'}});
+      request.ok({item: {id: 2, category: 'happy', description: 'this is an item'}});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroItemSuccessfullyCreated',
-        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1},
-      });
+
+      expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 2, category: 'happy', description: 'this is an item'});
+      expect(analyticsActionDispatcher.createdRetroItem).toHaveBeenCalledWith(1, 'happy');
     });
   });
 
