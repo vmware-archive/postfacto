@@ -59,7 +59,6 @@ const muiTheme = getMuiTheme({
 
 
 const router = new Grapnel({pushState: true});
-Dispatcher.router = router;
 const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
 const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
 const reduxStore = makeReduxStore(router, retroClient, analyticsClient);
