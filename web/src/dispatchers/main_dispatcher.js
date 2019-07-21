@@ -46,11 +46,6 @@ export default function (retroActionCreators, routerActionDispatcher) {
     redirectToRetroCreatePage() {
       routerActionDispatcher.newRetro();
     },
-    retroSettingsSuccessfullyUpdated({data: {retro}}) {
-      retroActionCreators.currentRetroUpdated(retro);
-      retroActionCreators.clearErrors();
-      routerActionDispatcher.showRetro(retro);
-    },
     routeToRetroArchives({data}) {
       routerActionDispatcher.retroArchives(data.retro_id);
     },
@@ -66,14 +61,6 @@ export default function (retroActionCreators, routerActionDispatcher) {
     backPressedFromArchives({data}) {
       routerActionDispatcher.showRetroForId(data.retro_id);
     },
-    loggedInSuccessfully({data}) {
-      localStorage.setItem('authToken', data.auth_token);
-      if (data.new_user) {
-        routerActionDispatcher.newRetro();
-      } else {
-        routerActionDispatcher.home();
-      }
-    },
     signOut() {
       window.localStorage.clear();
       routerActionDispatcher.home();
@@ -83,9 +70,6 @@ export default function (retroActionCreators, routerActionDispatcher) {
     },
     backPressedFromPasswordSettings({data}) {
       routerActionDispatcher.retroSettings(data.retro_id);
-    },
-    redirectToRegistration({data}) {
-      routerActionDispatcher.registration(data.access_token, data.email, data.name);
     },
     retroNotFound() {
       retroActionCreators.setNotFound({retro_not_found: true});
@@ -118,15 +102,6 @@ export default function (retroActionCreators, routerActionDispatcher) {
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
       retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
     },
-    retroArchiveSuccessfullyFetched({data}) {
-      retroActionCreators.updateCurrentArchivedRetro(data.retro);
-    },
-    retroArchivesSuccessfullyFetched({data}) {
-      retroActionCreators.updateRetroArchives(data.archives);
-    },
-    showAlert({data}) {
-      retroActionCreators.showAlert(data);
-    },
     hideAlert() {
       retroActionCreators.clearAlert();
     },
@@ -136,23 +111,8 @@ export default function (retroActionCreators, routerActionDispatcher) {
     hideDialog() {
       retroActionCreators.clearDialog();
     },
-    retroSettingsUnsuccessfullyUpdated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
-    retroPasswordSuccessfullyUpdated({data}) {
-      retroActionCreators.clearErrors();
-      window.localStorage.setItem(`apiToken-${data.retro_id}`, data.token);
-    },
-    retroPasswordUnsuccessfullyUpdated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
     clearErrors() {
       retroActionCreators.clearErrors();
-    },
-    setConfig(action) {
-      retroActionCreators.updateFeatureFlags({
-        archiveEmails: action.data.archive_emails,
-      });
     },
   };
 }

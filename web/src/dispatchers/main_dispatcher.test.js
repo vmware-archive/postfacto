@@ -128,47 +128,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retroSettingsSuccessfullyUpdated', () => {
-    const settingUpdatedRetro = {
-      name: 'new retro name',
-      slug: 'new-retro-slug',
-    };
-    beforeEach(() => {
-      dispatcher.retroSettingsSuccessfullyUpdated({
-        data: {
-          retro: settingUpdatedRetro,
-        },
-      });
-    });
-
-    it('updates the retro slug and name, and clears the error message', () => {
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({
-        name: 'new retro name',
-        slug: 'new-retro-slug',
-      });
-
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalled();
-    });
-
-    it('redirects to the retro page url with the new slug', () => {
-      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(settingUpdatedRetro);
-    });
-  });
-
-  describe('retroSettingsUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      dispatcher.retroSettingsUnsuccessfullyUpdated({
-        data: {
-          errors: ['Sorry! That URL is already taken.'],
-        },
-      });
-    });
-
-    it('updates the error messages', () => {
-      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
-    });
-  });
-
   describe('requireRetroLogin', () => {
     it('dispatches a set Route', () => {
       dispatcher.requireRetroLogin({data: {retro_id: 1}});
@@ -224,60 +183,10 @@ describe('MainDispatcher', () => {
     });
   });
 
-
   describe('websocketSessionDataReceived', () => {
     it('updates store with data from socket', () => {
       dispatcher.websocketSessionDataReceived({data: {payload: {request_uuid: 'some-request-uuid'}}});
       expect(reduxActions.updateWebsocketSession).toHaveBeenCalledWith({request_uuid: 'some-request-uuid'});
-    });
-  });
-
-  describe('retroArchiveSuccessfullyFetched', () => {
-    it('updates the store with the archived retro items', () => {
-      const retro_archives = {
-        id: 1,
-        name: 'retro name',
-        items: [
-          {
-            id: 2,
-            description: 'item 1',
-            vote_count: 1,
-            done: false,
-            archived_at: '2016-07-18T00:00:00.000Z',
-          },
-          {
-            id: 3,
-            description: 'item 3',
-            vote_count: 2,
-            done: true,
-            archived_at: '2016-07-20T00:00:00.000Z',
-          },
-        ],
-        action_items: [
-          {
-            id: 1,
-            description: 'archived item 1',
-            archived_at: '2016-07-18T00:00:00.000Z',
-          },
-          {
-            id: 2,
-            description: 'archived item 2',
-            archived_at: '2016-07-20T00:00:00.000Z',
-          },
-        ],
-      };
-
-      dispatcher.retroArchiveSuccessfullyFetched({data: {retro: retro_archives}});
-
-      expect(reduxActions.updateCurrentArchivedRetro).toHaveBeenCalledWith(retro_archives);
-    });
-  });
-
-  describe('retroArchivesSuccessfullyFetched', () => {
-    it('updates the store with the archives', () => {
-      dispatcher.retroArchivesSuccessfullyFetched({data: {archives: [{id: 123}]}});
-
-      expect(reduxActions.updateRetroArchives).toHaveBeenCalledWith([{id: 123}]);
     });
   });
 
@@ -296,20 +205,6 @@ describe('MainDispatcher', () => {
     });
     it('sets the route back to the current retro', () => {
       expect(routerActionDispatcher.retroSettings).toHaveBeenCalledWith('1');
-    });
-  });
-
-  describe('showAlert', () => {
-    beforeEach(() => {
-      dispatcher.showAlert({
-        data: {
-          message: 'this is a message',
-        },
-      });
-    });
-
-    it('adds the alert message to the store', () => {
-      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'this is a message'});
     });
   });
 
@@ -415,62 +310,10 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retroPasswordSuccessfullyUpdated', () => {
-    beforeEach(() => {
-      dispatcher.retroPasswordSuccessfullyUpdated({data: {retro_id: '42', token: 'new-api-token'}});
-    });
-
-    it('clears the error messages', () => {
-      expect(reduxActions.clearErrors).toHaveBeenCalled();
-    });
-
-    it('updates token in local storage', () => {
-      expect(localStorage.getItem('apiToken-42')).toEqual('new-api-token');
-    });
-  });
-
-  describe('retroPasswordUnsuccessfullyUpdated', () => {
-    beforeEach(() => {
-      dispatcher.retroPasswordUnsuccessfullyUpdated({
-        data: {
-          errors: ['Sorry! That password does not match the current one.'],
-        },
-      });
-    });
-
-    it('updates the error messages', () => {
-      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That password does not match the current one.']);
-    });
-  });
-
   describe('clearErrors', () => {
     it('clears the error messages', () => {
       dispatcher.clearErrors();
       expect(reduxActions.clearErrors).toHaveBeenCalled();
-    });
-  });
-
-  describe('redirectToRegistration', () => {
-    it('redirects to the registration page with the correct url parameters', () => {
-      dispatcher.redirectToRegistration({
-        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},
-      });
-
-      expect(routerActionDispatcher.registration).toHaveBeenCalledWith('the-access-token', 'a@a.a', 'my full name');
-    });
-  });
-
-  describe('setConfig', () => {
-    it('sets feature flags', () => {
-      dispatcher.setConfig({
-        data: {
-          archive_emails: true,
-        },
-      });
-
-      expect(reduxActions.updateFeatureFlags).toHaveBeenCalledWith({
-        archiveEmails: true,
-      });
     });
   });
 });

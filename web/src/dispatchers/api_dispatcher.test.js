@@ -238,33 +238,27 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({
         retro: {
-          name: 'the new retro name',
-          slug: 'the-new-slug-123',
           is_private: true,
         },
       });
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroSettingsSuccessfullyUpdated',
-        data: {
-          retro: {
-            name: 'the new retro name',
-            slug: 'the-new-slug-123',
-            is_private: true,
-          },
-        },
-      });
 
+      const expectedRetro = {
+        name: 'the new retro name',
+        slug: 'the-new-slug-123',
+        is_private: true,
+      };
       expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual(null);
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'showAlert',
-        data: {
-          checkIcon: true,
-          message: 'Settings saved!',
-          className: 'alert-with-back-button',
-        },
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(expectedRetro);
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
+      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(expectedRetro);
+
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({
+        checkIcon: true,
+        message: 'Settings saved!',
+        className: 'alert-with-back-button',
       });
     });
 
@@ -296,10 +290,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroSettingsUnsuccessfullyUpdated',
-          data: {errors: ['some error']},
-        });
+        expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['some error']);
       });
 
       it('does not reset API token', () => {
@@ -323,15 +314,19 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroSettingsSuccessfullyUpdated', () => {
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroSettingsSuccessfullyUpdated',
-          data: {
-            retro: {
-              name: 'the new retro name',
-              slug: 'retro-slug-123',
-              is_private: false,
-            },
-          },
+        const expectedRetro = {
+          name: 'the new retro name',
+          slug: 'retro-slug-123',
+          is_private: false,
+        };
+        expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(expectedRetro);
+        expect(reduxActions.clearErrors).toHaveBeenCalled();
+        expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(expectedRetro);
+
+        expect(reduxActions.showAlert).toHaveBeenCalledWith({
+          checkIcon: true,
+          message: 'Settings saved!',
+          className: 'alert-with-back-button',
         });
       });
 
@@ -377,27 +372,15 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({token: 'new-api-token'});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroPasswordSuccessfullyUpdated',
-        data: {
-          retro_id: '13',
-          token: 'new-api-token',
-        },
-      });
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'routeToRetroSettings',
-        data: {
-          retro_id: '13',
-        },
-      });
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
+      expect(localStorage.getItem('apiToken-13')).toEqual('new-api-token');
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'showAlert',
-        data: {
-          checkIcon: true,
-          message: 'Password changed',
-        },
+      expect(routerActionDispatcher.retroSettings).toHaveBeenCalledWith('13');
+
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({
+        checkIcon: true,
+        message: 'Password changed',
       });
     });
 
@@ -409,10 +392,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroPasswordUnsuccessfullyUpdated',
-          data: {errors: ['some error']},
-        });
+        expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['some error']);
       });
     });
   });
@@ -1006,12 +986,11 @@ describe('ApiDispatcher', () => {
         },
       });
       const request = MockFetch.latestRequest();
-      request.ok();
+      const archives = [{id: 4}, {id: 5}];
+      request.ok({archives});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroArchivesSuccessfullyFetched',
-        data: {},
-      });
+
+      expect(reduxActions.updateRetroArchives).toHaveBeenCalledWith(archives);
     });
 
     describe('when retro does not exist', () => {
@@ -1039,12 +1018,10 @@ describe('ApiDispatcher', () => {
         },
       });
       const request = MockFetch.latestRequest();
-      request.ok();
+      request.ok({retro, archive: {id: 6}});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroArchiveSuccessfullyFetched',
-        data: {},
-      });
+
+      expect(reduxActions.updateCurrentArchivedRetro).toHaveBeenCalledWith(retro);
     });
 
     describe('when archives do not exist', () => {
@@ -1080,9 +1057,8 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok();
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'redirectToRetroCreatePage',
-      });
+
+      expect(routerActionDispatcher.newRetro).toHaveBeenCalled();
     });
 
     it('stores the auth token in local storage', () => {
@@ -1101,7 +1077,7 @@ describe('ApiDispatcher', () => {
       });
     });
 
-    it('makes an api POST to /sessions', () => {
+    it('makes an api POST to /sessions and stores token in local storage', () => {
       expect(MockFetch).toHaveRequested('/sessions', {
         method: 'POST',
         headers: {
@@ -1113,26 +1089,34 @@ describe('ApiDispatcher', () => {
         },
       });
       const request = MockFetch.latestRequest();
-      request.ok();
+      request.ok({auth_token: 'auth-token'});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'loggedInSuccessfully',
-        data: {},
-      });
+
+      expect(localStorage.getItem('authToken')).toEqual('auth-token');
+    });
+
+    it('redirects new user to new retro', () => {
+      const request = MockFetch.latestRequest();
+      request.ok({new_user: true});
+      Promise.runAll();
+
+      expect(routerActionDispatcher.newRetro).toHaveBeenCalled();
+    });
+
+    it('redirects existing user to home', () => {
+      const request = MockFetch.latestRequest();
+      request.ok({new_user: false});
+      Promise.runAll();
+
+      expect(routerActionDispatcher.home).toHaveBeenCalled();
     });
 
     it('if the server returns a 404 because the user does not exist', () => {
       const request = MockFetch.latestRequest();
       request.notFound();
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'redirectToRegistration',
-        data: {
-          'access_token': 'the-access-token',
-          'email': 'a@a.a',
-          'name': 'My full name',
-        },
-      });
+
+      expect(routerActionDispatcher.registration).toHaveBeenCalledWith('the-access-token', 'a@a.a', 'My full name');
     });
 
     it('stores the auth token in local storage', () => {
@@ -1158,8 +1142,29 @@ describe('ApiDispatcher', () => {
         },
       });
       const request = MockFetch.latestRequest();
-      request.ok();
+      request.ok({archive_emails: true});
       Promise.runAll();
+
+      expect(reduxActions.updateFeatureFlags).toHaveBeenCalledWith({
+        archiveEmails: true,
+      });
+    });
+
+    it('sets not found when config not found', () => {
+      expect(MockFetch).toHaveRequested('/config', {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+        },
+      });
+      const request = MockFetch.latestRequest();
+      request.notFound();
+      Promise.runAll();
+
+      expect(reduxActions.setNotFound).toHaveBeenCalledWith({
+        not_found: true,
+      });
     });
   });
 });

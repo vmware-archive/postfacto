@@ -219,7 +219,7 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroArchive');
       return retroClient.getRetroArchive(retro_id, archive_id, getApiToken(retro_id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'retroArchiveSuccessfullyFetched', data});
+          retroActionCreators.updateCurrentArchivedRetro(data.retro);
         } else if (status === 403) {
           routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 404) {
@@ -231,7 +231,7 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroArchives');
       return retroClient.getRetroArchives(retro_id, getApiToken(retro_id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'retroArchivesSuccessfullyFetched', data});
+          retroActionCreators.updateRetroArchives(data.archives);
         } else if (status === 403) {
           routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 404) {
@@ -243,15 +243,20 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('createUser');
       return retroClient.createUser(access_token, company_name, full_name).then(([, response]) => {
         localStorage.setItem('authToken', response.auth_token);
-        this.dispatch({type: 'redirectToRetroCreatePage'});
+        routerActionDispatcher.newRetro();
       });
     },
     createSession({data: {access_token, email, name}}) {
       return retroClient.createSession(access_token).then(([status, data]) => {
         if (status === 200) {
-          this.dispatch({type: 'loggedInSuccessfully', data});
+          localStorage.setItem('authToken', data.auth_token);
+          if (data.new_user) {
+            routerActionDispatcher.newRetro();
+          } else {
+            routerActionDispatcher.home();
+          }
         } else if (status === 404) {
-          this.dispatch({type: 'redirectToRegistration', data: {access_token, email, name}});
+          routerActionDispatcher.registration(access_token, email, name);
         }
       });
     },
@@ -260,18 +265,16 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       return retroClient.updateRetro(retro_id, retro_name, new_slug, getApiToken(retro_id), is_private, request_uuid, video_link).then(([status, data]) => {
         if (status >= 200 && status < 400) {
           resetApiToken(old_slug, new_slug);
-          this.dispatch({
-            type: 'retroSettingsSuccessfullyUpdated',
-            data: {retro: {name: retro_name, slug: new_slug, is_private: data.retro.is_private}},
-          });
-          this.dispatch({
-            type: 'showAlert',
-            data: {checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'},
-          });
+          const retro = {name: retro_name, slug: new_slug, is_private: data.retro.is_private};
+          retroActionCreators.currentRetroUpdated(retro);
+          retroActionCreators.clearErrors();
+
+          routerActionDispatcher.showRetro(retro);
+          retroActionCreators.showAlert({checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'});
         } else if (status === 403) {
           routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 422) {
-          this.dispatch({type: 'retroSettingsUnsuccessfullyUpdated', data});
+          retroActionCreators.errorsUpdated(data.errors);
         }
       });
     },
@@ -280,11 +283,13 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       return retroClient.updateRetroPassword(retro_id, current_password, new_password, request_uuid, getApiToken(retro_id))
         .then(([status, data]) => {
           if (status >= 200 && status < 400) {
-            this.dispatch({type: 'retroPasswordSuccessfullyUpdated', data: {retro_id, token: data.token}});
-            this.dispatch({type: 'routeToRetroSettings', data: {retro_id}});
-            this.dispatch({type: 'showAlert', data: {checkIcon: true, message: 'Password changed'}});
+            retroActionCreators.clearErrors();
+            window.localStorage.setItem(`apiToken-${retro_id}`, data.token);
+
+            routerActionDispatcher.retroSettings(retro_id);
+            retroActionCreators.showAlert({checkIcon: true, message: 'Password changed'});
           } else if (status === 422) {
-            this.dispatch({type: 'retroPasswordUnsuccessfullyUpdated', data});
+            retroActionCreators.errorsUpdated(data.errors);
           }
         });
     },
@@ -292,11 +297,8 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('retrieveConfig');
       return retroClient.retrieveConfig().then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({
-            type: 'setConfig',
-            data: {
-              archive_emails: data.archive_emails,
-            },
+          retroActionCreators.updateFeatureFlags({
+            archiveEmails: data.archive_emails,
           });
         } else if (status === 404) {
           retroActionCreators.setNotFound({not_found: true});
