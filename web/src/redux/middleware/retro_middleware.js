@@ -28,14 +28,21 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const AnalyticsMiddleware = (analyticsClient) => () => (next) => (action) => {
-  if (action.type === 'TRACK_ANALYTICS') {
-    /* eslint-disable no-console */
-    console.log('Sending analytics:', action.payload.type, action.payload.data);
-    analyticsClient.track(action.payload.type, action.payload.data);
+import {retrosUpdated, signOut} from '../actions/state_change_actions';
+
+const Retro_middleware = (retroClient) => (store) => (next) => (action) => {
+  if (action.type === 'GET_RETROS') {
+    retroClient.getRetros().then(([status, data]) => {
+      if (status === 403) {
+        store.dispatch(signOut());
+      } else {
+        store.dispatch(retrosUpdated(data.retros));
+      }
+    });
+
     return;
   }
   next(action);
 };
 
-export default AnalyticsMiddleware;
+export default Retro_middleware;

@@ -30,12 +30,12 @@
  */
 
 import PromiseMock from 'promise-mock';
-import RetroMiddleware from './retro-middleware';
+import Retro_middleware from './retro_middleware';
 import MockFetch from '../../test_support/fetch_matchers';
 import {retrosUpdated, signOut} from '../actions/state_change_actions';
 import RetroClient from '../../api/retro_client';
 
-describe('RetroMiddleware', () => {
+describe('Retro_middleware', () => {
   const client = new RetroClient(() => 'https://example.com', () => 'the-auth-token');
 
   beforeEach(() => {
@@ -55,7 +55,7 @@ describe('RetroMiddleware', () => {
 
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
-    RetroMiddleware(client)(store)(next)(action);
+    Retro_middleware(client)(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
   });
@@ -69,7 +69,7 @@ describe('RetroMiddleware', () => {
 
       const next = jest.fn();
       store = {dispatch: jest.fn()};
-      RetroMiddleware(client)(store)(next)(action);
+      Retro_middleware(client)(store)(next)(action);
     });
 
     it('makes an API GET to /retros', () => {

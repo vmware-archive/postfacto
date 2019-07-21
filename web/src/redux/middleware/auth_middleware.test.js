@@ -29,11 +29,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import AuthMiddleware from './auth-middleware';
+import Auth_middleware from './auth_middleware';
 import {home, retroRelogin} from '../actions/router_actions';
 import {forceRelogin} from '../actions/state_change_actions';
 
-describe('AuthMiddleware', () => {
+describe('Auth_middleware', () => {
   beforeEach(() => {
   });
 
@@ -44,7 +44,7 @@ describe('AuthMiddleware', () => {
 
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
-    AuthMiddleware()(store)(next)(action);
+    Auth_middleware()(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
   });
@@ -60,7 +60,7 @@ describe('AuthMiddleware', () => {
       const next = jest.fn();
       const store = {dispatch: jest.fn()};
       const localStorage = {clear: jest.fn()};
-      AuthMiddleware(localStorage)(store)(next)(doneAction);
+      Auth_middleware(localStorage)(store)(next)(doneAction);
 
       expect(store.dispatch).toHaveBeenCalledWith(home());
       expect(localStorage.clear).toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe('AuthMiddleware', () => {
         }),
       };
 
-      AuthMiddleware(localStorage)(store)(next)(forceRelogin('user-b', 'retro-id'));
+      Auth_middleware(localStorage)(store)(next)(forceRelogin('user-b', 'retro-id'));
 
       expect(store.dispatch).toHaveBeenCalledWith(retroRelogin('retro-id'));
     });
@@ -101,7 +101,7 @@ describe('AuthMiddleware', () => {
         }),
       };
 
-      AuthMiddleware(localStorage)(store)(next)(forceRelogin('user-a', 'retro-id'));
+      Auth_middleware(localStorage)(store)(next)(forceRelogin('user-a', 'retro-id'));
 
       expect(store.dispatch).not.toHaveBeenCalled();
     });

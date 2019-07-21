@@ -28,14 +28,21 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const RouterMiddleware = (router) => () => (next) => (action) => {
-  if (action.type === 'SET_ROUTE') {
-    /* eslint-disable no-console */
-    console.log('Navigating to: ', action.payload);
-    router.navigate(action.payload);
-    return;
+import {home, retroRelogin} from '../actions/router_actions';
+
+const Auth_middleware = (localStorage) => (store) => (next) => (action) => {
+  if (action.type === 'SIGN_OUT') {
+    localStorage.clear();
+    store.dispatch(home());
+  }
+
+  if (action.type === 'FORCE_RELOGIN') {
+    const session = store.getState().user.websocketSession;
+    if (session.request_uuid !== action.payload.originatorId) {
+      store.dispatch(retroRelogin(action.payload.retroId));
+    }
   }
   next(action);
 };
 
-export default RouterMiddleware;
+export default Auth_middleware;

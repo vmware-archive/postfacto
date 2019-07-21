@@ -29,9 +29,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import RouterMiddleware from './router-middleware';
+import Router_middleware from './router_middleware';
 
-describe('RouterMiddleware', () => {
+describe('Router_middleware', () => {
   beforeEach(() => {
   });
 
@@ -43,7 +43,7 @@ describe('RouterMiddleware', () => {
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
     const router = {navigate: jest.fn()};
-    RouterMiddleware(router)(store)(next)(action);
+    Router_middleware(router)(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
     expect(router.navigate).not.toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('RouterMiddleware', () => {
 
     const next = jest.fn();
     const router = {navigate: jest.fn()};
-    RouterMiddleware(router)({})(next)(doneAction);
+    Router_middleware(router)({})(next)(doneAction);
 
     expect(router.navigate).toHaveBeenCalledWith(location);
     expect(next).not.toHaveBeenCalled();

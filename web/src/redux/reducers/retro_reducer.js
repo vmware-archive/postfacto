@@ -49,7 +49,7 @@ const initialState = {
   retros: [],
 };
 
-const RetroReducer = () => (state = initialState, action) => {
+const Retro_reducer = () => (state = initialState, action) => {
   if (action.type === 'CURRENT_RETRO_UPDATED') {
     return Object.assign({}, state, {currentRetro: action.payload});
   }
@@ -145,4 +145,4 @@ const RetroReducer = () => (state = initialState, action) => {
   return state;
 };
 
-export default RetroReducer;
+export default Retro_reducer;

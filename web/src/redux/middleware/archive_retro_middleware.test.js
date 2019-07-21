@@ -29,7 +29,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import ArchiveMiddleware from './archive-retro-middleware';
+import ArchiveMiddleware from './archive_retro_middleware';
 
 describe('ArchiveMiddleware', () => {
   beforeEach(() => {
