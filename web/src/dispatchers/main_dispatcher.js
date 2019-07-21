@@ -29,9 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const ALERT_DURATION = 3500;
-let alertTimeout = null;
-
 /*
  * TODO
  *  4. Pull functions up to api dispatcher where possible
@@ -163,10 +160,7 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     archiveRetroSuccessfullyDone({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);
       analyticsDispatcher.archivedRetro(data.retro.id);
-      this.dispatch({
-        type: 'showAlert',
-        data: {message: 'Archived!'},
-      });
+      retroActionCreators.showAlert({message: 'Archived!'});
     },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
@@ -206,15 +200,9 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
       retroActionCreators.updateRetroArchives(data.archives);
     },
     showAlert({data}) {
-      clearTimeout(alertTimeout);
-      alertTimeout = setTimeout(() => retroActionCreators.clearAlert(), ALERT_DURATION);
-
       retroActionCreators.showAlert(data);
     },
     hideAlert() {
-      clearTimeout(alertTimeout);
-      alertTimeout = null;
-
       retroActionCreators.clearAlert();
     },
     showDialog({data}) {

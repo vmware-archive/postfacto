@@ -9,6 +9,7 @@ import RouterMiddleware from './middleware/router-middleware';
 import AuthMiddleware from './middleware/auth-middleware';
 import RetroMiddleware from './middleware/retro-middleware';
 import AnalyticsMiddleware from './middleware/analytics-middleware';
+import MessageMiddleware from './middleware/message_middleware';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -23,6 +24,7 @@ const getReduxStore = (router, retroClient, analyticsClient) => createStore(comb
   RouterMiddleware(router),
   AuthMiddleware(window.localStorage),
   RetroMiddleware(retroClient),
+  MessageMiddleware(),
 )));
 
 

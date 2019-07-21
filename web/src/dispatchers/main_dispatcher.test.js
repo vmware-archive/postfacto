@@ -376,12 +376,7 @@ describe('MainDispatcher', () => {
     });
 
     it('displays an alert', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'showAlert',
-        data: {
-          message: 'Archived!',
-        },
-      });
+      expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'Archived!'});
     });
   });
 
@@ -565,29 +560,6 @@ describe('MainDispatcher', () => {
 
     it('adds the alert message to the store', () => {
       expect(reduxActions.showAlert).toHaveBeenCalledWith({message: 'this is a message'});
-    });
-
-    it('schedules removal of the message after a delay', () => {
-      jest.advanceTimersByTime(2000);
-      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
-
-      jest.advanceTimersByTime(2000);
-      expect(reduxActions.clearAlert).toHaveBeenCalled();
-    });
-
-    it('resets the removal countdown if the message updates', () => {
-      jest.advanceTimersByTime(2000);
-      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
-
-      dispatcher.showAlert({
-        data: {message: 'a new message'},
-      });
-
-      jest.advanceTimersByTime(2000);
-      expect(reduxActions.clearAlert).not.toHaveBeenCalled();
-
-      jest.advanceTimersByTime(2000);
-      expect(reduxActions.clearAlert).toHaveBeenCalled();
     });
   });
 
