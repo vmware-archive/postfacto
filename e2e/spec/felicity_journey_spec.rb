@@ -110,7 +110,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
         expect(page).to have_content('worst team')
 
         find('.retro-list-tile', text: 'best team').click
-        expect(current_url).to end_with('retros/best-team/')
+        expect(current_url).to end_with('retros/best-team')
       end
 
       describe 'clicking new retro' do

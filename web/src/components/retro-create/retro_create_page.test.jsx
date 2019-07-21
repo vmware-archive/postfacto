@@ -233,6 +233,6 @@ describe('RetroCreatePage', () => {
     localStorage.setItem('authToken', '');
     shallow(<RetroCreatePage/>);
 
-    expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/'});
+    expect(Dispatcher).toHaveReceived({type: 'redirectToHome'});
   });
 });

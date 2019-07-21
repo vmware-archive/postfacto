@@ -41,68 +41,68 @@ let alertTimeout = null;
  *  5. Remove main_dispatcher and analytics_dispatcher
  *  6. Move api-dispatcher to middleware
  */
-export default function (retroActionCreators, store) {
+export default function (retroActionCreators, routerActionDispatcher, store) {
   return {
-    setRoute({data}) {
-      this.router.navigate(data);
+    redirectToHome() {
+      routerActionDispatcher.home();
     },
     requireRetroLogin({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/login`});
+      routerActionDispatcher.retroLogin(data.retro_id);
     },
     requireRetroRelogin({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}/relogin`});
+      routerActionDispatcher.retroRelogin(data.retro);
     },
     retroSuccessfullyCreated({data}) {
       retroActionCreators.clearErrors();
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}`});
+      routerActionDispatcher.showRetro(data.retro);
       this.dispatch({type: 'createdRetroAnalytics', data: {retroId: data.retro.id}});
     },
     retroSuccessfullyLoggedIn({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+      routerActionDispatcher.showRetroForId(data.retro_id);
     },
     redirectToRetroCreatePage() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
+      routerActionDispatcher.newRetro();
     },
     retroSettingsSuccessfullyUpdated({data: {retro}}) {
       retroActionCreators.currentRetroUpdated(retro);
       retroActionCreators.clearErrors();
-      this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
+      routerActionDispatcher.showRetro(retro);
     },
     routeToRetroArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives`});
+      routerActionDispatcher.retroArchives(data.retro_id);
     },
     routeToRetroArchive({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives/${data.archive_id}`});
+      routerActionDispatcher.retroArchive(data.retro_id, data.archive_id);
     },
     routeToRetroSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
+      routerActionDispatcher.retroSettings(data.retro_id);
     },
     routeToRetroPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings/password`});
+      routerActionDispatcher.retroPasswordSettings(data.retro_id);
     },
     backPressedFromArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+      routerActionDispatcher.showRetroForId(data.retro_id);
     },
     loggedInSuccessfully({data}) {
       localStorage.setItem('authToken', data.auth_token);
       if (data.new_user) {
-        this.dispatch({type: 'setRoute', data: '/retros/new'});
+        routerActionDispatcher.newRetro();
       } else {
-        this.dispatch({type: 'setRoute', data: '/'});
+        routerActionDispatcher.home();
       }
     },
     signOut() {
       window.localStorage.clear();
-      this.dispatch({type: 'setRoute', data: '/'});
+      routerActionDispatcher.home();
     },
     backPressedFromSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+      routerActionDispatcher.showRetroForId(data.retro_id);
     },
     backPressedFromPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
+      routerActionDispatcher.retroSettings(data.retro_id);
     },
     redirectToRegistration({data}) {
-      this.dispatch({type: 'setRoute', data: `/registration/${data.access_token}/${data.email}/${data.name}`});
+      routerActionDispatcher.registration(data.access_token, data.email, data.name);
     },
     retroUnsuccessfullyCreated({data}) {
       retroActionCreators.errorsUpdated(data.errors);

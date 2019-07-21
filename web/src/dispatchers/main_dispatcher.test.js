@@ -29,31 +29,52 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 import mainDispatcher from './main_dispatcher';
 
 describe('MainDispatcher', () => {
-  let subject;
   let retro;
-  let retro_archives;
-  let router;
+  let dispatcher;
+  let reduxActions;
+  let routerActionDispatcher;
 
   beforeEach(() => {
-    subject = Dispatcher;
-
-    // dispatch is spied on in spec_helper
-    subject.dispatch.mockCallThrough();
-
-    // prevent console logs
-    jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
-
-    router = {
-      navigate: () => {
-      },
+    reduxActions = {
+      clearErrors: jest.fn(),
+      errorsUpdated: jest.fn(),
+      currentRetroUpdated: jest.fn(),
+      currentRetroItemUpdated: jest.fn(),
+      updateWebsocketSession: jest.fn(),
+      currentRetroActionItemDeleted: jest.fn(),
+      updateFeatureFlags: jest.fn(),
+      setNotFound: jest.fn(),
+      clearDialog: jest.fn(),
+      showDialog: jest.fn(),
+      showAlert: jest.fn(),
+      clearAlert: jest.fn(),
+      updateRetroArchives: jest.fn(),
+      updateCurrentArchivedRetro: jest.fn(),
+      currentRetroActionItemUpdated: jest.fn(),
+      currentRetroSendArchiveEmailUpdated: jest.fn(),
+      currentRetroHighlightCleared: jest.fn(),
+      currentRetroItemDeleted: jest.fn(),
+      currentRetroItemDoneUpdated: jest.fn(),
     };
-    subject.router = router;
-    jest.spyOn(router, 'navigate').mockReturnValue(null);
+    routerActionDispatcher = {
+      newRetro: jest.fn(),
+      showRetro: jest.fn(),
+      home: jest.fn(),
+      retroLogin: jest.fn(),
+      retroRelogin: jest.fn(),
+      showRetroForId: jest.fn(),
+      retroArchives: jest.fn(),
+      retroArchive: jest.fn(),
+      retroSettings: jest.fn(),
+      retroPasswordSettings: jest.fn(),
+      registration: jest.fn(),
+    };
+    dispatcher = mainDispatcher(reduxActions, routerActionDispatcher);
+    dispatcher.dispatch = jest.fn();
 
     retro = {
       id: 1,
@@ -88,63 +109,23 @@ describe('MainDispatcher', () => {
         },
       ],
     };
-
-    retro_archives = {
-      id: 1,
-      name: 'retro name',
-      items: [
-        {
-          id: 2,
-          description: 'item 1',
-          vote_count: 1,
-          done: false,
-          archived_at: '2016-07-18T00:00:00.000Z',
-        },
-        {
-          id: 3,
-          description: 'item 3',
-          vote_count: 2,
-          done: true,
-          archived_at: '2016-07-20T00:00:00.000Z',
-        },
-      ],
-      action_items: [
-        {
-          id: 1,
-          description: 'archived item 1',
-          archived_at: '2016-07-18T00:00:00.000Z',
-        },
-        {
-          id: 2,
-          description: 'archived item 2',
-          archived_at: '2016-07-20T00:00:00.000Z',
-        },
-      ],
-    };
   });
 
   describe('setRoute', () => {
     it('calls the router navigate', () => {
-      subject.dispatch({type: 'setRoute', data: '/url/path'});
-      expect(router.navigate.mock.calls).toEqual([['/url/path']]);
+      dispatcher.redirectToHome();
+
+      expect(routerActionDispatcher.home).toHaveBeenCalled();
     });
   });
 
   describe('retroSuccessfullyCreated', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        clearErrors: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroSuccessfullyCreated({data: {retro}});
     });
 
     it('redirects to the new retro page', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'setRoute', data: `/retros/${retro.slug}`});
+      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(retro);
     });
 
     it('dispatches created retro analytic', () => {
@@ -160,18 +141,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroUnsuccessfullyCreated', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        errorsUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
-
     it('updates the error messages', () => {
       dispatcher.retroUnsuccessfullyCreated({
         data: {
@@ -184,17 +153,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroSuccessfullyFetched', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the retro', () => {
       dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
 
@@ -209,17 +167,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('getRetroSettingsSuccessfullyReceived', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the retro', () => {
       const updatedRetro = {name: 'The Retro Name', slug: 'the-retro-123'};
       dispatcher.getRetroSettingsSuccessfullyReceived({data: {retro: updatedRetro}});
@@ -229,17 +176,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('getRetroLoginSuccessfullyReceived', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the retro name', () => {
       dispatcher.getRetroLoginSuccessfullyReceived({data: {retro: {name: 'The Retro Name'}}});
       expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name'});
@@ -247,26 +183,17 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroSettingsSuccessfullyUpdated', () => {
-    let dispatcher;
-    let reduxActions;
-
+    const settingUpdatedRetro = {
+      name: 'new retro name',
+      slug: 'new-retro-slug',
+    };
     beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-        clearErrors: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroSettingsSuccessfullyUpdated({
         data: {
-          retro: {
-            name: 'new retro name',
-            slug: 'new-retro-slug',
-          },
+          retro: settingUpdatedRetro,
         },
       });
     });
-
 
     it('updates the retro slug and name, and clears the error message', () => {
       expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({
@@ -278,20 +205,12 @@ describe('MainDispatcher', () => {
     });
 
     it('redirects to the retro page url with the new slug', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'setRoute', data: '/retros/new-retro-slug'});
+      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(settingUpdatedRetro);
     });
   });
 
   describe('retroSettingsUnsuccessfullyUpdated', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        errorsUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroSettingsUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That URL is already taken.'],
@@ -306,54 +225,35 @@ describe('MainDispatcher', () => {
 
   describe('requireRetroLogin', () => {
     it('dispatches a set Route', () => {
-      subject.dispatch({type: 'requireRetroLogin', data: {retro_id: 1}});
-      expect(Dispatcher).toHaveReceived({
-        type: 'setRoute',
-        data: '/retros/1/login',
-      });
+      dispatcher.requireRetroLogin({data: {retro_id: 1}});
+      expect(routerActionDispatcher.retroLogin).toHaveBeenCalledWith(1);
     });
   });
 
   describe('requireRetroRelogin', () => {
     it('dispatches a set Route', () => {
-      subject.dispatch({type: 'requireRetroRelogin', data: {retro: {slug: 'retro-slug-1'}}});
-      expect(Dispatcher).toHaveReceived({
-        type: 'setRoute',
-        data: '/retros/retro-slug-1/relogin',
-      });
+      const r = {slug: 'retro-slug-1'};
+      dispatcher.requireRetroRelogin({data: {retro: r}});
+      expect(routerActionDispatcher.retroRelogin).toHaveBeenCalledWith(r);
     });
   });
 
   describe('redirectToRetroCreatePage', () => {
     it('dispatches a set Route to new retro page', () => {
-      subject.dispatch({type: 'redirectToRetroCreatePage'});
-      expect(Dispatcher).toHaveReceived({
-        type: 'setRoute',
-        data: '/retros/new',
-      });
+      dispatcher.redirectToRetroCreatePage({});
+      expect(routerActionDispatcher.newRetro).toHaveBeenCalled();
     });
   });
 
   describe('retroSuccessfullyLoggedIn', () => {
     it('dispatches a set Route', () => {
-      subject.dispatch({type: 'retroSuccessfullyLoggedIn', data: {retro_id: 1}});
-      expect(Dispatcher).toHaveReceived({
-        type: 'setRoute',
-        data: '/retros/1',
-      });
+      dispatcher.retroSuccessfullyLoggedIn({data: {retro_id: 1}});
+      expect(routerActionDispatcher.showRetroForId).toHaveBeenCalledWith(1);
     });
   });
 
   describe('retroItemSuccessfullyCreated', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        currentRetroItemUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroItemSuccessfullyCreated({
         data: {
           item: {id: 10, category: 'happy'},
@@ -361,7 +261,6 @@ describe('MainDispatcher', () => {
         },
       });
     });
-
 
     it('creates the retro item', () => {
       expect(reduxActions.currentRetroItemUpdated).toHaveBeenCalledWith({id: 10, category: 'happy'});
@@ -376,17 +275,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyDeleted', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroItemDeleted: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('deletes the retro item', () => {
       dispatcher.retroItemSuccessfullyDeleted({data: {retro_id: 1, item: retro.items[0]}});
 
@@ -395,17 +283,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyVoted', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroItemUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the vote count on the retro item', () => {
       const itemFromApiResponse = {
         id: 1,
@@ -419,38 +296,17 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyDone', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroItemDoneUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-      dispatcher.retroItemSuccessfullyDone({data: {retroId: 1, itemId: 2}});
-    });
-
     it('fires retroItemDoneUpdated with true', () => {
+      dispatcher.retroItemSuccessfullyDone({data: {retroId: 1, itemId: 2}});
       expect(reduxActions.currentRetroItemDoneUpdated).toHaveBeenCalledWith(2, true);
     });
   });
 
   describe('retroItemSuccessfullyUndone', () => {
-    let dispatcher;
-    let reduxActions;
-
     let item;
 
     beforeEach(() => {
-      reduxActions = {
-        currentRetroItemDoneUpdated: jest.fn(),
-      };
-
       item = {id: 2, done: false};
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroItemSuccessfullyUndone({data: {retroId: 1, item}});
     });
 
@@ -463,18 +319,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyHighlighted', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates retro in redux', () => {
       dispatcher.retroItemSuccessfullyHighlighted({data: {retro}});
 
@@ -483,18 +327,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroItemSuccessfullyUnhighlighted', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroHighlightCleared: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates retro in redux', () => {
       dispatcher.retroItemSuccessfullyUnhighlighted({data: {retro}});
 
@@ -503,18 +335,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('toggleSendArchiveEmail', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroSendArchiveEmailUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('toggles archive email value', () => {
       dispatcher.toggleSendArchiveEmail({data: {currentSendArchiveEmail: false}});
 
@@ -523,18 +343,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('extendTimerSuccessfullyDone', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates retro in redux', () => {
       dispatcher.extendTimerSuccessfullyDone({data: {retro}});
 
@@ -543,17 +351,8 @@ describe('MainDispatcher', () => {
   });
 
   describe('archiveRetroSuccessfullyDone', () => {
-    let dispatcher;
-    let reduxActions;
     let updated_retro;
-
     beforeEach(() => {
-      reduxActions = {
-        currentRetroUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       updated_retro = {
         id: retro.id,
         name: retro.name,
@@ -588,18 +387,6 @@ describe('MainDispatcher', () => {
 
   describe('websocketRetroDataReceived', () => {
     describe('when the retro is updated', () => {
-      let dispatcher;
-      let reduxActions;
-
-      beforeEach(() => {
-        reduxActions = {
-          currentRetroUpdated: jest.fn(),
-        };
-
-        dispatcher = mainDispatcher(reduxActions);
-        dispatcher.dispatch = jest.fn();
-      });
-
       it('updates store with data from socket', () => {
         dispatcher.websocketRetroDataReceived({data: {retro}});
 
@@ -608,16 +395,9 @@ describe('MainDispatcher', () => {
     });
 
     describe('when the command is force_relogin', () => {
-      let dispatcher;
-      let reduxActions;
-
       beforeEach(() => {
-        reduxActions = {
-          currentRetroUpdated: jest.fn(),
-        };
-
         const store = {getState: () => ({user: {websocketSession: {request_uuid: 'fake-request-uuid-1'}}})};
-        dispatcher = mainDispatcher(reduxActions, store);
+        dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, store);
         dispatcher.dispatch = jest.fn();
       });
 
@@ -664,18 +444,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('websocketSessionDataReceived', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        updateWebsocketSession: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates store with data from socket', () => {
       dispatcher.websocketSessionDataReceived({data: {payload: {request_uuid: 'some-request-uuid'}}});
       expect(reduxActions.updateWebsocketSession).toHaveBeenCalledWith({request_uuid: 'some-request-uuid'});
@@ -683,18 +451,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('doneRetroActionItemSuccessfullyToggled', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroActionItemUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store', () => {
       const actionItem = {id: 1, done: true};
       dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: actionItem}});
@@ -723,19 +479,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroActionItemSuccessfullyDeleted', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroActionItemDeleted: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
-
     it('updates the store and removes the retro action item', () => {
       const action_item = retro.action_items[0];
 
@@ -746,19 +489,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroActionItemSuccessfullyEdited', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        currentRetroActionItemUpdated: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
-
     it('updates description of the action item', () => {
       const action_item = retro.action_items[0];
       action_item.description = 'description for action item 1 has been changed';
@@ -769,19 +499,40 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroArchiveSuccessfullyFetched', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        updateCurrentArchivedRetro: jest.fn(),
+    it('updates the store with the archived retro items', () => {
+      const retro_archives = {
+        id: 1,
+        name: 'retro name',
+        items: [
+          {
+            id: 2,
+            description: 'item 1',
+            vote_count: 1,
+            done: false,
+            archived_at: '2016-07-18T00:00:00.000Z',
+          },
+          {
+            id: 3,
+            description: 'item 3',
+            vote_count: 2,
+            done: true,
+            archived_at: '2016-07-20T00:00:00.000Z',
+          },
+        ],
+        action_items: [
+          {
+            id: 1,
+            description: 'archived item 1',
+            archived_at: '2016-07-18T00:00:00.000Z',
+          },
+          {
+            id: 2,
+            description: 'archived item 2',
+            archived_at: '2016-07-20T00:00:00.000Z',
+          },
+        ],
       };
 
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
-    it('updates the store with the archived retro items', () => {
       dispatcher.retroArchiveSuccessfullyFetched({data: {retro: retro_archives}});
 
       expect(reduxActions.updateCurrentArchivedRetro).toHaveBeenCalledWith(retro_archives);
@@ -789,18 +540,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroArchivesSuccessfullyFetched', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        updateRetroArchives: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with the archives', () => {
       dispatcher.retroArchivesSuccessfullyFetched({data: {archives: [{id: 123}]}});
 
@@ -810,34 +549,24 @@ describe('MainDispatcher', () => {
 
   describe('backPressedFromArchives', () => {
     beforeEach(() => {
-      subject.dispatch({type: 'backPressedFromArchives', data: {retro_id: '1'}});
+      dispatcher.backPressedFromArchives({data: {retro_id: '1'}});
     });
     it('sets the route back to the current retro', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/retros/1'});
+      expect(routerActionDispatcher.showRetroForId).toHaveBeenCalledWith('1');
     });
   });
 
   describe('backPressedFromPasswordSettings', () => {
     beforeEach(() => {
-      subject.dispatch({type: 'backPressedFromPasswordSettings', data: {retro_id: '1'}});
+      dispatcher.backPressedFromPasswordSettings({data: {retro_id: '1'}});
     });
     it('sets the route back to the current retro', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/retros/1/settings'});
+      expect(routerActionDispatcher.retroSettings).toHaveBeenCalledWith('1');
     });
   });
 
   describe('showAlert', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        showAlert: jest.fn(),
-        clearAlert: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.showAlert({
         data: {
           message: 'this is a message',
@@ -874,17 +603,7 @@ describe('MainDispatcher', () => {
   });
 
   describe('hideAlert', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        showAlert: jest.fn(),
-        clearAlert: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.hideAlert();
     });
 
@@ -894,18 +613,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('showDialog', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        showDialog: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('adds dialog to the store', () => {
       dispatcher.showDialog({
         data: {
@@ -922,18 +629,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('hideDialog', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        clearDialog: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('clears the dialog from the store', () => {
       dispatcher.hideDialog();
 
@@ -942,18 +637,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroNotFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with retro not found', () => {
       dispatcher.retroNotFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
@@ -961,18 +644,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('resetRetroNotFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with retro not found', () => {
       dispatcher.resetRetroNotFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: false});
@@ -980,18 +651,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('notFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with retro not found', () => {
       dispatcher.notFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: true});
@@ -999,18 +658,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('resetNotFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with retro not found', () => {
       dispatcher.resetNotFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: false});
@@ -1018,18 +665,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('apiServerNotFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with retro not found', () => {
       dispatcher.apiServerNotFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: true});
@@ -1037,18 +672,6 @@ describe('MainDispatcher', () => {
   });
 
   describe('resetApiServerNotFound', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        setNotFound: jest.fn(),
-      };
-
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('updates the store with not found to false', () => {
       dispatcher.resetApiServerNotFound();
       expect(reduxActions.setNotFound).toHaveBeenCalledWith({api_server_not_found: false});
@@ -1059,7 +682,7 @@ describe('MainDispatcher', () => {
     beforeEach(() => {
       localStorage.setItem('a', 'b');
 
-      subject.dispatch({type: 'signOut'});
+      dispatcher.signOut({});
     });
 
     it('clears local storage', () => {
@@ -1067,30 +690,22 @@ describe('MainDispatcher', () => {
     });
 
     it('redirects to home page', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/'});
+      expect(routerActionDispatcher.home).toHaveBeenCalled();
     });
   });
 
   describe('routeToRetroPasswordSettings', () => {
     beforeEach(() => {
-      subject.dispatch({type: 'routeToRetroPasswordSettings', data: {retro_id: '13'}});
+      dispatcher.routeToRetroPasswordSettings({data: {retro_id: '13'}});
     });
 
     it('routes to the retro password settings page', () => {
-      expect(Dispatcher).toHaveReceived({type: 'setRoute', data: '/retros/13/settings/password'});
+      expect(routerActionDispatcher.retroPasswordSettings).toHaveBeenCalledWith('13');
     });
   });
 
   describe('retroPasswordSuccessfullyUpdated', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        clearErrors: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroPasswordSuccessfullyUpdated({data: {retro_id: '42', token: 'new-api-token'}});
     });
 
@@ -1104,15 +719,7 @@ describe('MainDispatcher', () => {
   });
 
   describe('retroPasswordUnsuccessfullyUpdated', () => {
-    let dispatcher;
-    let reduxActions;
-
     beforeEach(() => {
-      reduxActions = {
-        errorsUpdated: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
       dispatcher.retroPasswordUnsuccessfullyUpdated({
         data: {
           errors: ['Sorry! That password does not match the current one.'],
@@ -1126,50 +733,23 @@ describe('MainDispatcher', () => {
   });
 
   describe('clearErrors', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        clearErrors: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-      dispatcher.clearErrors();
-    });
-
     it('clears the error messages', () => {
+      dispatcher.clearErrors();
       expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
   });
 
   describe('redirectToRegistration', () => {
     it('redirects to the registration page with the correct url parameters', () => {
-      subject.dispatch({
-        type: 'redirectToRegistration',
+      dispatcher.redirectToRegistration({
         data: {access_token: 'the-access-token', email: 'a@a.a', name: 'my full name'},
       });
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'setRoute',
-        data: '/registration/the-access-token/a@a.a/my full name',
-      });
-      expect(router.navigate.mock.calls).toEqual([['/registration/the-access-token/a@a.a/my full name']]);
+      expect(routerActionDispatcher.registration).toHaveBeenCalledWith('the-access-token', 'a@a.a', 'my full name');
     });
   });
 
   describe('setConfig', () => {
-    let dispatcher;
-    let reduxActions;
-
-    beforeEach(() => {
-      reduxActions = {
-        updateFeatureFlags: jest.fn(),
-      };
-      dispatcher = mainDispatcher(reduxActions);
-      dispatcher.dispatch = jest.fn();
-    });
-
     it('sets feature flags', () => {
       dispatcher.setConfig({
         data: {

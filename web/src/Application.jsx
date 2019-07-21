@@ -47,6 +47,7 @@ import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as stateChangeActions from './redux/actions/state_change_actions';
+import * as routerActions from './redux/actions/router_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
@@ -109,12 +110,13 @@ class Application extends React.Component {
 }
 
 const reduxActionDispatcher = bindActionCreators(stateChangeActions, reduxStore.dispatch);
+const routerActionDispatcher = bindActionCreators(routerActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, reduxStore),
+      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, reduxStore),
       apiDispatcher(retroClient),
       analyticsDispatcher(analyticsClient),
     ],
