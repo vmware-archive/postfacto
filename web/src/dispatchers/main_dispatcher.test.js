@@ -128,50 +128,6 @@ describe('MainDispatcher', () => {
     });
   });
 
-  describe('retroSuccessfullyCreated', () => {
-    beforeEach(() => {
-      dispatcher.retroSuccessfullyCreated({data: {retro}});
-    });
-
-    it('redirects to the new retro page', () => {
-      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(retro);
-    });
-
-    it('dispatches created retro analytic', () => {
-      expect(analyticsActionDispatcher.createdRetro).toHaveBeenCalledWith(retro.id);
-    });
-
-    it('empties the error messages', () => {
-      expect(reduxActions.clearErrors).toHaveBeenCalled();
-    });
-  });
-
-  describe('retroUnsuccessfullyCreated', () => {
-    it('updates the error messages', () => {
-      dispatcher.retroUnsuccessfullyCreated({
-        data: {
-          errors: ['Sorry! That URL is already taken.'],
-        },
-      });
-
-      expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['Sorry! That URL is already taken.']);
-    });
-  });
-
-  describe('retroSuccessfullyFetched', () => {
-    it('updates the retro', () => {
-      dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
-
-      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith({name: 'The Retro Name', id: 2});
-    });
-
-    it('dispatches visited retro analytic', () => {
-      dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
-
-      expect(analyticsActionDispatcher.visitedRetro).toHaveBeenCalledWith(2);
-    });
-  });
-
   describe('getRetroSettingsSuccessfullyReceived', () => {
     it('updates the retro', () => {
       const updatedRetro = {name: 'The Retro Name', slug: 'the-retro-123'};

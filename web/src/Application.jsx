@@ -119,7 +119,7 @@ export default useStore(
     actions: [],
     dispatcherHandlers: [
       mainDispatcher(reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
-      apiDispatcher(retroClient),
+      apiDispatcher(retroClient, reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
       analyticsDispatcher(analyticsClient),
     ],
     onDispatch: (event) => {

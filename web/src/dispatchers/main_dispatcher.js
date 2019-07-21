@@ -43,11 +43,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     requireRetroLogin({data}) {
       routerActionDispatcher.retroLogin(data.retro_id);
     },
-    retroSuccessfullyCreated({data}) {
-      retroActionCreators.clearErrors();
-      routerActionDispatcher.showRetro(data.retro);
-      analyticsDispatcher.createdRetro(data.retro.id);
-    },
     retroSuccessfullyLoggedIn({data}) {
       routerActionDispatcher.showRetroForId(data.retro_id);
     },
@@ -95,9 +90,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     redirectToRegistration({data}) {
       routerActionDispatcher.registration(data.access_token, data.email, data.name);
     },
-    retroUnsuccessfullyCreated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
     retroLoginFailed() {
       retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
     },
@@ -118,10 +110,6 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     },
     resetApiServerNotFound() {
       retroActionCreators.setNotFound({api_server_not_found: false});
-    },
-    retroSuccessfullyFetched({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-      analyticsDispatcher.visitedRetro(data.retro.id);
     },
     getRetroSettingsSuccessfullyReceived({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);

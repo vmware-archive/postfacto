@@ -48,7 +48,7 @@ function resetApiToken(oldRetroId, newRetroId) {
   localStorage.removeItem('apiToken-' + oldRetroId);
 }
 
-export default function (retroClient) {
+export default function (retroClient, retroActionCreators, routerActionDispatcher, analyticsDispatcher) {
   return {
     retroCreate(request) {
       Logger.info('retroCreate');
@@ -58,9 +58,12 @@ export default function (retroClient) {
           if (token) {
             setApiToken(data.retro.slug, token);
           }
-          this.dispatch({type: 'retroSuccessfullyCreated', data});
+
+          retroActionCreators.clearErrors();
+          routerActionDispatcher.showRetro(data.retro);
+          analyticsDispatcher.createdRetro(data.retro.id);
         } else if (status === 422) {
-          this.dispatch({type: 'retroUnsuccessfullyCreated', data});
+          retroActionCreators.errorsUpdated(data.errors);
         }
       });
     },
@@ -68,12 +71,13 @@ export default function (retroClient) {
       Logger.info('getRetro');
       return retroClient.getRetro(id, getApiToken(id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          this.dispatch({type: 'retroSuccessfullyFetched', data});
+          retroActionCreators.currentRetroUpdated(data.retro);
+          analyticsDispatcher.visitedRetro(data.retro.id);
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id: id}});
+          routerActionDispatcher.retroLogin(id);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${id}`);
-          this.dispatch({type: 'retroNotFound'});
+          retroActionCreators.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -83,10 +87,10 @@ export default function (retroClient) {
         if (status >= 200 && status < 400) {
           this.dispatch({type: 'getRetroSettingsSuccessfullyReceived', data});
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id: id}});
+          routerActionDispatcher.retroLogin(id);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${id}`);
-          this.dispatch({type: 'retroNotFound'});
+          retroActionCreators.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -97,7 +101,7 @@ export default function (retroClient) {
           this.dispatch({type: 'getRetroLoginSuccessfullyReceived', data});
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${retro_id}`);
-          this.dispatch({type: 'retroNotFound'});
+          retroActionCreators.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -176,7 +180,7 @@ export default function (retroClient) {
         if (status >= 200 && status < 400) {
           this.dispatch({type: 'archiveRetroSuccessfullyDone', data});
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id: retro.slug}});
+          routerActionDispatcher.retroLogin(retro.slug);
         }
       });
     },
@@ -210,9 +214,9 @@ export default function (retroClient) {
         if (status >= 200 && status < 400) {
           this.dispatch({type: 'retroArchiveSuccessfullyFetched', data});
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
+          routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 404) {
-          this.dispatch({type: 'notFound'});
+          retroActionCreators.setNotFound({not_found: true});
         }
       });
     },
@@ -222,9 +226,9 @@ export default function (retroClient) {
         if (status >= 200 && status < 400) {
           this.dispatch({type: 'retroArchivesSuccessfullyFetched', data});
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
+          routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 404) {
-          this.dispatch({type: 'retroNotFound'});
+          retroActionCreators.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -258,7 +262,7 @@ export default function (retroClient) {
             data: {checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'},
           });
         } else if (status === 403) {
-          this.dispatch({type: 'requireRetroLogin', data: {retro_id}});
+          routerActionDispatcher.retroLogin(retro_id);
         } else if (status === 422) {
           this.dispatch({type: 'retroSettingsUnsuccessfullyUpdated', data});
         }
@@ -288,7 +292,7 @@ export default function (retroClient) {
             },
           });
         } else if (status === 404) {
-          this.dispatch({type: 'notFound'});
+          retroActionCreators.setNotFound({not_found: true});
         }
       });
     },

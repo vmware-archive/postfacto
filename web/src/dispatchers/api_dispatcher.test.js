@@ -39,10 +39,56 @@ describe('ApiDispatcher', () => {
   let retro;
 
   let dispatcher;
+  let reduxActions;
+  let routerActionDispatcher;
+  let analyticsActionDispatcher;
 
   beforeEach(() => {
+    reduxActions = {
+      clearErrors: jest.fn(),
+      errorsUpdated: jest.fn(),
+      currentRetroUpdated: jest.fn(),
+      currentRetroItemUpdated: jest.fn(),
+      updateWebsocketSession: jest.fn(),
+      currentRetroActionItemDeleted: jest.fn(),
+      updateFeatureFlags: jest.fn(),
+      setNotFound: jest.fn(),
+      clearDialog: jest.fn(),
+      showDialog: jest.fn(),
+      showAlert: jest.fn(),
+      clearAlert: jest.fn(),
+      updateRetroArchives: jest.fn(),
+      updateCurrentArchivedRetro: jest.fn(),
+      currentRetroActionItemUpdated: jest.fn(),
+      currentRetroSendArchiveEmailUpdated: jest.fn(),
+      currentRetroHighlightCleared: jest.fn(),
+      currentRetroItemDeleted: jest.fn(),
+      currentRetroItemDoneUpdated: jest.fn(),
+      forceRelogin: jest.fn(),
+    };
+    routerActionDispatcher = {
+      newRetro: jest.fn(),
+      showRetro: jest.fn(),
+      home: jest.fn(),
+      retroLogin: jest.fn(),
+      retroRelogin: jest.fn(),
+      showRetroForId: jest.fn(),
+      retroArchives: jest.fn(),
+      retroArchive: jest.fn(),
+      retroSettings: jest.fn(),
+      retroPasswordSettings: jest.fn(),
+      registration: jest.fn(),
+    };
+    analyticsActionDispatcher = {
+      archivedRetro: jest.fn(),
+      createdRetro: jest.fn(),
+      createdRetroItem: jest.fn(),
+      visitedRetro: jest.fn(),
+      doneActionItem: jest.fn(),
+      undoneActionItem: jest.fn(),
+    };
     const retroClient = new RetroClient(() => 'https://example.com');
-    dispatcher = apiDispatcher(retroClient);
+    dispatcher = apiDispatcher(retroClient, reduxActions, routerActionDispatcher, analyticsActionDispatcher);
     dispatcher.dispatch = jest.fn();
 
     retro = {
@@ -99,7 +145,7 @@ describe('ApiDispatcher', () => {
       });
     });
 
-    it('makes an api POST to /retros', () => {
+    it('makes an api POST to /retros, stores the retro, clears errors and navigates to the show retro page', () => {
       expect(MockFetch).toHaveRequested('https://example.com/retros', {
         method: 'POST',
         headers: {
@@ -122,10 +168,10 @@ describe('ApiDispatcher', () => {
       Promise.runAll();
 
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroSuccessfullyCreated',
-        data: {retro, token},
-      });
+
+      expect(routerActionDispatcher.showRetro).toHaveBeenCalledWith(retro);
+      expect(analyticsActionDispatcher.createdRetro).toHaveBeenCalledWith(retro.id);
+      expect(reduxActions.clearErrors).toHaveBeenCalled();
     });
 
     describe('when unprocessable entity is received', () => {
@@ -135,11 +181,8 @@ describe('ApiDispatcher', () => {
         Promise.runAll();
       });
 
-      it('dispatches retroUnsuccessfullyCreated', () => {
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroUnsuccessfullyCreated',
-          data: {errors: ['some error']},
-        });
+      it('dispatches errorsUpdated with the error from the response', () => {
+        expect(reduxActions.errorsUpdated).toHaveBeenCalledWith(['some error']);
       });
 
       it('does not reset API token', () => {
@@ -235,10 +278,7 @@ describe('ApiDispatcher', () => {
       });
 
       it('dispatches requireRetroLogin', () => {
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'requireRetroLogin',
-          data: {retro_id: 13},
-        });
+        expect(routerActionDispatcher.retroLogin).toHaveBeenCalledWith(13);
       });
 
       it('does not reset API token', () => {
@@ -394,10 +434,9 @@ describe('ApiDispatcher', () => {
       const request = MockFetch.latestRequest();
       request.ok({retro});
       Promise.runAll();
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'retroSuccessfullyFetched',
-        data: {retro},
-      });
+
+      expect(reduxActions.currentRetroUpdated).toHaveBeenCalledWith(retro);
+      expect(analyticsActionDispatcher.visitedRetro).toHaveBeenCalledWith(1);
     });
 
     describe('when forbidden is received', () => {
@@ -405,10 +444,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.forbidden();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'requireRetroLogin',
-          data: {retro_id: 1},
-        });
+        expect(routerActionDispatcher.retroLogin).toHaveBeenCalledWith(1);
       });
     });
 
@@ -417,9 +453,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroNotFound',
-        });
+        expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
       });
     });
   });
@@ -450,9 +484,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroNotFound',
-        });
+        expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
       });
     });
   });
@@ -497,10 +529,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.forbidden();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'requireRetroLogin',
-          data: {retro_id: 'retro-slug-123'},
-        });
+        expect(routerActionDispatcher.retroLogin).toHaveBeenCalledWith('retro-slug-123');
       });
     });
   });
@@ -997,9 +1026,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'retroNotFound',
-        });
+        expect(reduxActions.setNotFound).toHaveBeenCalledWith({retro_not_found: true});
       });
     });
   });
@@ -1032,9 +1059,7 @@ describe('ApiDispatcher', () => {
         const request = MockFetch.latestRequest();
         request.notFound();
         Promise.runAll();
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'notFound',
-        });
+        expect(reduxActions.setNotFound).toHaveBeenCalledWith({not_found: true});
       });
     });
   });
