@@ -118,7 +118,7 @@ export default useStore(
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher, reduxStore),
+      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
       apiDispatcher(retroClient),
       analyticsDispatcher(analyticsClient),
     ],
