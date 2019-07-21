@@ -48,7 +48,7 @@ function resetApiToken(oldRetroId, newRetroId) {
   localStorage.removeItem('apiToken-' + oldRetroId);
 }
 
-export default function (retroClient, retroActionCreators, routerActionDispatcher, analyticsDispatcher) {
+export default function (retroClient, mainBoundActions, routerBoundActions, analyticsBoundActions) {
   return {
     retroCreate(request) {
       Logger.info('retroCreate');
@@ -59,11 +59,11 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
             setApiToken(data.retro.slug, token);
           }
 
-          retroActionCreators.clearErrors();
-          routerActionDispatcher.showRetro(data.retro);
-          analyticsDispatcher.createdRetro(data.retro.id);
+          mainBoundActions.clearErrors();
+          routerBoundActions.showRetro(data.retro);
+          analyticsBoundActions.createdRetro(data.retro.id);
         } else if (status === 422) {
-          retroActionCreators.errorsUpdated(data.errors);
+          mainBoundActions.errorsUpdated(data.errors);
         }
       });
     },
@@ -71,13 +71,13 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetro');
       return retroClient.getRetro(id, getApiToken(id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.currentRetroUpdated(data.retro);
-          analyticsDispatcher.visitedRetro(data.retro.id);
+          mainBoundActions.currentRetroUpdated(data.retro);
+          analyticsBoundActions.visitedRetro(data.retro.id);
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(id);
+          routerBoundActions.retroLogin(id);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${id}`);
-          retroActionCreators.setNotFound({retro_not_found: true});
+          mainBoundActions.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -85,12 +85,12 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroSettings');
       return retroClient.getRetroSettings(id, getApiToken(id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.currentRetroUpdated(data.retro);
+          mainBoundActions.currentRetroUpdated(data.retro);
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(id);
+          routerBoundActions.retroLogin(id);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${id}`);
-          retroActionCreators.setNotFound({retro_not_found: true});
+          mainBoundActions.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -98,10 +98,10 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroLogin');
       return retroClient.getRetroLogin(retro_id).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.currentRetroUpdated(data.retro);
+          mainBoundActions.currentRetroUpdated(data.retro);
         } else if (status === 404) {
           Logger.warn(`getRetro: Retro not found, retroId=${retro_id}`);
-          retroActionCreators.setNotFound({retro_not_found: true});
+          mainBoundActions.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -113,17 +113,17 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
           if (token) {
             setApiToken(data.retro_id, token);
           }
-          routerActionDispatcher.showRetroForId(data.retro_id);
+          routerBoundActions.showRetroForId(data.retro_id);
         } else {
-          retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
+          mainBoundActions.errorsUpdated({login_error_message: 'Oops, wrong password!'});
         }
       });
     },
     createRetroItem({data: {retro_id, category, description}}) {
       Logger.info('createRetroItem');
       return retroClient.createRetroItem(retro_id, category, description, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroItemUpdated(data.item);
-        analyticsDispatcher.createdRetroItem(retro_id, data.item.category);
+        mainBoundActions.currentRetroItemUpdated(data.item);
+        analyticsBoundActions.createdRetroItem(retro_id, data.item.category);
       });
     },
     updateRetroItem({data: {retro_id, item, description}}) {
@@ -133,58 +133,58 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
     deleteRetroItem({data: {retro_id, item}}) {
       Logger.info('deleteRetroItem');
       retroClient.deleteRetroItem(retro_id, item.id, getApiToken(retro_id));
-      retroActionCreators.currentRetroItemDeleted(item);
+      mainBoundActions.currentRetroItemDeleted(item);
     },
     voteRetroItem({data: {retro_id, item}}) {
       Logger.info('voteRetroItem');
       retroClient.voteRetroItem(retro_id, item.id, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroItemUpdated(data.item);
+        mainBoundActions.currentRetroItemUpdated(data.item);
       });
     },
     nextRetroItem({data: {retro}}) {
       Logger.info('nextRetroItem');
       if (retro.highlighted_item_id !== null) {
-        retroActionCreators.currentRetroItemDoneUpdated(retro.highlighted_item_id, true);
+        mainBoundActions.currentRetroItemDoneUpdated(retro.highlighted_item_id, true);
       }
       retroClient.nextRetroItem(retro.slug, getApiToken(retro.slug));
     },
     highlightRetroItem({data: {retro_id, item}}) {
       Logger.info('highlightRetroItem');
       retroClient.highlightRetroItem(retro_id, item.id, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroUpdated(data.retro);
+        mainBoundActions.currentRetroUpdated(data.retro);
       });
     },
     unhighlightRetroItem({data: {retro_id}}) {
       Logger.info('unhighlightRetroItem');
       retroClient.unhighlightRetroItem(retro_id, getApiToken(retro_id));
-      retroActionCreators.currentRetroHighlightCleared();
+      mainBoundActions.currentRetroHighlightCleared();
     },
     doneRetroItem({data: {retroId, item}}) {
       Logger.info('doneRetroItem');
       retroClient.doneRetroItem(retroId, item.id, getApiToken(retroId));
 
-      retroActionCreators.currentRetroItemDoneUpdated(item.id, true);
+      mainBoundActions.currentRetroItemDoneUpdated(item.id, true);
     },
     undoneRetroItem({data: {retroId, item}}) {
       Logger.info('undoneRetroItem');
       retroClient.undoneRetroItem(retroId, item.id, getApiToken(retroId));
-      retroActionCreators.currentRetroItemDoneUpdated(item.id, false);
+      mainBoundActions.currentRetroItemDoneUpdated(item.id, false);
     },
     extendTimer({data: {retro_id}}) {
       Logger.info('extendTimer');
       retroClient.extendTimer(retro_id, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroUpdated(data.retro);
+        mainBoundActions.currentRetroUpdated(data.retro);
       });
     },
     archiveRetro({data: {retro}}) {
       Logger.info('archiveRetro');
       retroClient.archiveRetro(retro.slug, getApiToken(retro.slug), retro.send_archive_email).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.currentRetroUpdated(data.retro);
-          analyticsDispatcher.archivedRetro(data.retro.id);
-          retroActionCreators.showAlert({message: 'Archived!'});
+          mainBoundActions.currentRetroUpdated(data.retro);
+          analyticsBoundActions.archivedRetro(data.retro.id);
+          mainBoundActions.showAlert({message: 'Archived!'});
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(retro.slug);
+          routerBoundActions.retroLogin(retro.slug);
         }
       });
     },
@@ -195,35 +195,35 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
     doneRetroActionItem({data: {retro_id, action_item_id, done}}) {
       Logger.info('doneRetroActionItem');
       retroClient.doneRetroActionItem(retro_id, action_item_id, done, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroActionItemUpdated(data.action_item);
+        mainBoundActions.currentRetroActionItemUpdated(data.action_item);
 
         if (data.action_item.done) {
-          analyticsDispatcher.doneActionItem(retro_id);
+          analyticsBoundActions.doneActionItem(retro_id);
         } else {
-          analyticsDispatcher.undoneActionItem(retro_id);
+          analyticsBoundActions.undoneActionItem(retro_id);
         }
       });
     },
     deleteRetroActionItem({data: {retro_id, action_item}}) {
       Logger.info('deleteRetroActionItem');
       retroClient.deleteRetroActionItem(retro_id, action_item.id, getApiToken(retro_id));
-      retroActionCreators.currentRetroActionItemDeleted(action_item);
+      mainBoundActions.currentRetroActionItemDeleted(action_item);
     },
     editRetroActionItem({data: {retro_id, action_item_id, description}}) {
       Logger.info('editRetroActionItem');
       retroClient.editRetroActionItem(retro_id, action_item_id, description, getApiToken(retro_id)).then(([, data]) => {
-        retroActionCreators.currentRetroActionItemUpdated(data.action_item);
+        mainBoundActions.currentRetroActionItemUpdated(data.action_item);
       });
     },
     getRetroArchive({data: {retro_id, archive_id}}) {
       Logger.info('getRetroArchive');
       return retroClient.getRetroArchive(retro_id, archive_id, getApiToken(retro_id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.updateCurrentArchivedRetro(data.retro);
+          mainBoundActions.updateCurrentArchivedRetro(data.retro);
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(retro_id);
+          routerBoundActions.retroLogin(retro_id);
         } else if (status === 404) {
-          retroActionCreators.setNotFound({not_found: true});
+          mainBoundActions.setNotFound({not_found: true});
         }
       });
     },
@@ -231,11 +231,11 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('getRetroArchives');
       return retroClient.getRetroArchives(retro_id, getApiToken(retro_id)).then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.updateRetroArchives(data.archives);
+          mainBoundActions.updateRetroArchives(data.archives);
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(retro_id);
+          routerBoundActions.retroLogin(retro_id);
         } else if (status === 404) {
-          retroActionCreators.setNotFound({retro_not_found: true});
+          mainBoundActions.setNotFound({retro_not_found: true});
         }
       });
     },
@@ -243,7 +243,7 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('createUser');
       return retroClient.createUser(access_token, company_name, full_name).then(([, response]) => {
         localStorage.setItem('authToken', response.auth_token);
-        routerActionDispatcher.newRetro();
+        routerBoundActions.newRetro();
       });
     },
     createSession({data: {access_token, email, name}}) {
@@ -251,12 +251,12 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
         if (status === 200) {
           localStorage.setItem('authToken', data.auth_token);
           if (data.new_user) {
-            routerActionDispatcher.newRetro();
+            routerBoundActions.newRetro();
           } else {
-            routerActionDispatcher.home();
+            routerBoundActions.home();
           }
         } else if (status === 404) {
-          routerActionDispatcher.registration(access_token, email, name);
+          routerBoundActions.registration(access_token, email, name);
         }
       });
     },
@@ -266,15 +266,15 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
         if (status >= 200 && status < 400) {
           resetApiToken(old_slug, new_slug);
           const retro = {name: retro_name, slug: new_slug, is_private: data.retro.is_private};
-          retroActionCreators.currentRetroUpdated(retro);
-          retroActionCreators.clearErrors();
+          mainBoundActions.currentRetroUpdated(retro);
+          mainBoundActions.clearErrors();
 
-          routerActionDispatcher.showRetro(retro);
-          retroActionCreators.showAlert({checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'});
+          routerBoundActions.showRetro(retro);
+          mainBoundActions.showAlert({checkIcon: true, message: 'Settings saved!', className: 'alert-with-back-button'});
         } else if (status === 403) {
-          routerActionDispatcher.retroLogin(retro_id);
+          routerBoundActions.retroLogin(retro_id);
         } else if (status === 422) {
-          retroActionCreators.errorsUpdated(data.errors);
+          mainBoundActions.errorsUpdated(data.errors);
         }
       });
     },
@@ -283,13 +283,13 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       return retroClient.updateRetroPassword(retro_id, current_password, new_password, request_uuid, getApiToken(retro_id))
         .then(([status, data]) => {
           if (status >= 200 && status < 400) {
-            retroActionCreators.clearErrors();
+            mainBoundActions.clearErrors();
             window.localStorage.setItem(`apiToken-${retro_id}`, data.token);
 
-            routerActionDispatcher.retroSettings(retro_id);
-            retroActionCreators.showAlert({checkIcon: true, message: 'Password changed'});
+            routerBoundActions.retroSettings(retro_id);
+            mainBoundActions.showAlert({checkIcon: true, message: 'Password changed'});
           } else if (status === 422) {
-            retroActionCreators.errorsUpdated(data.errors);
+            mainBoundActions.errorsUpdated(data.errors);
           }
         });
     },
@@ -297,11 +297,11 @@ export default function (retroClient, retroActionCreators, routerActionDispatche
       Logger.info('retrieveConfig');
       return retroClient.retrieveConfig().then(([status, data]) => {
         if (status >= 200 && status < 400) {
-          retroActionCreators.updateFeatureFlags({
+          mainBoundActions.updateFeatureFlags({
             archiveEmails: data.archive_emails,
           });
         } else if (status === 404) {
-          retroActionCreators.setNotFound({not_found: true});
+          mainBoundActions.setNotFound({not_found: true});
         }
       });
     },

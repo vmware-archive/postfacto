@@ -36,7 +36,7 @@ import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
 import {newRetro, showRetro} from '../../redux/actions/router_actions';
-import {signOut, getRetros} from '../../redux/actions/state_change_actions';
+import {signOut, getRetros} from '../../redux/actions/main_actions';
 
 class ListRetrosPage extends React.Component {
   static propTypes = {

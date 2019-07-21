@@ -30,7 +30,7 @@
  */
 import {home, retroRelogin} from '../actions/router_actions';
 
-const Auth_middleware = (localStorage) => (store) => (next) => (action) => {
+const AuthMiddleware = (localStorage) => (store) => (next) => (action) => {
   if (action.type === 'SIGN_OUT') {
     localStorage.clear();
     store.dispatch(home());
@@ -45,4 +45,4 @@ const Auth_middleware = (localStorage) => (store) => (next) => (action) => {
   next(action);
 };
 
-export default Auth_middleware;
+export default AuthMiddleware;

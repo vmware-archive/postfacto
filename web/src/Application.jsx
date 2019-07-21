@@ -46,7 +46,7 @@ import SessionWebsocket from './components/session_websocket';
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import * as stateChangeActions from './redux/actions/state_change_actions';
+import * as mainActions from './redux/actions/main_actions';
 import * as routerActions from './redux/actions/router_actions';
 import * as analyticsActions from './redux/actions/analytics_actions';
 import makeReduxStore from './redux/store';
@@ -109,16 +109,16 @@ class Application extends React.Component {
   }
 }
 
-const reduxActionDispatcher = bindActionCreators(stateChangeActions, reduxStore.dispatch);
-const routerActionDispatcher = bindActionCreators(routerActions, reduxStore.dispatch);
-const analyticsActionDispatcher = bindActionCreators(analyticsActions, reduxStore.dispatch);
+const mainBoundActions = bindActionCreators(mainActions, reduxStore.dispatch);
+const routerBoundActions = bindActionCreators(routerActions, reduxStore.dispatch);
+const analyticsBoundActions = bindActionCreators(analyticsActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, routerActionDispatcher),
-      apiDispatcher(retroClient, reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher),
+      mainDispatcher(mainBoundActions, routerBoundActions),
+      apiDispatcher(retroClient, mainBoundActions, routerBoundActions, analyticsBoundActions),
       analyticsDispatcher(analyticsClient),
     ],
     onDispatch: (event) => {

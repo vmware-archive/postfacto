@@ -28,9 +28,9 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {retrosUpdated, signOut} from '../actions/state_change_actions';
+import {retrosUpdated, signOut} from '../actions/main_actions';
 
-const Retro_middleware = (retroClient) => (store) => (next) => (action) => {
+const RetroMiddleware = (retroClient) => (store) => (next) => (action) => {
   if (action.type === 'GET_RETROS') {
     retroClient.getRetros().then(([status, data]) => {
       if (status === 403) {
@@ -45,4 +45,4 @@ const Retro_middleware = (retroClient) => (store) => (next) => (action) => {
   next(action);
 };
 
-export default Retro_middleware;
+export default RetroMiddleware;

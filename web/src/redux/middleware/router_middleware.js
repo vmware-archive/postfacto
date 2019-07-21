@@ -28,7 +28,7 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const Router_middleware = (router) => () => (next) => (action) => {
+const RouterMiddleware = (router) => () => (next) => (action) => {
   if (action.type === 'SET_ROUTE') {
     /* eslint-disable no-console */
     console.log('Navigating to: ', action.payload);
@@ -38,4 +38,4 @@ const Router_middleware = (router) => () => (next) => (action) => {
   next(action);
 };
 
-export default Router_middleware;
+export default RouterMiddleware;

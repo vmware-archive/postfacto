@@ -29,9 +29,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Analytics_middleware from './analytics_middleware';
+import AnalyticsMiddleware from './analytics_middleware';
 
-describe('Analytics_middleware', () => {
+describe('AnalyticsMiddleware', () => {
   beforeEach(() => {
   });
 
@@ -43,7 +43,7 @@ describe('Analytics_middleware', () => {
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
     const analyticsClient = {track: jest.fn()};
-    Analytics_middleware(analyticsClient)(store)(next)(action);
+    AnalyticsMiddleware(analyticsClient)(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
     expect(analyticsClient.track).not.toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('Analytics_middleware', () => {
 
     const next = jest.fn();
     const analyticsClient = {track: jest.fn()};
-    Analytics_middleware(analyticsClient)({})(next)(doneAction);
+    AnalyticsMiddleware(analyticsClient)({})(next)(doneAction);
 
     expect(analyticsClient.track).toHaveBeenCalledWith('Created Retro', {retroId: 1});
     expect(next).not.toHaveBeenCalled();

@@ -28,7 +28,7 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {clearAlert} from '../actions/state_change_actions';
+import {clearAlert} from '../actions/main_actions';
 
 const ALERT_DURATION = 3500;
 let alertTimeout;

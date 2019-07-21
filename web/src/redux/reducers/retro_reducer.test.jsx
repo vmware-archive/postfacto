@@ -29,16 +29,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Retro_reducer from './retro_reducer';
+import RetroReducer from './retro_reducer';
 
-describe('Retro_reducer', () => {
+describe('RetroReducer', () => {
   let actionDispatcher;
   let retroReducer;
   beforeEach(() => {
     actionDispatcher = {
       completedRetroItemAnalytics: jest.fn(),
     };
-    retroReducer = Retro_reducer(actionDispatcher);
+    retroReducer = RetroReducer(actionDispatcher);
   });
 
   it('sets initial state', () => {

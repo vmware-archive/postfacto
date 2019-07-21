@@ -29,84 +29,84 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default function (retroActionCreators, routerActionDispatcher) {
+export default function (mainBoundActions, routerBoundActions) {
   return {
     redirectToHome() {
-      routerActionDispatcher.home();
+      routerBoundActions.home();
     },
     requireRetroLogin({data}) {
-      routerActionDispatcher.retroLogin(data.retro_id);
+      routerBoundActions.retroLogin(data.retro_id);
     },
     redirectToRetroCreatePage() {
-      routerActionDispatcher.newRetro();
+      routerBoundActions.newRetro();
     },
     routeToRetroArchives({data}) {
-      routerActionDispatcher.retroArchives(data.retro_id);
+      routerBoundActions.retroArchives(data.retro_id);
     },
     routeToRetroArchive({data}) {
-      routerActionDispatcher.retroArchive(data.retro_id, data.archive_id);
+      routerBoundActions.retroArchive(data.retro_id, data.archive_id);
     },
     routeToRetroSettings({data}) {
-      routerActionDispatcher.retroSettings(data.retro_id);
+      routerBoundActions.retroSettings(data.retro_id);
     },
     routeToRetroPasswordSettings({data}) {
-      routerActionDispatcher.retroPasswordSettings(data.retro_id);
+      routerBoundActions.retroPasswordSettings(data.retro_id);
     },
     backPressedFromArchives({data}) {
-      routerActionDispatcher.showRetroForId(data.retro_id);
+      routerBoundActions.showRetroForId(data.retro_id);
     },
     signOut() {
       window.localStorage.clear();
-      routerActionDispatcher.home();
+      routerBoundActions.home();
     },
     backPressedFromSettings({data}) {
-      routerActionDispatcher.showRetroForId(data.retro_id);
+      routerBoundActions.showRetroForId(data.retro_id);
     },
     backPressedFromPasswordSettings({data}) {
-      routerActionDispatcher.retroSettings(data.retro_id);
+      routerBoundActions.retroSettings(data.retro_id);
     },
     retroNotFound() {
-      retroActionCreators.setNotFound({retro_not_found: true});
+      mainBoundActions.setNotFound({retro_not_found: true});
     },
     resetRetroNotFound() {
-      retroActionCreators.setNotFound({retro_not_found: false});
+      mainBoundActions.setNotFound({retro_not_found: false});
     },
     notFound() {
-      retroActionCreators.setNotFound({not_found: true});
+      mainBoundActions.setNotFound({not_found: true});
     },
     resetNotFound() {
-      retroActionCreators.setNotFound({not_found: false});
+      mainBoundActions.setNotFound({not_found: false});
     },
     apiServerNotFound() {
-      retroActionCreators.setNotFound({api_server_not_found: true});
+      mainBoundActions.setNotFound({api_server_not_found: true});
     },
     resetApiServerNotFound() {
-      retroActionCreators.setNotFound({api_server_not_found: false});
+      mainBoundActions.setNotFound({api_server_not_found: false});
     },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
-        retroActionCreators.forceRelogin(data.payload.originator_id, data.payload.retro.slug);
+        mainBoundActions.forceRelogin(data.payload.originator_id, data.payload.retro.slug);
       } else {
-        retroActionCreators.currentRetroUpdated(data.retro);
+        mainBoundActions.currentRetroUpdated(data.retro);
       }
     },
     websocketSessionDataReceived({data}) {
-      retroActionCreators.updateWebsocketSession(data.payload);
+      mainBoundActions.updateWebsocketSession(data.payload);
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
-      retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
+      mainBoundActions.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
     },
     hideAlert() {
-      retroActionCreators.clearAlert();
+      mainBoundActions.clearAlert();
     },
     showDialog({data}) {
-      retroActionCreators.showDialog(data);
+      mainBoundActions.showDialog(data);
     },
     hideDialog() {
-      retroActionCreators.clearDialog();
+      mainBoundActions.clearDialog();
     },
     clearErrors() {
-      retroActionCreators.clearErrors();
+      mainBoundActions.clearErrors();
     },
   };
 }

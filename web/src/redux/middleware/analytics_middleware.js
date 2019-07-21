@@ -28,7 +28,7 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const Analytics_middleware = (analyticsClient) => () => (next) => (action) => {
+const AnalyticsMiddleware = (analyticsClient) => () => (next) => (action) => {
   if (action.type === 'TRACK_ANALYTICS') {
     /* eslint-disable no-console */
     console.log('Sending analytics:', action.payload.type, action.payload.data);
@@ -38,4 +38,4 @@ const Analytics_middleware = (analyticsClient) => () => (next) => (action) => {
   next(action);
 };
 
-export default Analytics_middleware;
+export default AnalyticsMiddleware;

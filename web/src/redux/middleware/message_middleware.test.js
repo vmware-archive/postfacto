@@ -30,7 +30,7 @@
  */
 
 import MessageMiddleware from './message_middleware';
-import {clearAlert, showAlert} from '../actions/state_change_actions';
+import {clearAlert, showAlert} from '../actions/main_actions';
 
 describe('MessageMiddleware', () => {
   jest.useFakeTimers();
