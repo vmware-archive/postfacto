@@ -1,5 +1,4 @@
 import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
-import {Actions} from 'p-flux';
 import Retro_reducer from './reducers/retro_reducer';
 import MessageReducer from './reducers/message_reducer';
 import UserReducer from './reducers/user_reducer';
@@ -19,7 +18,7 @@ const getReduxStore = (router, retroClient, analyticsClient) => createStore(comb
   user: UserReducer(),
   config: ConfigReducer(),
 }), composeEnhancers(applyMiddleware(
-  ArchiveMiddleware(Actions),
+  ArchiveMiddleware(),
   Analytics_middleware(analyticsClient),
   Router_middleware(router),
   Auth_middleware(window.localStorage),

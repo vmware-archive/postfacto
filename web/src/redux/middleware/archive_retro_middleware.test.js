@@ -30,6 +30,7 @@
  */
 
 import ArchiveMiddleware from './archive_retro_middleware';
+import {completedRetroItem} from '../actions/analytics_actions';
 
 describe('ArchiveMiddleware', () => {
   beforeEach(() => {
@@ -110,11 +111,11 @@ describe('ArchiveMiddleware', () => {
     };
 
     const next = jest.fn();
-    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
-    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+    ArchiveMiddleware()(store)(next)(doneAction);
 
     expect(next).toHaveBeenCalledWith(doneAction);
-    expect(store.dispatch).not.toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(completedRetroItem(5, 'happy'));
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
   });
 
   it('does not fire SHOW_DIALOG if the updating item is not done', () => {
@@ -141,8 +142,7 @@ describe('ArchiveMiddleware', () => {
     };
 
     const next = jest.fn();
-    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
-    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+    ArchiveMiddleware()(store)(next)(doneAction);
 
     expect(next).toHaveBeenCalledWith(doneAction);
     expect(store.dispatch).not.toHaveBeenCalled();
@@ -172,12 +172,9 @@ describe('ArchiveMiddleware', () => {
     };
 
     const next = jest.fn();
-    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
-    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+    ArchiveMiddleware()(store)(next)(doneAction);
 
-    expect(actionDispatcher.completedRetroItemAnalytics).toHaveBeenCalledWith({
-      data: {retroId: 5, category: 'happy'},
-    });
+    expect(store.dispatch).toHaveBeenCalledWith(completedRetroItem(5, 'happy'));
   });
   it('Does not fires analytics event when item is undone', () => {
     const existingItem = {id: 2, category: 'happy', done: true};
