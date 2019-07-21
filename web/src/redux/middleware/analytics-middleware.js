@@ -28,11 +28,11 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const AnalyticsMiddleware = (router) => () => (next) => (action) => {
-  if (action.type === 'SET_ROUTE') {
+const AnalyticsMiddleware = (analyticsClient) => () => (next) => (action) => {
+  if (action.type === 'TRACK_ANALYTICS') {
     /* eslint-disable no-console */
-    console.log('Navigating to: ', action.payload);
-    router.navigate(action.payload);
+    console.log('Sending analytics:', action.payload.type, action.payload.data);
+    analyticsClient.track(action.payload.type, action.payload.data);
     return;
   }
   next(action);

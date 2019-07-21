@@ -43,25 +43,25 @@ describe('AnalyticsMiddleware', () => {
 
     const next = jest.fn();
     const store = {dispatch: jest.fn()};
-    const router = {navigate: jest.fn()};
-    AnalyticsMiddleware(router)(store)(next)(action);
+    const analyticsClient = {track: jest.fn()};
+    AnalyticsMiddleware(analyticsClient)(store)(next)(action);
 
     expect(next).toHaveBeenCalledWith(action);
-    expect(router.navigate).not.toHaveBeenCalled();
+    expect(analyticsClient.track).not.toHaveBeenCalled();
   });
 
-  it('Passes SET_ROUTE payload to router.navigate and stops event propagating', () => {
-    const location = '/some/location';
+  it('Passes TRACK_ANALYTICS payload to analyticsClient.track and stops event propagating', () => {
+    const analyticsInfo = {type: 'Created Retro', data: {'retroId': 1}};
     const doneAction = {
-      type: 'SET_ROUTE',
-      payload: location,
+      type: 'TRACK_ANALYTICS',
+      payload: analyticsInfo,
     };
 
     const next = jest.fn();
-    const router = {navigate: jest.fn()};
-    AnalyticsMiddleware(router)({})(next)(doneAction);
+    const analyticsClient = {track: jest.fn()};
+    AnalyticsMiddleware(analyticsClient)({})(next)(doneAction);
 
-    expect(router.navigate).toHaveBeenCalledWith(location);
+    expect(analyticsClient.track).toHaveBeenCalledWith('Created Retro', {retroId: 1});
     expect(next).not.toHaveBeenCalled();
   });
 });

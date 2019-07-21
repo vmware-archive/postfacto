@@ -34,14 +34,11 @@ let alertTimeout = null;
 
 /*
  * TODO
- *  1. Add analytics middleware  (LIKE ROUTER)
- *  2. Pass bound actions and bound router and bound analytics actions to api dispatcher
- *  3. Pull out all setRoute events
- *  4. Pull retroActionCreators up to api dispatcher where possible
+ *  4. Pull functions up to api dispatcher where possible
  *  5. Remove main_dispatcher and analytics_dispatcher
  *  6. Move api-dispatcher to middleware
  */
-export default function (retroActionCreators, routerActionDispatcher, store) {
+export default function (retroActionCreators, routerActionDispatcher, analyticsDispatcher, store) {
   return {
     redirectToHome() {
       routerActionDispatcher.home();
@@ -55,7 +52,7 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
     retroSuccessfullyCreated({data}) {
       retroActionCreators.clearErrors();
       routerActionDispatcher.showRetro(data.retro);
-      this.dispatch({type: 'createdRetroAnalytics', data: {retroId: data.retro.id}});
+      analyticsDispatcher.createdRetro(data.retro.id);
     },
     retroSuccessfullyLoggedIn({data}) {
       routerActionDispatcher.showRetroForId(data.retro_id);
@@ -130,7 +127,7 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
     },
     retroSuccessfullyFetched({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);
-      this.dispatch({type: 'visitedRetroAnalytics', data: {retroId: data.retro.id}});
+      analyticsDispatcher.visitedRetro(data.retro.id);
     },
     getRetroSettingsSuccessfullyReceived({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);
@@ -140,7 +137,7 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
     },
     retroItemSuccessfullyCreated({data}) {
       retroActionCreators.currentRetroItemUpdated(data.item);
-      this.dispatch({type: 'createdRetroItemAnalytics', data: {retroId: data.retroId, category: data.item.category}});
+      analyticsDispatcher.createdRetroItem(data.retroId, data.item.category);
     },
     retroItemSuccessfullyDeleted({data}) {
       retroActionCreators.currentRetroItemDeleted(data.item);
@@ -165,10 +162,7 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
     },
     archiveRetroSuccessfullyDone({data}) {
       retroActionCreators.currentRetroUpdated(data.retro);
-      this.dispatch({
-        type: 'archivedRetroAnalytics',
-        data: {retroId: data.retro.id},
-      });
+      analyticsDispatcher.archivedRetro(data.retro.id);
       this.dispatch({
         type: 'showAlert',
         data: {message: 'Archived!'},
@@ -178,7 +172,7 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
       if (data.command === 'force_relogin') {
         const session = store.getState().user.websocketSession;
         if (session.request_uuid !== data.payload.originator_id) {
-          this.dispatch({type: 'requireRetroRelogin', data: {retro: data.payload.retro}});
+          routerActionDispatcher.retroRelogin(data.payload.retro);
         }
       } else {
         retroActionCreators.currentRetroUpdated(data.retro);
@@ -196,8 +190,11 @@ export default function (retroActionCreators, routerActionDispatcher, store) {
     doneRetroActionItemSuccessfullyToggled({data}) {
       retroActionCreators.currentRetroActionItemUpdated(data.action_item);
 
-      const analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
-      this.dispatch({type: analyticsType, data: {retroId: data.retro_id}});
+      if (data.action_item.done) {
+        analyticsDispatcher.doneActionItem(data.retro_id);
+      } else {
+        analyticsDispatcher.undoneActionItem(data.retro_id);
+      }
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
       retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);

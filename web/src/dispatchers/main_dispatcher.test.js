@@ -37,6 +37,7 @@ describe('MainDispatcher', () => {
   let dispatcher;
   let reduxActions;
   let routerActionDispatcher;
+  let analyticsActionDispatcher;
 
   beforeEach(() => {
     reduxActions = {
@@ -73,7 +74,15 @@ describe('MainDispatcher', () => {
       retroPasswordSettings: jest.fn(),
       registration: jest.fn(),
     };
-    dispatcher = mainDispatcher(reduxActions, routerActionDispatcher);
+    analyticsActionDispatcher = {
+      archivedRetro: jest.fn(),
+      createdRetro: jest.fn(),
+      createdRetroItem: jest.fn(),
+      visitedRetro: jest.fn(),
+      doneActionItem: jest.fn(),
+      undoneActionItem: jest.fn(),
+    };
+    dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, analyticsActionDispatcher);
     dispatcher.dispatch = jest.fn();
 
     retro = {
@@ -129,10 +138,7 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches created retro analytic', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'createdRetroAnalytics',
-        data: {retroId: retro.id},
-      });
+      expect(analyticsActionDispatcher.createdRetro).toHaveBeenCalledWith(retro.id);
     });
 
     it('empties the error messages', () => {
@@ -162,7 +168,7 @@ describe('MainDispatcher', () => {
     it('dispatches visited retro analytic', () => {
       dispatcher.retroSuccessfullyFetched({data: {retro: {name: 'The Retro Name', id: 2}}});
 
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({type: 'visitedRetroAnalytics', data: {retroId: 2}});
+      expect(analyticsActionDispatcher.visitedRetro).toHaveBeenCalledWith(2);
     });
   });
 
@@ -267,10 +273,7 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches created retro item analytic', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'createdRetroItemAnalytics',
-        data: {retroId: retro.id, category: 'happy'},
-      });
+      expect(analyticsActionDispatcher.createdRetroItem).toHaveBeenCalledWith(retro.id, 'happy');
     });
   });
 
@@ -369,10 +372,7 @@ describe('MainDispatcher', () => {
     });
 
     it('dispatches archived retro analytics', () => {
-      expect(dispatcher.dispatch).toHaveBeenCalledWith({
-        type: 'archivedRetroAnalytics',
-        data: {retroId: retro.id},
-      });
+      expect(analyticsActionDispatcher.archivedRetro).toHaveBeenCalledWith(retro.id);
     });
 
     it('displays an alert', () => {
@@ -397,7 +397,7 @@ describe('MainDispatcher', () => {
     describe('when the command is force_relogin', () => {
       beforeEach(() => {
         const store = {getState: () => ({user: {websocketSession: {request_uuid: 'fake-request-uuid-1'}}})};
-        dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, store);
+        dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, analyticsActionDispatcher, store);
         dispatcher.dispatch = jest.fn();
       });
 
@@ -415,13 +415,8 @@ describe('MainDispatcher', () => {
             },
           });
 
-          expect(dispatcher.dispatch).toHaveBeenCalledWith({
-            type: 'requireRetroRelogin',
-            data: {
-              retro: {
-                slug: 'retro-slug-1',
-              },
-            },
+          expect(routerActionDispatcher.retroRelogin).toHaveBeenCalledWith({
+            slug: 'retro-slug-1',
           });
         });
       });
@@ -460,20 +455,14 @@ describe('MainDispatcher', () => {
     describe('when action item is marked as done', () => {
       it('dispatches completed retro action item analytic', () => {
         dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 1, done: true}, retro_id: 222}});
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'doneActionItemAnalytics',
-          data: {retroId: 222},
-        });
+        expect(analyticsActionDispatcher.doneActionItem).toHaveBeenCalledWith(222);
       });
     });
 
     describe('when action item is marked as undone', () => {
       it('does not dispatch anything', () => {
         dispatcher.doneRetroActionItemSuccessfullyToggled({data: {action_item: {id: 2, done: false}, retro_id: 222}});
-        expect(dispatcher.dispatch).toHaveBeenCalledWith({
-          type: 'undoneActionItemAnalytics',
-          data: {retroId: 222},
-        });
+        expect(analyticsActionDispatcher.undoneActionItem).toHaveBeenCalledWith(222);
       });
     });
   });

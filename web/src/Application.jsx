@@ -48,6 +48,7 @@ import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as stateChangeActions from './redux/actions/state_change_actions';
 import * as routerActions from './redux/actions/router_actions';
+import * as analyticsActions from './redux/actions/analytics_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
@@ -61,7 +62,7 @@ const router = new Grapnel({pushState: true});
 Dispatcher.router = router;
 const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
 const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
-const reduxStore = makeReduxStore(router, retroClient);
+const reduxStore = makeReduxStore(router, retroClient, analyticsClient);
 
 class Application extends React.Component {
   static propTypes = {
@@ -111,12 +112,13 @@ class Application extends React.Component {
 
 const reduxActionDispatcher = bindActionCreators(stateChangeActions, reduxStore.dispatch);
 const routerActionDispatcher = bindActionCreators(routerActions, reduxStore.dispatch);
+const analyticsActionDispatcher = bindActionCreators(analyticsActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, reduxStore),
+      mainDispatcher(reduxActionDispatcher, routerActionDispatcher, analyticsActionDispatcher, reduxStore),
       apiDispatcher(retroClient),
       analyticsDispatcher(analyticsClient),
     ],

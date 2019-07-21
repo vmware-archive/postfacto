@@ -8,16 +8,18 @@ import ArchiveMiddleware from './middleware/archive-retro-middleware';
 import RouterMiddleware from './middleware/router-middleware';
 import AuthMiddleware from './middleware/auth-middleware';
 import RetroMiddleware from './middleware/retro-middleware';
+import AnalyticsMiddleware from './middleware/analytics-middleware';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const getReduxStore = (router, retroClient) => createStore(combineReducers({
+const getReduxStore = (router, retroClient, analyticsClient) => createStore(combineReducers({
   retro: RetroReducer(),
   messages: MessageReducer(),
   user: UserReducer(),
   config: ConfigReducer(),
 }), composeEnhancers(applyMiddleware(
   ArchiveMiddleware(Actions),
+  AnalyticsMiddleware(analyticsClient),
   RouterMiddleware(router),
   AuthMiddleware(window.localStorage),
   RetroMiddleware(retroClient),
