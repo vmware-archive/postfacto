@@ -47,8 +47,8 @@ import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
 import * as mainActions from './redux/actions/main_actions';
+import * as apiActions from './redux/actions/api_actions';
 import * as routerActions from './redux/actions/router_actions';
-import * as analyticsActions from './redux/actions/analytics_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
@@ -111,20 +111,15 @@ class Application extends React.Component {
 
 const mainBoundActions = bindActionCreators(mainActions, reduxStore.dispatch);
 const routerBoundActions = bindActionCreators(routerActions, reduxStore.dispatch);
-const analyticsBoundActions = bindActionCreators(analyticsActions, reduxStore.dispatch);
+const apiBoundActions = bindActionCreators(apiActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {
     actions: [],
     dispatcherHandlers: [
       mainDispatcher(mainBoundActions, routerBoundActions),
-      apiDispatcher(retroClient, mainBoundActions, routerBoundActions, analyticsBoundActions),
+      apiDispatcher(apiBoundActions),
       analyticsDispatcher(analyticsClient),
     ],
-    onDispatch: (event) => {
-      /* eslint-disable no-console */
-      console.info('dispatching event', event);
-      /* eslint-enable no-console */
-    },
   },
 );

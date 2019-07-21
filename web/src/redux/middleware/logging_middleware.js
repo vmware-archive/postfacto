@@ -28,21 +28,11 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {retrosUpdated, signOut} from '../actions/main_actions';
 
-const RetroMiddleware = (retroClient) => (store) => (next) => (action) => {
-  if (action.type === 'GET_RETROS') {
-    retroClient.getRetros().then(([status, data]) => {
-      if (status === 403) {
-        store.dispatch(signOut());
-      } else {
-        store.dispatch(retrosUpdated(data.retros));
-      }
-    });
-
-    return;
-  }
+const LoggingMiddleware = () => () => (next) => (action) => {
+  // eslint-disable-next-line no-console
+  console.info('dispatching event', action);
   next(action);
 };
 
-export default RetroMiddleware;
+export default LoggingMiddleware;
