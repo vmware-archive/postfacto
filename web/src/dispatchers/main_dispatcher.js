@@ -35,7 +35,7 @@
  *  5. Remove main_dispatcher and analytics_dispatcher
  *  6. Move api-dispatcher to middleware
  */
-export default function (retroActionCreators, routerActionDispatcher, analyticsDispatcher, store) {
+export default function (retroActionCreators, routerActionDispatcher, analyticsDispatcher) {
   return {
     redirectToHome() {
       routerActionDispatcher.home();
@@ -164,10 +164,7 @@ export default function (retroActionCreators, routerActionDispatcher, analyticsD
     },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
-        const session = store.getState().user.websocketSession;
-        if (session.request_uuid !== data.payload.originator_id) {
-          routerActionDispatcher.retroRelogin(data.payload.retro);
-        }
+        retroActionCreators.forceRelogin(data.payload.originator_id, data.payload.retro.slug);
       } else {
         retroActionCreators.currentRetroUpdated(data.retro);
       }

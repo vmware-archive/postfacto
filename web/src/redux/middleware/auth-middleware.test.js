@@ -31,7 +31,8 @@
 
 import '../../spec_helper';
 import AuthMiddleware from './auth-middleware';
-import {home} from '../actions/router_actions';
+import {home, retroRelogin} from '../actions/router_actions';
+import {forceRelogin} from '../actions/state_change_actions';
 
 describe('AuthMiddleware', () => {
   beforeEach(() => {
@@ -49,19 +50,61 @@ describe('AuthMiddleware', () => {
     expect(next).toHaveBeenCalledWith(action);
   });
 
-  it('SIGN_OUT navigates to home and clears local storage', () => {
-    const location = '/some/location';
-    const doneAction = {
-      type: 'SIGN_OUT',
-      payload: location,
-    };
+  describe('SIGN_OUT', () => {
+    it('navigates to home and clears local storage', () => {
+      const location = '/some/location';
+      const doneAction = {
+        type: 'SIGN_OUT',
+        payload: location,
+      };
 
-    const next = jest.fn();
-    const store = {dispatch: jest.fn()};
-    const localStorage = {clear: jest.fn()};
-    AuthMiddleware(localStorage)(store)(next)(doneAction);
+      const next = jest.fn();
+      const store = {dispatch: jest.fn()};
+      const localStorage = {clear: jest.fn()};
+      AuthMiddleware(localStorage)(store)(next)(doneAction);
 
-    expect(store.dispatch).toHaveBeenCalledWith(home());
-    expect(localStorage.clear).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(home());
+      expect(localStorage.clear).toHaveBeenCalled();
+    });
+  });
+
+  describe('FORCE_RELOGIN', () => {
+    it('navigates to login page if current user didnt trigger action requiring relogin', () => {
+      const localStorage = {clear: jest.fn()};
+      const next = jest.fn();
+      const store = {
+        dispatch: jest.fn(),
+        getState: () => ({
+          user: {
+            websocketSession: {
+              request_uuid: 'user-a',
+            },
+          },
+        }),
+      };
+
+      AuthMiddleware(localStorage)(store)(next)(forceRelogin('user-b', 'retro-id'));
+
+      expect(store.dispatch).toHaveBeenCalledWith(retroRelogin('retro-id'));
+    });
+
+    it('does not trigger relogin if current user triggered action requiring relogin', () => {
+      const localStorage = {clear: jest.fn()};
+      const next = jest.fn();
+      const store = {
+        dispatch: jest.fn(),
+        getState: () => ({
+          user: {
+            websocketSession: {
+              request_uuid: 'user-a',
+            },
+          },
+        }),
+      };
+
+      AuthMiddleware(localStorage)(store)(next)(forceRelogin('user-a', 'retro-id'));
+
+      expect(store.dispatch).not.toHaveBeenCalled();
+    });
   });
 });

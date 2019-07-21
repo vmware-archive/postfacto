@@ -28,12 +28,19 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {home} from '../actions/router_actions';
+import {home, retroRelogin} from '../actions/router_actions';
 
 const AuthMiddleware = (localStorage) => (store) => (next) => (action) => {
   if (action.type === 'SIGN_OUT') {
     localStorage.clear();
     store.dispatch(home());
+  }
+
+  if (action.type === 'FORCE_RELOGIN') {
+    const session = store.getState().user.websocketSession;
+    if (session.request_uuid !== action.payload.originatorId) {
+      store.dispatch(retroRelogin(action.payload.retroId));
+    }
   }
   next(action);
 };

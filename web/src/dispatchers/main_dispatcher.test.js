@@ -60,6 +60,7 @@ describe('MainDispatcher', () => {
       currentRetroHighlightCleared: jest.fn(),
       currentRetroItemDeleted: jest.fn(),
       currentRetroItemDoneUpdated: jest.fn(),
+      forceRelogin: jest.fn(),
     };
     routerActionDispatcher = {
       newRetro: jest.fn(),
@@ -391,47 +392,28 @@ describe('MainDispatcher', () => {
 
     describe('when the command is force_relogin', () => {
       beforeEach(() => {
-        const store = {getState: () => ({user: {websocketSession: {request_uuid: 'fake-request-uuid-1'}}})};
-        dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, analyticsActionDispatcher, store);
+        dispatcher = mainDispatcher(reduxActions, routerActionDispatcher, analyticsActionDispatcher);
         dispatcher.dispatch = jest.fn();
       });
 
-      describe('when the command was originated by someone else', () => {
-        it('dispatches show alert with a password changed message', () => {
-          dispatcher.websocketRetroDataReceived({
-            data: {
-              command: 'force_relogin',
-              payload: {
-                originator_id: 'fake-request-uuid-2',
-                retro: {
-                  slug: 'retro-slug-1',
-                },
+      it('dispatches force relogin', () => {
+        dispatcher.websocketRetroDataReceived({
+          data: {
+            command: 'force_relogin',
+            payload: {
+              originator_id: 'fake-request-uuid-2',
+              retro: {
+                slug: 'retro-slug-1',
               },
             },
-          });
-
-          expect(routerActionDispatcher.retroRelogin).toHaveBeenCalledWith({
-            slug: 'retro-slug-1',
-          });
+          },
         });
-      });
 
-      describe('when the command was originated by me', () => {
-        it('does not dispatch show alert', () => {
-          dispatcher.websocketRetroDataReceived({
-            data: {
-              command: 'force_relogin',
-              payload: {
-                originator_id: 'fake-request-uuid-1',
-              },
-            },
-          });
-
-          expect(dispatcher.dispatch).not.toHaveBeenCalled();
-        });
+        expect(reduxActions.forceRelogin).toHaveBeenCalledWith('fake-request-uuid-2', 'retro-slug-1');
       });
     });
   });
+
 
   describe('websocketSessionDataReceived', () => {
     it('updates store with data from socket', () => {

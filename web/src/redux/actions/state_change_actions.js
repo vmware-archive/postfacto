@@ -172,3 +172,13 @@ export function signOut() {
     type: 'SIGN_OUT',
   };
 }
+
+export function forceRelogin(originatorId, retroId) {
+  return {
+    type: 'FORCE_RELOGIN',
+    payload: {
+      originatorId,
+      retroId,
+    },
+  };
+}
