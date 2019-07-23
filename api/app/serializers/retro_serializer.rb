@@ -27,34 +27,33 @@
 # You should have received a copy of the GNU Affero General Public License
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+class RetroSerializer
+  ALLOWED_FIELDS = [
+    :created_at,
+    :highlighted_item_id,
+    :id,
+    :is_private,
+    :name,
+    :retro_item_end_time,
+    :send_archive_email,
+    :slug,
+    :updated_at,
+    :user_id,
+    :video_link
+  ].freeze
 
-require 'rails_helper'
+  ASSOCIATIONS = {
+    action_items: {}.freeze,
+    archives: { only: :id }.freeze,
+    items: {}.freeze
+  }.freeze
 
-RSpec.describe RetrosChannel, type: :channel do
-  describe 'subscription' do
-    context 'for private retro' do
-      let!(:retro) do
-        Retro.create!(name: 'My Retro', password: 'the-password', is_private: true)
-      end
+  def initialize(retro)
+    @retro = retro
+  end
 
-      context 'with correct API token provided' do
-        before do
-          subscribe(retro_id: retro.id, api_token: token_for(retro))
-        end
-
-        it 'is confirmed' do
-          expect(subscription).to be_confirmed
-        end
-      end
-
-      it 'does not broadcast the encrypted password or salt' do
-        expect {
-          RetrosChannel.broadcast(retro)
-        }.to have_broadcasted_to(retro).with { |payload|
-          expect(payload['retro']).not_to include 'encrypted_password'
-          expect(payload['retro']).not_to include 'salt'
-        }
-      end
-    end
+  def as_json
+    @retro.as_json(include: ASSOCIATIONS, only: ALLOWED_FIELDS)
   end
 end
