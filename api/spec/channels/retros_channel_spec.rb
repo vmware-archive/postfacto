@@ -46,6 +46,15 @@ RSpec.describe RetrosChannel, type: :channel do
           expect(subscription).to be_confirmed
         end
       end
+
+      it 'does not broadcast the encrypted password or salt' do
+        expect {
+          RetrosChannel.broadcast(retro)
+        }.to have_broadcasted_to(retro).with { |payload|
+          expect(payload['retro']).not_to include 'encrypted_password'
+          expect(payload['retro']).not_to include 'salt'
+        }
+      end
     end
   end
 end

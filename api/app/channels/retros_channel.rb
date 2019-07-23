@@ -36,7 +36,10 @@ require 'security/auth_token'
 class RetrosChannel < ApplicationCable::Channel
 
   def self.broadcast(retro)
-    broadcast_to retro, retro: retro.as_json(include: {items: {}, action_items: {}, archives: {only: :id}})
+    broadcast_to retro, retro: retro.as_json(
+      except: [:encrypted_password, :salt],
+      include: {items: {}, action_items: {}, archives: {only: :id}},
+    )
   end
 
   def self.broadcast_force_relogin(retro, originator_id)
