@@ -29,36 +29,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UserReducer from './user_reducer';
+const LoggingMiddleware = () => () => (next) => (action) => {
+  // eslint-disable-next-line no-console
+  console.info('dispatching event', action);
+  next(action);
+};
 
-describe('UserReducer', () => {
-  let sessionReducer;
-  beforeEach(() => {
-    sessionReducer = UserReducer();
-  });
-
-  it('sets initial state', () => {
-    const state = sessionReducer(undefined, {});
-
-    expect(state).toEqual({
-      websocketSession: {},
-    });
-  });
-
-  describe('WEBSOCKET_SESSION_UPDATED', () => {
-    it('replaces the session', () => {
-      const session = {
-        request_uuid: '111',
-      };
-
-      const action = {
-        type: 'WEBSOCKET_SESSION_UPDATED',
-        payload: session,
-      };
-
-      const state = sessionReducer(undefined, action);
-
-      expect(state.websocketSession).toEqual(session);
-    });
-  });
-});
+export default LoggingMiddleware;

@@ -32,10 +32,10 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {MuiThemeProvider} from 'material-ui';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import {ListRetrosPage} from './list_retros_page';
+import {newRetro, showRetro} from '../../redux/actions/router_actions';
 
 function createRetros(count = 1) {
   const retros = [];
@@ -60,9 +60,19 @@ describe('List Retros Page', () => {
   const config = {contact: '', terms: '', privacy: ''};
 
   let dom;
+  let navigateTo;
+  let signOut;
+  let getRetros;
 
   beforeEach(() => {
-    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)} config={config}/></MuiThemeProvider>);
+    navigateTo = jest.fn();
+    signOut = jest.fn();
+    getRetros = jest.fn();
+    dom = mount(<MuiThemeProvider><ListRetrosPage retros={createRetros(2)} getRetros={getRetros} navigateTo={navigateTo} signOut={signOut} config={config}/></MuiThemeProvider>);
+  });
+
+  it('gets retros on mount', () => {
+    expect(getRetros).toHaveBeenCalled();
   });
 
   it('shows multiple retros', () => {
@@ -71,6 +81,19 @@ describe('List Retros Page', () => {
 
   it('includes a link to the show retro page', () => {
     dom.find('.retro-list-tile').at(0).simulate('click');
-    expect(Dispatcher).toHaveReceived('routeToShowRetro');
+
+    expect(navigateTo).toHaveBeenCalledWith(showRetro({slug: 'slug-1'}));
+  });
+
+  it('includes a link to the new retro page', () => {
+    dom.find('.new-retro button').simulate('click');
+
+    expect(navigateTo).toHaveBeenCalledWith(newRetro());
+  });
+
+  it('includes a link to log out', () => {
+    dom.find('.sign-out button').simulate('click');
+
+    expect(signOut).toHaveBeenCalled();
   });
 });

@@ -28,34 +28,21 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import {home, retroRelogin} from '../actions/router_actions';
 
-import React from 'react';
-import {mount} from 'enzyme';
-import '../spec_helper';
+const AuthMiddleware = (localStorage) => (store) => (next) => (action) => {
+  if (action.type === 'SIGN_OUT') {
+    localStorage.clear();
+    store.dispatch(home());
+  }
 
-import PropTypes from 'prop-types';
-import useRouter from './use_router';
+  if (action.type === 'FORCE_RELOGIN') {
+    const session = store.getState().user.websocketSession;
+    if (session.request_uuid !== action.payload.originatorId) {
+      store.dispatch(retroRelogin(action.payload.retroId));
+    }
+  }
+  next(action);
+};
 
-describe('useRouter', () => {
-  it('routes', () => {
-    const routeSpy = jest.fn().mockName('route');
-
-    const Application = ({router}) => {
-      router.get('/test', routeSpy);
-      return (
-        <div className="application">
-          <button type="button" onClick={() => router.navigate('/test')}>Route</button>
-        </div>
-      );
-    };
-    Application.propTypes = {
-      router: PropTypes.object.isRequired,
-    };
-
-    const TestRouter = useRouter(Application);
-    const dom = mount(<TestRouter/>);
-
-    dom.find('.application button').simulate('click');
-    expect(routeSpy).toHaveBeenCalled();
-  });
-});
+export default AuthMiddleware;

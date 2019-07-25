@@ -28,7 +28,9 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-const ArchiveMiddleware = (actionDispatcher) => (store) => (next) => (action) => {
+import {completedRetroItem} from '../actions/analytics_actions';
+
+const ArchiveMiddleware = () => (store) => (next) => (action) => {
   if (action.type === 'CURRENT_RETRO_ITEM_DONE_UPDATED') {
     const {itemId, done} = action.payload;
 
@@ -41,7 +43,8 @@ const ArchiveMiddleware = (actionDispatcher) => (store) => (next) => (action) =>
         .every((i) => i.done);
 
       const item = currentRetro.items.find((i) => i.id === itemId);
-      actionDispatcher.completedRetroItemAnalytics({data: {retroId: currentRetro.id, category: item.category}});
+
+      store.dispatch(completedRetroItem(currentRetro.id, item.category));
     }
 
     if (allDone) {

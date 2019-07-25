@@ -29,223 +29,84 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const ALERT_DURATION = 3500;
-let alertTimeout = null;
-
-export default function (retroActionCreators, store) {
+export default function (mainBoundActions, routerBoundActions) {
   return {
-    setRoute({data}) {
-      this.router.navigate(data);
+    redirectToHome() {
+      routerBoundActions.home();
     },
     requireRetroLogin({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/login`});
-    },
-    requireRetroRelogin({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}/relogin`});
-    },
-    retroSuccessfullyCreated({data}) {
-      retroActionCreators.clearErrors();
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro.slug}`});
-      this.dispatch({type: 'createdRetroAnalytics', data: {retroId: data.retro.id}});
-    },
-    retroSuccessfullyLoggedIn({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+      routerBoundActions.retroLogin(data.retro_id);
     },
     redirectToRetroCreatePage() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
-    },
-    retroSettingsSuccessfullyUpdated({data: {retro}}) {
-      retroActionCreators.currentRetroUpdated(retro);
-      retroActionCreators.clearErrors();
-      this.dispatch({type: 'setRoute', data: `/retros/${retro.slug}`});
-    },
-    routeToHome() {
-      this.dispatch({type: 'setRoute', data: '/'});
-    },
-    routeToShowRetro({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.slug}/`});
-    },
-    routeToNewRetro() {
-      this.dispatch({type: 'setRoute', data: '/retros/new'});
+      routerBoundActions.newRetro();
     },
     routeToRetroArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives`});
+      routerBoundActions.retroArchives(data.retro_id);
     },
     routeToRetroArchive({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/archives/${data.archive_id}`});
+      routerBoundActions.retroArchive(data.retro_id, data.archive_id);
     },
     routeToRetroSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
+      routerBoundActions.retroSettings(data.retro_id);
     },
     routeToRetroPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings/password`});
+      routerBoundActions.retroPasswordSettings(data.retro_id);
     },
     backPressedFromArchives({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
-    },
-    loggedInSuccessfully({data}) {
-      localStorage.setItem('authToken', data.auth_token);
-      if (data.new_user) {
-        this.dispatch({type: 'setRoute', data: '/retros/new'});
-      } else {
-        this.dispatch({type: 'setRoute', data: '/'});
-      }
+      routerBoundActions.showRetroForId(data.retro_id);
     },
     signOut() {
       window.localStorage.clear();
-      this.dispatch({type: 'setRoute', data: '/'});
+      routerBoundActions.home();
     },
     backPressedFromSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}`});
+      routerBoundActions.showRetroForId(data.retro_id);
     },
     backPressedFromPasswordSettings({data}) {
-      this.dispatch({type: 'setRoute', data: `/retros/${data.retro_id}/settings`});
-    },
-    redirectToRegistration({data}) {
-      this.dispatch({type: 'setRoute', data: `/registration/${data.access_token}/${data.email}/${data.name}`});
-    },
-    retroUnsuccessfullyCreated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
-    retroLoginFailed() {
-      retroActionCreators.errorsUpdated({login_error_message: 'Oops, wrong password!'});
+      routerBoundActions.retroSettings(data.retro_id);
     },
     retroNotFound() {
-      retroActionCreators.setNotFound({retro_not_found: true});
+      mainBoundActions.setNotFound({retro_not_found: true});
     },
     resetRetroNotFound() {
-      retroActionCreators.setNotFound({retro_not_found: false});
+      mainBoundActions.setNotFound({retro_not_found: false});
     },
     notFound() {
-      retroActionCreators.setNotFound({not_found: true});
+      mainBoundActions.setNotFound({not_found: true});
     },
     resetNotFound() {
-      retroActionCreators.setNotFound({not_found: false});
+      mainBoundActions.setNotFound({not_found: false});
     },
     apiServerNotFound() {
-      retroActionCreators.setNotFound({api_server_not_found: true});
+      mainBoundActions.setNotFound({api_server_not_found: true});
     },
     resetApiServerNotFound() {
-      retroActionCreators.setNotFound({api_server_not_found: false});
-    },
-    retrosSuccessfullyFetched({data}) {
-      retroActionCreators.retrosUpdated(data.retros);
-    },
-    retroSuccessfullyFetched({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-      this.dispatch({type: 'visitedRetroAnalytics', data: {retroId: data.retro.id}});
-    },
-    getRetroSettingsSuccessfullyReceived({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    getRetroLoginSuccessfullyReceived({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    retroItemSuccessfullyCreated({data}) {
-      retroActionCreators.currentRetroItemUpdated(data.item);
-      this.dispatch({type: 'createdRetroItemAnalytics', data: {retroId: data.retroId, category: data.item.category}});
-    },
-    retroItemSuccessfullyDeleted({data}) {
-      retroActionCreators.currentRetroItemDeleted(data.item);
-    },
-    retroItemSuccessfullyVoted({data}) {
-      retroActionCreators.currentRetroItemUpdated(data.item);
-    },
-    retroItemSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroItemDoneUpdated(data.itemId, true);
-    },
-    retroItemSuccessfullyUndone({data}) {
-      retroActionCreators.currentRetroItemDoneUpdated(data.item.id, false);
-    },
-    retroItemSuccessfullyHighlighted({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    retroItemSuccessfullyUnhighlighted() {
-      retroActionCreators.currentRetroHighlightCleared();
-    },
-    extendTimerSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-    },
-    archiveRetroSuccessfullyDone({data}) {
-      retroActionCreators.currentRetroUpdated(data.retro);
-      this.dispatch({
-        type: 'archivedRetroAnalytics',
-        data: {retroId: data.retro.id},
-      });
-      this.dispatch({
-        type: 'showAlert',
-        data: {message: 'Archived!'},
-      });
+      mainBoundActions.setNotFound({api_server_not_found: false});
     },
     websocketRetroDataReceived({data}) {
       if (data.command === 'force_relogin') {
-        const session = store.getState().user.websocketSession;
-        if (session.request_uuid !== data.payload.originator_id) {
-          this.dispatch({type: 'requireRetroRelogin', data: {retro: data.payload.retro}});
-        }
+        mainBoundActions.forceRelogin(data.payload.originator_id, data.payload.retro.slug);
       } else {
-        retroActionCreators.currentRetroUpdated(data.retro);
+        mainBoundActions.currentRetroUpdated(data.retro);
       }
     },
     websocketSessionDataReceived({data}) {
-      retroActionCreators.updateWebsocketSession(data.payload);
-    },
-    retroActionItemSuccessfullyDeleted({data}) {
-      retroActionCreators.currentRetroActionItemDeleted(data.action_item);
-    },
-    retroActionItemSuccessfullyEdited({data}) {
-      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
-    },
-    doneRetroActionItemSuccessfullyToggled({data}) {
-      retroActionCreators.currentRetroActionItemUpdated(data.action_item);
-
-      const analyticsType = data.action_item.done ? 'doneActionItemAnalytics' : 'undoneActionItemAnalytics';
-      this.dispatch({type: analyticsType, data: {retroId: data.retro_id}});
+      mainBoundActions.updateWebsocketSession(data.payload);
     },
     toggleSendArchiveEmail({data: {currentSendArchiveEmail}}) {
-      retroActionCreators.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
-    },
-    retroArchiveSuccessfullyFetched({data}) {
-      retroActionCreators.updateCurrentArchivedRetro(data.retro);
-    },
-    retroArchivesSuccessfullyFetched({data}) {
-      retroActionCreators.updateRetroArchives(data.archives);
-    },
-    showAlert({data}) {
-      clearTimeout(alertTimeout);
-      alertTimeout = setTimeout(() => retroActionCreators.clearAlert(), ALERT_DURATION);
-
-      retroActionCreators.showAlert(data);
+      mainBoundActions.currentRetroSendArchiveEmailUpdated(!currentSendArchiveEmail);
     },
     hideAlert() {
-      clearTimeout(alertTimeout);
-      alertTimeout = null;
-
-      retroActionCreators.clearAlert();
+      mainBoundActions.clearAlert();
     },
     showDialog({data}) {
-      retroActionCreators.showDialog(data);
+      mainBoundActions.showDialog(data);
     },
     hideDialog() {
-      retroActionCreators.clearDialog();
-    },
-    retroSettingsUnsuccessfullyUpdated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
-    },
-    retroPasswordSuccessfullyUpdated({data}) {
-      retroActionCreators.clearErrors();
-      window.localStorage.setItem(`apiToken-${data.retro_id}`, data.token);
-    },
-    retroPasswordUnsuccessfullyUpdated({data}) {
-      retroActionCreators.errorsUpdated(data.errors);
+      mainBoundActions.clearDialog();
     },
     clearErrors() {
-      retroActionCreators.clearErrors();
-    },
-    setConfig(action) {
-      retroActionCreators.updateFeatureFlags({
-        archiveEmails: action.data.archive_emails,
-      });
+      mainBoundActions.clearErrors();
     },
   };
 }

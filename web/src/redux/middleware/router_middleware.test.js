@@ -29,36 +29,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import UserReducer from './user_reducer';
+import RouterMiddleware from './router_middleware';
 
-describe('UserReducer', () => {
-  let sessionReducer;
+describe('RouterMiddleware', () => {
   beforeEach(() => {
-    sessionReducer = UserReducer();
   });
 
-  it('sets initial state', () => {
-    const state = sessionReducer(undefined, {});
+  it('calls next with action if action type not recognised', () => {
+    const action = {
+      type: 'OTHER',
+    };
 
-    expect(state).toEqual({
-      websocketSession: {},
-    });
+    const next = jest.fn();
+    const store = {dispatch: jest.fn()};
+    const router = {navigate: jest.fn()};
+    RouterMiddleware(router)(store)(next)(action);
+
+    expect(next).toHaveBeenCalledWith(action);
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  describe('WEBSOCKET_SESSION_UPDATED', () => {
-    it('replaces the session', () => {
-      const session = {
-        request_uuid: '111',
-      };
+  it('Passes SET_ROUTE payload to router.navigate and stops event propagating', () => {
+    const location = '/some/location';
+    const doneAction = {
+      type: 'SET_ROUTE',
+      payload: location,
+    };
 
-      const action = {
-        type: 'WEBSOCKET_SESSION_UPDATED',
-        payload: session,
-      };
+    const next = jest.fn();
+    const router = {navigate: jest.fn()};
+    RouterMiddleware(router)({})(next)(doneAction);
 
-      const state = sessionReducer(undefined, action);
-
-      expect(state.websocketSession).toEqual(session);
-    });
+    expect(router.navigate).toHaveBeenCalledWith(location);
+    expect(next).not.toHaveBeenCalled();
   });
 });

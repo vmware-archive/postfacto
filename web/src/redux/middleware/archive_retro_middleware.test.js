@@ -29,8 +29,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import '../../spec_helper';
-import ArchiveMiddleware from './archive-retro-middleware';
+import ArchiveMiddleware from './archive_retro_middleware';
+import {completedRetroItem} from '../actions/analytics_actions';
 
 describe('ArchiveMiddleware', () => {
   beforeEach(() => {
@@ -111,8 +111,38 @@ describe('ArchiveMiddleware', () => {
     };
 
     const next = jest.fn();
-    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
-    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+    ArchiveMiddleware()(store)(next)(doneAction);
+
+    expect(next).toHaveBeenCalledWith(doneAction);
+    expect(store.dispatch).toHaveBeenCalledWith(completedRetroItem(5, 'happy'));
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not fire SHOW_DIALOG if the updating item is not done', () => {
+    const existingItem = {id: 2, category: 'happy', done: false};
+    const retro = {
+      name: 'retro1',
+      id: 5,
+      video_link: 'video',
+      items: [{id: 1, category: 'happy', done: true}, existingItem],
+      action_items: [{}],
+      is_private: true,
+      send_archive_email: false,
+      highlighted_item_id: 2,
+    };
+
+    const store = {
+      getState: () => ({retro: {currentRetro: retro}}),
+      dispatch: jest.fn(),
+    };
+
+    const doneAction = {
+      type: 'CURRENT_RETRO_ITEM_DONE_UPDATED',
+      payload: {itemId: 2, done: false},
+    };
+
+    const next = jest.fn();
+    ArchiveMiddleware()(store)(next)(doneAction);
 
     expect(next).toHaveBeenCalledWith(doneAction);
     expect(store.dispatch).not.toHaveBeenCalled();
@@ -142,12 +172,9 @@ describe('ArchiveMiddleware', () => {
     };
 
     const next = jest.fn();
-    const actionDispatcher = {completedRetroItemAnalytics: jest.fn()};
-    ArchiveMiddleware(actionDispatcher)(store)(next)(doneAction);
+    ArchiveMiddleware()(store)(next)(doneAction);
 
-    expect(actionDispatcher.completedRetroItemAnalytics).toHaveBeenCalledWith({
-      data: {retroId: 5, category: 'happy'},
-    });
+    expect(store.dispatch).toHaveBeenCalledWith(completedRetroItem(5, 'happy'));
   });
   it('Does not fires analytics event when item is undone', () => {
     const existingItem = {id: 2, category: 'happy', done: true};

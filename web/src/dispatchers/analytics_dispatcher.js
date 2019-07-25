@@ -29,34 +29,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Analytics from '../helpers/analytics';
-
-export default {
-  createdRetroAnalytics({data}) {
-    Analytics.track('Created Retro', {'retroId': data.retroId});
-  },
-  visitedRetroAnalytics({data}) {
-    Analytics.track('Retro visited', {'retroId': data.retroId});
-  },
-  createdRetroItemAnalytics({data}) {
-    Analytics.track('Created Retro Item', {'retroId': data.retroId, 'category': data.category});
-  },
-  completedRetroItemAnalytics({data}) {
-    Analytics.track('Completed Retro Item', {'retroId': data.retroId, 'category': data.category});
-  },
-  createdActionItemAnalytics({data}) {
-    Analytics.track('Created Action Item', {'retroId': data.retroId});
-  },
-  doneActionItemAnalytics({data}) {
-    Analytics.track('Done Action Item', {'retroId': data.retroId});
-  },
-  undoneActionItemAnalytics({data}) {
-    Analytics.track('Undone Action Item', {'retroId': data.retroId});
-  },
-  archivedRetroAnalytics({data}) {
-    Analytics.track('Archived Retro', {'retroId': data.retroId});
-  },
-  showHomePageAnalytics() {
-    Analytics.track('Loaded homepage');
-  },
-};
+export default function (analyticsClient) {
+  return {
+    createdRetroAnalytics({data}) {
+      analyticsClient.track('Created Retro', {'retroId': data.retroId});
+    },
+    visitedRetroAnalytics({data}) {
+      analyticsClient.track('Retro visited', {'retroId': data.retroId});
+    },
+    createdRetroItemAnalytics({data}) {
+      analyticsClient.track('Created Retro Item', {'retroId': data.retroId, 'category': data.category});
+    },
+    completedRetroItemAnalytics({data}) {
+      analyticsClient.track('Completed Retro Item', {'retroId': data.retroId, 'category': data.category});
+    },
+    createdActionItemAnalytics({data}) {
+      analyticsClient.track('Created Action Item', {'retroId': data.retroId});
+    },
+    doneActionItemAnalytics({data}) {
+      analyticsClient.track('Done Action Item', {'retroId': data.retroId});
+    },
+    undoneActionItemAnalytics({data}) {
+      analyticsClient.track('Undone Action Item', {'retroId': data.retroId});
+    },
+    archivedRetroAnalytics({data}) {
+      analyticsClient.track('Archived Retro', {'retroId': data.retroId});
+    },
+    showHomePageAnalytics() {
+      analyticsClient.track('Loaded homepage');
+    },
+  };
+}

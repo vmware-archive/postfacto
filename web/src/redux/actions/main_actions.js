@@ -92,6 +92,12 @@ export function retrosUpdated(retros) {
   };
 }
 
+export function getRetros() {
+  return {
+    type: 'GET_RETROS',
+  };
+}
+
 export function errorsUpdated(errors) {
   return {
     type: 'ERRORS_UPDATED',
@@ -164,5 +170,21 @@ export function updateFeatureFlags(featureFlags) {
   return {
     type: 'FEATURE_FLAGS_UPDATED',
     payload: featureFlags,
+  };
+}
+
+export function signOut() {
+  return {
+    type: 'SIGN_OUT',
+  };
+}
+
+export function forceRelogin(originatorId, retroId) {
+  return {
+    type: 'FORCE_RELOGIN',
+    payload: {
+      originatorId,
+      retroId,
+    },
   };
 }

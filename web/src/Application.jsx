@@ -36,6 +36,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import Grapnel from 'grapnel';
 import {ConnectedRouter} from './components/router';
 import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
@@ -45,12 +46,22 @@ import SessionWebsocket from './components/session_websocket';
 import apiDispatcher from './dispatchers/api_dispatcher';
 import mainDispatcher from './dispatchers/main_dispatcher';
 import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import * as ReduxActionDispatcher from './dispatchers/redux-action-dispatcher';
-import reduxStore from './redux/store';
+import * as mainActions from './redux/actions/main_actions';
+import * as apiActions from './redux/actions/api_actions';
+import * as routerActions from './redux/actions/router_actions';
+import makeReduxStore from './redux/store';
+import RetroClient from './api/retro_client';
+import AnalyticsClient from './helpers/analytics_client';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
+
+
+const router = new Grapnel({pushState: true});
+const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
+const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
+const reduxStore = makeReduxStore(router, retroClient, analyticsClient);
 
 class Application extends React.Component {
   static propTypes = {
@@ -89,7 +100,7 @@ class Application extends React.Component {
           <div className="retro-application">
 
             <ConnectedHeader config={config}/>
-            <ConnectedRouter config={config}/>
+            <ConnectedRouter config={config} router={router}/>
             <SessionWebsocket url={websocket_url}/>
           </div>
         </MuiThemeProvider>
@@ -98,20 +109,17 @@ class Application extends React.Component {
   }
 }
 
-const reduxActionDispatcher = bindActionCreators(ReduxActionDispatcher, reduxStore.dispatch);
+const mainBoundActions = bindActionCreators(mainActions, reduxStore.dispatch);
+const routerBoundActions = bindActionCreators(routerActions, reduxStore.dispatch);
+const apiBoundActions = bindActionCreators(apiActions, reduxStore.dispatch);
 export default useStore(
   Application,
   {
     actions: [],
     dispatcherHandlers: [
-      mainDispatcher(reduxActionDispatcher, reduxStore),
-      apiDispatcher,
-      analyticsDispatcher,
+      mainDispatcher(mainBoundActions, routerBoundActions),
+      apiDispatcher(apiBoundActions),
+      analyticsDispatcher(analyticsClient),
     ],
-    onDispatch: (event) => {
-      /* eslint-disable no-console */
-      console.info('dispatching event', event);
-      /* eslint-enable no-console */
-    },
   },
 );

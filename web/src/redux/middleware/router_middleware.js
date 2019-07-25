@@ -28,37 +28,14 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+const RouterMiddleware = (router) => () => (next) => (action) => {
+  if (action.type === 'SET_ROUTE') {
+    /* eslint-disable no-console */
+    console.log('Navigating to: ', action.payload);
+    router.navigate(action.payload);
+    return;
+  }
+  next(action);
+};
 
-import UserReducer from './user_reducer';
-
-describe('UserReducer', () => {
-  let sessionReducer;
-  beforeEach(() => {
-    sessionReducer = UserReducer();
-  });
-
-  it('sets initial state', () => {
-    const state = sessionReducer(undefined, {});
-
-    expect(state).toEqual({
-      websocketSession: {},
-    });
-  });
-
-  describe('WEBSOCKET_SESSION_UPDATED', () => {
-    it('replaces the session', () => {
-      const session = {
-        request_uuid: '111',
-      };
-
-      const action = {
-        type: 'WEBSOCKET_SESSION_UPDATED',
-        payload: session,
-      };
-
-      const state = sessionReducer(undefined, action);
-
-      expect(state.websocketSession).toEqual(session);
-    });
-  });
-});
+export default RouterMiddleware;

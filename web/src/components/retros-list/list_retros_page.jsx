@@ -30,17 +30,21 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import {RaisedButton} from 'material-ui';
 import types from 'prop-types';
 import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import RetroTile from './retro_tile';
+import {newRetro, showRetro} from '../../redux/actions/router_actions';
+import {signOut, getRetros} from '../../redux/actions/main_actions';
 
 class ListRetrosPage extends React.Component {
   static propTypes = {
     retros: types.array.isRequired,
     config: types.object.isRequired,
+    navigateTo: types.func.isRequired,
+    getRetros: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   constructor(props) {
@@ -51,19 +55,19 @@ class ListRetrosPage extends React.Component {
   }
 
   componentWillMount() {
-    Actions.getRetros();
+    this.props.getRetros();
   }
 
   handleRetroListItemClicked(retro) {
-    Actions.routeToShowRetro(retro);
+    this.props.navigateTo(showRetro(retro));
   }
 
   handleNewRetroButtonClicked() {
-    Actions.routeToNewRetro();
+    this.props.navigateTo(newRetro());
   }
 
   handleSignOutButtonClicked() {
-    Actions.signOut();
+    this.props.signOut();
   }
 
   render() {
@@ -117,5 +121,11 @@ const mapStateToProps = (state) => ({
   retros: state.retro.retros,
 });
 
-const ConnectedListRetrosPage = connect(mapStateToProps)(ListRetrosPage);
+const mapDispatchToProps = (dispatch) => ({
+  navigateTo: (location) => dispatch(location),
+  signOut: () => dispatch(signOut()),
+  getRetros: () => dispatch(getRetros()),
+});
+
+const ConnectedListRetrosPage = connect(mapStateToProps, mapDispatchToProps)(ListRetrosPage);
 export {ListRetrosPage, ConnectedListRetrosPage};

@@ -28,23 +28,20 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import Mixpanel from 'mixpanel-browser';
+import {clearAlert} from '../actions/main_actions';
 
-const POSTFACTO_TEAM_ANALYTICS_TOKEN = 'd4de349453cc697734eced9ebedcdb22';
+const ALERT_DURATION = 3500;
+let alertTimeout;
 
-export default class Analytics {
-  static initialized = false;
-
-  static track(event, options = {}) {
-    if (global.Retro.config.enable_analytics) {
-      if (!Analytics.initialized) {
-        Mixpanel.init(POSTFACTO_TEAM_ANALYTICS_TOKEN);
-        Analytics.initialized = true;
-      }
-
-      Mixpanel.track(event, Object.assign({
-        timestamp: (new Date()).toJSON(),
-      }, options));
-    }
+const MessageMiddleware = () => (store) => (next) => (action) => {
+  if (action.type === 'SHOW_ALERT') {
+    clearTimeout(alertTimeout);
+    alertTimeout = setTimeout(() => store.dispatch(clearAlert()), ALERT_DURATION);
   }
-}
+  if (action.type === 'CLEAR_ALERT') {
+    clearTimeout(alertTimeout);
+  }
+  next(action);
+};
+
+export default MessageMiddleware;

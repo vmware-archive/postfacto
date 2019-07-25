@@ -28,37 +28,29 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import Mixpanel from 'mixpanel-browser';
 
-import UserReducer from './user_reducer';
+const POSTFACTO_TEAM_ANALYTICS_TOKEN = 'd4de349453cc697734eced9ebedcdb22';
 
-describe('UserReducer', () => {
-  let sessionReducer;
-  beforeEach(() => {
-    sessionReducer = UserReducer();
-  });
+export default class AnalyticsClient {
+  static initialized = false;
 
-  it('sets initial state', () => {
-    const state = sessionReducer(undefined, {});
+  enableAnalyticsFn;
 
-    expect(state).toEqual({
-      websocketSession: {},
-    });
-  });
+  constructor(enableAnalyticsFn) {
+    this.enableAnalyticsFn = enableAnalyticsFn;
+  }
 
-  describe('WEBSOCKET_SESSION_UPDATED', () => {
-    it('replaces the session', () => {
-      const session = {
-        request_uuid: '111',
-      };
+  track(event, options = {}) {
+    if (this.enableAnalyticsFn()) {
+      if (!AnalyticsClient.initialized) {
+        Mixpanel.init(POSTFACTO_TEAM_ANALYTICS_TOKEN);
+        AnalyticsClient.initialized = true;
+      }
 
-      const action = {
-        type: 'WEBSOCKET_SESSION_UPDATED',
-        payload: session,
-      };
-
-      const state = sessionReducer(undefined, action);
-
-      expect(state.websocketSession).toEqual(session);
-    });
-  });
-});
+      Mixpanel.track(event, Object.assign({
+        timestamp: (new Date()).toJSON(),
+      }, options));
+    }
+  }
+}

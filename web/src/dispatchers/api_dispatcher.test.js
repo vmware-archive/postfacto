@@ -29,1153 +29,204 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import PromiseMock from 'promise-mock';
-import Grapnel from 'grapnel';
-import {Dispatcher} from 'p-flux';
-import MockFetch from '../test_support/fetch_matchers';
-import '../spec_helper';
+import apiDispatcher from './api_dispatcher';
 
 describe('ApiDispatcher', () => {
-  let subject;
-  let retro;
-  let realDispatchLevels;
+  let boundActionCreators;
+  let dispatcher;
 
   beforeEach(() => {
-    PromiseMock.install();
-
-    subject = Dispatcher;
-
-    // dispatch is spied on in spec_helper
-    let dispatchCount = 0;
-    realDispatchLevels = 1;
-    subject.dispatch.mockConditionalCallThrough(() => {
-      // Call through for first (potentially several) dispatches ONLY
-      // Later dispatches are recorded but not invoked
-      dispatchCount += 1;
-      return dispatchCount <= realDispatchLevels;
-    });
-
-    // prevent console logs
-    jest.spyOn(subject, 'onDispatch').mockReturnValue(null);
-    retro = {
-      id: 1,
-      name: 'retro name',
-      slug: 'retro-slug-123',
-      items: [
-        {
-          id: 2,
-          description: 'happy description',
-          vote_count: 1,
-          created_at: '2016-01-01T00:00:00.000Z',
-        },
-        {
-          id: 3,
-          description: '2nd description',
-          vote_count: 3,
-          created_at: '2016-01-02T00:00:00.000Z',
-        },
-        {
-          id: 4,
-          description: '2nd description',
-          vote_count: 2,
-          created_at: '2016-01-03T00:00:00.000Z',
-        },
-      ],
-      action_items: [
-        {
-          id: 1,
-          description: 'action item 1',
-          done: false,
-        },
-      ],
+    boundActionCreators = {
+      retroCreate: jest.fn(),
+      getRetro: jest.fn(),
+      getRetroSettings: jest.fn(),
+      getRetroLogin: jest.fn(),
+      loginToRetro: jest.fn(),
+      createRetroItem: jest.fn(),
+      updateRetroItem: jest.fn(),
+      deleteRetroItem: jest.fn(),
+      voteRetroItem: jest.fn(),
+      nextRetroItem: jest.fn(),
+      highlightRetroItem: jest.fn(),
+      unhighlightRetroItem: jest.fn(),
+      doneRetroItem: jest.fn(),
+      undoneRetroItem: jest.fn(),
+      extendTimer: jest.fn(),
+      archiveRetro: jest.fn(),
+      createRetroActionItem: jest.fn(),
+      doneRetroActionItem: jest.fn(),
+      deleteRetroActionItem: jest.fn(),
+      editRetroActionItem: jest.fn(),
+      getRetroArchive: jest.fn(),
+      getRetroArchives: jest.fn(),
+      createUser: jest.fn(),
+      createSession: jest.fn(),
+      updateRetroSettings: jest.fn(),
+      updateRetroPassword: jest.fn(),
+      retrieveConfig: jest.fn(),
     };
-
-    MockFetch.install();
+    dispatcher = apiDispatcher(boundActionCreators);
   });
 
-  afterEach(() => {
-    PromiseMock.uninstall();
-    MockFetch.uninstall();
+  it('retroCreate', () => {
+    const retro = {name: 1};
+    dispatcher.retroCreate({data: retro});
+    expect(boundActionCreators.retroCreate).toHaveBeenCalledWith(retro);
   });
 
-  describe('retroCreate', () => {
-    beforeEach(() => {
-      localStorage.setItem('authToken', 'the-auth-token');
-      subject.dispatch({
-        type: 'retroCreate',
-        data: {
-          name: 'the retro name',
-          slug: 'the-retro-name',
-          password: 'the-retro-password',
-        },
-      });
-    });
-
-    it('makes an api POST to /retros', () => {
-      expect(MockFetch).toHaveRequested('https://example.com/retros', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token',
-        },
-        data: {
-          retro: {
-            name: 'the retro name',
-            slug: 'the-retro-name',
-            password: 'the-retro-password',
-          },
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok({retro, token: 'the-token'});
-      Promise.runAll();
-      expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-token');
-      expect(Dispatcher).toHaveReceived('retroSuccessfullyCreated');
-    });
-
-    describe('when unprocessable entity is received', () => {
-      beforeEach(() => {
-        const request = MockFetch.latestRequest();
-        request.resolveJsonStatus(422, {errors: ['some error']});
-        Promise.runAll();
-      });
-
-      it('dispatches retroUnsuccessfullyCreated', () => {
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroUnsuccessfullyCreated',
-          data: {errors: ['some error']},
-        });
-      });
-
-      it('does not reset API token', () => {
-        expect(localStorage.getItem('authToken')).toEqual('the-auth-token');
-      });
-    });
+  it('getRetro', () => {
+    dispatcher.getRetro({data: {id: 1}});
+    expect(boundActionCreators.getRetro).toHaveBeenCalledWith(1);
   });
 
-  describe('updateRetroSettings', () => {
-    function dispatchRetroData(new_slug, old_slug, is_private, request_uuid) {
-      const data = {
-        retro_id: 13,
-        retro_name: 'the new retro name',
-        new_slug,
-        old_slug,
-        is_private,
-        request_uuid,
-      };
-
-      subject.dispatch({type: 'updateRetroSettings', data});
-    }
-
-    beforeEach(() => {
-      // test appears to be set up badly and requires both retro ID types:
-      // (previously responded to all getItem calls with the token)
-      localStorage.setItem('apiToken-retro-slug-123', 'the-auth-token');
-      localStorage.setItem('apiToken-13', 'the-auth-token');
-
-      subject.router = new Grapnel({pushState: true});
-      subject.router.get('/retros/:id', () => {});
-    });
-
-    it('makes an api PATCH to /retros/:id', () => {
-      dispatchRetroData('the-new-slug-123', 'retro-slug-123', true, 'some-uuid');
-      expect(MockFetch).toHaveRequested('/retros/13', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token',
-        },
-        data: {
-          retro: {
-            name: 'the new retro name',
-            slug: 'the-new-slug-123',
-            is_private: true,
-          },
-          request_uuid: 'some-uuid',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({
-        retro: {
-          name: 'the new retro name',
-          slug: 'the-new-slug-123',
-          is_private: true,
-        },
-      });
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroSettingsSuccessfullyUpdated',
-        data: {
-          retro: {
-            name: 'the new retro name',
-            slug: 'the-new-slug-123',
-            is_private: true,
-          },
-        },
-      });
-
-      expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
-      expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual(null);
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'showAlert',
-        data: {
-          checkIcon: true,
-          message: 'Settings saved!',
-          className: 'alert-with-back-button',
-        },
-      });
-    });
-
-    describe('when forbidden is received', () => {
-      beforeEach(() => {
-        dispatchRetroData('the-new-slug-123', 'retro-slug-123', 'some-uuid');
-
-        const request = MockFetch.latestRequest();
-        request.forbidden();
-        Promise.runAll();
-      });
-
-      it('dispatches requireRetroLogin', () => {
-        expect(Dispatcher).toHaveReceived({
-          type: 'requireRetroLogin',
-          data: {retro_id: 13},
-        });
-      });
-
-      it('does not reset API token', () => {
-        expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-auth-token');
-      });
-    });
-
-    describe('when unprocessable entity is received', () => {
-      beforeEach(() => {
-        dispatchRetroData('the-new-slug-123', 'retro-slug-123', 'some-uuid');
-
-        const request = MockFetch.latestRequest();
-        request.resolveJsonStatus(422, {errors: ['some error']});
-        Promise.runAll();
-      });
-
-      it('dispatches retroSettingsUnsuccessfullyUpdated', () => {
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroSettingsUnsuccessfullyUpdated',
-          data: {errors: ['some error']},
-        });
-      });
-
-      it('does not reset API token', () => {
-        expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-auth-token');
-      });
-    });
-
-    describe('when slug is not modified and name is changed', () => {
-      beforeEach(() => {
-        dispatchRetroData('retro-slug-123', 'retro-slug-123', false, 'some-uuid');
-
-        const request = MockFetch.latestRequest();
-        request.ok({
-          retro: {
-            name: 'the new retro name',
-            slug: 'retro-slug-123',
-            is_private: false,
-          },
-        });
-        Promise.runAll();
-      });
-
-      it('dispatches retroSettingsSuccessfullyUpdated', () => {
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroSettingsSuccessfullyUpdated',
-          data: {
-            retro: {
-              name: 'the new retro name',
-              slug: 'retro-slug-123',
-              is_private: false,
-            },
-          },
-        });
-      });
-
-      it('does not reset API token', () => {
-        expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual('the-auth-token');
-      });
-    });
+  it('getRetroSettings', () => {
+    dispatcher.getRetroSettings({data: {id: 1}});
+    expect(boundActionCreators.getRetroSettings).toHaveBeenCalledWith(1);
   });
 
-  describe('updateRetroPassword', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-13', 'the-auth-token');
-
-      subject.dispatch({
-        type: 'updateRetroPassword',
-        data: {
-          retro_id: '13',
-          current_password: 'current password',
-          new_password: 'new password',
-          request_uuid: 'some-request-uuid',
-        },
-      });
-
-      subject.router = new Grapnel({pushState: true});
-      subject.router.get('/retros/:id/settings', () => {});
-    });
-
-    it('makes an api PATCH to /retros/:id/password', () => {
-      expect(MockFetch).toHaveRequested('/retros/13/password', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-auth-token',
-        },
-        data: {
-          current_password: 'current password',
-          new_password: 'new password',
-          request_uuid: 'some-request-uuid',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({token: 'new-api-token'});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroPasswordSuccessfullyUpdated',
-        data: {
-          retro_id: '13',
-          token: 'new-api-token',
-        },
-      });
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'routeToRetroSettings',
-        data: {
-          retro_id: '13',
-        },
-      });
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'showAlert',
-        data: {
-          checkIcon: true,
-          message: 'Password changed',
-        },
-      });
-    });
-
-    describe('when unprocessable entity is received', () => {
-      beforeEach(() => {
-        const request = MockFetch.latestRequest();
-        request.resolveJsonStatus(422, {errors: ['some error']});
-        Promise.runAll();
-      });
-
-      it('dispatches retroPasswordUnsuccessfullyUpdated', () => {
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroPasswordUnsuccessfullyUpdated',
-          data: {errors: ['some error']},
-        });
-      });
-    });
+  it('getRetroLogin', () => {
+    dispatcher.getRetroLogin({data: {retro_id: 1}});
+    expect(boundActionCreators.getRetroLogin).toHaveBeenCalledWith(1);
   });
 
-  describe('getRetro', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'getRetro', data: {id: 1}});
-    });
-
-    it('makes an api GET to /retros/:id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok({retro});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroSuccessfullyFetched',
-        data: {retro},
-      });
-    });
-
-    describe('when forbidden is received', () => {
-      it('dispatches requireRetroLogin', () => {
-        const request = MockFetch.latestRequest();
-        request.forbidden();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'requireRetroLogin',
-          data: {retro_id: 1},
-        });
-      });
-    });
-
-    describe('when retro does not exist', () => {
-      it('dispatches retroNotFound', () => {
-        const request = MockFetch.latestRequest();
-        request.notFound();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroNotFound',
-        });
-      });
-    });
+  it('loginToRetro', () => {
+    dispatcher.loginToRetro({data: {retro_id: 1, password: 'p'}});
+    expect(boundActionCreators.loginToRetro).toHaveBeenCalledWith(1, 'p');
   });
 
-  describe('getRetros', () => {
-    beforeEach(() => {
-      localStorage.setItem('authToken', 'the-auth-token');
-      subject.dispatch({type: 'getRetros'});
-    });
-
-    it('makes an API GET to /retros', () => {
-      expect(MockFetch).toHaveRequested('/retros', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'x-auth-token': 'the-auth-token',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retros: [retro]});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retrosSuccessfullyFetched',
-        data: {retros: [retro]},
-      });
-    });
-
-    describe('when forbidden is received', () => {
-      it('dispatches signOut', () => {
-        const request = MockFetch.latestRequest();
-        request.forbidden();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'signOut',
-        });
-      });
-    });
+  it('createRetroItem', () => {
+    dispatcher.createRetroItem({data: {retro_id: 'a', category: 'cat', description: 'des'}});
+    expect(boundActionCreators.createRetroItem).toHaveBeenCalledWith('a', 'cat', 'des');
   });
 
-  describe('getRetroLogin', () => {
-    beforeEach(() => {
-      subject.dispatch({type: 'getRetroLogin', data: {retro_id: 1}});
-    });
-
-    it('makes an api GET to /retros/:id/sessions/new', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/sessions/new', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok({retro: {id: 1, name: 'the-fetched-retro-login-name'}});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'getRetroLoginSuccessfullyReceived',
-        data: {retro: {id: 1, name: 'the-fetched-retro-login-name'}},
-      });
-    });
-
-    describe('when retro does not exist', () => {
-      it('dispatches retroNotFound', () => {
-        const request = MockFetch.latestRequest();
-        request.notFound();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroNotFound',
-        });
-      });
-    });
+  it('updateRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.updateRetroItem({data: {retro_id: 'a', item, description: 'des'}});
+    expect(boundActionCreators.updateRetroItem).toHaveBeenCalledWith('a', item, 'des');
   });
 
-  describe('getRetroSettings', () => {
-    const doSetup = () => {
-      subject.dispatch({type: 'getRetroSettings', data: {id: 'retro-slug-123'}});
-    };
-
-    describe('GET /retros/:id/settings', () => {
-      it('returns the retro settings when authenticated', () => {
-        localStorage.setItem('apiToken-retro-slug-123', 'the-token');
-        doSetup();
-
-        expect(MockFetch).toHaveRequested('/retros/retro-slug-123/settings', {
-          headers: {
-            'accept': 'application/json',
-            'content-type': 'application/json',
-            'authorization': 'Bearer the-token',
-          },
-        });
-        const request = MockFetch.latestRequest();
-        const response = {retro: {id: 1, name: 'the-fetched-retro-login-name', slug: 'retro-slug-123'}};
-        request.ok(response);
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'getRetroSettingsSuccessfullyReceived',
-          data: response,
-        });
-      });
-
-      it('is forbidden when not authenticated', () => {
-        localStorage.setItem('apiToken-retro-slug-123', '');
-        doSetup();
-
-        expect(MockFetch).toHaveRequested('/retros/retro-slug-123/settings', {
-          headers: {
-            'accept': 'application/json',
-            'content-type': 'application/json',
-          },
-        });
-        const request = MockFetch.latestRequest();
-        request.forbidden();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'requireRetroLogin',
-          data: {retro_id: 'retro-slug-123'},
-        });
-      });
-    });
+  it('deleteRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.deleteRetroItem({data: {retro_id: 'a', item}});
+    expect(boundActionCreators.deleteRetroItem).toHaveBeenCalledWith('a', item);
   });
 
-  describe('loginToRetro', () => {
-    beforeEach(() => {
-      subject.dispatch({type: 'loginToRetro', data: {retro_id: 15, password: 'pa55word'}});
-    });
-
-    it('makes an api POST to /retros/:id/sessions', () => {
-      expect(MockFetch).toHaveRequested('/retros/15/sessions', {
-        method: 'POST',
-        data: {retro: {password: 'pa55word'}},
-      });
-      const request = MockFetch.latestRequest();
-      request.ok({token: 'the-token'});
-      Promise.runAll();
-      expect(localStorage.getItem('apiToken-15')).toEqual('the-token');
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroSuccessfullyLoggedIn',
-        data: {retro_id: 15},
-      });
-    });
-
-    describe('when password is wrong', () => {
-      it('dispatches retroLoginFailed', () => {
-        const request = MockFetch.latestRequest();
-        request.notFound();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroLoginFailed',
-        });
-      });
-    });
+  it('voteRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.voteRetroItem({data: {retro_id: 'a', item}});
+    expect(boundActionCreators.voteRetroItem).toHaveBeenCalledWith('a', item);
   });
 
-  describe('deleteRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
-    });
-    it('makes an api DELETE to /retros/:id/items/:item_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items/2', {
-        method: 'DELETE',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item},
-      });
-    });
+  it('nextRetroItem', () => {
+    const retro = {id: 1};
+    dispatcher.nextRetroItem({data: {retro}});
+    expect(boundActionCreators.nextRetroItem).toHaveBeenCalledWith(retro);
   });
 
-  describe('createRetroItem', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'createRetroItem', data: {retro_id: 1, description: 'happy item', category: 'happy'}});
-    });
-
-    it('makes an api POST to /retros/:id/items', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          description: 'happy item',
-          category: 'happy',
-        },
-      });
-    });
-
-    it('dispatches retroItemSuccessfullyCreated with the response', () => {
-      const request = MockFetch.latestRequest();
-      request.ok({item: {id: 1, category: 'happy', description: 'this is an item'}});
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyCreated',
-        data: {item: {id: 1, category: 'happy', description: 'this is an item'}, retroId: 1},
-      });
-    });
+  it('highlightRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.highlightRetroItem({data: {retro_id: 'a', item}});
+    expect(boundActionCreators.highlightRetroItem).toHaveBeenCalledWith('a', item);
   });
 
-  describe('updateRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      item = retro.items[0];
-      subject.dispatch({type: 'updateRetroItem', data: {retro_id: 1, item, description: 'updated description'}});
-    });
-
-    it('makes an api PATCH to /retros/:retro_id/items/:id', () => {
-      expect(MockFetch).toHaveRequested(`/retros/1/items/${item.id}`, {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          description: 'updated description',
-        },
-      });
-    });
+  it('unhighlightRetroItem', () => {
+    dispatcher.unhighlightRetroItem({data: {retro_id: 'a'}});
+    expect(boundActionCreators.unhighlightRetroItem).toHaveBeenCalledWith('a');
   });
 
-  describe('deleteRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      item = retro.items[0];
-      subject.dispatch({type: 'deleteRetroItem', data: {retro_id: 1, item}});
-    });
-
-    it('makes an api DELETE to /retros/:id/items/:item_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items/2', {
-        method: 'DELETE',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyDeleted',
-        data: {retro_id: 1, item},
-      });
-    });
+  it('doneRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.doneRetroItem({data: {retroId: 'a', item}});
+    expect(boundActionCreators.doneRetroItem).toHaveBeenCalledWith('a', item);
   });
 
-  describe('voteRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      item = retro.items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'voteRetroItem', data: {retro_id: 1, item}});
-    });
-    it('makes an api POST to /retros/:id/items/:item_id/vote', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items/2/vote', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({item});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyVoted',
-        data: {item},
-      });
-    });
+  it('undoneRetroItem', () => {
+    const item = {id: 1};
+    dispatcher.undoneRetroItem({data: {retroId: 'a', item}});
+    expect(boundActionCreators.undoneRetroItem).toHaveBeenCalledWith('a', item);
   });
 
-  describe('nextRetroItem', () => {
-    it('makes an API POST to /retros/:id/discussion/transitions', () => {
-      realDispatchLevels = 2; // allow nextRetroItem and retroItemSuccessfullyDone
-
-      localStorage.setItem('apiToken-retro-slug-123', 'the-token');
-      retro.highlighted_item_id = null;
-      subject.dispatch({type: 'nextRetroItem', data: {retro}});
-
-      expect(MockFetch).toHaveRequested('/retros/retro-slug-123/discussion/transitions', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {transition: 'NEXT'},
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retro});
-      Promise.runAll();
-    });
+  it('extendTimer', () => {
+    dispatcher.extendTimer({data: {retro_id: 'a'}});
+    expect(boundActionCreators.extendTimer).toHaveBeenCalledWith('a');
   });
 
-  describe('highlightRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      item = retro.items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'highlightRetroItem', data: {retro_id: 1, item}});
-    });
-    it('makes an api POST to /retros/:id/discussion', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {item_id: 2},
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retro});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyHighlighted',
-        data: {retro},
-      });
-    });
+  it('archiveRetro', () => {
+    const retro = {id: 1};
+    dispatcher.archiveRetro({data: {retro}});
+    expect(boundActionCreators.archiveRetro).toHaveBeenCalledWith(retro);
   });
 
-  describe('unhighlightRetroItem', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'unhighlightRetroItem', data: {retro_id: 1}});
-    });
-    it('makes an api DELETE to /retros/:id/discussion', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
-        method: 'DELETE',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      expect(Dispatcher).toHaveReceived('retroItemSuccessfullyUnhighlighted');
-    });
+  it('createRetroActionItem', () => {
+    dispatcher.createRetroActionItem({data: {retro_id: 'a', description: 'b'}});
+    expect(boundActionCreators.createRetroActionItem).toHaveBeenCalledWith('a', 'b');
   });
 
-  describe('doneRetroItem', () => {
-    let item;
-    beforeEach(() => {
-      item = retro.items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'doneRetroItem', data: {retroId: 1, item}});
-    });
-    it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items/2/done', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-
-      item = retro.items[0];
-      item.done = true;
-      const request = MockFetch.latestRequest();
-      request.ok({item});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyDone',
-        data: {retroId: 1, itemId: item.id},
-      });
-    });
+  it('doneRetroActionItem', () => {
+    dispatcher.doneRetroActionItem({data: {retro_id: 'a', action_item_id: 'b', done: true}});
+    expect(boundActionCreators.doneRetroActionItem).toHaveBeenCalledWith('a', 'b', true);
   });
 
-  describe('undoneRetroItem', () => {
-    let item;
-
-    beforeEach(() => {
-      item = retro.items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'undoneRetroItem', data: {retroId: 1, item}});
-    });
-
-    it('makes an api PATCH to /retros/:id/items/:item_id/done', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/items/2/done', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          done: false,
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.noContent();
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroItemSuccessfullyUndone',
-        data: {retroId: 1, item},
-      });
-    });
+  it('deleteRetroActionItem', () => {
+    const actionItem = {id: 1};
+    dispatcher.deleteRetroActionItem({data: {retro_id: 'a', action_item: actionItem}});
+    expect(boundActionCreators.deleteRetroActionItem).toHaveBeenCalledWith('a', actionItem);
   });
 
-  describe('extendTimer', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'extendTimer', data: {retro_id: 1}});
-    });
-
-    it('makes an api PATCH to /retros/:id/discussion', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/discussion', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retro});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'extendTimerSuccessfullyDone',
-        data: {retro},
-      });
-    });
+  it('editRetroActionItem', () => {
+    dispatcher.editRetroActionItem({data: {retro_id: 'a', action_item_id: 'b', description: 'des'}});
+    expect(boundActionCreators.editRetroActionItem).toHaveBeenCalledWith('a', 'b', 'des');
   });
 
-  describe('archiveRetro', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'archiveRetro', data: {retro: {slug: 1, send_archive_email: true}}});
-    });
-
-    it('makes an api PUT to /retros/:id/archive', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/archive', {
-        method: 'PUT',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          send_archive_email: true,
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({retro});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'archiveRetroSuccessfullyDone',
-        data: {retro},
-      });
-    });
+  it('getRetroArchive', () => {
+    dispatcher.getRetroArchive({data: {retro_id: 'a', archive_id: 'b'}});
+    expect(boundActionCreators.getRetroArchive).toHaveBeenCalledWith('a', 'b');
   });
 
-  describe('createRetroActionItem', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'createRetroActionItem', data: {retro_id: 1, description: 'a new action item'}});
-    });
-
-    it('makes an api POST to /retros/:id/action_items', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/action_items', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          description: 'a new action item',
-        },
-      });
-    });
+  it('getRetroArchives', () => {
+    dispatcher.getRetroArchives({data: {retro_id: 'a'}});
+    expect(boundActionCreators.getRetroArchives).toHaveBeenCalledWith('a');
   });
 
-  describe('doneRetroActionItem', () => {
-    let action_item;
-
-    beforeEach(() => {
-      action_item = retro.action_items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'doneRetroActionItem', data: {retro_id: 1, action_item_id: 1, done: true}});
-    });
-
-    it('makes an api PATCH to /retros/:id/action_items/:action_item_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-        data: {
-          done: true,
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({action_item});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'doneRetroActionItemSuccessfullyToggled',
-        data: {action_item, retro_id: 1},
-      });
-    });
+  it('createUser', () => {
+    dispatcher.createUser({data: {access_token: 'token', company_name: 'company', full_name: 'name'}});
+    expect(boundActionCreators.createUser).toHaveBeenCalledWith('token', 'company', 'name');
   });
 
-  describe('deleteRetroActionItem', () => {
-    let action_item;
-    beforeEach(() => {
-      action_item = retro.action_items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'deleteRetroActionItem', data: {retro_id: 1, action_item}});
-    });
-
-    it('makes an api DELETE to /retros/:id/action_items/:action_item_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
-        method: 'DELETE',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroActionItemSuccessfullyDeleted',
-        data: {action_item},
-      });
-    });
+  it('createSession', () => {
+    dispatcher.createSession({data: {access_token: 'token', email: 'email', name: 'name'}});
+    expect(boundActionCreators.createSession).toHaveBeenCalledWith('token', 'email', 'name');
   });
 
-  describe('editRetroActionItem', () => {
-    let action_item;
-    beforeEach(() => {
-      action_item = retro.action_items[0];
-      localStorage.setItem('apiToken-1', 'the-token');
-
-      subject.dispatch({
-        type: 'editRetroActionItem',
-        data: {retro_id: 1, action_item_id: action_item.id, description: 'this is a description'},
-      });
+  it('updateRetroSettings', () => {
+    dispatcher.updateRetroSettings({
+      data: {
+        retro_id: 'a',
+        retro_name: 'name',
+        new_slug: 'newslug',
+        old_slug: 'oldslug',
+        is_private: true,
+        video_link: 'http://www.example.com',
+        request_uuid: 'uuid',
+      },
     });
-
-    it('makes an api PUT to /retros/:id/action_items/:action_item_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/action_items/1', {
-        method: 'PATCH',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-
-      const request = MockFetch.latestRequest();
-      request.ok({action_item});
-      Promise.runAll();
-
-      expect(Dispatcher).toHaveReceived({
-        type: 'retroActionItemSuccessfullyEdited',
-        data: {action_item},
-      });
-    });
+    expect(boundActionCreators.updateRetroSettings).toHaveBeenCalledWith('a', 'name', 'newslug', 'oldslug', true, 'uuid', 'http://www.example.com');
   });
 
-  describe('getRetroArchives', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'getRetroArchives', data: {retro_id: '1'}});
+  it('updateRetroPassword', () => {
+    dispatcher.updateRetroPassword({
+      data: {
+        retro_id: 'id',
+        current_password: 'currentpass',
+        new_password: 'newpass',
+        request_uuid: 'uuid',
+      },
     });
-
-    it('makes an api GET to /retros/:retro_id/archives', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/archives', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok();
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived('retroArchivesSuccessfullyFetched');
-    });
-
-    describe('when retro does not exist', () => {
-      it('dispatches retroNotFound', () => {
-        const request = MockFetch.latestRequest();
-        request.notFound();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'retroNotFound',
-        });
-      });
-    });
+    expect(boundActionCreators.updateRetroPassword).toHaveBeenCalledWith('id', 'currentpass', 'newpass', 'uuid');
   });
 
-  describe('getRetroArchive', () => {
-    beforeEach(() => {
-      localStorage.setItem('apiToken-1', 'the-token');
-      subject.dispatch({type: 'getRetroArchive', data: {retro_id: '1', archive_id: '1'}});
-    });
-
-    it('makes an api GET to /retros/:retro_id/archives/:archive_id', () => {
-      expect(MockFetch).toHaveRequested('/retros/1/archives/1', {
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'authorization': 'Bearer the-token',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok();
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived('retroArchiveSuccessfullyFetched');
-    });
-
-    describe('when archives do not exist', () => {
-      it('dispatches notFound', () => {
-        const request = MockFetch.latestRequest();
-        request.notFound();
-        Promise.runAll();
-        expect(Dispatcher).toHaveReceived({
-          type: 'notFound',
-        });
-      });
-    });
-  });
-
-  describe('createUser', () => {
-    beforeEach(() => {
-      subject.dispatch({
-        type: 'createUser',
-        data: {access_token: 'the-access-token', company_name: 'Company name', full_name: 'My Full Name'},
-      });
-    });
-
-    it('makes an api POST to /users', () => {
-      expect(MockFetch).toHaveRequested('/users', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        },
-        data: {
-          'access_token': 'the-access-token',
-          'company_name': 'Company name',
-          'full_name': 'My Full Name',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok();
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived('redirectToRetroCreatePage');
-    });
-
-    it('stores the auth token in local storage', () => {
-      const request = MockFetch.latestRequest();
-      request.ok({auth_token: 'the-token'});
-      Promise.runAll();
-
-      expect(localStorage.getItem('authToken')).toEqual('the-token');
-    });
-  });
-
-  describe('createSession', () => {
-    beforeEach(() => {
-      subject.dispatch({
-        type: 'createSession',
-        data: {access_token: 'the-access-token', email: 'a@a.a', name: 'My full name'},
-      });
-    });
-
-    it('makes an api POST to /sessions', () => {
-      expect(MockFetch).toHaveRequested('/sessions', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        },
-        data: {
-          'access_token': 'the-access-token',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok();
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived('loggedInSuccessfully');
-    });
-
-    it('if the server returns a 404 because the user does not exist', () => {
-      const request = MockFetch.latestRequest();
-      request.notFound();
-      Promise.runAll();
-      expect(Dispatcher).toHaveReceived({
-        type: 'redirectToRegistration',
-        data: {
-          'access_token': 'the-access-token',
-          'email': 'a@a.a',
-          'name': 'My full name',
-        },
-      });
-    });
-
-    it('stores the auth token in local storage', () => {
-      realDispatchLevels = 2; // allow createSession and loggedInSuccessfully
-
-      const request = MockFetch.latestRequest();
-      request.ok({auth_token: 'the-token'});
-      Promise.runAll();
-
-      expect(localStorage.getItem('authToken')).toEqual('the-token');
-    });
-  });
-
-  describe('retrieveConfig', () => {
-    beforeEach(() => {
-      subject.dispatch({type: 'retrieveConfig', data: undefined});
-    });
-
-    it('makes an api GET to /config', () => {
-      expect(MockFetch).toHaveRequested('/config', {
-        method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-        },
-      });
-      const request = MockFetch.latestRequest();
-      request.ok();
-      Promise.runAll();
-    });
+  it('retrieveConfig', () => {
+    dispatcher.retrieveConfig();
+    expect(boundActionCreators.retrieveConfig).toHaveBeenCalled();
   });
 });

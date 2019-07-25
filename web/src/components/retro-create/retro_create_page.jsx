@@ -72,7 +72,7 @@ class RetroCreatePage extends React.Component {
 
   componentWillMount() {
     if (!localStorage.getItem('authToken')) {
-      Actions.setRoute('/');
+      Actions.redirectToHome();
     }
   }
 

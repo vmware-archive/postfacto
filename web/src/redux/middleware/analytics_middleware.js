@@ -28,21 +28,14 @@
  *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
-import Grapnel from 'grapnel';
-import {Dispatcher} from 'p-flux';
-
-export default (Component) => class extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const router = new Grapnel({pushState: true});
-    Dispatcher.router = router;
-    this.state = {router};
+const AnalyticsMiddleware = (analyticsClient) => () => (next) => (action) => {
+  if (action.type === 'TRACK_ANALYTICS') {
+    /* eslint-disable no-console */
+    console.log('Sending analytics:', action.payload.type, action.payload.data);
+    analyticsClient.track(action.payload.type, action.payload.data);
+    return;
   }
-
-  render() {
-    return (<Component {...this.props} {...this.state}/>);
-  }
+  next(action);
 };
+
+export default AnalyticsMiddleware;
