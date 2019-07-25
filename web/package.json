@@ -29,7 +29,7 @@
     "fast-deep-equal": "^2.0.1",
     "jest-enzyme": "^7.0.1",
     "promise-mock": "^2.1.0",
-    "serve": "^10.1.1"
+    "serve": "^11.1.0"
   },
   "scripts": {
     "start": "REACT_APP_USE_MOCK_GOOGLE=\"$USE_MOCK_GOOGLE\" REACT_APP_GOOGLE_OAUTH_CLIENT_ID=\"$GOOGLE_OAUTH_CLIENT_ID\" react-scripts start",
