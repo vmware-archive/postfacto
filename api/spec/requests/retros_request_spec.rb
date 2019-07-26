@@ -49,9 +49,11 @@ describe '/retros' do
     context 'when auth header is provided' do
       let(:user) { User.create!(email: 'test@test.io', name: 'random') }
       before do
-        post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
-                        params: { retro: { name: 'the new retro', slug: 'my-retro-url', password: 'the-password' } },
-                        as: :json
+        post '/api/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
+                            params: {
+                              retro: { name: 'the new retro', slug: 'my-retro-url', password: 'the-password' }
+                            },
+                            as: :json
       end
 
       it 'returns the retro' do
@@ -78,14 +80,15 @@ describe '/retros' do
         expect(retro.action_items.count).to eq 2
 
         expect do
-          post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) }, params: { retro: { name: 'the second retro' } }
+          post '/api/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
+                              params: { retro: { name: 'the second retro' } }
         end.to_not change { [Item.count, ActionItem.count] }
       end
     end
 
     context 'when auth header is not provided' do
       it 'responds with forbidden' do
-        post '/retros', params: { retro: { name: 'the new retro', password: 'the-password' } }, as: :json
+        post '/api/retros', params: { retro: { name: 'the new retro', password: 'the-password' } }, as: :json
 
         expect(response).to be_forbidden
       end
@@ -96,9 +99,9 @@ describe '/retros' do
 
       it 'returns unprocessable entity with error message' do
         # Create retro with same slug
-        post '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
-                        params: { retro: { name: 'the new retro', slug: retro.slug, password: 'the-password' } },
-                        as: :json
+        post '/api/retros', headers: { 'X-AUTH-TOKEN': token_for(user) },
+                            params: { retro: { name: 'the new retro', slug: retro.slug, password: 'the-password' } },
+                            as: :json
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -112,7 +115,7 @@ describe '/retros' do
       before do
         user.retros.create(name: 'Felicity Frog')
         user.retros.create(name: 'Frog Felicity')
-        get '/retros', headers: { 'X-AUTH-TOKEN': token_for(user) }, as: :json
+        get '/api/retros', headers: { 'X-AUTH-TOKEN': token_for(user) }, as: :json
       end
 
       it 'returns a list of retros' do
@@ -126,7 +129,7 @@ describe '/retros' do
       let(:user) { User.create!(email: 'test@test.io', name: 'random') }
 
       before do
-        get '/retros', headers: { 'X-AUTH-TOKEN': 'not-a-valid-token' }, as: :json
+        get '/api/retros', headers: { 'X-AUTH-TOKEN': 'not-a-valid-token' }, as: :json
       end
 
       it 'returns 403 Forbidden' do
@@ -136,7 +139,7 @@ describe '/retros' do
 
     context 'when auth header is not provided' do
       before do
-        get '/retros', as: :json
+        get '/api/retros', as: :json
       end
 
       it 'returns 403 Forbidden' do
@@ -162,7 +165,7 @@ describe '/retros' do
       end
 
       it 'returns the retro with the given slug' do
-        status = get "/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
+        status = get "/api/retros/#{retro.slug}", headers: { HTTP_AUTHORIZATION: token }, as: :json
 
         expect(status).to eq(200)
         data = JSON.parse(response.body)
@@ -204,7 +207,7 @@ describe '/retros' do
     context 'when not authenticated' do
       context 'public retro' do
         it 'returns 200 OK when the slug is used' do
-          status = get "/retros/#{retro.slug}", as: :json
+          status = get "/api/retros/#{retro.slug}", as: :json
 
           expect(status).to eq(200)
         end
@@ -217,7 +220,7 @@ describe '/retros' do
 
         it 'returns 403 Forbidden' do
           retro.update(is_private: true)
-          status = get "/retros/#{retro.slug}", as: :json
+          status = get "/api/retros/#{retro.slug}", as: :json
           expect(status).to eq(403)
         end
       end
@@ -226,7 +229,7 @@ describe '/retros' do
     context 'when such a retro with that slug does not exist' do
       it 'responds with a http 404 json string' do
         headers = { HTTP_AUTHORIZATION: token }
-        get "/retros/#{retro.id}", headers: headers, as: :json
+        get "/api/retros/#{retro.id}", headers: headers, as: :json
 
         expect(response).to have_http_status(:not_found)
         expect(response.content_type).to eq('application/json')
