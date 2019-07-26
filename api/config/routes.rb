@@ -56,4 +56,8 @@ Rails.application.routes.draw do
       resources :sessions, only: [:new, :create]
     end
   end
+
+  # pushstate routing
+  get '/' => 'static#home', as: 'home', constraints: { format: :html }
+  get '*url' => 'static#home', constraints: { format: :html }
 end
