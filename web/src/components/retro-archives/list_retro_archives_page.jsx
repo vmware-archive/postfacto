@@ -30,13 +30,15 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import types from 'prop-types';
 import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
 import RetroFooter from '../shared/footer';
+import {getRetroArchives} from '../../redux/actions/api_actions';
+import {retroArchive, showRetroForId} from '../../redux/actions/router_actions';
+import {signOut} from '../../redux/actions/main_actions';
 
 function makeDateString(date) {
   const year = date.getFullYear();
@@ -58,6 +60,10 @@ class ListRetroArchivesPage extends React.Component {
     environment: types.shape({
       isMobile1030: types.bool,
     }).isRequired,
+    getRetroArchives: types.func.isRequired,
+    routeToRetroArchive: types.func.isRequired,
+    showRetroForId: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -66,23 +72,23 @@ class ListRetroArchivesPage extends React.Component {
 
   componentWillMount() {
     const {retroId} = this.props;
-    Actions.getRetroArchives({retro_id: retroId});
+    this.props.getRetroArchives(retroId);
   }
 
   onArchiveClicked(archiveId, e) {
     e.preventDefault();
     const {retroId} = this.props;
-    Actions.routeToRetroArchive({retro_id: retroId, archive_id: archiveId});
+    this.props.routeToRetroArchive(retroId, archiveId);
   }
 
   onCurrentRetroClicked = () => {
     const {retroId} = this.props;
-    Actions.backPressedFromArchives({retro_id: retroId});
+    this.props.showRetroForId(retroId);
   };
 
   getMenuItems() {
     const items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
+      {title: 'Sign out', callback: this.props.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
     return items.filter((item) => item.isApplicable);
@@ -142,5 +148,13 @@ const mapStateToProps = (state) => ({
   environment: state.config.environment,
 });
 
-const ConnectedListRetroArchivesPage = connect(mapStateToProps)(ListRetroArchivesPage);
+
+const mapDispatchToProps = (dispatch) => ({
+  getRetroArchives: (retroId) => dispatch(getRetroArchives(retroId)),
+  routeToRetroArchive: (retroId, archiveId) => dispatch(retroArchive(retroId, archiveId)),
+  showRetroForId: (retroId) => dispatch(showRetroForId(retroId)),
+  signOut: () => dispatch(signOut()),
+});
+
+const ConnectedListRetroArchivesPage = connect(mapStateToProps, mapDispatchToProps)(ListRetroArchivesPage);
 export {ListRetroArchivesPage, ConnectedListRetroArchivesPage};

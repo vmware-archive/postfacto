@@ -32,9 +32,8 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Dispatcher} from 'p-flux';
 import {getMenuLabels} from '../../test_support/retro_menu_getters';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import {ListRetroArchivesPage} from './list_retro_archives_page';
 
@@ -53,9 +52,30 @@ describe('ListRetroArchivesPage', () => {
   const environment = {isMobile1030: false};
 
   let dom;
-
+  let getRetroArchives;
+  let routeToRetroArchive;
+  let showRetroForId;
+  let signOut;
   beforeEach(() => {
-    dom = mount(<MuiThemeProvider><ListRetroArchivesPage retroId="789" archives={archives} config={config} environment={environment}/></MuiThemeProvider>);
+    getRetroArchives = jest.fn();
+    routeToRetroArchive = jest.fn();
+    showRetroForId = jest.fn();
+    signOut = jest.fn();
+
+    dom = mount((
+      <MuiThemeProvider>
+        <ListRetroArchivesPage
+          retroId="789"
+          archives={archives}
+          config={config}
+          environment={environment}
+          getRetroArchives={getRetroArchives}
+          routeToRetroArchive={routeToRetroArchive}
+          showRetroForId={showRetroForId}
+          signOut={signOut}
+        />
+      </MuiThemeProvider>
+    ));
   });
 
   it('shows all archived retros', () => {
@@ -74,24 +94,27 @@ describe('ListRetroArchivesPage', () => {
     expect(back).toIncludeText('Current retro');
     back.simulate('click');
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'backPressedFromArchives',
-      data: {retro_id: '789'},
-    });
+    expect(showRetroForId).toHaveBeenCalledWith('789');
   });
 
   it('navigates to archives when clicked', () => {
     dom.find('.archives .archive-link a').at(0).simulate('click');
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'routeToRetroArchive',
-      data: {retro_id: '789', archive_id: 123},
-    });
+    expect(routeToRetroArchive).toHaveBeenCalledWith('789', 123);
   });
 
   it('shows a sign out menu item if logged in', () => {
     window.localStorage.setItem('authToken', 'some-token');
-    dom = shallow(<ListRetroArchivesPage retroId="789" archives={archives} config={config} environment={environment}/>);
+    dom = shallow(<ListRetroArchivesPage
+      retroId="789"
+      archives={archives}
+      config={config}
+      environment={environment}
+      getRetroArchives={getRetroArchives}
+      routeToRetroArchive={routeToRetroArchive}
+      showRetroForId={showRetroForId}
+      signOut={signOut}
+    />);
 
     expect(getMenuLabels(dom)).toEqual(['Sign out']);
   });
