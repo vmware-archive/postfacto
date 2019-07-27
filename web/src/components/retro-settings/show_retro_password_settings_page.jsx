@@ -33,10 +33,12 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
 import EmptyPage from '../shared/empty_page';
+import {getRetroSettings, updateRetroPassword} from '../../redux/actions/api_actions';
+import {clearErrors, signOut} from '../../redux/actions/main_actions';
+import {showRetroForId} from '../../redux/actions/router_actions';
 
 class ShowRetroPasswordSettingsPage extends React.Component {
   static propTypes = {
@@ -49,6 +51,11 @@ class ShowRetroPasswordSettingsPage extends React.Component {
     environment: types.shape({
       isMobile640: types.bool,
     }).isRequired,
+    getRetroSettings: types.func.isRequired,
+    clearErrors: types.func.isRequired,
+    showRetroForId: types.func.isRequired,
+    updateRetroPassword: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -78,7 +85,7 @@ class ShowRetroPasswordSettingsPage extends React.Component {
 
   componentWillMount() {
     const {retroId} = this.props;
-    Actions.getRetroSettings({id: retroId});
+    this.props.getRetroSettings(retroId);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -94,12 +101,12 @@ class ShowRetroPasswordSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
-    Actions.clearErrors();
+    this.props.clearErrors();
   }
 
   handleBackButtonClicked() {
     const {retroId} = this.props;
-    Actions.backPressedFromSettings({retro_id: retroId});
+    this.props.showRetroForId(retroId);
   }
 
   handleSubmitButtonClicked() {
@@ -110,12 +117,7 @@ class ShowRetroPasswordSettingsPage extends React.Component {
     } else {
       errors.confirm_new_password = '';
 
-      Actions.updateRetroPassword({
-        retro_id: this.props.retroId,
-        new_password: this.state.new_password,
-        current_password: this.state.current_password,
-        request_uuid: this.props.session.request_uuid,
-      });
+      this.props.updateRetroPassword(this.props.retroId, this.state.current_password, this.state.new_password, this.props.session.request_uuid);
     }
 
     this.setState((oldState) => ({
@@ -147,7 +149,7 @@ class ShowRetroPasswordSettingsPage extends React.Component {
 
   getMenuItems() {
     const items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
+      {title: 'Sign out', callback: this.props.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
     return items.filter((item) => item.isApplicable);
@@ -247,5 +249,13 @@ const mapStateToProps = (state) => ({
   environment: state.config.environment,
 });
 
-const ConnectedShowRetroPasswordSettingsPage = connect(mapStateToProps)(ShowRetroPasswordSettingsPage);
+const mapDispatchToProps = (dispatch) => ({
+  getRetroSettings: (retroId) => dispatch(getRetroSettings(retroId)),
+  clearErrors: () => dispatch(clearErrors()),
+  showRetroForId: (retroId) => dispatch(showRetroForId(retroId)),
+  updateRetroPassword: (retroId, currentPassword, newPassword, requestUuid) => dispatch(updateRetroPassword(retroId, currentPassword, newPassword, requestUuid)),
+  signOut: () => dispatch(signOut()),
+});
+
+const ConnectedShowRetroPasswordSettingsPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPasswordSettingsPage);
 export {ShowRetroPasswordSettingsPage, ConnectedShowRetroPasswordSettingsPage};
