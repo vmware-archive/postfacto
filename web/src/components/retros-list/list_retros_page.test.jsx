@@ -32,7 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {MuiThemeProvider} from 'material-ui';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import {ListRetrosPage} from './list_retros_page';
 import {newRetro, showRetro} from '../../redux/actions/router_actions';

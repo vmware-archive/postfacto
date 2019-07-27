@@ -34,7 +34,7 @@ import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
 

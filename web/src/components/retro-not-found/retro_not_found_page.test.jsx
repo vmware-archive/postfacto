@@ -32,7 +32,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroNotFoundPage from './retro_not_found_page';
 

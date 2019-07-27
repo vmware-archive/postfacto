@@ -33,7 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import {ShowRetroPasswordSettingsPage} from './show_retro_password_settings_page';
 

@@ -33,7 +33,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
 import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroHeading from './retro_heading';
 

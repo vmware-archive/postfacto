@@ -31,7 +31,7 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroColumn from './retro_column';
 

@@ -33,7 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import TextareaAutosize from 'react-autosize-textarea';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroColumnInput from './retro_column_input';
 import EmojiSelector from './emoji_selector';

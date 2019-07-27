@@ -33,7 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import ActionCable from 'actioncable';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroCable from './retro_cable';
 

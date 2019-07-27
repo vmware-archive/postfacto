@@ -31,7 +31,7 @@
 
 import {Dispatcher} from 'p-flux';
 import fetchJson from './fetch_helper';
-import '../spec_helper';
+import '../dispatcher_spec_helper';
 
 describe('fetchJson', () => {
   describe('errors', () => {

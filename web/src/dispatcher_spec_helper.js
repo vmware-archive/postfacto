@@ -29,23 +29,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import {mount, shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import './test_support/application_globals';
+import './test_support/enzyme';
 
-import ApiServerNotFoundPage from './api_server_not_found_page';
-
-describe('ApiServerNotFoundPage', () => {
-  it('displays error details', () => {
-    const subject = shallow(<ApiServerNotFoundPage/>);
-    expect(subject.find('h1')).toIncludeText('Oh no! It\'s broken');
-  });
-
-  it('dispatches resetApiServerNotFound when unmounting', () => {
-    const subject = mount(<ApiServerNotFoundPage/>);
-    expect(Dispatcher).not.toHaveReceived('resetApiServerNotFound');
-    subject.unmount();
-    expect(Dispatcher).toHaveReceived('resetApiServerNotFound');
-  });
-});
+import './test_support/dispatcher_matchers';
+import './test_support/enzyme_matchers';

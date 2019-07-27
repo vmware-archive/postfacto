@@ -32,7 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroActionsColumnItem from './retro_actions_column_item';
 

@@ -34,7 +34,7 @@ import {mount} from 'enzyme';
 
 import EmojiSelector from './emoji_selector';
 
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 describe('EmojiSelector', () => {
   it('should render the emojis headers by their name in order', () => {

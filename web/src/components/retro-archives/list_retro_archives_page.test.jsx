@@ -34,7 +34,7 @@ import {mount, shallow} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
 import {getMenuLabels} from '../../test_support/retro_menu_getters';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import {ListRetroArchivesPage} from './list_retro_archives_page';
 

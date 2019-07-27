@@ -33,7 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import Scroll from 'react-scroll';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import RetroColumnItem from './retro_column_item';
 

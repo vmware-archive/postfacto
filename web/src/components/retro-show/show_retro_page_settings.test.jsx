@@ -34,7 +34,7 @@ import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Dispatcher} from 'p-flux';
 import {invokeMenuOption} from '../../test_support/retro_menu_getters';
-import '../../spec_helper';
+import '../../dispatcher_spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
 

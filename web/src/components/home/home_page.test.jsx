@@ -32,9 +32,8 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {Dispatcher} from 'p-flux';
-import '../../spec_helper';
-
 import HomePage from './home_page';
+import '../../dispatcher_spec_helper';
 
 const config = {contact: '', terms: '', privacy: ''};
 
