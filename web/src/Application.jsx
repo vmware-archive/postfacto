@@ -31,7 +31,7 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions, useStore} from 'p-flux';
+import {useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
@@ -70,7 +70,7 @@ class Application extends React.Component {
 
   componentDidMount() {
     Logger.info('Application started');
-    Actions.retrieveConfig();
+    reduxStore.dispatch(apiActions.retrieveConfig());
 
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
