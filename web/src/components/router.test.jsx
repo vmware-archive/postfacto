@@ -31,7 +31,6 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import '../spec_helper';
 
 import Alert from './shared/alert';
@@ -42,11 +41,13 @@ import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 
 describe('Router', () => {
   let rendered;
+  let clearAlert;
 
   beforeEach(() => {
     const fakeRouter = {get: () => {}};
 
-    rendered = shallow(<Router alert={{}} router={fakeRouter} config={{}}/>);
+    clearAlert = jest.fn();
+    rendered = shallow(<Router alert={{}} clearAlert={clearAlert} router={fakeRouter} config={{}}/>);
   });
 
   it('renders alert', () => {
@@ -56,13 +57,13 @@ describe('Router', () => {
   it('dispatches hide alert when changed to a different page', () => {
     rendered.setState({Page: HomePage, additionalProps: {createSession: jest.fn(), homePageShownAnalytics: jest.fn()}});
 
-    expect(Dispatcher).toHaveReceived('hideAlert');
+    expect(clearAlert).toHaveBeenCalled();
   });
 
   it('does not dispatch hide alert when changed to the same page', () => {
     rendered.setState({Page: EmptyPage});
 
-    expect(Dispatcher).not.toHaveReceived('hideAlert');
+    expect(clearAlert).not.toHaveBeenCalled();
   });
 
   it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {

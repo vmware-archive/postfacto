@@ -30,7 +30,6 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import {connect} from 'react-redux';
 import types from 'prop-types';
 import {ConnectedRetroCreatePage} from './retro-create/retro_create_page';
@@ -41,13 +40,14 @@ import {ConnectedShowRetroPasswordSettingsPage} from './retro-settings/show_retr
 import {ConnectedLoginToRetroPage} from './retro-login/login_to_retro_page';
 import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 import RetroNotFoundPage from './retro-not-found/retro_not_found_page';
-import NotFoundPage from './not-found/not_found_page';
+import {ConnectedNotFoundPage} from './not-found/not_found_page';
 import NewTermsPage from './terms/new_terms_page';
 import EmptyPage from './shared/empty_page';
-import HomePage from './home/home_page';
+import {ConnectedHomePage} from './home/home_page';
 import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
 import RegistrationPage from './registration/registration_page';
+import {clearAlert} from '../redux/actions/main_actions';
 
 
 class Router extends React.Component {
@@ -56,6 +56,7 @@ class Router extends React.Component {
     config: types.object,
     alert: types.object,
     not_found: types.object,
+    clearAlert: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -98,13 +99,13 @@ class Router extends React.Component {
       this.setPage(RetroNotFoundPage);
     }
     if (not_found) {
-      this.setPage(NotFoundPage);
+      this.setPage(ConnectedNotFoundPage);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.Page !== prevState.Page) {
-      Actions.hideAlert();
+      this.props.clearAlert();
     }
   }
 
@@ -143,7 +144,7 @@ class Router extends React.Component {
   };
 
   showNotFound = () => {
-    this.setPage(NotFoundPage);
+    this.setPage(ConnectedNotFoundPage);
   };
 
   showTerms = () => {
@@ -164,7 +165,7 @@ class Router extends React.Component {
     if (this.isUserLoggedIn()) {
       this.listRetros();
     } else {
-      this.setPage(HomePage);
+      this.setPage(ConnectedHomePage);
     }
   };
 
@@ -196,6 +197,10 @@ const mapStateToProps = (state) => ({
   not_found: state.messages.not_found,
 });
 
-const ConnectedRouter = connect(mapStateToProps)(Router);
+const mapDispatchToProps = (dispatch) => ({
+  clearAlert: () => dispatch(clearAlert()),
+});
+
+const ConnectedRouter = connect(mapStateToProps, mapDispatchToProps)(Router);
 
 export {Router, ConnectedRouter};
