@@ -48,9 +48,9 @@ import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
 import {
-  archiveRetro, createRetroActionItem, createRetroItem,
-  deleteRetroItem,
-  doneRetroItem,
+  archiveRetro, createRetroActionItem, createRetroItem, deleteRetroActionItem,
+  deleteRetroItem, doneRetroActionItem,
+  doneRetroItem, editRetroActionItem,
   getRetro,
   getRetroArchive, highlightRetroItem,
   nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
@@ -102,6 +102,9 @@ class ShowRetroPage extends React.Component {
     deleteRetroItem: types.func.isRequired,
     createRetroActionItem: types.func.isRequired,
     createRetroItem: types.func.isRequired,
+    doneRetroActionItem: types.func.isRequired,
+    deleteRetroActionItem: types.func.isRequired,
+    editRetroActionItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -215,6 +218,9 @@ class ShowRetroPage extends React.Component {
           archives={archives}
           createRetroItem={this.props.createRetroItem}
           createRetroActionItem={this.props.createRetroActionItem}
+          doneRetroActionItem={this.props.doneRetroActionItem}
+          deleteRetroActionItem={this.props.deleteRetroActionItem}
+          editRetroActionItem={this.props.editRetroActionItem}
         />
       );
     }
@@ -451,6 +457,9 @@ class ShowRetroPage extends React.Component {
               archives={archives}
               createRetroItem={this.props.createRetroItem}
               createRetroActionItem={this.props.createRetroActionItem}
+              doneRetroActionItem={this.props.doneRetroActionItem}
+              deleteRetroActionItem={this.props.deleteRetroActionItem}
+              editRetroActionItem={this.props.editRetroActionItem}
             />
             <RetroFooter config={config}/>
           </div>
@@ -502,6 +511,9 @@ const mapDispatchToProps = (dispatch) => ({
   deleteRetroItem: (retroId, item) => dispatch(deleteRetroItem(retroId, item)),
   createRetroActionItem: (retroId, description) => dispatch(createRetroActionItem(retroId, description)),
   createRetroItem: (retroId, category, description) => dispatch(createRetroItem(retroId, category, description)),
+  doneRetroActionItem: (retroId, actionItemId, done) => dispatch(doneRetroActionItem(retroId, actionItemId, done)),
+  deleteRetroActionItem: (retroId, actionItem) => dispatch(deleteRetroActionItem(retroId, actionItem)),
+  editRetroActionItem: (retroId, actionItemId, description) => dispatch(editRetroActionItem(retroId, actionItemId, description)),
 });
 
 const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);

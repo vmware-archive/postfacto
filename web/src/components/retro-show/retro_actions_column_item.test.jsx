@@ -31,8 +31,7 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroActionsColumnItem from './retro_actions_column_item';
 
@@ -50,9 +49,22 @@ const itemNotDone = {
 
 describe('RetroActionsColumnItem', () => {
   let dom;
+  let doneRetroActionItem;
+  let deleteRetroActionItem;
+  let editRetroActionItem;
 
   beforeEach(() => {
-    dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemDone}/>);
+    doneRetroActionItem = jest.fn();
+    deleteRetroActionItem = jest.fn();
+    editRetroActionItem = jest.fn();
+
+    dom = mount(<RetroActionsColumnItem
+      retroId={retroId}
+      action_item={itemDone}
+      doneRetroActionItem={doneRetroActionItem}
+      deleteRetroActionItem={deleteRetroActionItem}
+      editRetroActionItem={editRetroActionItem}
+    />);
   });
 
   it('renders each action item', () => {
@@ -66,10 +78,7 @@ describe('RetroActionsColumnItem', () => {
   it('marks items as not done when clicking pre-ticked box', () => {
     dom.find('.retro-action .action-tick').simulate('click');
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'doneRetroActionItem',
-      data: {retro_id: retroId, action_item_id: 1, done: false},
-    });
+    expect(doneRetroActionItem).toHaveBeenCalledWith(retroId, 1, false);
   });
 
   describe('editing', () => {
@@ -87,10 +96,7 @@ describe('RetroActionsColumnItem', () => {
 
       expect(dom.find('.retro-action.retro-action-edit')).not.toExist();
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'editRetroActionItem',
-        data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
-      });
+      expect(editRetroActionItem).toHaveBeenCalledWith(retroId, 1, 'some other value');
     });
 
     it('updates the action item when pressing enter', () => {
@@ -99,26 +105,20 @@ describe('RetroActionsColumnItem', () => {
 
       expect(dom.find('.retro-action.retro-action-edit')).not.toExist();
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'editRetroActionItem',
-        data: {retro_id: retroId, action_item_id: 1, description: 'some other value'},
-      });
+      expect(editRetroActionItem).toHaveBeenCalledWith(retroId, 1, 'some other value');
     });
 
     it('does not update if value is empty', () => {
       dom.find('.retro-action textarea').simulate('change', {target: {value: ''}});
       dom.find('.retro-action .edit-save').simulate('click');
 
-      expect(Dispatcher).not.toHaveReceived('editRetroActionItem');
+      expect(editRetroActionItem).not.toHaveBeenCalled();
     });
 
     it('removes the action item when delete is clicked', () => {
       dom.find('.retro-action .edit-delete').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'deleteRetroActionItem',
-        data: {retro_id: retroId, action_item: itemDone},
-      });
+      expect(deleteRetroActionItem).toHaveBeenCalledWith(retroId, itemDone);
     });
   });
 
@@ -135,12 +135,12 @@ describe('RetroActionsColumnItem', () => {
   });
 
   it('does not show check by items which are not done', () => {
-    dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemNotDone}/>);
+    dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemNotDone} doneRetroActionItem={jest.fn()} deleteRetroActionItem={jest.fn()} editRetroActionItem={jest.fn()}/>);
     expect(dom.find('.action-tick .action-tick-unchecked')).toExist();
   });
 
   it('does not allow editing if archived', () => {
-    dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemDone} archives/>);
+    dom = mount(<RetroActionsColumnItem retroId={retroId} action_item={itemDone} archives doneRetroActionItem={jest.fn()} deleteRetroActionItem={jest.fn()} editRetroActionItem={jest.fn()}/>);
     expect(dom.find('.action-edit')).not.toExist();
   });
 });
