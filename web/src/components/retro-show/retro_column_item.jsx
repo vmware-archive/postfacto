@@ -32,7 +32,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import Scroll from 'react-scroll';
 import CountdownTimer from './countdown_timer';
 import RetroItemEditView from './retro_item_edit_view';
@@ -45,11 +44,20 @@ export default class RetroColumnItem extends React.Component {
     retro_item_end_time: types.string,
     archives: types.bool.isRequired,
     isMobile: types.bool.isRequired,
+    voteRetroItem: types.func.isRequired,
+    doneRetroItem: types.func.isRequired,
+    undoneRetroItem: types.func.isRequired,
+    highlightRetroItem: types.func.isRequired,
+    unhighlightRetroItem: types.func.isRequired,
+    updateRetroItem: types.func.isRequired,
+    deleteRetroItem: types.func.isRequired,
+    scrollTo: types.func,
   };
 
   static defaultProps = {
     highlighted_item_id: null,
     retro_item_end_time: '',
+    scrollTo: Scroll.scroller.scrollTo,
   };
 
   constructor(props) {
@@ -74,7 +82,7 @@ export default class RetroColumnItem extends React.Component {
     if (this.isHighlighted() && !wasHighlighted) {
       const windowH = document.body.getBoundingClientRect().height;
       const itemH = ReactDOM.findDOMNode(this).offsetHeight;
-      Scroll.scroller.scrollTo(this.domId(), {
+      this.props.scrollTo(this.domId(), {
         offset: -(windowH - itemH) / 2,
         delay: 0,
         smooth: !document.hidden,
@@ -115,7 +123,7 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, archives} = this.props;
     if (this.isEnabled() && !this.isDone() && !archives) {
-      Actions.voteRetroItem({item, retro_id: retroId});
+      this.props.voteRetroItem(retroId, item);
     }
   }
 
@@ -127,10 +135,7 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && !isMobile) {
-      Actions.doneRetroItem({
-        item,
-        retroId,
-      });
+      this.props.doneRetroItem(retroId, item);
     }
   }
 
@@ -138,10 +143,7 @@ export default class RetroColumnItem extends React.Component {
     event.stopPropagation();
     const {item, retroId, isMobile} = this.props;
     if (this.isEnabled() && this.isDone() && !isMobile) {
-      Actions.undoneRetroItem({
-        item,
-        retroId,
-      });
+      this.props.undoneRetroItem(retroId, item);
     } else {
       this.toggleHighlight();
     }
@@ -171,9 +173,9 @@ export default class RetroColumnItem extends React.Component {
     const {isEditing} = this.state;
     if (this.isEnabled() && !isMobile && !archives && !isEditing) {
       if (this.isHighlighted()) {
-        Actions.unhighlightRetroItem({retro_id: retroId});
+        this.props.unhighlightRetroItem(retroId);
       } else {
-        Actions.highlightRetroItem({retro_id: retroId, item});
+        this.props.highlightRetroItem(retroId, item);
       }
     }
   }
@@ -184,14 +186,14 @@ export default class RetroColumnItem extends React.Component {
 
     if (isEditing && editedText.trim().length > 0) {
       this.setState({isEditing: false});
-      Actions.updateRetroItem({retro_id: retroId, item, description: editedText});
+      this.props.updateRetroItem(retroId, item, editedText);
     }
   }
 
   deleteItem() {
     const {item, retroId} = this.props;
     if (this.isEnabled()) {
-      Actions.deleteRetroItem({item, retro_id: retroId});
+      this.props.deleteRetroItem(retroId, item);
     }
   }
 

@@ -47,7 +47,14 @@ import RetroHeading from './retro_heading';
 import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
-import {archiveRetro, getRetro, getRetroArchive, nextRetroItem} from '../../redux/actions/api_actions';
+import {
+  archiveRetro, deleteRetroItem,
+  doneRetroItem,
+  getRetro,
+  getRetroArchive, highlightRetroItem,
+  nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
+  voteRetroItem,
+} from '../../redux/actions/api_actions';
 import {clearDialog, currentRetroSendArchiveEmailUpdated, showDialog, signOut} from '../../redux/actions/main_actions';
 import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
 
@@ -85,6 +92,13 @@ class ShowRetroPage extends React.Component {
     requireRetroLogin: types.func.isRequired,
     showDialog: types.func.isRequired,
     signOut: types.func.isRequired,
+    voteRetroItem: types.func.isRequired,
+    doneRetroItem: types.func.isRequired,
+    undoneRetroItem: types.func.isRequired,
+    highlightRetroItem: types.func.isRequired,
+    unhighlightRetroItem: types.func.isRequired,
+    updateRetroItem: types.func.isRequired,
+    deleteRetroItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -206,6 +220,13 @@ class ShowRetroPage extends React.Component {
         retroId={retroId}
         archives={archives}
         isMobile
+        voteRetroItem={this.props.voteRetroItem}
+        doneRetroItem={this.props.doneRetroItem}
+        undoneRetroItem={this.props.undoneRetroItem}
+        highlightRetroItem={this.props.highlightRetroItem}
+        unhighlightRetroItem={this.props.unhighlightRetroItem}
+        updateRetroItem={this.props.updateRetroItem}
+        deleteRetroItem={this.props.deleteRetroItem}
       />
     );
   }
@@ -373,6 +394,13 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
               />
               <RetroColumn
                 category="meh"
@@ -380,6 +408,13 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
               />
               <RetroColumn
                 category="sad"
@@ -387,6 +422,13 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
               />
             </div>
             <RetroActionPanel
@@ -436,6 +478,13 @@ const mapDispatchToProps = (dispatch) => ({
   requireRetroLogin: (retroId) => dispatch(retroLogin(retroId)),
   showDialog: (dialog) => dispatch(showDialog(dialog)),
   signOut: () => dispatch(signOut()),
+  voteRetroItem: (retroId, item) => dispatch(voteRetroItem(retroId, item)),
+  doneRetroItem: (retroId, item) => dispatch(doneRetroItem(retroId, item)),
+  undoneRetroItem: (retroId, item) => dispatch(undoneRetroItem(retroId, item)),
+  highlightRetroItem: (retroId, item) => dispatch(highlightRetroItem(retroId, item)),
+  unhighlightRetroItem: (retroId) => dispatch(unhighlightRetroItem(retroId)),
+  updateRetroItem: (retroId, item, description) => dispatch(updateRetroItem(retroId, item, description)),
+  deleteRetroItem: (retroId, item) => dispatch(deleteRetroItem(retroId, item)),
 });
 
 const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);
