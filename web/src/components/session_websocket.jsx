@@ -37,6 +37,7 @@ import SessionCable from './session_cable';
 export default class SessionWebsocket extends React.Component {
   static propTypes = {
     url: types.string.isRequired,
+    websocketSessionDataReceived: types.func.isRequired,
   };
 
   constructor(props) {
@@ -63,7 +64,7 @@ export default class SessionWebsocket extends React.Component {
   render() {
     const {cable} = this.state;
     if (cable) {
-      return <SessionCable cable={cable}/>;
+      return <SessionCable cable={cable} websocketSessionDataReceived={this.props.websocketSessionDataReceived}/>;
     }
     return null;
   }

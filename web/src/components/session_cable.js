@@ -31,11 +31,12 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 
 export default class SessionCable extends React.Component {
   static propTypes = {
     cable: types.object.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
+    websocketSessionDataReceived: types.func.isRequired,
   };
 
   constructor(props) {
@@ -58,21 +59,17 @@ export default class SessionCable extends React.Component {
   }
 
   initialize(props) {
-    const {cable} = props;
+    const {cable, websocketSessionDataReceived} = props;
     const {subscription} = this.state;
     if (cable && !subscription) {
-      this.subscribe(cable);
+      this.subscribe(cable, websocketSessionDataReceived);
     }
   }
 
-  onReceived(data) {
-    Actions.websocketSessionDataReceived(data);
-  }
-
-  subscribe(cable) {
+  subscribe(cable, onRecieved) {
     const subscription = cable.subscriptions.create(
       {channel: 'SessionsChannel'},
-      {received: this.onReceived},
+      {received: (data) => onRecieved(data.payload)},
     );
 
     this.setState({subscription});

@@ -91,6 +91,10 @@ class Application extends React.Component {
     });
   };
 
+  updateWebsocketSession = (session) => {
+    reduxStore.dispatch(mainActions.updateWebsocketSession(session));
+  };
+
   render() {
     const {config} = this.props;
     const {websocket_url} = config;
@@ -101,7 +105,7 @@ class Application extends React.Component {
 
             <ConnectedHeader config={config}/>
             <ConnectedRouter config={config} router={router}/>
-            <SessionWebsocket url={websocket_url}/>
+            <SessionWebsocket url={websocket_url} websocketSessionDataReceived={this.updateWebsocketSession}/>
           </div>
         </MuiThemeProvider>
       </Provider>
