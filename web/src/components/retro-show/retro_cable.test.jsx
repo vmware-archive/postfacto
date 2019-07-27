@@ -32,17 +32,18 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import ActionCable from 'actioncable';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroCable from './retro_cable';
 
 describe('RetroCable', () => {
   let retroCableDOM;
+  let websocketRetroDataReceived;
 
   beforeEach(() => {
+    websocketRetroDataReceived = jest.fn();
     const cable = ActionCable.createConsumer('wss://websocket/url');
-    retroCableDOM = mount(<RetroCable cable={cable} retro_id="retro-slug-123"/>);
+    retroCableDOM = mount(<RetroCable cable={cable} retro_id="retro-slug-123" websocketRetroDataReceived={websocketRetroDataReceived}/>);
   });
 
   it('subscribes to the channels', () => {
@@ -50,31 +51,5 @@ describe('RetroCable', () => {
     const subscriptionJson = JSON.parse(subscription.identifier);
     expect(subscriptionJson.channel).toEqual('RetrosChannel');
     expect(subscriptionJson.retro_id).toEqual('retro-slug-123');
-  });
-
-  it('dispatches updates to the store when receiving data', () => {
-    const websocketData = {
-      retro: {
-        id: 1,
-        name: 'retro name',
-        items: [
-          {
-            id: 2,
-            description: 'item 1',
-            vote_count: 1,
-          },
-          {
-            id: 3,
-            description: 'item 3',
-            vote_count: 2,
-          },
-        ],
-      },
-    };
-    retroCableDOM.instance().onReceived(websocketData);
-    expect(Dispatcher).toHaveReceived({
-      type: 'websocketRetroDataReceived',
-      data: websocketData,
-    });
   });
 });

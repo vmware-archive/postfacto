@@ -56,7 +56,13 @@ import {
   nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
   voteRetroItem,
 } from '../../redux/actions/api_actions';
-import {clearDialog, currentRetroSendArchiveEmailUpdated, showDialog, signOut} from '../../redux/actions/main_actions';
+import {
+  clearDialog,
+  currentRetroSendArchiveEmailUpdated, currentRetroUpdated,
+  forceRelogin,
+  showDialog,
+  signOut,
+} from '../../redux/actions/main_actions';
 import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
 
 function getItemArchiveTime(item) {
@@ -106,6 +112,7 @@ class ShowRetroPage extends React.Component {
     deleteRetroActionItem: types.func.isRequired,
     editRetroActionItem: types.func.isRequired,
     extendTimer: types.func.isRequired,
+    websocketRetroDataReceived: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -312,7 +319,7 @@ class ShowRetroPage extends React.Component {
 
     return (
       <span>
-        <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
+        <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
@@ -385,7 +392,7 @@ class ShowRetroPage extends React.Component {
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
-          <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
+          <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
           {this.renderArchiveConfirmationDialog()}
           <div className={retroContainerClasses}>
 
@@ -520,6 +527,13 @@ const mapDispatchToProps = (dispatch) => ({
   deleteRetroActionItem: (retroId, actionItem) => dispatch(deleteRetroActionItem(retroId, actionItem)),
   editRetroActionItem: (retroId, actionItemId, description) => dispatch(editRetroActionItem(retroId, actionItemId, description)),
   extendTimer: (retroId) => dispatch(extendTimer(retroId)),
+  websocketRetroDataReceived: (data) => {
+    if (data.command === 'force_relogin') {
+      dispatch(forceRelogin(data.payload.originator_id, data.payload.retro.slug));
+    } else {
+      dispatch(currentRetroUpdated(data.retro));
+    }
+  },
 });
 
 const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);

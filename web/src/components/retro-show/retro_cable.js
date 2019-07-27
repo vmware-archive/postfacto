@@ -31,13 +31,13 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import Logger from '../../helpers/logger';
 
 export default class RetroCable extends React.Component {
   static propTypes = {
     cable: types.object.isRequired,
     retro_id: types.string.isRequired,
+    websocketRetroDataReceived: types.func.isRequired,
   };
 
   constructor(props) {
@@ -46,13 +46,13 @@ export default class RetroCable extends React.Component {
   }
 
   componentWillMount() {
-    const {cable, retro_id} = this.props;
-    this.initialize(cable, retro_id);
+    const {cable, retro_id, websocketRetroDataReceived} = this.props;
+    this.initialize(cable, retro_id, websocketRetroDataReceived);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {cable, retro_id} = nextProps;
-    this.initialize(cable, retro_id);
+    const {cable, retro_id, websocketRetroDataReceived} = nextProps;
+    this.initialize(cable, retro_id, websocketRetroDataReceived);
   }
 
   componentWillUnmount() {
@@ -61,26 +61,23 @@ export default class RetroCable extends React.Component {
     cable.subscriptions.remove(this.state.subscription);
   }
 
-  initialize(cable, retro_id) {
+  initialize(cable, retro_id, websocketRetroDataReceived) {
     const {subscription} = this.state;
     if (cable && !subscription) {
-      this.subscribe(cable, retro_id, localStorage.getItem('apiToken-' + retro_id));
+      this.subscribe(cable, retro_id, localStorage.getItem('apiToken-' + retro_id), websocketRetroDataReceived);
     }
   }
 
-  onReceived(data) {
-    Actions.websocketRetroDataReceived(data);
-  }
 
   onDisconnected(data) {
     Logger.info('disconnected from actioncable', data);
   }
 
-  subscribe(cable, retro_id, api_token) {
+  subscribe(cable, retro_id, api_token, websocketRetroDataReceived) {
     const subscription = cable.subscriptions.create(
       {channel: 'RetrosChannel', retro_id, api_token},
       {
-        received: this.onReceived,
+        received: websocketRetroDataReceived,
         disconnected: this.onDisconnected,
       },
     );
