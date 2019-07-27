@@ -39,7 +39,7 @@ import {ConnectedShowRetroSettingsPage} from './retro-settings/show_retro_settin
 import {ConnectedShowRetroPasswordSettingsPage} from './retro-settings/show_retro_password_settings_page';
 import {ConnectedLoginToRetroPage} from './retro-login/login_to_retro_page';
 import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
-import RetroNotFoundPage from './retro-not-found/retro_not_found_page';
+import {ConnectedRetroNotFoundPage} from './retro-not-found/retro_not_found_page';
 import {ConnectedNotFoundPage} from './not-found/not_found_page';
 import NewTermsPage from './terms/new_terms_page';
 import EmptyPage from './shared/empty_page';
@@ -96,7 +96,7 @@ class Router extends React.Component {
       this.setPage(ApiServerNotFoundPage);
     }
     if (retro_not_found) {
-      this.setPage(RetroNotFoundPage);
+      this.setPage(ConnectedRetroNotFoundPage);
     }
     if (not_found) {
       this.setPage(ConnectedNotFoundPage);

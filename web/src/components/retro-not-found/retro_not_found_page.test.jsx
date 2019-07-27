@@ -31,16 +31,20 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
-
-import RetroNotFoundPage from './retro_not_found_page';
+import '../../spec_helper';
+import {RetroNotFoundPage} from './retro_not_found_page';
 
 describe('RetroNotFoundPage', () => {
   let subject;
-
+  let resetRetroNotFound;
+  let redirectToRetroCreatePage;
   beforeEach(() => {
-    subject = shallow(<RetroNotFoundPage/>);
+    resetRetroNotFound = jest.fn();
+    redirectToRetroCreatePage = jest.fn();
+    subject = shallow(<RetroNotFoundPage
+      resetRetroNotFound={resetRetroNotFound}
+      redirectToRetroCreatePage={redirectToRetroCreatePage}
+    />);
   });
 
   it('displays error details', () => {
@@ -52,14 +56,14 @@ describe('RetroNotFoundPage', () => {
     expect(button).toHaveText('Create a Project');
     button.simulate('click');
 
-    expect(Dispatcher).toHaveReceived({type: 'redirectToRetroCreatePage'});
+    expect(redirectToRetroCreatePage).toHaveBeenCalled();
   });
 
   it('dispatches resetRetroNotFound when unmounting', () => {
-    expect(Dispatcher).not.toHaveReceived('resetRetroNotFound');
+    expect(resetRetroNotFound).not.toHaveBeenCalled();
 
     subject.unmount();
 
-    expect(Dispatcher).toHaveReceived('resetRetroNotFound');
+    expect(resetRetroNotFound).toHaveBeenCalled();
   });
 });
