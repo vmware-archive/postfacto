@@ -31,7 +31,7 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroItemEditView from './retro_item_edit_view';
 import EmojiSelector from './emoji_selector';

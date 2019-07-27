@@ -32,7 +32,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroHeading from './retro_heading';
 

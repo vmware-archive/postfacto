@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import './dispatcher_spec_helper';
+import './spec_helper';
 
 import EnhancedApplication from './Application';
 

@@ -31,7 +31,7 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RetroMenu from './retro_menu';

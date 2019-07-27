@@ -33,7 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {invokeMenuOption} from '../../test_support/retro_menu_getters';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
 
@@ -52,6 +52,7 @@ describe('Retro settings', () => {
   let requireRetroLogin;
 
   beforeEach(() => {
+    global.localStorage.clear();
     const retro = {
       id: 13,
       name: 'the retro name',

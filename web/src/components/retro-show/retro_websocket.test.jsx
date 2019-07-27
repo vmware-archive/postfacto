@@ -31,7 +31,7 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroWebsocket from './retro_websocket';
 
