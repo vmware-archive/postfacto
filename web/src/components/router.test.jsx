@@ -37,7 +37,7 @@ import '../spec_helper';
 import Alert from './shared/alert';
 import {Router} from './router';
 import EmptyPage from './shared/empty_page';
-import HomePage from './home/home_page';
+import {HomePage} from './home/home_page';
 import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
 
 describe('Router', () => {
@@ -54,7 +54,7 @@ describe('Router', () => {
   });
 
   it('dispatches hide alert when changed to a different page', () => {
-    rendered.setState({Page: HomePage});
+    rendered.setState({Page: HomePage, additionalProps: {createSession: jest.fn(), homePageShownAnalytics: jest.fn()}});
 
     expect(Dispatcher).toHaveReceived('hideAlert');
   });
