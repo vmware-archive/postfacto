@@ -46,7 +46,7 @@ import EmptyPage from './shared/empty_page';
 import {ConnectedHomePage} from './home/home_page';
 import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
-import RegistrationPage from './registration/registration_page';
+import {ConnectedRegistrationPage} from './registration/registration_page';
 import {clearAlert} from '../redux/actions/main_actions';
 
 
@@ -171,7 +171,7 @@ class Router extends React.Component {
 
   showRegistration = (req) => {
     const {accessToken, email, fullName} = req.params;
-    this.setPage(RegistrationPage, {accessToken, email, fullName});
+    this.setPage(ConnectedRegistrationPage, {accessToken, email, fullName});
   };
 
   render() {

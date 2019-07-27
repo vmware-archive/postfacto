@@ -50,7 +50,7 @@ import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
 import {
   archiveRetro, createRetroActionItem, createRetroItem, deleteRetroActionItem,
   deleteRetroItem, doneRetroActionItem,
-  doneRetroItem, editRetroActionItem,
+  doneRetroItem, editRetroActionItem, extendTimer,
   getRetro,
   getRetroArchive, highlightRetroItem,
   nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
@@ -105,6 +105,7 @@ class ShowRetroPage extends React.Component {
     doneRetroActionItem: types.func.isRequired,
     deleteRetroActionItem: types.func.isRequired,
     editRetroActionItem: types.func.isRequired,
+    extendTimer: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -240,6 +241,7 @@ class ShowRetroPage extends React.Component {
         deleteRetroItem={this.props.deleteRetroItem}
         createRetroItem={this.props.createRetroItem}
         createRetroActionItem={this.props.createRetroActionItem}
+        extendTimer={this.props.extendTimer}
       />
     );
   }
@@ -416,6 +418,7 @@ class ShowRetroPage extends React.Component {
                 deleteRetroItem={this.props.deleteRetroItem}
                 createRetroItem={this.props.createRetroItem}
                 createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
               <RetroColumn
                 category="meh"
@@ -432,6 +435,7 @@ class ShowRetroPage extends React.Component {
                 deleteRetroItem={this.props.deleteRetroItem}
                 createRetroItem={this.props.createRetroItem}
                 createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
               <RetroColumn
                 category="sad"
@@ -448,6 +452,7 @@ class ShowRetroPage extends React.Component {
                 deleteRetroItem={this.props.deleteRetroItem}
                 createRetroItem={this.props.createRetroItem}
                 createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
             </div>
             <RetroActionPanel
@@ -514,6 +519,7 @@ const mapDispatchToProps = (dispatch) => ({
   doneRetroActionItem: (retroId, actionItemId, done) => dispatch(doneRetroActionItem(retroId, actionItemId, done)),
   deleteRetroActionItem: (retroId, actionItem) => dispatch(deleteRetroActionItem(retroId, actionItem)),
   editRetroActionItem: (retroId, actionItemId, description) => dispatch(editRetroActionItem(retroId, actionItemId, description)),
+  extendTimer: (retroId) => dispatch(extendTimer(retroId)),
 });
 
 const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);

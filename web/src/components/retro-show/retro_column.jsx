@@ -58,6 +58,7 @@ export default class RetroColumn extends React.Component {
     deleteRetroItem: types.func.isRequired,
     createRetroActionItem: types.func.isRequired,
     createRetroItem: types.func.isRequired,
+    extendTimer: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -96,6 +97,7 @@ export default class RetroColumn extends React.Component {
           unhighlightRetroItem={this.props.unhighlightRetroItem}
           updateRetroItem={this.props.updateRetroItem}
           deleteRetroItem={this.props.deleteRetroItem}
+          extendTimer={this.props.extendTimer}
         />
       ));
   }

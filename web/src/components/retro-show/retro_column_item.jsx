@@ -51,6 +51,7 @@ export default class RetroColumnItem extends React.Component {
     unhighlightRetroItem: types.func.isRequired,
     updateRetroItem: types.func.isRequired,
     deleteRetroItem: types.func.isRequired,
+    extendTimer: types.func.isRequired,
     scrollTo: types.func,
   };
 
@@ -202,7 +203,7 @@ export default class RetroColumnItem extends React.Component {
     const {item, highlighted_item_id, retro_item_end_time, retroId} = this.props;
     if (item.id === highlighted_item_id) {
       return (
-        <CountdownTimer endTimestampInMs={Date.parse(retro_item_end_time)} retroId={retroId}/>
+        <CountdownTimer endTimestampInMs={Date.parse(retro_item_end_time)} retroId={retroId} extendTimer={this.props.extendTimer}/>
       );
     }
     return null;
