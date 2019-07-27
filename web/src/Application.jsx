@@ -57,11 +57,16 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
 
-
+let reduxStore;
 const router = new Grapnel({pushState: true});
-const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
+const retroClient = new RetroClient(
+  () => global.Retro.config.api_base_url,
+  () => localStorage.getItem('authToken'),
+  () => reduxStore.dispatch(mainActions.setNotFound({api_server_not_found: true})),
+);
+
 const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
-const reduxStore = makeReduxStore(router, retroClient, analyticsClient);
+reduxStore = makeReduxStore(router, retroClient, analyticsClient);
 
 class Application extends React.Component {
   static propTypes = {

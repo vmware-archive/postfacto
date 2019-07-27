@@ -29,9 +29,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {Dispatcher} from 'p-flux';
-import fetchJson from './fetch_helper';
-import '../dispatcher_spec_helper';
+import RetroClient from './retro_client';
+import '../spec_helper';
 
 describe('fetchJson', () => {
   describe('errors', () => {
@@ -40,13 +39,14 @@ describe('fetchJson', () => {
     });
 
     it('returns empty array', async () => {
-      const results = await fetchJson('http://example.com/some-url');
+      const results = await new RetroClient(null, null, jest.fn()).fetchJson('http://example.com/some-url');
       expect(results).toEqual([]);
     });
 
     it('dispatches apiServerNotFound', async () => {
-      await fetchJson('http://example.com/some-url');
-      expect(Dispatcher).toHaveReceived('apiServerNotFound');
+      const apiServerNotFound = jest.fn();
+      await new RetroClient(null, null, apiServerNotFound).fetchJson('http://example.com/some-url');
+      expect(apiServerNotFound).toHaveBeenCalled();
     });
   });
 
@@ -56,13 +56,14 @@ describe('fetchJson', () => {
     });
 
     it('returns the status code and empty response string', async () => {
-      const results = await fetchJson('http://example.com/some-url');
+      const results = await new RetroClient().fetchJson('http://example.com/some-url');
       expect(results).toEqual([204, '']);
     });
 
     it('does not dispatch apiServerNotFound', async () => {
-      await fetchJson('http://example.com/some-url');
-      expect(Dispatcher).not.toHaveReceived('apiServerNotFound');
+      const apiServerNotFound = jest.fn();
+      await new RetroClient(null, null, apiServerNotFound).fetchJson('http://example.com/some-url');
+      expect(apiServerNotFound).not.toHaveBeenCalled();
     });
   });
 });
