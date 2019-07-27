@@ -32,7 +32,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Dispatcher} from 'p-flux';
 import {invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../dispatcher_spec_helper';
 
@@ -49,6 +48,8 @@ const config = {
 
 describe('Retro settings', () => {
   let dom;
+  let routeToRetroSettings;
+  let requireRetroLogin;
 
   beforeEach(() => {
     const retro = {
@@ -61,6 +62,8 @@ describe('Retro settings', () => {
 
     window.localStorage.setItem('authToken', 'some-token');
 
+    routeToRetroSettings = jest.fn();
+    requireRetroLogin = jest.fn();
     dom = mount((
       <MuiThemeProvider>
         <ShowRetroPage
@@ -70,6 +73,17 @@ describe('Retro settings', () => {
           config={config}
           featureFlags={{archiveEmails: true}}
           environment={{isMobile640: false}}
+          getRetro={jest.fn()}
+          routeToRetroSettings={routeToRetroSettings}
+          requireRetroLogin={requireRetroLogin}
+          getRetroArchive={jest.fn()}
+          nextRetroItem={jest.fn()}
+          archiveRetro={jest.fn()}
+          hideDialog={jest.fn()}
+          toggleSendArchiveEmail={jest.fn()}
+          routeToRetroArchives={jest.fn()}
+          showDialog={jest.fn()}
+          signOut={jest.fn()}
         />
       </MuiThemeProvider>
     ));
@@ -81,19 +95,13 @@ describe('Retro settings', () => {
 
       invokeMenuOption(dom, 'Retro settings');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'routeToRetroSettings',
-        data: {retro_id: '13'},
-      });
+      expect(routeToRetroSettings).toHaveBeenCalledWith('13');
     });
 
     it('redirects to retro login page if not logged in', () => {
       invokeMenuOption(dom, 'Retro settings');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'requireRetroLogin',
-        data: {retro_id: '13'},
-      });
+      expect(requireRetroLogin).toHaveBeenCalledWith('13');
     });
   });
 });

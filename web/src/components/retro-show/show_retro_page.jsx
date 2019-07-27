@@ -34,7 +34,6 @@ import Toggle from 'material-ui/Toggle';
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 
 import {HotKeys} from 'react-hotkeys';
 import {connect} from 'react-redux';
@@ -48,6 +47,9 @@ import RetroHeading from './retro_heading';
 import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
+import {archiveRetro, getRetro, getRetroArchive, nextRetroItem} from '../../redux/actions/api_actions';
+import {clearDialog, currentRetroSendArchiveEmailUpdated, showDialog, signOut} from '../../redux/actions/main_actions';
+import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -72,6 +74,17 @@ class ShowRetroPage extends React.Component {
     environment: types.shape({
       isMobile640: types.bool,
     }).isRequired,
+    getRetroArchive: types.func.isRequired,
+    getRetro: types.func.isRequired,
+    nextRetroItem: types.func.isRequired,
+    archiveRetro: types.func.isRequired,
+    hideDialog: types.func.isRequired,
+    toggleSendArchiveEmail: types.func.isRequired,
+    routeToRetroArchives: types.func.isRequired,
+    routeToRetroSettings: types.func.isRequired,
+    requireRetroLogin: types.func.isRequired,
+    showDialog: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -116,9 +129,9 @@ class ShowRetroPage extends React.Component {
 
   fetchRetros(retroId, archives, archiveId) {
     if (archives) {
-      Actions.getRetroArchive({retro_id: retroId, archive_id: archiveId});
+      this.props.getRetroArchive(retroId, archiveId);
     } else {
-      Actions.getRetro({id: retroId});
+      this.props.getRetro(retroId);
     }
   }
 
@@ -155,7 +168,7 @@ class ShowRetroPage extends React.Component {
       return;
     }
     const {retro} = this.props;
-    Actions.nextRetroItem({retro});
+    this.props.nextRetroItem(retro);
   }
 
   // Handle events
@@ -164,14 +177,12 @@ class ShowRetroPage extends React.Component {
   }
 
   handleArchiveRetroConfirmation() {
-    Actions.archiveRetro({retro: this.props.retro});
-    Actions.hideDialog();
+    this.props.archiveRetro(this.props.retro);
+    this.props.hideDialog();
   }
 
   handleArchiveEmailPreferenceChange() {
-    Actions.toggleSendArchiveEmail({
-      currentSendArchiveEmail: this.props.retro.send_archive_email,
-    });
+    this.props.toggleSendArchiveEmail(!this.props.retro.send_archive_email);
   }
 
   renderColumnMobile(retro) {
@@ -218,7 +229,7 @@ class ShowRetroPage extends React.Component {
       <button
         className="archive-dialog__actions--cancel"
         type="button"
-        onClick={Actions.hideDialog}
+        onClick={this.props.hideDialog}
       >
         Cancel
       </button>
@@ -229,7 +240,7 @@ class ShowRetroPage extends React.Component {
         title={title}
         actions={[cancelButton, archiveButton]}
         open={!!this.props.dialog}
-        onRequestClose={Actions.hideDialog}
+        onRequestClose={this.props.hideDialog}
         actionsContainerClassName="archive-dialog__actions"
         contentClassName="archive-dialog"
       >
@@ -271,7 +282,17 @@ class ShowRetroPage extends React.Component {
 
           <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
-          <RetroHeading retro={retro} retroId={retroId} isMobile archives={archives}/>
+          <RetroHeading
+            retro={retro}
+            retroId={retroId}
+            isMobile
+            archives={archives}
+            routeToRetroArchives={this.props.routeToRetroArchives}
+            routeToRetroSettings={this.props.routeToRetroSettings}
+            requireRetroLogin={this.props.requireRetroLogin}
+            showDialog={this.props.showDialog}
+            signOut={this.props.signOut}
+          />
 
           <div className="mobile-tabs">
             <div className="mobile-tabs-list">
@@ -339,6 +360,11 @@ class ShowRetroPage extends React.Component {
               retroId={retroId}
               isMobile={false}
               archives={archives}
+              routeToRetroArchives={this.props.routeToRetroArchives}
+              routeToRetroSettings={this.props.routeToRetroSettings}
+              requireRetroLogin={this.props.requireRetroLogin}
+              showDialog={this.props.showDialog}
+              signOut={this.props.signOut}
             />
             <div className="retro-item-list">
               <RetroColumn
@@ -398,5 +424,19 @@ const mapStateToProps = (state) => ({
   environment: state.config.environment,
 });
 
-const ConnectedShowRetroPage = connect(mapStateToProps)(ShowRetroPage);
+const mapDispatchToProps = (dispatch) => ({
+  getRetroArchive: (retroId, archiveId) => dispatch(getRetroArchive(retroId, archiveId)),
+  getRetro: (retroId) => dispatch(getRetro(retroId)),
+  nextRetroItem: (retro) => dispatch(nextRetroItem(retro)),
+  archiveRetro: (retro) => dispatch(archiveRetro(retro)),
+  hideDialog: () => dispatch(clearDialog()),
+  toggleSendArchiveEmail: (send) => dispatch(currentRetroSendArchiveEmailUpdated(send)),
+  routeToRetroArchives: (retroId) => dispatch(retroArchives(retroId)),
+  routeToRetroSettings: (retroId) => dispatch(retroSettings(retroId)),
+  requireRetroLogin: (retroId) => dispatch(retroLogin(retroId)),
+  showDialog: (dialog) => dispatch(showDialog(dialog)),
+  signOut: () => dispatch(signOut()),
+});
+
+const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);
 export {ShowRetroPage, ConnectedShowRetroPage};

@@ -32,9 +32,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Dispatcher} from 'p-flux';
 import {getMenuLabels} from '../../test_support/retro_menu_getters';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
 
@@ -90,8 +89,10 @@ describe('Show retro page archives', () => {
 
   describe('on desktop', () => {
     let dom;
+    let routeToRetroArchives;
 
     beforeEach(() => {
+      routeToRetroArchives = jest.fn();
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -102,6 +103,17 @@ describe('Show retro page archives', () => {
             config={config}
             featureFlags={{archiveEmails: true}}
             environment={{isMobile640: false}}
+            getRetroArchive={jest.fn()}
+            getRetro={jest.fn()}
+            nextRetroItem={jest.fn()}
+            archiveRetro={jest.fn()}
+            hideDialog={jest.fn()}
+            toggleSendArchiveEmail={jest.fn()}
+            routeToRetroArchives={routeToRetroArchives}
+            routeToRetroSettings={jest.fn()}
+            requireRetroLogin={jest.fn()}
+            showDialog={jest.fn()}
+            signOut={jest.fn()}
           />
         </MuiThemeProvider>
       ));
@@ -121,10 +133,7 @@ describe('Show retro page archives', () => {
     it('redirects to list archives page of current retro when clicking Archived retros', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'routeToRetroArchives',
-        data: {retro_id: '13'},
-      });
+      expect(routeToRetroArchives).toHaveBeenCalledWith('13');
     });
 
     it('shows a menu with "Sign out" if logged in', () => {
@@ -139,8 +148,10 @@ describe('Show retro page archives', () => {
 
   describe('on mobile', () => {
     let dom;
+    let routeToRetroArchives;
 
     beforeEach(() => {
+      routeToRetroArchives = jest.fn();
       dom = mount((
         <MuiThemeProvider>
           <ShowRetroPage
@@ -151,6 +162,17 @@ describe('Show retro page archives', () => {
             config={config}
             featureFlags={{archiveEmails: true}}
             environment={{isMobile640: true}}
+            getRetroArchive={jest.fn()}
+            getRetro={jest.fn()}
+            nextRetroItem={jest.fn()}
+            archiveRetro={jest.fn()}
+            hideDialog={jest.fn()}
+            toggleSendArchiveEmail={jest.fn()}
+            routeToRetroArchives={routeToRetroArchives}
+            routeToRetroSettings={jest.fn()}
+            requireRetroLogin={jest.fn()}
+            showDialog={jest.fn()}
+            signOut={jest.fn()}
           />
         </MuiThemeProvider>
       ));
@@ -163,10 +185,7 @@ describe('Show retro page archives', () => {
     it('redirects to list archives page when clicking back', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'routeToRetroArchives',
-        data: {retro_id: '13'},
-      });
+      expect(routeToRetroArchives).toHaveBeenCalledWith('13');
     });
   });
 });

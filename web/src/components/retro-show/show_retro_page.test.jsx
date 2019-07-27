@@ -30,11 +30,10 @@
  */
 
 import React from 'react';
-import {mount, shallow} from 'enzyme';
+import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
 
@@ -75,6 +74,25 @@ function createRetro(isPrivate = false) {
   };
 }
 
+function UnconnectedShowRetroPage(props) {
+  return (
+    <ShowRetroPage
+      getRetro={jest.fn()}
+      nextRetroItem={jest.fn()}
+      archiveRetro={jest.fn()}
+      hideDialog={jest.fn()}
+      getRetroArchive={jest.fn()}
+      toggleSendArchiveEmail={jest.fn()}
+      routeToRetroArchives={jest.fn()}
+      routeToRetroSettings={jest.fn()}
+      requireRetroLogin={jest.fn()}
+      showDialog={jest.fn()}
+      signOut={jest.fn()}
+      {...props}
+    />
+  );
+}
+
 describe('ShowRetroPage', () => {
   let environment;
 
@@ -90,7 +108,7 @@ describe('ShowRetroPage', () => {
 
       const dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPage
+          <UnconnectedShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
@@ -109,7 +127,7 @@ describe('ShowRetroPage', () => {
 
       const dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPage
+          <UnconnectedShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
@@ -134,7 +152,7 @@ describe('ShowRetroPage', () => {
 
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPage
+          <UnconnectedShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
@@ -175,7 +193,7 @@ describe('ShowRetroPage', () => {
     it('displays a dialog if requested', () => {
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPage
+          <UnconnectedShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}
@@ -203,24 +221,28 @@ describe('ShowRetroPage', () => {
     });
 
     it('hides the dialog when requested', () => {
-      dom = shallow((
-        <ShowRetroPage
-          retro={retro}
-          retroId="13"
-          archives={false}
-          config={config}
-          dialog={{
-            title: 'Some dialog title',
-            message: 'Some dialog message',
-          }}
-          featureFlags={{archiveEmails: true}}
-          environment={environment}
-        />
+      const hideDialog = jest.fn();
+      dom = mount((
+        <MuiThemeProvider>
+          <UnconnectedShowRetroPage
+            retro={retro}
+            retroId="13"
+            archives={false}
+            config={config}
+            dialog={{
+              title: 'Some dialog title',
+              message: 'Some dialog message',
+            }}
+            featureFlags={{archiveEmails: true}}
+            environment={environment}
+            hideDialog={hideDialog}
+          />
+        </MuiThemeProvider>
       ));
-
       const dialog = dom.find(Dialog);
+
       dialog.props().onRequestClose();
-      expect(Dispatcher).toHaveReceived('hideDialog');
+      expect(hideDialog).toHaveBeenCalled();
     });
 
     it('does not display a dialog by default', () => {
@@ -238,7 +260,7 @@ describe('ShowRetroPage', () => {
 
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPage
+          <UnconnectedShowRetroPage
             retro={retro}
             retroId="13"
             archives={false}

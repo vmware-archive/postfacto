@@ -31,7 +31,6 @@
 
 import React from 'react';
 import {FlatButton, FontIcon, RaisedButton} from 'material-ui';
-import {Actions} from 'p-flux';
 import types from 'prop-types';
 import RetroMenu from '../shared/retro_menu';
 
@@ -42,6 +41,11 @@ export default class RetroHeading extends React.Component {
     retroId: types.string.isRequired,
     archives: types.bool.isRequired,
     isMobile: types.bool.isRequired,
+    routeToRetroArchives: types.func.isRequired,
+    routeToRetroSettings: types.func.isRequired,
+    requireRetroLogin: types.func.isRequired,
+    showDialog: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   constructor(props) {
@@ -55,7 +59,7 @@ export default class RetroHeading extends React.Component {
 
   onArchivesButtonClicked() {
     const {retroId} = this.props;
-    Actions.routeToRetroArchives({retro_id: retroId});
+    this.props.routeToRetroArchives(retroId);
   }
 
   renderBackButton() {
@@ -77,7 +81,7 @@ export default class RetroHeading extends React.Component {
   }
 
   handleArchiveRetro() {
-    Actions.showDialog({
+    this.props.showDialog({
       title: 'You\'re about to archive this retro.',
       message: 'Are you sure?',
     });
@@ -85,16 +89,16 @@ export default class RetroHeading extends React.Component {
 
   handleViewArchives() {
     const {retroId} = this.props;
-    Actions.routeToRetroArchives({retro_id: retroId});
+    this.props.routeToRetroArchives(retroId);
   }
 
   handleRetroSettings() {
     const {retroId} = this.props;
 
     if (window.localStorage.getItem(`apiToken-${retroId}`) !== null) {
-      Actions.routeToRetroSettings({retro_id: retroId});
+      this.props.routeToRetroSettings(retroId);
     } else {
-      Actions.requireRetroLogin({retro_id: retroId});
+      this.props.requireRetroLogin(retroId);
     }
   }
 
@@ -119,7 +123,7 @@ export default class RetroHeading extends React.Component {
       },
       {
         title: 'Sign out',
-        callback: Actions.signOut,
+        callback: this.props.signOut,
         isApplicable: window.localStorage.length > 0,
       },
     ];
