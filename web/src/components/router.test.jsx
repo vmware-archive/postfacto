@@ -37,7 +37,7 @@ import Alert from './shared/alert';
 import {Router} from './router';
 import EmptyPage from './shared/empty_page';
 import {HomePage} from './home/home_page';
-import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
+import {ConnectedApiServerNotFoundPage} from './server-lost/api_server_not_found_page';
 
 describe('Router', () => {
   let rendered;
@@ -69,12 +69,12 @@ describe('Router', () => {
   it('renders ApiServerNotFoundPage when api_server_not_found is true', () => {
     rendered.setProps({not_found: {api_server_not_found: true}});
 
-    expect(rendered.find(ApiServerNotFoundPage)).toExist();
+    expect(rendered.find(ConnectedApiServerNotFoundPage)).toExist();
   });
 
   it('does not render ApiServerNotFoundPage when api_server_not_found is false', () => {
     rendered.setProps({not_found: {api_server_not_found: false}});
 
-    expect(rendered.find(ApiServerNotFoundPage)).not.toExist();
+    expect(rendered.find(ConnectedApiServerNotFoundPage)).not.toExist();
   });
 });

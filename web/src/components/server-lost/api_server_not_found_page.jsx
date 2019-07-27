@@ -30,12 +30,19 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
+import types from 'prop-types';
 import faceDeadSvg from '../../images/face-dead.svg';
+import {setNotFound} from '../../redux/actions/main_actions';
 
 export default class ApiServerNotFoundPage extends React.PureComponent {
+  static propTypes = {
+    resetApiServerNotFound: types.func.isRequired,
+  };
+
+
   componentWillUnmount() {
-    Actions.resetApiServerNotFound();
+    this.props.resetApiServerNotFound();
   }
 
   render() {
@@ -54,3 +61,10 @@ export default class ApiServerNotFoundPage extends React.PureComponent {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  resetApiServerNotFound: () => dispatch(setNotFound({api_server_not_found: false})),
+});
+
+const ConnectedApiServerNotFoundPage = connect(null, mapDispatchToProps)(ApiServerNotFoundPage);
+export {ApiServerNotFoundPage, ConnectedApiServerNotFoundPage};

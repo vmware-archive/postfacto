@@ -31,21 +31,21 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
-import ApiServerNotFoundPage from './api_server_not_found_page';
+import {ApiServerNotFoundPage} from './api_server_not_found_page';
 
 describe('ApiServerNotFoundPage', () => {
   it('displays error details', () => {
-    const subject = shallow(<ApiServerNotFoundPage/>);
+    const subject = shallow(<ApiServerNotFoundPage resetApiServerNotFound={jest.fn()}/>);
     expect(subject.find('h1')).toIncludeText('Oh no! It\'s broken');
   });
 
   it('dispatches resetApiServerNotFound when unmounting', () => {
-    const subject = mount(<ApiServerNotFoundPage/>);
-    expect(Dispatcher).not.toHaveReceived('resetApiServerNotFound');
+    const resetApiServerNotFound = jest.fn();
+    const subject = mount(<ApiServerNotFoundPage resetApiServerNotFound={resetApiServerNotFound}/>);
+    expect(resetApiServerNotFound).not.toHaveBeenCalled();
     subject.unmount();
-    expect(Dispatcher).toHaveReceived('resetApiServerNotFound');
+    expect(resetApiServerNotFound).toHaveBeenCalled();
   });
 });
