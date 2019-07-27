@@ -40,6 +40,8 @@ export default class RetroActionPanel extends React.Component {
     retroId: types.string.isRequired,
     isMobile: types.bool.isRequired,
     archives: types.bool.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
   };
 
   renderActionColumnTitle() {
@@ -55,7 +57,14 @@ export default class RetroActionPanel extends React.Component {
     if (archives) {
       return null;
     }
-    return (<RetroColumnInput retroId={retroId} category="action"/>);
+    return (
+      <RetroColumnInput
+        retroId={retroId}
+        category="action"
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
+      />
+    );
   }
 
   render() {

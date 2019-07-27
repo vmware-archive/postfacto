@@ -57,7 +57,7 @@ export default class RetroColumnItem extends React.Component {
   static defaultProps = {
     highlighted_item_id: null,
     retro_item_end_time: '',
-    scrollTo: Scroll.scroller.scrollTo,
+    scrollTo: Scroll.scroller.scrollTo.bind(Scroll.scroller),
   };
 
   constructor(props) {

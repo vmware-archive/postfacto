@@ -48,7 +48,8 @@ import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
 import {
-  archiveRetro, deleteRetroItem,
+  archiveRetro, createRetroActionItem, createRetroItem,
+  deleteRetroItem,
   doneRetroItem,
   getRetro,
   getRetroArchive, highlightRetroItem,
@@ -99,6 +100,8 @@ class ShowRetroPage extends React.Component {
     unhighlightRetroItem: types.func.isRequired,
     updateRetroItem: types.func.isRequired,
     deleteRetroItem: types.func.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -210,6 +213,8 @@ class ShowRetroPage extends React.Component {
           retroId={retroId}
           isMobile
           archives={archives}
+          createRetroItem={this.props.createRetroItem}
+          createRetroActionItem={this.props.createRetroActionItem}
         />
       );
     }
@@ -227,6 +232,8 @@ class ShowRetroPage extends React.Component {
         unhighlightRetroItem={this.props.unhighlightRetroItem}
         updateRetroItem={this.props.updateRetroItem}
         deleteRetroItem={this.props.deleteRetroItem}
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
       />
     );
   }
@@ -401,6 +408,8 @@ class ShowRetroPage extends React.Component {
                 unhighlightRetroItem={this.props.unhighlightRetroItem}
                 updateRetroItem={this.props.updateRetroItem}
                 deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
               />
               <RetroColumn
                 category="meh"
@@ -415,6 +424,8 @@ class ShowRetroPage extends React.Component {
                 unhighlightRetroItem={this.props.unhighlightRetroItem}
                 updateRetroItem={this.props.updateRetroItem}
                 deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
               />
               <RetroColumn
                 category="sad"
@@ -429,6 +440,8 @@ class ShowRetroPage extends React.Component {
                 unhighlightRetroItem={this.props.unhighlightRetroItem}
                 updateRetroItem={this.props.updateRetroItem}
                 deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
               />
             </div>
             <RetroActionPanel
@@ -436,6 +449,8 @@ class ShowRetroPage extends React.Component {
               retroId={retroId}
               isMobile={false}
               archives={archives}
+              createRetroItem={this.props.createRetroItem}
+              createRetroActionItem={this.props.createRetroActionItem}
             />
             <RetroFooter config={config}/>
           </div>
@@ -485,6 +500,8 @@ const mapDispatchToProps = (dispatch) => ({
   unhighlightRetroItem: (retroId) => dispatch(unhighlightRetroItem(retroId)),
   updateRetroItem: (retroId, item, description) => dispatch(updateRetroItem(retroId, item, description)),
   deleteRetroItem: (retroId, item) => dispatch(deleteRetroItem(retroId, item)),
+  createRetroActionItem: (retroId, description) => dispatch(createRetroActionItem(retroId, description)),
+  createRetroItem: (retroId, category, description) => dispatch(createRetroItem(retroId, category, description)),
 });
 
 const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);

@@ -32,8 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import TextareaAutosize from 'react-autosize-textarea';
-import {Dispatcher} from 'p-flux';
-import '../../dispatcher_spec_helper';
+import '../../spec_helper';
 
 import RetroColumnInput from './retro_column_input';
 import EmojiSelector from './emoji_selector';
@@ -42,9 +41,17 @@ const retroId = 'retro-slug-123';
 
 describe('inputting a retro item', () => {
   let dom;
-
+  let createRetroItem;
+  let createRetroActionItem;
   beforeEach(() => {
-    dom = mount(<RetroColumnInput retroId={retroId} category="happy"/>);
+    createRetroItem = jest.fn();
+    createRetroActionItem = jest.fn();
+    dom = mount(<RetroColumnInput
+      retroId={retroId}
+      category="happy"
+      createRetroItem={createRetroItem}
+      createRetroActionItem={createRetroActionItem}
+    />);
   });
 
   it('does not display submit button until text is entered', () => {
@@ -66,10 +73,7 @@ describe('inputting a retro item', () => {
 
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'createRetroItem',
-      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
-    });
+    expect(createRetroItem).toHaveBeenCalledWith(retroId, 'happy', 'a new retro item');
 
     expect(dom.find('textarea')).toHaveValue('');
   });
@@ -81,10 +85,7 @@ describe('inputting a retro item', () => {
 
     dom.find('.input-button').simulate('click');
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'createRetroItem',
-      data: {retro_id: retroId, category: 'happy', description: 'a new retro item'},
-    });
+    expect(createRetroItem).toHaveBeenCalledWith(retroId, 'happy', 'a new retro item');
 
     expect(dom.find('textarea')).toHaveValue('');
   });
@@ -94,15 +95,24 @@ describe('inputting a retro item', () => {
     textarea.simulate('change', {target: {value: ''}});
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(Dispatcher).not.toHaveReceived('createRetroItem');
+    expect(createRetroItem).not.toHaveBeenCalled();
   });
 });
 
 describe('inputting an action item', () => {
   let subject;
+  let createRetroItem;
+  let createRetroActionItem;
 
   beforeEach(() => {
-    subject = mount(<RetroColumnInput retroId={retroId} category="action"/>);
+    createRetroItem = jest.fn();
+    createRetroActionItem = jest.fn();
+    subject = mount(<RetroColumnInput
+      retroId={retroId}
+      category="action"
+      createRetroItem={createRetroItem}
+      createRetroActionItem={createRetroActionItem}
+    />);
   });
 
   it('does not display submit button until text is entered', () => {
@@ -125,10 +135,7 @@ describe('inputting an action item', () => {
 
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(Dispatcher).toHaveReceived({
-      type: 'createRetroActionItem',
-      data: {retro_id: retroId, description: 'a new action item'},
-    });
+    expect(createRetroActionItem).toHaveBeenCalledWith(retroId, 'a new action item');
 
     expect(subject.find('textarea')).toHaveValue('');
   });
@@ -138,7 +145,7 @@ describe('inputting an action item', () => {
     textarea.simulate('change', {target: {value: 'a new action item'}});
     textarea.simulate('keyPress', {key: 'Enter', shiftKey: true});
 
-    expect(Dispatcher).not.toHaveReceived('createRetroActionItem');
+    expect(createRetroActionItem).not.toHaveBeenCalled();
   });
 
   it('does not allow empty items', () => {
@@ -146,7 +153,7 @@ describe('inputting an action item', () => {
     textarea.simulate('change', {target: {value: ''}});
     textarea.simulate('keyPress', {key: 'Enter'});
 
-    expect(Dispatcher).not.toHaveReceived('createRetroActionItem');
+    expect(createRetroActionItem).not.toHaveBeenCalled();
   });
 
   it('moves submit button when textarea is resized', () => {

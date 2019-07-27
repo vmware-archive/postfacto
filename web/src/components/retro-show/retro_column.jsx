@@ -56,6 +56,8 @@ export default class RetroColumn extends React.Component {
     unhighlightRetroItem: types.func.isRequired,
     updateRetroItem: types.func.isRequired,
     deleteRetroItem: types.func.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -115,7 +117,14 @@ export default class RetroColumn extends React.Component {
     if (archives) {
       return null;
     }
-    return <RetroColumnInput retroId={retroId} category={category}/>;
+    return (
+      <RetroColumnInput
+        retroId={retroId}
+        category={category}
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
+      />
+    );
   }
 
   render() {
