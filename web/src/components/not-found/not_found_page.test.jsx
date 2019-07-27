@@ -31,10 +31,9 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import '../../dispatcher_spec_helper';
 
-import NotFoundPage from './not_found_page';
+import {NotFoundPage} from './not_found_page';
 
 describe('NotFoundPage', () => {
   it('displays error details', () => {

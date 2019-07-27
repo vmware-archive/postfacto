@@ -30,15 +30,23 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
+import types from 'prop-types';
+import {setNotFound} from '../../redux/actions/main_actions';
+import {newRetro} from '../../redux/actions/router_actions';
 
 export default class NotFoundPage extends React.PureComponent {
+  static propTypes = {
+    resetNotFound: types.func.isRequired,
+    navigateNewRetro: types.func.isRequired,
+  };
+
   componentWillUnmount() {
-    Actions.resetNotFound();
+    this.props.resetNotFound();
   }
 
   onCreateNewRetroClicked = () => {
-    Actions.redirectToRetroCreatePage();
+    this.props.navigateNewRetro();
   };
 
   render() {
@@ -63,3 +71,12 @@ export default class NotFoundPage extends React.PureComponent {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  resetNotFound: () => dispatch(setNotFound({not_found: false})),
+  navigateNewRetro: () => dispatch(newRetro()),
+});
+
+const ConnectedNotFoundPage = connect(null, mapDispatchToProps)(NotFoundPage);
+
+export {NotFoundPage, ConnectedNotFoundPage};
