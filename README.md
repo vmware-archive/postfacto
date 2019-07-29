@@ -9,7 +9,9 @@ Postfacto was created by [Pivotal Labs](https://pivotal.io/labs) by a team in th
 
 ## Deployment
 
-Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto.
+Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto. 
+
+_Note: Postfacto **does not** support being deployed from source, it must be deployed from a packaged version/archived release._
 
 ## Features
 
