@@ -31,22 +31,24 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import CountdownTimer from './countdown_timer';
 
 describe('CountdownTimer', () => {
   let dom;
+  let extendTimer;
 
   beforeEach(() => {
+    jest.useFakeTimers();
     global.Date.now = () => 0;
+    extendTimer = jest.fn();
   });
 
   describe('with time remaining', () => {
     beforeEach(() => {
       const FOUR_MINS_FIVE_SECS = 245000;
-      dom = mount(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123"/>);
+      dom = mount(<CountdownTimer endTimestampInMs={FOUR_MINS_FIVE_SECS} retroId="retro-slug-123" extendTimer={extendTimer}/>);
     });
 
     it('displays the remaining time in MM:SS format', () => {
@@ -63,7 +65,7 @@ describe('CountdownTimer', () => {
 
   describe('with no time remaining', () => {
     beforeEach(() => {
-      dom = mount(<CountdownTimer endTimestampInMs={0} retroId="retro-slug-123"/>);
+      dom = mount(<CountdownTimer endTimestampInMs={0} retroId="retro-slug-123" extendTimer={extendTimer}/>);
     });
 
     it('displays +2 more minutes and no countdown', () => {
@@ -76,7 +78,7 @@ describe('CountdownTimer', () => {
 
     it('dispatches extendTimer when extend button clicked', () => {
       dom.find('.retro-item-timer-extend').simulate('click');
-      expect(Dispatcher).toHaveReceived({type: 'extendTimer', data: {retro_id: 'retro-slug-123'}});
+      expect(extendTimer).toHaveBeenCalledWith('retro-slug-123');
     });
   });
 });

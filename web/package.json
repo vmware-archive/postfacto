@@ -9,7 +9,6 @@
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
     "node-sass": "^4.12.0",
-    "p-flux": "^1.1.1",
     "prop-types": "^15.6.2",
     "react": "16.8.6",
     "react-autosize-textarea": "^6.0.0",

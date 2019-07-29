@@ -49,6 +49,16 @@ export default class RetroColumn extends React.Component {
     retroId: types.string.isRequired,
     archives: types.bool,
     isMobile: types.bool.isRequired,
+    voteRetroItem: types.func.isRequired,
+    doneRetroItem: types.func.isRequired,
+    undoneRetroItem: types.func.isRequired,
+    highlightRetroItem: types.func.isRequired,
+    unhighlightRetroItem: types.func.isRequired,
+    updateRetroItem: types.func.isRequired,
+    deleteRetroItem: types.func.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
+    extendTimer: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -80,6 +90,14 @@ export default class RetroColumn extends React.Component {
           retro_item_end_time={retro_item_end_time}
           archives={archives}
           isMobile={isMobile}
+          voteRetroItem={this.props.voteRetroItem}
+          doneRetroItem={this.props.doneRetroItem}
+          undoneRetroItem={this.props.undoneRetroItem}
+          highlightRetroItem={this.props.highlightRetroItem}
+          unhighlightRetroItem={this.props.unhighlightRetroItem}
+          updateRetroItem={this.props.updateRetroItem}
+          deleteRetroItem={this.props.deleteRetroItem}
+          extendTimer={this.props.extendTimer}
         />
       ));
   }
@@ -101,7 +119,14 @@ export default class RetroColumn extends React.Component {
     if (archives) {
       return null;
     }
-    return <RetroColumnInput retroId={retroId} category={category}/>;
+    return (
+      <RetroColumnInput
+        retroId={retroId}
+        category={category}
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
+      />
+    );
   }
 
   render() {

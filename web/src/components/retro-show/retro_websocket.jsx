@@ -38,6 +38,7 @@ export default class RetroWebsocket extends React.Component {
   static propTypes = {
     url: types.string.isRequired,
     retro_id: types.string.isRequired,
+    websocketRetroDataReceived: types.func.isRequired,
   };
 
   constructor(props) {
@@ -65,7 +66,7 @@ export default class RetroWebsocket extends React.Component {
     const {cable} = this.state;
     const {retro_id} = this.props;
     if (cable) {
-      return <RetroCable cable={cable} retro_id={retro_id}/>;
+      return <RetroCable cable={cable} retro_id={retro_id} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>;
     }
     return null;
   }

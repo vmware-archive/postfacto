@@ -32,7 +32,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import {ShowRetroPasswordSettingsPage} from './show_retro_password_settings_page';
@@ -55,13 +54,32 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
   const sharedRetroPasswordSettingsBehavior = (isMobile) => {
     let dom;
+    let getRetroSettings;
+    let clearErrors;
+    let showRetroForId;
+    let updateRetroPassword;
+    let signOut;
 
     beforeEach(() => {
       const environment = {isMobile640: isMobile};
-
+      getRetroSettings = jest.fn();
+      clearErrors = jest.fn();
+      showRetroForId = jest.fn();
+      updateRetroPassword = jest.fn();
+      signOut = jest.fn();
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroPasswordSettingsPage retroId="13" retro={retro} session={session} environment={environment}/>
+          <ShowRetroPasswordSettingsPage
+            retroId="13"
+            retro={retro}
+            session={session}
+            environment={environment}
+            getRetroSettings={getRetroSettings}
+            clearErrors={clearErrors}
+            showRetroForId={showRetroForId}
+            updateRetroPassword={updateRetroPassword}
+            signOut={signOut}
+          />
         </MuiThemeProvider>
       ));
     });
@@ -73,10 +91,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
     it('goes back to the retro page when the back button is clicked', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'backPressedFromSettings',
-        data: {retro_id: '13'},
-      });
+      expect(showRetroForId).toHaveBeenCalledWith('13');
     });
 
     it('dispatches updateRetroPassword', () => {
@@ -86,15 +101,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       dom.find('button.retro-settings-form-submit').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'updateRetroPassword',
-        data: {
-          retro_id: '13',
-          current_password: 'current password',
-          new_password: 'new password',
-          request_uuid: 'blah',
-        },
-      });
+      expect(updateRetroPassword).toHaveBeenCalledWith('13', 'current password', 'new password', 'blah');
     });
 
     it('allows blank old passwords', () => {
@@ -103,15 +110,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       dom.find('button.retro-settings-form-submit').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'updateRetroPassword',
-        data: {
-          retro_id: '13',
-          current_password: '',
-          new_password: 'new password',
-          request_uuid: 'blah',
-        },
-      });
+      expect(updateRetroPassword).toHaveBeenCalledWith('13', '', 'new password', 'blah');
     });
 
     it('allows blank new passwords', () => {
@@ -119,15 +118,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
 
       dom.find('button.retro-settings-form-submit').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'updateRetroPassword',
-        data: {
-          retro_id: '13',
-          current_password: 'current password',
-          new_password: '',
-          request_uuid: 'blah',
-        },
-      });
+      expect(updateRetroPassword).toHaveBeenCalledWith('13', 'current password', '', 'blah');
     });
 
     it('displays an error message if new password and confirmation do not match', () => {
@@ -146,7 +137,7 @@ describe('ShowRetroPasswordSettingsPage', () => {
     it('clears errors when unmounted', () => {
       dom.unmount();
 
-      expect(Dispatcher).toHaveReceived({type: 'clearErrors'});
+      expect(clearErrors).toHaveBeenCalled();
     });
   };
 

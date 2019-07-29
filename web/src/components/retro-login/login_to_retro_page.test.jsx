@@ -31,7 +31,6 @@
 
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import {LoginToRetroPage} from './login_to_retro_page';
@@ -48,18 +47,22 @@ describe('LoginToRetroPage', () => {
 
   describe('while retro is loading', () => {
     it('renders nothing', () => {
-      dom = shallow(<LoginToRetroPage retro={{name: ''}} retroId="13" config={config}/>);
+      dom = shallow(<LoginToRetroPage retro={{name: ''}} retroId="13" config={config} getRetroLogin={jest.fn()} loginToRetro={jest.fn()}/>);
       expect(dom.find('h1')).not.toExist();
     });
   });
 
+  let getRetroLogin;
+  let loginToRetro;
   describe('with a retro', () => {
     beforeEach(() => {
-      dom = mount(<LoginToRetroPage retro={retro} retroId="13" config={config}/>);
+      getRetroLogin = jest.fn();
+      loginToRetro = jest.fn();
+      dom = mount(<LoginToRetroPage retro={retro} retroId="13" config={config} getRetroLogin={getRetroLogin} loginToRetro={loginToRetro}/>);
     });
 
     it('dispatches getRetroLogin', () => {
-      expect(Dispatcher).toHaveReceived({type: 'getRetroLogin', data: {retro_id: '13'}});
+      expect(getRetroLogin).toHaveBeenCalledWith('13');
       expect(dom.find('h1')).toIncludeText('Psst... what\'s the password?');
       expect(dom.find('label')).toIncludeText('Enter the password to access the retro name.');
     });
@@ -72,10 +75,7 @@ describe('LoginToRetroPage', () => {
       dom.find('.form-input').simulate('change', {target: {value: 'pa55word'}});
       dom.find('.retro-form-submit').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'loginToRetro',
-        data: {retro_id: '13', password: 'pa55word'},
-      });
+      expect(loginToRetro).toHaveBeenCalledWith('13', 'pa55word');
       expect(dom.find('.form-input')).toHaveValue('');
     });
 
@@ -84,10 +84,7 @@ describe('LoginToRetroPage', () => {
       input.simulate('change', {target: {value: 'pa55word'}});
       input.simulate('keyPress', {key: 'Enter'});
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'loginToRetro',
-        data: {retro_id: '13', password: 'pa55word'},
-      });
+      expect(loginToRetro).toHaveBeenCalledWith('13', 'pa55word');
       expect(dom.find('.form-input')).toHaveValue('');
     });
 
@@ -102,7 +99,7 @@ describe('LoginToRetroPage', () => {
 
   describe('title', () => {
     function setupRetro({force_relogin}) {
-      return shallow(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin} config={config}/>);
+      return shallow(<LoginToRetroPage retro={retro} retroId="13" force_relogin={force_relogin} config={config} getRetroLogin={jest.fn()} loginToRetro={jest.fn()}/>);
     }
 
     it('shows login required message when force_relogin is false', () => {

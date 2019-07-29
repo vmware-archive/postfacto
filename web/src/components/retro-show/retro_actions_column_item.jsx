@@ -31,7 +31,6 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import RetroItemEditView from './retro_item_edit_view';
 import actionTickCheckedSvg from '../../images/action-tick-checked.svg';
 import actionTickUncheckedSvg from '../../images/action-tick-unchecked.svg';
@@ -41,6 +40,9 @@ export default class RetroActionsColumnItem extends React.Component {
     retroId: types.string.isRequired,
     action_item: types.object.isRequired,
     archives: types.bool,
+    doneRetroActionItem: types.func.isRequired,
+    deleteRetroActionItem: types.func.isRequired,
+    editRetroActionItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -86,7 +88,7 @@ export default class RetroActionsColumnItem extends React.Component {
 
   onActionTickClicked() {
     const {retroId, action_item} = this.props;
-    Actions.doneRetroActionItem({retro_id: retroId, action_item_id: action_item.id, done: !action_item.done});
+    this.props.doneRetroActionItem(retroId, action_item.id, !action_item.done);
   }
 
   onActionEditClicked() {
@@ -95,14 +97,14 @@ export default class RetroActionsColumnItem extends React.Component {
 
   deleteItem() {
     const {retroId, action_item} = this.props;
-    Actions.deleteRetroActionItem({retro_id: retroId, action_item});
+    this.props.deleteRetroActionItem(retroId, action_item);
   }
 
   saveActionItem(editedText) {
     const {retroId, action_item} = this.props;
 
     this.setState({isEditing: false});
-    Actions.editRetroActionItem({retro_id: retroId, action_item_id: action_item.id, description: editedText});
+    this.props.editRetroActionItem(retroId, action_item.id, editedText);
   }
 
   render() {

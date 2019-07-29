@@ -31,13 +31,15 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
+import {createUser} from '../../redux/actions/api_actions';
 
 export default class RegistrationPage extends React.Component {
   static propTypes = {
     accessToken: types.string.isRequired,
     email: types.string.isRequired,
     fullName: types.string.isRequired,
+    createUser: types.func.isRequired,
   };
 
   constructor(props) {
@@ -61,11 +63,7 @@ export default class RegistrationPage extends React.Component {
     const {accessToken} = this.props;
     const {fullName, companyName} = this.state;
 
-    Actions.createUser({
-      access_token: accessToken,
-      company_name: companyName,
-      full_name: fullName,
-    });
+    this.props.createUser(accessToken, companyName, fullName);
   };
 
   render() {
@@ -147,3 +145,11 @@ export default class RegistrationPage extends React.Component {
     );
   }
 }
+
+
+const mapDispatchToProps = (dispatch) => ({
+  createUser: (accessToken, companyName, fullName) => dispatch(createUser(accessToken, companyName, fullName)),
+});
+
+const ConnectedRegistrationPage = connect(null, mapDispatchToProps)(RegistrationPage);
+export {RegistrationPage, ConnectedRegistrationPage};

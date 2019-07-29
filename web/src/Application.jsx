@@ -31,24 +31,17 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions, useStore} from 'p-flux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import Grapnel from 'grapnel';
 import {ConnectedRouter} from './components/router';
 import {ConnectedHeader} from './components/shared/header';
 import Logger from './helpers/logger';
 
 import SessionWebsocket from './components/session_websocket';
-
-import apiDispatcher from './dispatchers/api_dispatcher';
-import mainDispatcher from './dispatchers/main_dispatcher';
-import analyticsDispatcher from './dispatchers/analytics_dispatcher';
-import * as mainActions from './redux/actions/main_actions';
-import * as apiActions from './redux/actions/api_actions';
-import * as routerActions from './redux/actions/router_actions';
+import {setNotFound, updateWebsocketSession} from './redux/actions/main_actions';
+import {retrieveConfig} from './redux/actions/api_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
@@ -57,11 +50,17 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
 });
 
+let reduxStore;
 
 const router = new Grapnel({pushState: true});
-const retroClient = new RetroClient(() => global.Retro.config.api_base_url);
+const retroClient = new RetroClient(
+  () => global.Retro.config.api_base_url,
+  () => localStorage.getItem('authToken'),
+  () => reduxStore.dispatch(setNotFound({api_server_not_found: true})),
+);
+
 const analyticsClient = new AnalyticsClient(() => global.Retro.config.enable_analytics);
-const reduxStore = makeReduxStore(router, retroClient, analyticsClient);
+reduxStore = makeReduxStore(router, retroClient, analyticsClient);
 
 class Application extends React.Component {
   static propTypes = {
@@ -70,7 +69,7 @@ class Application extends React.Component {
 
   componentDidMount() {
     Logger.info('Application started');
-    Actions.retrieveConfig();
+    reduxStore.dispatch(retrieveConfig());
 
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
@@ -91,6 +90,10 @@ class Application extends React.Component {
     });
   };
 
+  updateWebsocketSession = (session) => {
+    reduxStore.dispatch(updateWebsocketSession(session));
+  };
+
   render() {
     const {config} = this.props;
     const {websocket_url} = config;
@@ -101,7 +104,7 @@ class Application extends React.Component {
 
             <ConnectedHeader config={config}/>
             <ConnectedRouter config={config} router={router}/>
-            <SessionWebsocket url={websocket_url}/>
+            <SessionWebsocket url={websocket_url} websocketSessionDataReceived={this.updateWebsocketSession}/>
           </div>
         </MuiThemeProvider>
       </Provider>
@@ -109,17 +112,4 @@ class Application extends React.Component {
   }
 }
 
-const mainBoundActions = bindActionCreators(mainActions, reduxStore.dispatch);
-const routerBoundActions = bindActionCreators(routerActions, reduxStore.dispatch);
-const apiBoundActions = bindActionCreators(apiActions, reduxStore.dispatch);
-export default useStore(
-  Application,
-  {
-    actions: [],
-    dispatcherHandlers: [
-      mainDispatcher(mainBoundActions, routerBoundActions),
-      apiDispatcher(apiBoundActions),
-      analyticsDispatcher(analyticsClient),
-    ],
-  },
-);
+export default Application;

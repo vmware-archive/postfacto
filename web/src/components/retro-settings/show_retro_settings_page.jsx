@@ -33,7 +33,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
 import {connect} from 'react-redux';
 import RetroMenu from '../shared/retro_menu';
@@ -41,6 +40,9 @@ import EmptyPage from '../shared/empty_page';
 import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../shared/constants';
 import iconLockedSvg from '../../images/icon-locked.svg';
 import iconEyeSvg from '../../images/icon-eye.svg';
+import {getRetroSettings, updateRetroSettings} from '../../redux/actions/api_actions';
+import {clearErrors, signOut} from '../../redux/actions/main_actions';
+import {retroPasswordSettings, showRetroForId} from '../../redux/actions/router_actions';
 
 function getStateUpdateFor(retro, errors) {
   const stateUpdate = {};
@@ -72,6 +74,12 @@ class ShowRetroSettingsPage extends React.Component {
     environment: types.shape({
       isMobile640: types.bool,
     }).isRequired,
+    clearErrors: types.func.isRequired,
+    showRetroForId: types.func.isRequired,
+    updateRetroSettings: types.func.isRequired,
+    routeToRetroPasswordSettings: types.func.isRequired,
+    getRetroSettings: types.func.isRequired,
+    signOut: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -116,12 +124,12 @@ class ShowRetroSettingsPage extends React.Component {
   }
 
   componentWillUnmount() {
-    Actions.clearErrors();
+    this.props.clearErrors();
   }
 
   handleBackButtonClicked() {
     const {retroId} = this.props;
-    Actions.backPressedFromSettings({retro_id: retroId});
+    this.props.showRetroForId(retroId);
   }
 
   validateName(value) {
@@ -175,15 +183,7 @@ class ShowRetroSettingsPage extends React.Component {
     };
 
     if (!errors.name && !errors.slug) {
-      Actions.updateRetroSettings({
-        retro_id: retroId,
-        retro_name: name,
-        new_slug: slug,
-        old_slug: retro.slug,
-        video_link,
-        is_private: isPrivate,
-        request_uuid: session.request_uuid,
-      });
+      this.props.updateRetroSettings(retroId, name, slug, retro.slug, isPrivate, session.request_uuid, video_link);
     } else {
       this.setState({errors});
     }
@@ -192,14 +192,14 @@ class ShowRetroSettingsPage extends React.Component {
   handleChangePasswordClick(e) {
     e.preventDefault();
 
-    Actions.routeToRetroPasswordSettings({retro_id: this.props.retroId});
+    this.props.routeToRetroPasswordSettings(this.props.retroId);
   }
 
   // Fetch Retro
 
   getSettings(props) {
     const {retroId} = props;
-    Actions.getRetroSettings({id: retroId});
+    this.props.getRetroSettings(retroId);
   }
 
   // Render
@@ -253,7 +253,7 @@ class ShowRetroSettingsPage extends React.Component {
 
   getMenuItems() {
     const items = [
-      {title: 'Sign out', callback: Actions.signOut, isApplicable: window.localStorage.length > 0},
+      {title: 'Sign out', callback: this.props.signOut, isApplicable: window.localStorage.length > 0},
     ];
 
     return items.filter((item) => item.isApplicable);
@@ -394,5 +394,14 @@ const mapStateToProps = (state) => ({
   environment: state.config.environment,
 });
 
-const ConnectedShowRetroSettingsPage = connect(mapStateToProps)(ShowRetroSettingsPage);
+const mapDispatchToProps = (dispatch) => ({
+  clearErrors: () => dispatch(clearErrors()),
+  showRetroForId: (retroId) => dispatch(showRetroForId(retroId)),
+  updateRetroSettings: (retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink) => dispatch(updateRetroSettings(retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink)),
+  routeToRetroPasswordSettings: (retroId) => dispatch(retroPasswordSettings(retroId)),
+  getRetroSettings: (retroId) => dispatch(getRetroSettings(retroId)),
+  signOut: () => dispatch(signOut()),
+});
+
+const ConnectedShowRetroSettingsPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroSettingsPage);
 export {ShowRetroSettingsPage, ConnectedShowRetroSettingsPage};

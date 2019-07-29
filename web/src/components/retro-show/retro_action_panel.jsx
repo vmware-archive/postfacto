@@ -40,6 +40,11 @@ export default class RetroActionPanel extends React.Component {
     retroId: types.string.isRequired,
     isMobile: types.bool.isRequired,
     archives: types.bool.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
+    doneRetroActionItem: types.func.isRequired,
+    deleteRetroActionItem: types.func.isRequired,
+    editRetroActionItem: types.func.isRequired,
   };
 
   renderActionColumnTitle() {
@@ -55,12 +60,31 @@ export default class RetroActionPanel extends React.Component {
     if (archives) {
       return null;
     }
-    return (<RetroColumnInput retroId={retroId} category="action"/>);
+    return (
+      <RetroColumnInput
+        retroId={retroId}
+        category="action"
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
+      />
+    );
   }
 
   render() {
     const {retro, retroId, isMobile, archives} = this.props;
 
+    const columns = ['current', 'last-week', 'older'].map((col) => (
+      <RetroActionsColumn
+        key={col}
+        category={col}
+        retro={retro}
+        retroId={retroId}
+        archives={archives}
+        doneRetroActionItem={this.props.doneRetroActionItem}
+        deleteRetroActionItem={this.props.deleteRetroActionItem}
+        editRetroActionItem={this.props.editRetroActionItem}
+      />
+    ));
     return (
       <div className={isMobile ? 'column-action' : 'retro-action-panel'}>
         <div className="retro-action-header">
@@ -71,10 +95,9 @@ export default class RetroActionPanel extends React.Component {
             this.renderInput()
           }
         </div>
+
         <div className="retro-action-list">
-          <RetroActionsColumn category="current" retro={retro} retroId={retroId} archives={archives}/>
-          <RetroActionsColumn category="last-week" retro={retro} retroId={retroId} archives={archives}/>
-          <RetroActionsColumn category="older" retro={retro} retroId={retroId} archives={archives}/>
+          {columns}
         </div>
       </div>
     );

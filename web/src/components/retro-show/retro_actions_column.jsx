@@ -48,6 +48,9 @@ export default class RetroActionsColumn extends React.Component {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
     archives: types.bool,
+    doneRetroActionItem: types.func.isRequired,
+    deleteRetroActionItem: types.func.isRequired,
+    editRetroActionItem: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -84,7 +87,15 @@ export default class RetroActionsColumn extends React.Component {
       })
       .sort((a, b) => (dateToMillis(b.created_at) - dateToMillis(a.created_at)))
       .map((action_item) => (
-        <RetroActionsColumnItem key={action_item.id} retroId={retroId} action_item={action_item} archives={archives}/>
+        <RetroActionsColumnItem
+          key={action_item.id}
+          retroId={retroId}
+          action_item={action_item}
+          archives={archives}
+          doneRetroActionItem={this.props.doneRetroActionItem}
+          deleteRetroActionItem={this.props.deleteRetroActionItem}
+          editRetroActionItem={this.props.editRetroActionItem}
+        />
       ));
   }
 

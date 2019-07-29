@@ -32,7 +32,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
 
 import {ShowRetroSettingsPage} from './show_retro_settings_page';
@@ -59,13 +58,37 @@ describe('ShowRetroSettingsPage', () => {
     let fieldRetroURL;
     let fieldRetroVideo;
     let environment;
+    let clearErrors;
+    let showRetroForId;
+    let updateRetroSettings;
+    let routeToRetroPasswordSettings;
+    let getRetroSettings;
+    let signOut;
 
     beforeEach(() => {
+      clearErrors = jest.fn();
+      showRetroForId = jest.fn();
+      updateRetroSettings = jest.fn();
+      routeToRetroPasswordSettings = jest.fn();
+      getRetroSettings = jest.fn();
+      signOut = jest.fn();
+
       const session = {request_uuid: 'some-request-uuid'};
       environment = {isMobile640: isMobile};
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13" retro={retro} session={session} environment={environment}/>
+          <ShowRetroSettingsPage
+            retroId="13"
+            retro={retro}
+            session={session}
+            environment={environment}
+            clearErrors={clearErrors}
+            showRetroForId={showRetroForId}
+            updateRetroSettings={updateRetroSettings}
+            routeToRetroPasswordSettings={routeToRetroPasswordSettings}
+            getRetroSettings={getRetroSettings}
+            signOut={signOut}
+          />
         </MuiThemeProvider>
       ));
 
@@ -96,7 +119,7 @@ describe('ShowRetroSettingsPage', () => {
         });
 
         it('does not update the retro settings', () => {
-          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(updateRetroSettings).not.toHaveBeenCalled();
         });
 
         it('displays an error message', () => {
@@ -127,7 +150,7 @@ describe('ShowRetroSettingsPage', () => {
         dom.find('.retro-settings-form-submit').simulate('click');
 
         expect(getAllErrors(dom).join('')).toEqual('Your project needs a URL!');
-        expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
+        expect(updateRetroSettings).not.toHaveBeenCalled();
       });
 
       describe('has more than 236 characters', () => {
@@ -138,7 +161,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('does not allow submission', () => {
           dom.find('.retro-settings-form-submit').simulate('click');
-          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(updateRetroSettings).not.toHaveBeenCalled();
         });
 
         it('clears error message on valid input', () => {
@@ -164,7 +187,7 @@ describe('ShowRetroSettingsPage', () => {
 
         it('does not allow submission', () => {
           dom.find('.retro-settings-form-submit').simulate('click');
-          expect(Dispatcher).not.toHaveReceived('updateRetroSettings');
+          expect(updateRetroSettings).not.toHaveBeenCalled();
         });
 
         it('clears error message on valid input', () => {
@@ -179,7 +202,18 @@ describe('ShowRetroSettingsPage', () => {
       it('displays an error message if provided', () => {
         dom = mount((
           <MuiThemeProvider>
-            <ShowRetroSettingsPage retroId="13" retro={retro} errors={{name: '', slug: 'Something went wrong!'}} environment={environment}/>
+            <ShowRetroSettingsPage
+              retroId="13"
+              retro={retro}
+              errors={{name: '', slug: 'Something went wrong!'}}
+              environment={environment}
+              clearErrors={clearErrors}
+              showRetroForId={showRetroForId}
+              updateRetroSettings={updateRetroSettings}
+              routeToRetroPasswordSettings={routeToRetroPasswordSettings}
+              getRetroSettings={getRetroSettings}
+              signOut={signOut}
+            />
           </MuiThemeProvider>
         ));
 
@@ -191,7 +225,17 @@ describe('ShowRetroSettingsPage', () => {
       const privateRetro = Object.assign({}, retro, {is_private: true});
       dom = mount((
         <MuiThemeProvider>
-          <ShowRetroSettingsPage retroId="13" retro={privateRetro} environment={environment}/>
+          <ShowRetroSettingsPage
+            retroId="13"
+            retro={privateRetro}
+            environment={environment}
+            clearErrors={clearErrors}
+            showRetroForId={showRetroForId}
+            updateRetroSettings={updateRetroSettings}
+            routeToRetroPasswordSettings={routeToRetroPasswordSettings}
+            getRetroSettings={getRetroSettings}
+            signOut={signOut}
+          />
         </MuiThemeProvider>
       ));
 
@@ -225,7 +269,7 @@ describe('ShowRetroSettingsPage', () => {
       it('clears out the errors when unmounted', () => {
         dom.unmount();
 
-        expect(Dispatcher).toHaveReceived({type: 'clearErrors'});
+        expect(clearErrors).toHaveBeenCalled();
       });
     });
 
@@ -240,38 +284,19 @@ describe('ShowRetroSettingsPage', () => {
 
       dom.find('.retro-settings-form-submit').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'updateRetroSettings',
-        data: {
-          retro_id: '13',
-          retro_name: 'the new retro name',
-          is_private: true,
-          new_slug: 'the-new-retro-slug',
-          old_slug: retro.slug,
-          request_uuid: 'some-request-uuid',
-          video_link: new_video_url,
-        },
-      });
+      expect(updateRetroSettings).toHaveBeenCalledWith('13', 'the new retro name', 'the-new-retro-slug', retro.slug, true, 'some-request-uuid', new_video_url);
     });
 
     it('routes to retro password settings when change password link is clicked', () => {
       dom.find('#retro-password-settings').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'routeToRetroPasswordSettings',
-        data: {
-          retro_id: '13',
-        },
-      });
+      expect(routeToRetroPasswordSettings).toHaveBeenCalledWith('13');
     });
 
     it('goes back to the retro page when the back button is clicked', () => {
       dom.find('button.retro-back').simulate('click');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'backPressedFromSettings',
-        data: {retro_id: '13'},
-      });
+      expect(showRetroForId).toHaveBeenCalledWith('13');
     });
   };
 

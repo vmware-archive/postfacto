@@ -29,8 +29,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import './test_support/application_globals';
 import './test_support/enzyme';
-
-import './test_support/dispatcher_matchers';
 import './test_support/enzyme_matchers';

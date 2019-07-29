@@ -31,7 +31,6 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import {getMenuLabels, invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
 
@@ -49,7 +48,18 @@ const defaultRetro = {
 function createShallowRetroHeading(retroOverrides = {}, propOverrides = {}) {
   const retro = Object.assign(defaultRetro, retroOverrides);
 
-  return shallow(<RetroHeading retro={retro} retroId="13" archives={false} isMobile={false} {...propOverrides}/>);
+  return shallow(<RetroHeading
+    retro={retro}
+    retroId="13"
+    archives={false}
+    isMobile={false}
+    routeToRetroArchives={jest.fn()}
+    routeToRetroSettings={jest.fn()}
+    requireRetroLogin={jest.fn()}
+    showDialog={jest.fn()}
+    signOut={jest.fn()}
+    {...propOverrides}
+  />);
 }
 
 describe('RetroHeading', () => {
@@ -85,16 +95,14 @@ describe('RetroHeading', () => {
     });
 
     it('dispatches showDialog when the archive link is clicked', () => {
-      const dom = createShallowRetroHeading({items: [{id: 1}]});
+      const showDialog = jest.fn();
+      const dom = createShallowRetroHeading({items: [{id: 1}]}, {showDialog});
 
       invokeMenuOption(dom, 'Archive this retro');
 
-      expect(Dispatcher).toHaveReceived({
-        type: 'showDialog',
-        data: {
-          title: 'You\'re about to archive this retro.',
-          message: 'Are you sure?',
-        },
+      expect(showDialog).toHaveBeenCalledWith({
+        title: 'You\'re about to archive this retro.',
+        message: 'Are you sure?',
       });
     });
 

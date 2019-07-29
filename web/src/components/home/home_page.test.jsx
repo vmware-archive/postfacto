@@ -31,16 +31,19 @@
 
 import React from 'react';
 import {shallow} from 'enzyme';
-import {Dispatcher} from 'p-flux';
 import '../../spec_helper';
-
-import HomePage from './home_page';
+import {HomePage} from './home_page';
 
 const config = {contact: '', terms: '', privacy: ''};
 
 describe('HomePage', () => {
   it('dispatches showHomePageAnalytics when mounted', () => {
-    shallow(<HomePage config={config}/>);
-    expect(Dispatcher).toHaveReceived('showHomePageAnalytics');
+    const homePageShownAnalytics = jest.fn();
+    shallow(<HomePage
+      homePageShownAnalytics={homePageShownAnalytics}
+      config={config}
+      createSession={jest.fn()}
+    />);
+    expect(homePageShownAnalytics).toHaveBeenCalled();
   });
 });

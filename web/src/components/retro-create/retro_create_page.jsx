@@ -30,19 +30,24 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import Toggle from 'material-ui/Toggle';
 import types from 'prop-types';
 import {connect} from 'react-redux';
 import {DEFAULT_TOGGLE_STYLE, MAX_SLUG_LENGTH, VALID_SLUG_REGEX} from '../shared/constants';
 import iconLockedSvg from '../../images/icon-locked.svg';
 import iconEyeSvg from '../../images/icon-eye.svg';
+import {retroCreate} from '../../redux/actions/api_actions';
+import {home} from '../../redux/actions/router_actions';
+import {clearErrors} from '../../redux/actions/main_actions';
 
 class RetroCreatePage extends React.Component {
   static propTypes = {
     errors: types.shape({
       slug: types.string,
     }),
+    redirectToHome: types.func.isRequired,
+    clearErrors: types.func.isRequired,
+    retroCreate: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -72,7 +77,7 @@ class RetroCreatePage extends React.Component {
 
   componentWillMount() {
     if (!localStorage.getItem('authToken')) {
-      Actions.redirectToHome();
+      this.props.redirectToHome();
     }
   }
 
@@ -89,7 +94,7 @@ class RetroCreatePage extends React.Component {
   }
 
   componentWillUnmount() {
-    Actions.clearErrors();
+    this.props.clearErrors();
   }
 
   submit() {
@@ -101,7 +106,7 @@ class RetroCreatePage extends React.Component {
     this.setState({errors});
 
     if (!errors.name && !errors.slug && !errors.password) {
-      Actions.retroCreate({
+      this.props.retroCreate({
         name: this.state.name,
         slug: this.state.slug,
         password: this.state.password,
@@ -298,5 +303,11 @@ const mapStateToProps = (state) => ({
   errors: state.messages.errors,
 });
 
-const ConnectedRetroCreatePage = connect(mapStateToProps)(RetroCreatePage);
+const mapDispatchToProps = (dispatch) => ({
+  redirectToHome: () => dispatch(home()),
+  clearErrors: () => dispatch(clearErrors()),
+  retroCreate: (newRetro) => dispatch(retroCreate(newRetro)),
+});
+
+const ConnectedRetroCreatePage = connect(mapStateToProps, mapDispatchToProps)(RetroCreatePage);
 export {RetroCreatePage, ConnectedRetroCreatePage};

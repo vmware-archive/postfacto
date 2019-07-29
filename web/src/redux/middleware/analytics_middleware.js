@@ -30,8 +30,6 @@
  */
 const AnalyticsMiddleware = (analyticsClient) => () => (next) => (action) => {
   if (action.type === 'TRACK_ANALYTICS') {
-    /* eslint-disable no-console */
-    console.log('Sending analytics:', action.payload.type, action.payload.data);
     analyticsClient.track(action.payload.type, action.payload.data);
     return;
   }

@@ -31,7 +31,6 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import TextareaAutosize from 'react-autosize-textarea';
 import EmojiSelector from './emoji_selector';
 
@@ -39,6 +38,8 @@ export default class RetroColumnInput extends React.Component {
     static propTypes = {
       category: types.string.isRequired,
       retroId: types.string.isRequired,
+      createRetroItem: types.func.isRequired,
+      createRetroActionItem: types.func.isRequired,
     };
 
     constructor(props) {
@@ -84,9 +85,9 @@ export default class RetroColumnInput extends React.Component {
       const {retroId, category} = this.props;
       const {inputText} = this.state;
       if (category === 'action') {
-        Actions.createRetroActionItem({retro_id: retroId, description: inputText});
+        this.props.createRetroActionItem(retroId, inputText);
       } else {
-        Actions.createRetroItem({retro_id: retroId, category, description: inputText});
+        this.props.createRetroItem(retroId, category, inputText);
       }
       this.setState({inputText: '', multiline: ''});
     }

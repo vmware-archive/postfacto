@@ -31,8 +31,8 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import {connect} from 'react-redux';
+import {getRetroLogin, loginToRetro} from '../../redux/actions/api_actions';
 
 class LoginToRetroPage extends React.Component {
   static propTypes = {
@@ -44,6 +44,8 @@ class LoginToRetroPage extends React.Component {
       terms: types.string.isRequired,
       privacy: types.string.isRequired,
     }).isRequired,
+    getRetroLogin: types.func.isRequired,
+    loginToRetro: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -70,7 +72,7 @@ class LoginToRetroPage extends React.Component {
     const {retroId} = this.props;
 
     if (retroId) {
-      Actions.getRetroLogin({retro_id: retroId});
+      this.props.getRetroLogin(retroId);
     }
   }
 
@@ -103,7 +105,7 @@ class LoginToRetroPage extends React.Component {
 
   loginToRetro() {
     const {retroId} = this.props;
-    Actions.loginToRetro({retro_id: retroId, password: this.state.password});
+    this.props.loginToRetro(retroId, this.state.password);
     this.setState({password: ''});
   }
 
@@ -167,5 +169,11 @@ const mapStateToProps = (state) => ({
   retro: state.retro.currentRetro,
 });
 
-const ConnectedLoginToRetroPage = connect(mapStateToProps)(LoginToRetroPage);
+
+const mapDispatchToProps = (dispatch) => ({
+  getRetroLogin: (retroId) => dispatch(getRetroLogin(retroId)),
+  loginToRetro: (retroId, password) => dispatch(loginToRetro(retroId, password)),
+});
+
+const ConnectedLoginToRetroPage = connect(mapStateToProps, mapDispatchToProps)(LoginToRetroPage);
 export {LoginToRetroPage, ConnectedLoginToRetroPage};

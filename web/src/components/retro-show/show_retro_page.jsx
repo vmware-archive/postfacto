@@ -34,7 +34,6 @@ import Toggle from 'material-ui/Toggle';
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 
 import {HotKeys} from 'react-hotkeys';
 import {connect} from 'react-redux';
@@ -48,6 +47,23 @@ import RetroHeading from './retro_heading';
 import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
+import {
+  archiveRetro, createRetroActionItem, createRetroItem, deleteRetroActionItem,
+  deleteRetroItem, doneRetroActionItem,
+  doneRetroItem, editRetroActionItem, extendTimer,
+  getRetro,
+  getRetroArchive, highlightRetroItem,
+  nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
+  voteRetroItem,
+} from '../../redux/actions/api_actions';
+import {
+  clearDialog,
+  currentRetroSendArchiveEmailUpdated, currentRetroUpdated,
+  forceRelogin,
+  showDialog,
+  signOut,
+} from '../../redux/actions/main_actions';
+import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -72,6 +88,31 @@ class ShowRetroPage extends React.Component {
     environment: types.shape({
       isMobile640: types.bool,
     }).isRequired,
+    getRetroArchive: types.func.isRequired,
+    getRetro: types.func.isRequired,
+    nextRetroItem: types.func.isRequired,
+    archiveRetro: types.func.isRequired,
+    hideDialog: types.func.isRequired,
+    toggleSendArchiveEmail: types.func.isRequired,
+    routeToRetroArchives: types.func.isRequired,
+    routeToRetroSettings: types.func.isRequired,
+    requireRetroLogin: types.func.isRequired,
+    showDialog: types.func.isRequired,
+    signOut: types.func.isRequired,
+    voteRetroItem: types.func.isRequired,
+    doneRetroItem: types.func.isRequired,
+    undoneRetroItem: types.func.isRequired,
+    highlightRetroItem: types.func.isRequired,
+    unhighlightRetroItem: types.func.isRequired,
+    updateRetroItem: types.func.isRequired,
+    deleteRetroItem: types.func.isRequired,
+    createRetroActionItem: types.func.isRequired,
+    createRetroItem: types.func.isRequired,
+    doneRetroActionItem: types.func.isRequired,
+    deleteRetroActionItem: types.func.isRequired,
+    editRetroActionItem: types.func.isRequired,
+    extendTimer: types.func.isRequired,
+    websocketRetroDataReceived: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -116,9 +157,9 @@ class ShowRetroPage extends React.Component {
 
   fetchRetros(retroId, archives, archiveId) {
     if (archives) {
-      Actions.getRetroArchive({retro_id: retroId, archive_id: archiveId});
+      this.props.getRetroArchive(retroId, archiveId);
     } else {
-      Actions.getRetro({id: retroId});
+      this.props.getRetro(retroId);
     }
   }
 
@@ -155,7 +196,7 @@ class ShowRetroPage extends React.Component {
       return;
     }
     const {retro} = this.props;
-    Actions.nextRetroItem({retro});
+    this.props.nextRetroItem(retro);
   }
 
   // Handle events
@@ -164,14 +205,12 @@ class ShowRetroPage extends React.Component {
   }
 
   handleArchiveRetroConfirmation() {
-    Actions.archiveRetro({retro: this.props.retro});
-    Actions.hideDialog();
+    this.props.archiveRetro(this.props.retro);
+    this.props.hideDialog();
   }
 
   handleArchiveEmailPreferenceChange() {
-    Actions.toggleSendArchiveEmail({
-      currentSendArchiveEmail: this.props.retro.send_archive_email,
-    });
+    this.props.toggleSendArchiveEmail(!this.props.retro.send_archive_email);
   }
 
   renderColumnMobile(retro) {
@@ -185,6 +224,11 @@ class ShowRetroPage extends React.Component {
           retroId={retroId}
           isMobile
           archives={archives}
+          createRetroItem={this.props.createRetroItem}
+          createRetroActionItem={this.props.createRetroActionItem}
+          doneRetroActionItem={this.props.doneRetroActionItem}
+          deleteRetroActionItem={this.props.deleteRetroActionItem}
+          editRetroActionItem={this.props.editRetroActionItem}
         />
       );
     }
@@ -195,6 +239,16 @@ class ShowRetroPage extends React.Component {
         retroId={retroId}
         archives={archives}
         isMobile
+        voteRetroItem={this.props.voteRetroItem}
+        doneRetroItem={this.props.doneRetroItem}
+        undoneRetroItem={this.props.undoneRetroItem}
+        highlightRetroItem={this.props.highlightRetroItem}
+        unhighlightRetroItem={this.props.unhighlightRetroItem}
+        updateRetroItem={this.props.updateRetroItem}
+        deleteRetroItem={this.props.deleteRetroItem}
+        createRetroItem={this.props.createRetroItem}
+        createRetroActionItem={this.props.createRetroActionItem}
+        extendTimer={this.props.extendTimer}
       />
     );
   }
@@ -218,7 +272,7 @@ class ShowRetroPage extends React.Component {
       <button
         className="archive-dialog__actions--cancel"
         type="button"
-        onClick={Actions.hideDialog}
+        onClick={this.props.hideDialog}
       >
         Cancel
       </button>
@@ -229,7 +283,7 @@ class ShowRetroPage extends React.Component {
         title={title}
         actions={[cancelButton, archiveButton]}
         open={!!this.props.dialog}
-        onRequestClose={Actions.hideDialog}
+        onRequestClose={this.props.hideDialog}
         actionsContainerClassName="archive-dialog__actions"
         contentClassName="archive-dialog"
       >
@@ -265,13 +319,23 @@ class ShowRetroPage extends React.Component {
 
     return (
       <span>
-        <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
+        <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
           <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
 
-          <RetroHeading retro={retro} retroId={retroId} isMobile archives={archives}/>
+          <RetroHeading
+            retro={retro}
+            retroId={retroId}
+            isMobile
+            archives={archives}
+            routeToRetroArchives={this.props.routeToRetroArchives}
+            routeToRetroSettings={this.props.routeToRetroSettings}
+            requireRetroLogin={this.props.requireRetroLogin}
+            showDialog={this.props.showDialog}
+            signOut={this.props.signOut}
+          />
 
           <div className="mobile-tabs">
             <div className="mobile-tabs-list">
@@ -328,7 +392,7 @@ class ShowRetroPage extends React.Component {
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
-          <RetroWebsocket url={config.websocket_url} retro_id={retroId}/>
+          <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
           {this.renderArchiveConfirmationDialog()}
           <div className={retroContainerClasses}>
 
@@ -339,6 +403,11 @@ class ShowRetroPage extends React.Component {
               retroId={retroId}
               isMobile={false}
               archives={archives}
+              routeToRetroArchives={this.props.routeToRetroArchives}
+              routeToRetroSettings={this.props.routeToRetroSettings}
+              requireRetroLogin={this.props.requireRetroLogin}
+              showDialog={this.props.showDialog}
+              signOut={this.props.signOut}
             />
             <div className="retro-item-list">
               <RetroColumn
@@ -347,6 +416,16 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
               <RetroColumn
                 category="meh"
@@ -354,6 +433,16 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
               <RetroColumn
                 category="sad"
@@ -361,6 +450,16 @@ class ShowRetroPage extends React.Component {
                 retroId={retroId}
                 archives={archives}
                 isMobile={false}
+                voteRetroItem={this.props.voteRetroItem}
+                doneRetroItem={this.props.doneRetroItem}
+                undoneRetroItem={this.props.undoneRetroItem}
+                highlightRetroItem={this.props.highlightRetroItem}
+                unhighlightRetroItem={this.props.unhighlightRetroItem}
+                updateRetroItem={this.props.updateRetroItem}
+                deleteRetroItem={this.props.deleteRetroItem}
+                createRetroItem={this.props.createRetroItem}
+                createRetroActionItem={this.props.createRetroActionItem}
+                extendTimer={this.props.extendTimer}
               />
             </div>
             <RetroActionPanel
@@ -368,6 +467,11 @@ class ShowRetroPage extends React.Component {
               retroId={retroId}
               isMobile={false}
               archives={archives}
+              createRetroItem={this.props.createRetroItem}
+              createRetroActionItem={this.props.createRetroActionItem}
+              doneRetroActionItem={this.props.doneRetroActionItem}
+              deleteRetroActionItem={this.props.deleteRetroActionItem}
+              editRetroActionItem={this.props.editRetroActionItem}
             />
             <RetroFooter config={config}/>
           </div>
@@ -398,5 +502,39 @@ const mapStateToProps = (state) => ({
   environment: state.config.environment,
 });
 
-const ConnectedShowRetroPage = connect(mapStateToProps)(ShowRetroPage);
+const mapDispatchToProps = (dispatch) => ({
+  getRetroArchive: (retroId, archiveId) => dispatch(getRetroArchive(retroId, archiveId)),
+  getRetro: (retroId) => dispatch(getRetro(retroId)),
+  nextRetroItem: (retro) => dispatch(nextRetroItem(retro)),
+  archiveRetro: (retro) => dispatch(archiveRetro(retro)),
+  hideDialog: () => dispatch(clearDialog()),
+  toggleSendArchiveEmail: (send) => dispatch(currentRetroSendArchiveEmailUpdated(send)),
+  routeToRetroArchives: (retroId) => dispatch(retroArchives(retroId)),
+  routeToRetroSettings: (retroId) => dispatch(retroSettings(retroId)),
+  requireRetroLogin: (retroId) => dispatch(retroLogin(retroId)),
+  showDialog: (dialog) => dispatch(showDialog(dialog)),
+  signOut: () => dispatch(signOut()),
+  voteRetroItem: (retroId, item) => dispatch(voteRetroItem(retroId, item)),
+  doneRetroItem: (retroId, item) => dispatch(doneRetroItem(retroId, item)),
+  undoneRetroItem: (retroId, item) => dispatch(undoneRetroItem(retroId, item)),
+  highlightRetroItem: (retroId, item) => dispatch(highlightRetroItem(retroId, item)),
+  unhighlightRetroItem: (retroId) => dispatch(unhighlightRetroItem(retroId)),
+  updateRetroItem: (retroId, item, description) => dispatch(updateRetroItem(retroId, item, description)),
+  deleteRetroItem: (retroId, item) => dispatch(deleteRetroItem(retroId, item)),
+  createRetroActionItem: (retroId, description) => dispatch(createRetroActionItem(retroId, description)),
+  createRetroItem: (retroId, category, description) => dispatch(createRetroItem(retroId, category, description)),
+  doneRetroActionItem: (retroId, actionItemId, done) => dispatch(doneRetroActionItem(retroId, actionItemId, done)),
+  deleteRetroActionItem: (retroId, actionItem) => dispatch(deleteRetroActionItem(retroId, actionItem)),
+  editRetroActionItem: (retroId, actionItemId, description) => dispatch(editRetroActionItem(retroId, actionItemId, description)),
+  extendTimer: (retroId) => dispatch(extendTimer(retroId)),
+  websocketRetroDataReceived: (data) => {
+    if (data.command === 'force_relogin') {
+      dispatch(forceRelogin(data.payload.originator_id, data.payload.retro.slug));
+    } else {
+      dispatch(currentRetroUpdated(data.retro));
+    }
+  },
+});
+
+const ConnectedShowRetroPage = connect(mapStateToProps, mapDispatchToProps)(ShowRetroPage);
 export {ShowRetroPage, ConnectedShowRetroPage};

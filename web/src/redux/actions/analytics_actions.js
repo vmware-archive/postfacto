@@ -17,7 +17,7 @@ const createdActionItem = (retroId) => event('Created Action Item', {'retroId': 
 const doneActionItem = (retroId) => event('Done Action Item', {'retroId': retroId});
 const undoneActionItem = (retroId) => event('Undone Action Item', {'retroId': retroId});
 const archivedRetro = (retroId) => event('Archived Retro', {'retroId': retroId});
-const showHomePage = () => event('Loaded homepage');
+const homePageShown = () => event('Loaded homepage');
 
 export {
   createdRetro,
@@ -28,5 +28,5 @@ export {
   doneActionItem,
   undoneActionItem,
   archivedRetro,
-  showHomePage,
+  homePageShown,
 };

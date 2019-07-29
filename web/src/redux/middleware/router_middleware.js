@@ -30,8 +30,6 @@
  */
 const RouterMiddleware = (router) => () => (next) => (action) => {
   if (action.type === 'SET_ROUTE') {
-    /* eslint-disable no-console */
-    console.log('Navigating to: ', action.payload);
     router.navigate(action.payload);
     return;
   }

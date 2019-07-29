@@ -30,7 +30,6 @@
  */
 
 import React from 'react';
-import {Actions} from 'p-flux';
 import {connect} from 'react-redux';
 import types from 'prop-types';
 import {ConnectedRetroCreatePage} from './retro-create/retro_create_page';
@@ -39,15 +38,16 @@ import {ConnectedShowRetroPage} from './retro-show/show_retro_page';
 import {ConnectedShowRetroSettingsPage} from './retro-settings/show_retro_settings_page';
 import {ConnectedShowRetroPasswordSettingsPage} from './retro-settings/show_retro_password_settings_page';
 import {ConnectedLoginToRetroPage} from './retro-login/login_to_retro_page';
-import ApiServerNotFoundPage from './server-lost/api_server_not_found_page';
-import RetroNotFoundPage from './retro-not-found/retro_not_found_page';
-import NotFoundPage from './not-found/not_found_page';
+import {ConnectedApiServerNotFoundPage} from './server-lost/api_server_not_found_page';
+import {ConnectedRetroNotFoundPage} from './retro-not-found/retro_not_found_page';
+import {ConnectedNotFoundPage} from './not-found/not_found_page';
 import NewTermsPage from './terms/new_terms_page';
 import EmptyPage from './shared/empty_page';
-import HomePage from './home/home_page';
+import {ConnectedHomePage} from './home/home_page';
 import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archives_page';
 import Alert from './shared/alert';
-import RegistrationPage from './registration/registration_page';
+import {ConnectedRegistrationPage} from './registration/registration_page';
+import {clearAlert} from '../redux/actions/main_actions';
 
 
 class Router extends React.Component {
@@ -56,6 +56,7 @@ class Router extends React.Component {
     config: types.object,
     alert: types.object,
     not_found: types.object,
+    clearAlert: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -92,19 +93,19 @@ class Router extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {api_server_not_found, retro_not_found, not_found} = nextProps.not_found;
     if (api_server_not_found) {
-      this.setPage(ApiServerNotFoundPage);
+      this.setPage(ConnectedApiServerNotFoundPage);
     }
     if (retro_not_found) {
-      this.setPage(RetroNotFoundPage);
+      this.setPage(ConnectedRetroNotFoundPage);
     }
     if (not_found) {
-      this.setPage(NotFoundPage);
+      this.setPage(ConnectedNotFoundPage);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.Page !== prevState.Page) {
-      Actions.hideAlert();
+      this.props.clearAlert();
     }
   }
 
@@ -143,7 +144,7 @@ class Router extends React.Component {
   };
 
   showNotFound = () => {
-    this.setPage(NotFoundPage);
+    this.setPage(ConnectedNotFoundPage);
   };
 
   showTerms = () => {
@@ -164,13 +165,13 @@ class Router extends React.Component {
     if (this.isUserLoggedIn()) {
       this.listRetros();
     } else {
-      this.setPage(HomePage);
+      this.setPage(ConnectedHomePage);
     }
   };
 
   showRegistration = (req) => {
     const {accessToken, email, fullName} = req.params;
-    this.setPage(RegistrationPage, {accessToken, email, fullName});
+    this.setPage(ConnectedRegistrationPage, {accessToken, email, fullName});
   };
 
   render() {
@@ -196,6 +197,10 @@ const mapStateToProps = (state) => ({
   not_found: state.messages.not_found,
 });
 
-const ConnectedRouter = connect(mapStateToProps)(Router);
+const mapDispatchToProps = (dispatch) => ({
+  clearAlert: () => dispatch(clearAlert()),
+});
+
+const ConnectedRouter = connect(mapStateToProps, mapDispatchToProps)(Router);
 
 export {Router, ConnectedRouter};

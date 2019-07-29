@@ -31,13 +31,13 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
 import FormattedInterval from './formatted_interval';
 
 export default class CountdownTimer extends React.Component {
   static propTypes = {
     retroId: types.string.isRequired,
     endTimestampInMs: types.number.isRequired,
+    extendTimer: types.func.isRequired,
   };
 
   constructor(props) {
@@ -84,7 +84,7 @@ export default class CountdownTimer extends React.Component {
 
   onExtendTimerClicked(event) {
     const {retroId} = this.props;
-    Actions.extendTimer({retro_id: retroId});
+    this.props.extendTimer(retroId);
     event.stopPropagation();
   }
 

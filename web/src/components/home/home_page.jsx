@@ -31,28 +31,38 @@
 
 import React from 'react';
 import types from 'prop-types';
-import {Actions} from 'p-flux';
+import {connect} from 'react-redux';
 import RetroFooter from '../shared/footer';
 import LoginForm from './login_form';
 import Logger from '../../helpers/logger';
 import HomeLegalBanner from './home_legal_banner';
+import {createSession} from '../../redux/actions/api_actions';
+import {homePageShown} from '../../redux/actions/analytics_actions';
 
 export default class HomePage extends React.PureComponent {
   static propTypes = {
     config: types.object.isRequired,
+    createSession: types.func.isRequired,
+    homePageShownAnalytics: types.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.onSignIn = this.onSignIn.bind(this);
+  }
+
+
   componentDidMount() {
-    Actions.showHomePageAnalytics();
+    this.props.homePageShownAnalytics();
   }
 
   onSignIn(googleUser) {
     Logger.info('onGoogleSignIn ' + googleUser.profileObj.email);
-    Actions.createSession({
-      access_token: googleUser.accessToken,
-      email: googleUser.profileObj.email,
-      name: googleUser.profileObj.name,
-    });
+    this.props.createSession(
+      googleUser.accessToken,
+      googleUser.profileObj.email,
+      googleUser.profileObj.name,
+    );
   }
 
   onGoogleLoginFailure() {
@@ -108,3 +118,13 @@ export default class HomePage extends React.PureComponent {
     );
   }
 }
+
+
+const mapDispatchToProps = (dispatch) => ({
+  homePageShownAnalytics: () => dispatch(homePageShown()),
+  createSession: (accessToken, email, name) => dispatch(createSession(accessToken, email, name)),
+});
+
+const ConnectedHomePage = connect(null, mapDispatchToProps)(HomePage);
+
+export {HomePage, ConnectedHomePage};
