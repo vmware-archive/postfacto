@@ -64,4 +64,14 @@ describe ActionCableConfigurationProvider do
       end
     end
   end
+
+  context 'when CLIENT_ORIGIN is NOT set in the environment' do
+    let(:client_origin) { nil }
+
+    it 'does not include an empty allowed request origin' do
+      configuration = subject.config(host: 'fixture-host')
+
+      expect(configuration.allowed_request_origins).to eq(['https://fixture-host'])
+    end
+  end
 end
