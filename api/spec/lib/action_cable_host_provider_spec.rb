@@ -66,10 +66,20 @@ describe ActionCableHostProvider do
       let(:action_cable_host) { nil }
 
       context 'when VCAP_APPLICATION is set in the environment' do
-        let(:vcap_application) { { 'uris' => ['vcap-uri-a', 'vcap-uri-b'] }.to_json }
+        context 'and URIs do not contain a path' do
+          let(:vcap_application) { { 'uris' => ['vcap-uri-a', 'vcap-uri-b'] }.to_json }
 
-        it "returns the first hostname from VCAP_APPLICATION's uris" do
-          expect(subject.host).to eq('vcap-uri-a')
+          it "returns the first hostname from VCAP_APPLICATION's uris" do
+            expect(subject.host).to eq('vcap-uri-a')
+          end
+        end
+
+        context 'and the URIs do contain a path' do
+          let(:vcap_application) { { 'uris' => ['vcap-uri-a.example.com/some-cool-path'] }.to_json }
+
+          it "returns the first hostname from VCAP_APPLICATION's uris with the path stripped out" do
+            expect(subject.host).to eq('vcap-uri-a.example.com')
+          end
         end
       end
 
