@@ -71,9 +71,9 @@ register_spawned $!
 # Create static content
 
 echo 'Building frontend in E2E test mode...'
-rm -rf "$BASE_DIR/api/public"
+rm -rf "$BASE_DIR/api/client/*"
 npm --prefix="$BASE_DIR/web" run build
-cp -a "$BASE_DIR/web/build/." "$BASE_DIR/api/public"
+cp -a "$BASE_DIR/web/build/." "$BASE_DIR/api/client"
 
 # Launch API
 

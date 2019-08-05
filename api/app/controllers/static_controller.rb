@@ -30,6 +30,6 @@
 #
 class StaticController < ApplicationController
   def home
-    render file: 'public/index.html', layout: false
+    render file: 'client/index.html', layout: false
   end
 end

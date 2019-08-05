@@ -28,11 +28,4 @@ postfacto-api.iml
 db/schema.rb
 
 # Ignore public client files
-/public
-!/public/404.html
-!/public/422.html
-!/public/500.html
-!/public/apple-touch-icon-precomposed.png
-!/public/apple-touch-icon.png
-!/public/favicon.ico
-!/public/robots.txt
+/client
