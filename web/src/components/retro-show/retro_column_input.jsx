@@ -34,6 +34,10 @@ import types from 'prop-types';
 import TextareaAutosize from 'react-autosize-textarea';
 import EmojiSelector from './emoji_selector';
 
+function inputHasContent(target) {
+  return target.value.trim().length !== 0;
+}
+
 export default class RetroColumnInput extends React.Component {
     static propTypes = {
       category: types.string.isRequired,
@@ -93,7 +97,7 @@ export default class RetroColumnInput extends React.Component {
     }
 
     onChange(event) {
-      if (event.target.value.trim().length === 0) {
+      if (!inputHasContent(event.target)) {
         this.setState({multiline: ''});
       }
 
@@ -102,7 +106,9 @@ export default class RetroColumnInput extends React.Component {
 
     onResize(event) {
       // store value as well to work around https://github.com/buildo/react-autosize-textarea/issues/109
-      this.setState({multiline: 'multiline', inputText: event.target.value});
+
+      const multiline = inputHasContent(event.target) ? 'multiline' : '';
+      this.setState({multiline, inputText: event.target.value});
     }
 
     inputFocus() {
