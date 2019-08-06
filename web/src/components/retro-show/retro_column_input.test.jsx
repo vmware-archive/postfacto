@@ -167,6 +167,16 @@ describe('inputting an action item', () => {
     expect(subject.find('.input-button-wrapper')).toHaveClassName('multiline');
   });
 
+  it('removes multiline after resizing after submit', () => {
+    const event = {target: {value: ''}};
+
+    subject.find(TextareaAutosize).prop('onResize')(event);
+    subject.update();
+
+    expect(subject.find('.input-box')).not.toHaveClassName('multiline');
+    expect(subject.find('.input-button-wrapper')).not.toHaveClassName('multiline');
+  });
+
   it('shows the emoji button on button click', () => {
     expect(subject.find(EmojiSelector)).not.toExist();
 
