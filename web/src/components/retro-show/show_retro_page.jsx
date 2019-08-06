@@ -48,22 +48,34 @@ import EmptyPage from '../shared/empty_page';
 
 import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
 import {
-  archiveRetro, createRetroActionItem, createRetroItem, deleteRetroActionItem,
-  deleteRetroItem, doneRetroActionItem,
-  doneRetroItem, editRetroActionItem, extendTimer,
+  archiveRetro,
+  createRetroActionItem,
+  createRetroItem,
+  deleteRetroActionItem,
+  deleteRetroItem,
+  doneRetroActionItem,
+  doneRetroItem,
+  editRetroActionItem,
+  extendTimer,
   getRetro,
-  getRetroArchive, highlightRetroItem,
-  nextRetroItem, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
+  getRetroArchive,
+  highlightRetroItem,
+  nextRetroItem,
+  undoneRetroItem,
+  unhighlightRetroItem,
+  updateRetroItem,
   voteRetroItem,
 } from '../../redux/actions/api_actions';
 import {
   clearDialog,
-  currentRetroSendArchiveEmailUpdated, currentRetroUpdated,
+  currentRetroSendArchiveEmailUpdated,
+  currentRetroUpdated,
   forceRelogin,
   showDialog,
   signOut,
 } from '../../redux/actions/main_actions';
 import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
+import {websocketUrl} from '../../helpers/websockets';
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -319,7 +331,7 @@ class ShowRetroPage extends React.Component {
 
     return (
       <span>
-        <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
+        <RetroWebsocket url={websocketUrl(config)} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
         {this.renderArchiveConfirmationDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
@@ -392,7 +404,7 @@ class ShowRetroPage extends React.Component {
     return (
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
-          <RetroWebsocket url={config.websocket_url} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
+          <RetroWebsocket url={websocketUrl(config)} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
           {this.renderArchiveConfirmationDialog()}
           <div className={retroContainerClasses}>
 
