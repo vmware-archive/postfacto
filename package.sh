@@ -25,6 +25,8 @@ chmod u+x package/pws/*.sh
 
 mkdir package/pws/assets
 
+rm -rf api/client/*
+rm -rf api/db/*.sqlite3
 rm -rf api/tmp/*
 cp -r api package/pws/assets/api
 cp -r web/build package/pws/assets/web
