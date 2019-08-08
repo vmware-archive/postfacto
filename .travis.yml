@@ -1,9 +1,9 @@
 language: minimal
 dist: bionic
 addons:
-  snaps:
-    - name: heroku
-      classic: true
+#  snaps:
+#    - name: heroku
+#      confinement: classic
   apt:
     sources:
       - sourceline: 'deb https://packages.cloudfoundry.org/debian stable main'
@@ -11,10 +11,12 @@ addons:
     packages:
       - cf-cli
 services:
-- docker
+  - docker
+install:
+  - snap install heroku --classic
 script:
-- docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
-- heroku --version && cf --version
+  - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
+  - heroku --version && cf --version
 deploy:
   provider: releases
   draft: true
