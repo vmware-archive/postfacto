@@ -55,7 +55,7 @@
 @include foundation-drilldown-menu;
 @include foundation-dropdown;
 @include foundation-dropdown-menu;
-@include foundation-flex-video;
+@include foundation-responsive-embed;
 @include foundation-label;
 @include foundation-media-object;
 @include foundation-off-canvas;
@@ -171,7 +171,7 @@ ol ol > li:before {
     }
 
     .video-box {
-      @extend .flex-video;
+      @extend .responsive-embed;
 
       @include breakpoint(large) {
         flex: 1;
@@ -425,7 +425,7 @@ ol ol > li:before {
   background-color: $page-heading-background;
   height: 100%;
 
-  @media #{$small-only} {
+  @include breakpoint(small only) {
     display: none;
   }
 }
@@ -753,6 +753,7 @@ button:focus {
     white-space: pre-line;
 
     button {
+      font-weight: inherit;
       line-height: 1.1;
     }
 

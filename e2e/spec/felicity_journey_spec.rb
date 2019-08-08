@@ -404,15 +404,15 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     find('div.retro-item', text: 'this is a happy item').click
 
     # Done an item
-    within('div.retro-item', text: 'this is a happy item') do
+    sleep(1)
+    within('div.retro-item.highlight', text: 'this is a happy item') do
       expect(page).to have_css('.item-done')
       find('.item-done').click
     end
 
     expect(page).not_to have_css '.highlight'
-    expect(page).not_to have_css('.retro-item-timer-clock')
+    expect(page).not_to have_css '.retro-item-timer-clock'
 
-    expect(page).to have_css('div.retro-item.discussed .item-text', text: 'this is a happy item')
     within(find('div.retro-item.discussed', text: 'this is a happy item')) do
       expect(page).to have_css('.item-discussed')
       expect(page).to_not have_css('.item-delete')
