@@ -81,6 +81,7 @@
 $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
+$global-color-pick-contrast-tolerance: 0.1;
 $foundation-palette: (
         primary: #2199e8,
         secondary: #777,
@@ -140,22 +141,22 @@ $header-font-family: 'Montserrat', Roboto, Arial, sans-serif;
 $header-font-weight: $global-weight-normal;
 $header-font-style: normal;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
-$header-sizes: (
+$header-styles: (
         small: (
-                'h1': 24,
-                'h2': 20,
-                'h3': 19,
-                'h4': 18,
-                'h5': 17,
-                'h6': 16,
+                'h1': ('font-size': 24),
+                'h2': ('font-size': 20),
+                'h3': ('font-size': 19),
+                'h4': ('font-size': 18),
+                'h5': ('font-size': 17),
+                'h6': ('font-size': 16),
         ),
         medium: (
-                'h1': 28,
-                'h2': 28,
-                'h3': 28,
-                'h4': 25,
-                'h5': 20,
-                'h6': 16,
+                'h1': ('font-size': 28),
+                'h2': ('font-size': 28),
+                'h3': ('font-size': 28),
+                'h4': ('font-size': 25),
+                'h5': ('font-size': 20),
+                'h6': ('font-size': 16),
         ),
 );
 $header-color: inherit;
@@ -229,12 +230,12 @@ $input-error-font-weight: $global-weight-bold;
 
 $accordion-background: $white;
 $accordion-plusminus: true;
-$accordion-item-color: foreground($accordion-background, $primary-color);
+$accordion-item-color: color-pick-contrast($accordion-background, ($primary-color, $white));
 $accordion-item-background-hover: $light-gray;
 $accordion-item-padding: 1.25rem 1rem;
 $accordion-content-background: $white;
 $accordion-content-border: 1px solid $light-gray;
-$accordion-content-color: foreground($accordion-background, $primary-color);
+$accordion-content-color: color-pick-contrast($accordion-background, ($primary-color, $white));
 $accordion-content-padding: 1rem;
 
 // 8. Accordion Menu
@@ -248,7 +249,7 @@ $accordionmenu-arrow-color: $primary-color;
 
 $badge-palette: $foundation-palette;
 $badge-background: $primary-color;
-$badge-color: foreground($badge-background);
+$badge-color: color-pick-contrast($badge-background);
 $badge-padding: 0.3em;
 $badge-minwidth: 2.1em;
 $badge-font-size: 0.6rem;
@@ -431,7 +432,7 @@ $meter-fill-bad: $alert-color;
 // 24. Off-canvas
 // --------------
 
-$offcanvas-size: 250px;
+$offcanvas-sizes: ('small': 250px);
 $offcanvas-background: $light-gray;
 $offcanvas-zindex: -1;
 $offcanvas-transition-length: 0.5s;
@@ -467,7 +468,7 @@ $pagination-item-spacing: rem-calc(1);
 $pagination-radius: $global-radius;
 $pagination-item-background-hover: $light-gray;
 $pagination-item-background-current: $primary-color;
-$pagination-item-color-current: foreground($pagination-item-background-current);
+$pagination-item-color-current: color-pick-contrast($pagination-item-background-current);
 $pagination-item-color-disabled: $medium-gray;
 $pagination-ellipsis-color: $black;
 $pagination-mobile-items: false;
@@ -553,7 +554,7 @@ $tab-item-padding: 1.25rem 1.5rem;
 $tab-expand-max: 6;
 $tab-content-background: $white;
 $tab-content-border: $light-gray;
-$tab-content-color: foreground($tab-background, $primary-color);
+$tab-content-color: color-pick-contrast($tab-background, ($primary-color, $white));
 $tab-content-padding: 1rem;
 
 // 33. Thumbnail
