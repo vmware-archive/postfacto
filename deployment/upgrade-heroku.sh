@@ -61,8 +61,10 @@ fi
 ###################
 
 pushd "$ASSETS_DIR"/api
-  heroku buildpacks:set -a ${API_HOST} https://github.com/heroku/heroku-buildpack-ruby.git#v200
-
+  BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v200'
+  if [[ ! $(heroku buildpacks -a ${API_HOST}) =~ ${BUILDPACK} ]]; then
+    heroku buildpacks:set -a ${API_HOST} ${BUILDPACK}
+  fi
   rm -rf .git # blow away any existent git directory from a previous run
   git init .
   git add .
