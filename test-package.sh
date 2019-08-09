@@ -36,10 +36,12 @@ unzip package.zip
 unzip last-release.zip -d last-release
 echo 'Setup complete'
 
-HEROKU_OLD_WEB='postfacto-travis-old-web'
-HEROKU_OLD_API='postfacto-travis-old-api'
-HEROKU_NEW_WEB='postfacto-travis-new-web'
-HEROKU_NEW_API='postfacto-travis-new-api'
+NOW=$(date +%s)
+
+HEROKU_OLD_WEB="postfacto-travis-old-web-${NOW}"
+HEROKU_OLD_API="postfacto-travis-old-api-${NOW}"
+HEROKU_NEW_WEB="postfacto-travis-new-web-${NOW}"
+HEROKU_NEW_API="postfacto-travis-new-api-${NOW}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
