@@ -38,10 +38,10 @@ echo 'Setup complete'
 
 NOW=$(date +%s)
 
-HEROKU_OLD_WEB="postfacto-travis-old-web-${NOW}"
-HEROKU_OLD_API="postfacto-travis-old-api-${NOW}"
-HEROKU_NEW_WEB="postfacto-travis-new-web-${NOW}"
-HEROKU_NEW_API="postfacto-travis-new-api-${NOW}"
+HEROKU_OLD_WEB="pf-travis-old-web-${NOW}"
+HEROKU_OLD_API="pf-travis-old-api-${NOW}"
+HEROKU_NEW_WEB="pf-travis-new-web-${NOW}"
+HEROKU_NEW_API="pf-travis-new-api-${NOW}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
