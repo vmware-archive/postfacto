@@ -53,32 +53,34 @@ CONFIG_DIR="$SCRIPT_DIR"/config
 ###################
 
 pushd "$ASSETS_DIR"/api
-heroku create ${API_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200
-heroku addons:create heroku-postgresql:hobby-dev -a ${API_HOST}
-heroku addons:create heroku-redis:hobby-dev -a ${API_HOST}
-heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com SESSION_TIME=${SESSION_TIME} -a ${API_HOST}
+  heroku create ${API_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200
+  heroku addons:create heroku-postgresql:hobby-dev -a ${API_HOST}
+  heroku addons:create heroku-redis:hobby-dev -a ${API_HOST}
+  heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com SESSION_TIME=${SESSION_TIME} -a ${API_HOST}
 
-rm -rf .git # blow away any existent git directory from a previous run
-git init .
-git add .
-git commit -m "Packaging for initial Heroku deployment"
-git push --set-upstream https://git.heroku.com/${API_HOST}.git master
-heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${API_HOST}
+  rm -rf .git # blow away any existent git directory from a previous run
+  git init .
+  git add .
+  git commit -m "Packaging for initial Heroku deployment"
+  git push --set-upstream https://git.heroku.com/${API_HOST}.git master
+  heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${API_HOST}
 popd
 
 ###########################
 # Deploy the web frontend
 ###########################
 
-cp "$CONFIG_DIR"/config.js "$ASSETS_DIR"/web/public_html
 pushd "$ASSETS_DIR"/web
-sed -i '' "s/{{api-app-name}}/${API_HOST}/" public_html/config.js
+  sed \
+    -e "s/{{api-app-name}}/${API_HOST}/" \
+    <"$CONFIG_DIR"/config.js \
+    >"$ASSETS_DIR"/web/public_html/config.js
 
-heroku create ${WEB_HOST} --buildpack https://github.com/heroku/heroku-buildpack-static
+  heroku create ${WEB_HOST} --buildpack https://github.com/heroku/heroku-buildpack-static
 
-rm -rf .git # blow away any existent git directory from a previous run
-git init .
-git add .
-git commit -m "Packaging for initial Heroku deployment"
-git push --set-upstream https://git.heroku.com/${WEB_HOST}.git master
+  rm -rf .git # blow away any existent git directory from a previous run
+  git init .
+  git add .
+  git commit -m "Packaging for initial Heroku deployment"
+  git push --set-upstream https://git.heroku.com/${WEB_HOST}.git master
 popd
