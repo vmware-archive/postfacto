@@ -31,38 +31,115 @@
 #
 set -euo pipefail
 
-curl -L -o last-release.zip 'https://github.com/pivotal/postfacto/releases/latest/download/package.zip'
-unzip package.zip
-unzip last-release.zip -d last-release
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ ! $* =~ --skip-heroku ]];
+then
+  heroku whoami \
+    || (echo 'You need to have the Heroku CLI installed and be logged in' \
+      && exit 1)
+fi
+
+if [[ ! $* =~ --skip-cf ]];
+then
+  cf target \
+    || (echo 'You need to have the CF CLI installed and be logged in' \
+      && exit 1)
+fi
+
+curl -L -o "$SCRIPT_DIR/last-release.zip" 'https://github.com/pivotal/postfacto/releases/latest/download/package.zip'
+unzip "$SCRIPT_DIR/package.zip"
+unzip "$SCRIPT_DIR/last-release.zip" -d "$SCRIPT_DIR/last-release"
 echo 'Setup complete'
 
 NOW=$(date +%s)
 
-HEROKU_OLD_WEB="pf-travis-old-web-${NOW}"
-HEROKU_OLD_API="pf-travis-old-api-${NOW}"
-HEROKU_NEW_WEB="pf-travis-new-web-${NOW}"
-HEROKU_NEW_API="pf-travis-new-api-${NOW}"
+OLD_WEB="postfacto-old-web-${NOW}"
+OLD_API="postfacto-old-api-${NOW}"
+NEW_WEB="postfacto-new-web-${NOW}"
+NEW_API="postfacto-new-api-${NOW}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ ! $* =~ --skip-cf ]];
+then
+  echo '####### Cloud Foundry'
 
-pushd "$SCRIPT_DIR/last-release/package/heroku"
-  echo 'Deploying old version to Heroku'
-  ./deploy.sh $HEROKU_OLD_WEB $HEROKU_OLD_API
-popd
+  SPACE="postfacto-space-${NOW}"
 
-pushd "$SCRIPT_DIR/package/heroku"
-  echo 'Upgrading old version on Heroku'
-  ./upgrade.sh $HEROKU_OLD_WEB $HEROKU_OLD_API
+  cf create-space $SPACE
+  cf target -s $SPACE
 
-  echo 'Deploying new version to Heroku'
-  ./deploy.sh $HEROKU_NEW_WEB $HEROKU_NEW_API
-popd
+  cf create-service \
+    ${REDIS_SERVICE:-'p-redis'} \
+    ${REDIS_PLAN:-'shared-vm'} \
+    postfacto-redis
 
-echo 'Cleaning up Heroku'
-for APP in $HEROKU_OLD_WEB $HEROKU_OLD_API $HEROKU_NEW_WEB $HEROKU_NEW_API
-do
-  heroku apps:delete -a $APP -c $APP
-done
+  cf create-service \
+    ${DB_SERVICE:-'p.mysql'} \
+    ${DB_PLAN:-'db-small'} \
+    postfacto-db
+
+  while [[ $(cf services) =~ 'create in progress' ]];
+  do
+    echo 'Service creation in progress'
+    sleep 5
+  done
+
+  pushd "$SCRIPT_DIR/last-release/package/pcf"
+    echo 'Deploying old version to Cloud Foundry'
+    ./deploy.sh $OLD_WEB $OLD_API '' 'apps.pcfone.io'
+  popd
+
+  pushd "$SCRIPT_DIR/package/pcf"
+    echo 'Upgrading old version on Cloud Foundry'
+    ./upgrade.sh $OLD_WEB $OLD_API '' 'apps.pcfone.io'
+
+    echo 'Deploying new version to Cloud Foundry'
+    ./deploy.sh $NEW_WEB $NEW_API '' 'apps.pcfone.io'
+  popd
+
+  echo 'Cleaning up Cloud Foundry'
+  for APP in $OLD_WEB $OLD_API $NEW_WEB $NEW_API
+  do
+    cf delete $APP -f -r
+  done
+
+  for SERVICE in 'postfacto-redis' 'postfacto-db'
+  do
+    cf delete-service $SERVICE -f
+  done
+
+  while [[ $(cf services) =~ 'delete in progress' ]];
+  do
+    echo 'Service deletion in progress'
+    sleep 5
+  done
+
+  cf delete-space $SPACE -f
+fi
+
+if [[ ! $* =~ --skip-heroku ]];
+then
+  echo '####### Heroku'
+
+  pushd "$SCRIPT_DIR/last-release/package/heroku"
+    echo 'Deploying old version to Heroku'
+    ./deploy.sh $OLD_WEB $OLD_API
+  popd
+
+  pushd "$SCRIPT_DIR/package/heroku"
+    echo 'Upgrading old version on Heroku'
+    ./upgrade.sh $OLD_WEB $OLD_API
+
+    echo 'Deploying new version to Heroku'
+    ./deploy.sh $NEW_WEB $NEW_API
+  popd
+
+  echo 'Cleaning up Heroku'
+  for APP in $OLD_WEB $OLD_API $NEW_WEB $NEW_API
+  do
+    heroku apps:delete -a $APP -c $APP
+  done
+fi
 
 echo 'Cleaning up working directory'
 rm -rf ./last-release ./last-release.zip ./package
