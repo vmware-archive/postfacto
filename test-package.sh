@@ -33,6 +33,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if [[ ! $* =~ --skip-package ]];
+then
+  "$SCRIPT_DIR/package.sh"
+fi
+
 if [[ ! $* =~ --skip-heroku ]];
 then
   heroku whoami \

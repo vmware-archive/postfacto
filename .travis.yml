@@ -17,7 +17,7 @@ install:
 
 script:
   - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
-  - ./test-package.sh --skip-cf
+  - ./test-package.sh --skip-cf --skip-package
 deploy:
   provider: releases
   draft: true
