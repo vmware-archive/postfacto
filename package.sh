@@ -54,7 +54,7 @@ cp -r web/build package/heroku/assets/web/public_html
 
 # Docs
 
-cp deployment/INSTRUCTIONS.md package
+cp deployment/README.md package
 
 # Zip
 

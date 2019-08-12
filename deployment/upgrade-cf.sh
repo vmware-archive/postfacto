@@ -4,8 +4,7 @@ set -e
 
 WEB_HOST=$1
 API_HOST=$2
-API_ENDPOINT=${3:-https://api.run.pivotal.io}
-APP_DOMAIN=${4:-cfapps.io}
+APP_DOMAIN=${3:-cfapps.io}
 SESSION_TIME=${SESSION_TIME:-'""'}
 
 # The directory in which this script is located
@@ -13,9 +12,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR"/assets
 CONFIG_DIR="$SCRIPT_DIR"/config
 
-cf login -a $API_ENDPOINT
+cf target \
+  || (echo 'You need to have the CF CLI installed and be logged in' \
+    && exit 1)
 
-cf push -f "$CONFIG_DIR"/manifest-api.yml -p "$ASSETS_DIR"/api --var api-app-name=$API_HOST --var web-app-name=$WEB_HOST --var pcf-url=$CF_URL --var session-time=$SESSION_TIME
+cf push -f "$CONFIG_DIR"/manifest-api.yml -p "$ASSETS_DIR"/api --var api-app-name=$API_HOST --var web-app-name=$WEB_HOST --var pcf-url=${APP_DOMAIN} --var session-time=$SESSION_TIME
 
 sed \
   -e "s/{{api-app-name}}/${API_HOST}/" \

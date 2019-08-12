@@ -49,3 +49,6 @@ Contact: callum@seadowg.com
 
 Engineer: Mike Kenyon
 Contact: mike.kenyon@gmail.com
+
+Engineer: Max Brauer
+Contact: github.com/mamachanko

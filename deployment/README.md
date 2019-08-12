@@ -37,7 +37,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Run the PCF deployment script from the `pcf` directory:
 
     ```bash
-    ./deploy.sh <web-app-name> <api-app-name> <cf-api-endpoint> <pcf-url>
+    ./deploy.sh <web-app-name> <api-app-name> <pcf-url>
     ```
 1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
@@ -48,7 +48,7 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pcf` directory:
   ```bash
-  ./upgrade.sh <web-app-name> <api-app-name>
+  ./upgrade.sh <web-app-name> <api-app-name> <pcf-url>
   ```
 
 
