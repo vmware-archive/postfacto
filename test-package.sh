@@ -91,15 +91,15 @@ then
 
   pushd "$SCRIPT_DIR/last-release/package/pcf"
     echo 'Deploying old version to Cloud Foundry'
-    ./deploy.sh $OLD_WEB $OLD_API '' 'apps.pcfone.io'
+    ./deploy.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
   popd
 
   pushd "$SCRIPT_DIR/package/pcf"
     echo 'Upgrading old version on Cloud Foundry'
-    ./upgrade.sh $OLD_WEB $OLD_API '' 'apps.pcfone.io'
+    ./upgrade.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
 
     echo 'Deploying new version to Cloud Foundry'
-    ./deploy.sh $NEW_WEB $NEW_API '' 'apps.pcfone.io'
+    ./deploy.sh $NEW_WEB $NEW_API 'apps.pcfone.io'
   popd
 
   echo 'Cleaning up Cloud Foundry'
