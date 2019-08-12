@@ -147,4 +147,4 @@ then
 fi
 
 echo 'Cleaning up working directory'
-rm -rf ./last-release ./last-release.zip ./package
+rm -rf "$SCRIPT_DIR/last-release" "$SCRIPT_DIR/last-release.zip" "$SCRIPT_DIR/package"
