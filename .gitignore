@@ -5,3 +5,4 @@ package.zip
 node_modules/
 docker_node_modules/
 *.log
+.heroku-netrc
