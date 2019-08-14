@@ -32,17 +32,17 @@ source 'https://rubygems.org'
 
 ruby '2.6.3'
 
-gem 'rails'
+gem 'rails', '>= 5.2.2.1'
 
-gem 'activeadmin'
+gem 'activeadmin', '>= 1.4.3'
 gem 'addressable'
 gem 'bcrypt'
 gem 'cf-app-utils'
-gem 'devise'
+gem 'devise', '>= 4.6.1'
 gem 'friendly_id'
-gem 'inherited_resources'
+gem 'inherited_resources', '>= 1.9.0'
 gem 'jbuilder'
-gem 'premailer-rails'
+gem 'premailer-rails', '>= 1.10.2'
 gem 'puma'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rest-client'
@@ -50,23 +50,23 @@ gem 'uglifier'
 gem 'jwt'
 
 group :development, :test do
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', '>= 2.7.0'
   gem 'pry'
   gem 'pry-byebug'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>= 3.8.2'
   gem 'rubocop', require: false
   gem 'shoulda-matchers'
   gem 'webmock'
   gem 'tzinfo-data'
   gem 'climate_control'
-  gem 'action-cable-testing'
+  gem 'action-cable-testing', '>= 0.5.0'
 end
 
 group :development do
   gem 'sqlite3', '~> 1.3', '< 1.4'
   gem 'bullet'
   gem 'listen'
-  gem 'web-console'
+  gem 'web-console', '>= 3.7.0'
 end
 
 group :production do
