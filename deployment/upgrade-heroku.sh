@@ -29,12 +29,11 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+set -euo pipefail
 
-set -e
-
-if [ $# -ne 2 ]; then
-  echo "usage: ./upgrade_heroku.sh <web-app-name> <api-app-name>"
-  echo "This will upgrade an existing Postfacto deployment to a .herokuapp.com host of your choosing"
+if [ $# -lt 1 ]; then
+  echo "usage: ./upgrade_heroku.sh <app-name>"
+  echo "This will upgrade an existing Postfacto deployment on a .herokuapp.com host of your choosing"
   exit 1
 fi
 
@@ -42,51 +41,31 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/mixpanel.sh" "Heroku $(basename "${BASH_SOURCE[0]}")" "$@"
 
-WEB_HOST=$1
-API_HOST=$2
+APP_HOST=$1
 
-ASSETS_DIR="$SCRIPT_DIR"/assets
-CONFIG_DIR="$SCRIPT_DIR"/config
+ASSETS_DIR="$SCRIPT_DIR/../assets"
+CONFIG_DIR="$SCRIPT_DIR/config"
 
-if ! heroku apps:info -a "$WEB_HOST" 2>/dev/null; then
-  echo "Web host ${WEB_HOST} does not exist! Aborting."
+if ! heroku apps:info -a "$APP_HOST" 2>/dev/null; then
+  echo "App host ${APP_HOST} does not exist! Aborting."
   exit 1
 fi
 
-if ! heroku apps:info -a "$API_HOST" 2>/dev/null; then
-  echo "API host ${API_HOST} does not exist! Aborting."
-  exit 1
-fi
 
 ###################
-# Upgrade the API
+# Upgrade the app
 ###################
+cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client"
+cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 
-pushd "$ASSETS_DIR"/api
+pushd "$ASSETS_DIR"
   BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v200'
-  if [[ ! $(heroku buildpacks -a ${API_HOST}) =~ ${BUILDPACK} ]]; then
-    heroku buildpacks:set -a ${API_HOST} ${BUILDPACK}
+  if [[ ! $(heroku buildpacks -a ${APP_HOST}) =~ ${BUILDPACK} ]]; then
+    heroku buildpacks:set -a ${APP_HOST} ${BUILDPACK}
   fi
   rm -rf .git # blow away any existent git directory from a previous run
   git init .
   git add .
   git commit -m "Packaging for Heroku upgrade"
-  git push --force --set-upstream https://git.heroku.com/${API_HOST}.git master
-popd
-
-###########################
-# Upgrade the web frontend
-###########################
-
-pushd "$ASSETS_DIR"/web
-  sed \
-    -e "s/{{api-app-name}}/${API_HOST}/" \
-    <"$CONFIG_DIR"/config.js \
-    >"$ASSETS_DIR"/web/public_html/config.js
-
-  rm -rf .git # blow away any existent git directory from a previous run
-  git init .
-  git add .
-  git commit -m "Packaging for Heroku upgrade"
-  git push --force --set-upstream https://git.heroku.com/${WEB_HOST}.git master
+  git push --force --set-upstream https://git.heroku.com/${APP_HOST}.git master
 popd

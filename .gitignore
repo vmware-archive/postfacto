@@ -1,5 +1,8 @@
-package
+last-release/
+package/
+tmp/
 package.zip
+last-release.zip
 .idea/
 .DS_Store
 node_modules/
