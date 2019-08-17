@@ -91,6 +91,8 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 ### Migrating a deployment
 
+ > ⚠️ **Warning**: the Heroku migration will attempt to migrate your data to a new database instance and delete the old one. Take a look at what the script is doing and make sure you understand the implications before running it.
+
 1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `heroku` directory:
     ```bash
     ./migrate.sh <web-app-name> <api-app-name>

@@ -45,7 +45,11 @@ SESSION_TIME=${SESSION_TIME:-'""'}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/mixpanel.sh" "Heroku $(basename "${BASH_SOURCE[0]}")" "$@"
 
-ENABLE_ANALYTICS=false "$SCRIPT_DIR/upgrade.sh" ${API_HOST}
+heroku addons:create heroku-postgresql:hobby-dev -a ${WEB_HOST}
+heroku pg:copy DATABASE ${WEB_HOST}::DATABASE -a ${API_HOST} --confirm ${API_HOST}
+heroku addons:create heroku-redis:hobby-dev -a ${WEB_HOST}
+heroku config:set WEBSOCKET_PORT=4443 SESSION_TIME=${SESSION_TIME} -a ${WEB_HOST}
 
-heroku apps:delete -a ${WEB_HOST} -c ${WEB_HOST}
-heroku apps:rename -a ${API_HOST} ${WEB_HOST}
+ENABLE_ANALYTICS=false "$SCRIPT_DIR/upgrade.sh" ${WEB_HOST}
+
+heroku apps:delete -a ${API_HOST} -c ${API_HOST}
