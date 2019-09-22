@@ -27,6 +27,11 @@ Contact: zarrin.rahman@gmail.com
 Engineer: Daniel Garnier-Moiroux
 Contact: git@garnier.wf
 
+/* Pivotal Alumni */
+
+Engineer: Devin Brown
+Contact: devin.g.brown@gmail.com
+
 /* CONTRIBUTORS */
 
 Engineer: Andrew Leung
