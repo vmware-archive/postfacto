@@ -36,7 +36,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-retry'
   gem 'capybara', '>= 3.14.0'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '>= 3.141.0'
   gem 'pry'
   gem 'pry-byebug'
 end
