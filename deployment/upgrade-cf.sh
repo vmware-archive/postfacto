@@ -2,13 +2,15 @@
 
 set -e
 
+# The directory in which this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/mixpanel.sh" "$(basename "${BASH_SOURCE[0]}")" "$@"
+
 WEB_HOST=$1
 API_HOST=$2
 APP_DOMAIN=${3:-cfapps.io}
 SESSION_TIME=${SESSION_TIME:-'""'}
 
-# The directory in which this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS_DIR="$SCRIPT_DIR"/assets
 CONFIG_DIR="$SCRIPT_DIR"/config
 
