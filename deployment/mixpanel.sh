@@ -62,7 +62,7 @@ case $ANALYTICS in
     echo ''
     echo -n 'Do you want to send this anonymous installation notification? [yN] '
     read -r ACCEPT
-    if [[ $ACCEPT =~ 'y' ]]; then
+    if [[ $ACCEPT == y ]]; then
       echo ''
       echo 'Thanks for supporting Postfacto!'
       echo ''
