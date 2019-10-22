@@ -40,7 +40,7 @@ fi
 
 # The directory in which this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"$SCRIPT_DIR/mixpanel.sh" "$(basename "${BASH_SOURCE[0]}")" "$@"
+"$SCRIPT_DIR/mixpanel.sh" "Heroku $(basename "${BASH_SOURCE[0]}")" "$@"
 
 WEB_HOST=$1
 API_HOST=$2
