@@ -34,24 +34,24 @@ set -euo pipefail
 if [ $# -lt 1 ]; then
   echo 'usage: ./mixpanel.sh <script-name> ...'
   echo 'This will report the script execution to MixPanel.'
-  echo 'Use ANALYTICS=0 (skip) or ANALYTICS=1 (send) to avoid the manual check.'
+  echo 'Use ENABLE_ANALYTICS=false (skip) or ENABLE_ANALYTICS=true (send) to avoid the manual check.'
   exit 1
 fi
 
-ANALYTICS=${ANALYTICS:-2}
+ENABLE_ANALYTICS=${ENABLE_ANALYTICS:-unknown}
 MIXPANEL_TOKEN='d4de349453cc697734eced9ebedcdb22'
 PAYLOAD="{\"event\": \"Ran $1\", \"properties\": {\"token\": \"$MIXPANEL_TOKEN\", \"time\": $(date +%s)}}"
 URL="https:/api.mixpanel.com/track/?data=$(echo -n "$PAYLOAD" | base64)"
 
-case $ANALYTICS in
-  0)
+case $ENABLE_ANALYTICS in
+  'false')
     exit 0;
   ;;
-  1)
+  'true')
     echo "MixPanel response (1 means success): $(curl "$URL")";
     exit 0;
   ;;
-  2)
+  *)
     echo 'As the maintainers of Postfacto, we are interested in gaining more information'
     echo 'about installs so that we can make Postfacto better for you and other users.'
     echo ''
@@ -66,11 +66,11 @@ case $ANALYTICS in
       echo ''
       echo 'Thanks for supporting Postfacto!'
       echo ''
-      echo 'You can use ANALYTICS=1 to avoid this check in the future.'
+      echo 'You can use ENABLE_ANALYTICS=true to avoid this check in the future.'
       echo ''
       echo "MixPanel response (1 means success): $(curl "$URL")"
     else
-      echo 'Skipping analytics. Use ANALYTICS=0 to avoid this check in the future.'
+      echo 'Skipping analytics. Use ENABLE_ANALYTICS=false to avoid this check in the future.'
     fi
   ;;
 esac
