@@ -91,15 +91,15 @@ then
 
   pushd "$SCRIPT_DIR/last-release/package/pcf"
     echo 'Deploying old version to Cloud Foundry'
-    ANALYTICS=0 ./deploy.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
+    ENABLE_ANALYTICS=false ./deploy.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
   popd
 
   pushd "$SCRIPT_DIR/package/pcf"
     echo 'Upgrading old version on Cloud Foundry'
-    ANALYTICS=0 ./upgrade.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
+    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
 
     echo 'Deploying new version to Cloud Foundry'
-    ANALYTICS=0 ./deploy.sh $NEW_WEB $NEW_API 'apps.pcfone.io'
+    ENABLE_ANALYTICS=false ./deploy.sh $NEW_WEB $NEW_API 'apps.pcfone.io'
   popd
 
   echo 'Cleaning up Cloud Foundry'
@@ -128,15 +128,15 @@ then
 
   pushd "$SCRIPT_DIR/last-release/package/heroku"
     echo 'Deploying old version to Heroku'
-    ANALYTICS=0 ./deploy.sh $OLD_WEB $OLD_API
+    ENABLE_ANALYTICS=false ./deploy.sh $OLD_WEB $OLD_API
   popd
 
   pushd "$SCRIPT_DIR/package/heroku"
     echo 'Upgrading old version on Heroku'
-    ANALYTICS=0 ./upgrade.sh $OLD_WEB $OLD_API
+    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_WEB $OLD_API
 
     echo 'Deploying new version to Heroku'
-    ANALYTICS=0 ./deploy.sh $NEW_WEB $NEW_API
+    ENABLE_ANALYTICS=false ./deploy.sh $NEW_WEB $NEW_API
   popd
 
   echo 'Cleaning up Heroku'
