@@ -36,10 +36,12 @@ import Dialog from 'material-ui/Dialog';
 import '../../spec_helper';
 
 import {ShowRetroPage} from './show_retro_page';
+import RetroWebsocket from './retro_websocket';
 
 const config = {
   title: 'Retro',
   api_base_url: 'https://example.com',
+  websocket_port: 1234,
   websocket_url: 'ws://websocket/url',
   contact: '',
   terms: '',
@@ -248,6 +250,10 @@ describe('ShowRetroPage', () => {
     it('does not display a dialog by default', () => {
       expect(dom.find(Dialog)).toHaveProp({open: false});
     });
+
+    it('passes the retro URL to RetroWebsocket', () => {
+      expect(dom.find(RetroWebsocket).prop('url')).toBe('ws://websocket:1234/url');
+    });
   });
 
   describe('on mobile', () => {
@@ -295,6 +301,10 @@ describe('ShowRetroPage', () => {
 
     it('does not display a back button', () => {
       expect(dom.find('.retro-back')).not.toExist();
+    });
+
+    it('passes the retro URL to RetroWebsocket', () => {
+      expect(dom.find(RetroWebsocket).prop('url')).toBe('ws://websocket:1234/url');
     });
   });
 });

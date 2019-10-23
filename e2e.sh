@@ -6,7 +6,7 @@ BASE_DIR="$(dirname "$0")"
 
 export RAILS_ENV="test"
 export USE_MOCK_GOOGLE=true
-export BASE_WEB_URL="http://localhost:3000"
+export BASE_WEB_URL="http://localhost:4000"
 export RETRO_ADMIN_BASE_URL="http://localhost:4000/admin"
 export GOOGLE_AUTH_ENDPOINT="http://localhost:3100/auth"
 
@@ -68,6 +68,13 @@ fi
 npm --prefix="$BASE_DIR/mock-google-server" start &
 register_spawned $!
 
+# Create static content
+
+echo 'Building frontend in E2E test mode...'
+rm -rf "$BASE_DIR/api/client/*"
+npm --prefix="$BASE_DIR/web" run build
+cp -a "$BASE_DIR/web/build/." "$BASE_DIR/api/client"
+
 # Launch API
 
 pushd "$BASE_DIR/api" >/dev/null
@@ -79,19 +86,6 @@ pushd "$BASE_DIR/api" >/dev/null
   echo 'Waiting for API...'
   ( tail -f -n10 "$API_LOG" & ) | grep -q 'Listening' || true
 popd >/dev/null
-
-# Launch static content
-
-echo 'Building frontend in E2E test mode...'
-npm --prefix="$BASE_DIR/web" run build
-
-echo 'Launching frontend...'
-echo > "$WEB_LOG"
-npm --prefix="$BASE_DIR/web" run serve-built >> "$WEB_LOG" 2>&1 &
-register_spawned $!
-
-echo 'Waiting for frontend...'
-( tail -f -n10 "$WEB_LOG" & ) | grep -q 'Accepting connections'
 
 # Run tests
 

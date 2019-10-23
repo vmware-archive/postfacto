@@ -45,6 +45,7 @@ import {retrieveConfig} from './redux/actions/api_actions';
 import makeReduxStore from './redux/store';
 import RetroClient from './api/retro_client';
 import AnalyticsClient from './helpers/analytics_client';
+import {websocketUrl} from './helpers/websockets';
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Karla',
@@ -96,7 +97,6 @@ class Application extends React.Component {
 
   render() {
     const {config} = this.props;
-    const {websocket_url} = config;
     return (
       <Provider store={reduxStore}>
         <MuiThemeProvider muiTheme={muiTheme}>
@@ -104,7 +104,7 @@ class Application extends React.Component {
 
             <ConnectedHeader config={config}/>
             <ConnectedRouter config={config} router={router}/>
-            <SessionWebsocket url={websocket_url} websocketSessionDataReceived={this.updateWebsocketSession}/>
+            <SessionWebsocket url={websocketUrl(config)} websocketSessionDataReceived={this.updateWebsocketSession}/>
           </div>
         </MuiThemeProvider>
       </Provider>

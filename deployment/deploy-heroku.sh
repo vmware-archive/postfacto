@@ -29,12 +29,11 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+set -euo pipefail
 
-set -e
-
-if [ $# -ne 2 ]; then
-  echo "usage: ./deploy_heroku.sh <web-app-name> <api-app-name>"
-  echo "This will deploy the web frontend and api to a .herokuapp.com host of your choosing"
+if [ $# -lt 1 ]; then
+  echo "usage: ./deploy.sh <app-name>"
+  echo "This will deploy the app to a .herokuapp.com host of your choosing"
   exit 1
 fi
 
@@ -42,47 +41,30 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/mixpanel.sh" "Heroku $(basename "${BASH_SOURCE[0]}")" "$@"
 
-WEB_HOST=$1
-API_HOST=$2
+APP_HOST=$1
 SESSION_TIME=${SESSION_TIME:-'""'}
 
-ASSETS_DIR="$SCRIPT_DIR"/assets
-CONFIG_DIR="$SCRIPT_DIR"/config
+ASSETS_DIR="$SCRIPT_DIR/../assets"
+CONFIG_DIR="$SCRIPT_DIR/config"
 
+# Prepare assets
+cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client"
+cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 
 ###################
 # Deploy the API
 ###################
 
-pushd "$ASSETS_DIR"/api
-  heroku create ${API_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200
-  heroku addons:create heroku-postgresql:hobby-dev -a ${API_HOST}
-  heroku addons:create heroku-redis:hobby-dev -a ${API_HOST}
-  heroku config:set WEBSOCKET_PORT=4443 CLIENT_ORIGIN=https://${WEB_HOST}.herokuapp.com SESSION_TIME=${SESSION_TIME} -a ${API_HOST}
+pushd "$ASSETS_DIR"
+  heroku create ${APP_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200
+  heroku addons:create heroku-postgresql:hobby-dev -a ${APP_HOST}
+  heroku addons:create heroku-redis:hobby-dev -a ${APP_HOST}
+  heroku config:set WEBSOCKET_PORT=4443 SESSION_TIME=${SESSION_TIME} -a ${APP_HOST}
 
   rm -rf .git # blow away any existent git directory from a previous run
   git init .
   git add .
   git commit -m "Packaging for initial Heroku deployment"
-  git push --set-upstream https://git.heroku.com/${API_HOST}.git master
-  heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${API_HOST}
-popd
-
-###########################
-# Deploy the web frontend
-###########################
-
-pushd "$ASSETS_DIR"/web
-  sed \
-    -e "s/{{api-app-name}}/${API_HOST}/" \
-    <"$CONFIG_DIR"/config.js \
-    >"$ASSETS_DIR"/web/public_html/config.js
-
-  heroku create ${WEB_HOST} --buildpack https://github.com/heroku/heroku-buildpack-static
-
-  rm -rf .git # blow away any existent git directory from a previous run
-  git init .
-  git add .
-  git commit -m "Packaging for initial Heroku deployment"
-  git push --set-upstream https://git.heroku.com/${WEB_HOST}.git master
+  git push --set-upstream https://git.heroku.com/${APP_HOST}.git master
+  heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${APP_HOST} -x
 popd

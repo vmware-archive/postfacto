@@ -189,6 +189,8 @@ GEM
     puma (3.12.0)
     rack (2.0.7)
     rack-cors (1.0.2)
+    rack-ssl (1.4.1)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.3)
@@ -339,6 +341,7 @@ DEPENDENCIES
   pry-byebug
   puma
   rack-cors
+  rack-ssl
   rails (>= 5.2.2.1)
   redis (~> 3.3.3)
   rest-client

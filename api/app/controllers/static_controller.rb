@@ -28,17 +28,8 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
-
-require_relative 'config/environment'
-
-if ENV['RAILS_ENV'] == 'production'
-  require 'rack/ssl'
-
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
+class StaticController < ApplicationController
+  def home
+    render file: 'client/index.html', layout: false
+  end
 end
-
-run Rails.application

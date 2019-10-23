@@ -45,7 +45,7 @@ Capybara.register_driver(:headless_chrome) do |app|
   )
 end
 
-RETRO_APP_BASE_URL = ENV['BASE_WEB_URL'] || 'http://localhost:3000'
+RETRO_APP_BASE_URL = ENV['BASE_WEB_URL'] || 'http://localhost:4000'
 RETRO_ADMIN_BASE_URL = ENV['BASE_ADMIN_URL'] || 'http://localhost:4000/admin'
 
 Capybara.run_server = false

@@ -31,25 +31,25 @@
 #
 set -euo pipefail
 
-if [ $# -lt 1 ]; then
-  echo "usage: ./deploy.sh <app-name>"
-  echo "This will deploy the app to a CF foundation of your choosing"
+if [ $# -lt 2 ]; then
+  echo "usage: ./migrate.sh <web-app-name> <api-app-name>"
+  echo "This will migrate the app on a .herokuapp.com host of your choosing"
   exit 1
 fi
-# The directory in which this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"$SCRIPT_DIR/mixpanel.sh" "CF $(basename "${BASH_SOURCE[0]}")" "$@"
 
-APP_HOST=$1
+WEB_HOST=$1
+API_HOST=$2
 SESSION_TIME=${SESSION_TIME:-'""'}
 
-ASSETS_DIR="$SCRIPT_DIR/../assets"
-CONFIG_DIR="$SCRIPT_DIR/config"
+# The directory in which this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/mixpanel.sh" "Heroku $(basename "${BASH_SOURCE[0]}")" "$@"
 
-cf target \
-  || (echo 'You need to have the CF CLI installed and be logged in' \
-    && exit 1)
+heroku addons:create heroku-postgresql:hobby-dev -a ${WEB_HOST}
+heroku pg:copy DATABASE ${WEB_HOST}::DATABASE -a ${API_HOST} --confirm ${API_HOST}
+heroku addons:create heroku-redis:hobby-dev -a ${WEB_HOST}
+heroku config:set WEBSOCKET_PORT=4443 SESSION_TIME=${SESSION_TIME} -a ${WEB_HOST}
 
-cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client/config.js"
-cf push -f "$CONFIG_DIR"/manifest.yml -p "$ASSETS_DIR" --var api-app-name=$APP_HOST --var session-time=$SESSION_TIME
-cf run-task $APP_HOST 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
+ENABLE_ANALYTICS=false "$SCRIPT_DIR/upgrade.sh" ${WEB_HOST}
+
+heroku apps:delete -a ${API_HOST} -c ${API_HOST}

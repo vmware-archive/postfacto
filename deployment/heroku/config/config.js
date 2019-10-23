@@ -5,11 +5,12 @@ window.Retro = {
     "scripts": ["application.js"],
     "stylesheets": ["application.css"],
     "useRevManifest": true,
-    "api_base_url": "https://{{api-app-name}}.herokuapp.com",
-    "websocket_url": "wss://{{api-app-name}}.herokuapp.com/cable",
+    "api_base_url": "/api",
+    "websocket_url": "/cable",
+    "enable_analytics": false,
     "contact": "",
     "terms": "",
     "privacy": ""
   }
-}
+};
 

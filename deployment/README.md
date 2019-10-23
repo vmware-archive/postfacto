@@ -1,6 +1,6 @@
 # Deployment
 
-So you're ready to set Postfacto up, choose names for your web and API apps. We'll refer to these names as `api-app-name` and `web-app-name` from now on.
+So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
 
 ## Pivotal Web Services
 
@@ -13,19 +13,27 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Run the PWS deployment script from the `pws` directory:
 
     ```bash
-    ./deploy.sh <web-app-name> <api-app-name>
+    ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.cfapps.io/admin`
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `web-app-name.cfapps.io/retros/you-retro-slug`
+1. Log in to your retro at `<app-name>.cfapps.io/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 ### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pws` directory:
-  ```bash
-  ./upgrade.sh <web-app-name> <api-app-name>
-  ```
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
+
+### Migrating a deployment
+
+1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `pws` directory:
+    ```bash
+    ./migrate.sh <web-app-name> <api-app-name>
+    ```
+    **Note** that the admin panel will move from `<api-app-name>.cfapps.io/admin` to `<web-app-name>.cfapps.io/admin` and the API app will be deleted
 
 ## Pivotal Cloud Foundry
 
@@ -37,20 +45,27 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Run the PCF deployment script from the `pcf` directory:
 
     ```bash
-    ./deploy.sh <web-app-name> <api-app-name> <pcf-url>
+    ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.{{pcf-url}}/admin`
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<pcf-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `web-app-name.{{pcf-url}}/retros/you-retro-slug`
+1. Log in to your retro at `<app-name>.<pcf-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 ### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pcf` directory:
-  ```bash
-  ./upgrade.sh <web-app-name> <api-app-name> <pcf-url>
-  ```
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
 
+### Migrating a deployment
+
+1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `pcf` directory:
+    ```bash
+    ./migrate.sh <web-app-name> <api-app-name>
+    ```
+    **Note** that the admin panel will move from `<api-app-name>.<pcf-url>/admin` to `<web-app-name>.<pcf-url>/admin` and the API app will be deleted
 
 ## Heroku
 
@@ -59,20 +74,30 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
 
-  ```bash
-  ./deploy.sh <web-app-name> <api-app-name>
-  ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `api-app-name.herokuapp.com/admin`
+    ```bash
+    ./deploy.sh <app-name>
+    ```
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.herokuapp.com/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `web-app-name.herokuapp.com/retros/you-retro-slug`
+1. Log in to your retro at `<app-name>.herokuapp.com/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 ### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `heroku` directory:
-  ```bash
-  ./upgrade.sh <web-app-name> <api-app-name>
-  ```
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
+
+### Migrating a deployment
+
+ > ⚠️ **Warning**: the Heroku migration will attempt to migrate your data to a new database instance and delete the old one. Take a look at what the script is doing and make sure you understand the implications before running it.
+
+1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `heroku` directory:
+    ```bash
+    ./migrate.sh <web-app-name> <api-app-name>
+    ```
+    **Note** that the admin panel will move from `<api-app-name>.herokuapp.com/admin` to `<web-app-name>.herokuapp.com/admin` and the API app will be deleted
 
 ## Configuration
 
@@ -80,13 +105,13 @@ So you're ready to set Postfacto up, choose names for your web and API apps. We'
 
 In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
 For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
-`api-app-name.cfapps.io/admin` or `api-app-name.{{pcf-url}}/admin`.
+`<app-name>.cfapps.io/admin` or `<app-name>.<pcf-url>/admin`.
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com) and
    create a new project
 1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
 1. Choose a name for your app
-1. In `Authorized JavaScript Origins`, set it to the public URL of your `web-app-name`. For example: if deploying to PWS, your public URL will be `https://{{web-app-name}}.{{pcf-url}}`
+1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to PWS, your public URL will be `https://<app-name>.<pcf-url>`
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
 1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
@@ -100,5 +125,5 @@ If you'd like to have your instance send analytics data to the Postfacto team so
 You can customise this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
 
 ```bash
-SESSION_TIME=60 ./deploy web-app api-app
+SESSION_TIME=60 ./deploy <app-name>
 ```
