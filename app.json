@@ -1,0 +1,50 @@
+{
+  "name": "Postfacto",
+  "description": "Self-hosted retro tool aimed at helping remote teams",
+  "repository": "https://github.com/pivotal/postfacto",
+  "env": {
+    "SECRET_KEY_BASE": {
+      "description": "Secret key base for Rails app",
+      "generator": "secret"
+    },
+    "WEBSOCKET_PORT": {
+      "description": "The port for websocket connections",
+      "value": "443"
+    },
+    "ADMIN_EMAIL": {
+      "description": "Email address for the administrator"
+    },
+    "ADMIN_PASSWORD": {
+      "description": "Password for the administrator"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git#v158"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-ruby.git#v200"
+    }
+  ],
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    },
+    {
+      "plan": "heroku-redis:hobby-dev"
+    }
+  ],
+  "keywords": [
+    "retro",
+    "ruby",
+    "rails",
+    "javascript",
+    "react"
+  ],
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate admin:create_user"
+  },
+  "logo": "https://raw.githubusercontent.com/pivotal/postfacto/master/media/postfactobot.png",
+  "success_url": "/admin",
+  "stack": "heroku-18"
+}

@@ -13,6 +13,10 @@ Download the [latest release](https://github.com/pivotal/postfacto/releases) and
 
 _Note: Postfacto **does not** support being deployed from source, it must be deployed from a packaged version/archived release._
 
+Alternatively, use the following button for a one-click deploy to Heroku (this will deploy the latest code, not necessarily the latest release).
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Features
 
 ### Run retros remotely
