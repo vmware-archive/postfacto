@@ -59,9 +59,8 @@ echo 'Setup complete'
 
 NOW=$(date +%s)
 
-OLD_WEB="postfacto-old-web-${NOW}"
-OLD_API="postfacto-old-api-${NOW}"
-NEW_WEB="postfacto-new-web-${NOW}"
+OLD_APP="postfacto-old-app-${NOW}"
+NEW_APP="postfacto-new-app-${NOW}"
 
 if [[ ! $* =~ --skip-cf ]];
 then
@@ -90,19 +89,19 @@ then
 
   pushd "$SCRIPT_DIR/last-release/package/pcf"
     echo 'Deploying old version to Cloud Foundry'
-    ENABLE_ANALYTICS=false ./deploy.sh $OLD_WEB $OLD_API 'apps.pcfone.io'
+    ENABLE_ANALYTICS=false ./deploy.sh $OLD_APP
   popd
 
   pushd "$SCRIPT_DIR/package/pcf"
-    echo 'Migrating old version on Cloud Foundry'
-    ENABLE_ANALYTICS=false ./migrate.sh $OLD_WEB $OLD_API
+    echo 'Upgrading old version on Cloud Foundry'
+    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_APP
 
     echo 'Deploying new version to Cloud Foundry'
-    ENABLE_ANALYTICS=false ./deploy.sh $NEW_WEB
+    ENABLE_ANALYTICS=false ./deploy.sh $NEW_APP
   popd
 
   echo 'Cleaning up Cloud Foundry'
-  for APP in $OLD_WEB $NEW_WEB
+  for APP in $OLD_APP $NEW_APP
   do
     cf delete $APP -f -r
   done
@@ -127,27 +126,22 @@ then
 
   pushd "$SCRIPT_DIR/last-release/package/heroku"
     echo 'Deploying old version to Heroku'
-    ENABLE_ANALYTICS=false ./deploy.sh $OLD_WEB $OLD_API
+    ENABLE_ANALYTICS=false ./deploy.sh $OLD_APP
   popd
 
   pushd "$SCRIPT_DIR/package/heroku"
-    echo 'Migrating old version on Heroku'
-    ENABLE_ANALYTICS=false ./migrate.sh $OLD_WEB $OLD_API
+    echo 'Upgrading old version on Heroku'
+    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_APP
 
     echo 'Deploying new version to Heroku'
-    ENABLE_ANALYTICS=false ./deploy.sh $NEW_WEB
+    ENABLE_ANALYTICS=false ./deploy.sh $NEW_APP
   popd
 
   echo 'Cleaning up Heroku'
-  for APP in $OLD_WEB $NEW_WEB
+  for APP in $OLD_APP $NEW_APP
   do
     heroku apps:delete -a $APP -c $APP
   done
-
-  if [[ $(heroku apps) =~ $OLD_API ]]; then
-    echo "$OLD_API was not deleted by the upgrade"
-    exit 1
-  fi
 fi
 
 echo 'Cleaning up working directory'
