@@ -35,7 +35,7 @@ nodeSelector: {}
 
 disableSSLRedirect:
 googleOAuthClientId:
-secretKeyBase: athing2
+secretKeyBase:
 
 redis:
   cluster:
