@@ -37,3 +37,23 @@ helm upgrade postfacto . \
   --set googleOAuthClientId=<client-id>
 ```
 
+# Parameters
+
+## Postfacto parameters
+
+Parameter | Description | Default
+----------|-------------|--------
+googleOAuthClientId  | The Google oAuth client ID to use to allow users to log in using a google account | nil   
+
+## Subcharts
+This chart includes the following subcharts: 
+* [redis](https://github.com/bitnami/charts/tree/master/upstreamed/redis)
+* [postgresql](https://github.com/bitnami/charts/tree/master/upstreamed/postgresql)
+
+All options are documented for these are documented in the above links and can be customized
+by providing the value prefixed with the chart name. For example to modify the `postgresqlDataDir` 
+option for postgres you would add the following to the install/upgrade command
+
+```shell script
+--set postgresql.postgresqlDataDir=<new-data-dir>
+```
