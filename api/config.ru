@@ -32,7 +32,7 @@
 
 require_relative 'config/environment'
 
-if ENV['RAILS_ENV'] == 'production'
+if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
   require 'rack/ssl'
 
   use Rack::SSL,

@@ -33,22 +33,31 @@ spec:
             value: "postgres://{{ .Values.postgresql.postgresqlUsername }}:$(POSTGRESQL_PASSWORD)@{{ .Release.Name }}-postgresql"
           - name: SECRET_KEY_BASE
             value: "{{ .Values.secretKeyBase }}"
+          - name: DISABLE_SSL_REDIRECT
+            value: "true"
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Release.Name }}-redis"
+                key: redis-password
+          - name: REDIS_URL
+            value: "redis://:$(REDIS_PASSWORD)@{{ .Release.Name }}-redis-master"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 4000
+              containerPort: 3000
               protocol: TCP
           livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

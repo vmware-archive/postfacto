@@ -2,3 +2,6 @@ dependencies:
   - name: postgresql
     version: 6.5.0
     repository: "@stable"
+  - name: redis
+    version: 9.4.3
+    repository: "@stable"

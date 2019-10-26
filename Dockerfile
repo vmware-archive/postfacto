@@ -10,7 +10,7 @@ FROM ruby:2.6.3
 RUN gem install bundler:2.0.1
 
 COPY ./api /postfacto
-COPY --from=front-end /web/build /postfacto/public/
+COPY --from=front-end /web/build /postfacto/client/
 
 WORKDIR /postfacto
 
@@ -24,7 +24,7 @@ ENV RAILS_SERVE_STATIC_FILES true
 
 EXPOSE 4000
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "4000"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
 
 
 
