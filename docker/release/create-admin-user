@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+  echo "usage: ./create-admin-user.sh <email> <password"
+  echo "Creates an admin user for the install"
+  exit 1
+fi
+
+ADMIN_EMAIL=$1 ADMIN_PASSWORD=$2 rake admin:create_user

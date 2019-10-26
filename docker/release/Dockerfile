@@ -10,7 +10,8 @@ FROM ruby:2.6.3
 RUN gem install bundler:2.0.1
 
 COPY ./api /postfacto
-COPY ./entrypoint.sh /
+COPY docker/release/entrypoint /
+COPY docker/release/create-admin-user /usr/local/bin
 COPY --from=front-end /web/build /postfacto/client/
 
 WORKDIR /postfacto
@@ -27,7 +28,7 @@ ENV ENABLE_ANALYTICS false
 
 EXPOSE 4000
 
-ENTRYPOINT "/entrypoint.sh"
+ENTRYPOINT "/entrypoint"
 
 
 
