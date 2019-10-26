@@ -1,4 +1,6 @@
 language: minimal
+cache: bundler
+
 dist: bionic
 
 addons:
@@ -13,6 +15,7 @@ services:
 
 script:
   - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
+  - docker build $TRAVIS_BUILD_DIR -f $TRAVIS_BUILD_DIR/docker/release/Dockerfile -t travis-build-image
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
@@ -21,12 +24,17 @@ before_deploy:
   - ./test-package.sh --skip-package
 
 deploy:
-  provider: releases
-  draft: true
-  skip_cleanup: true
-  overwrite: true
-  on:
-    tags: true
-  api_key:
-    secure: T+EgOhFIEIo278bi1tC+/mbea/9hIsBnyY4fp1vhEk/1znyv7I4Ua33olS+rhrrCW2RV+xJI79d7X6olZ1k+2gupzhtpp17q5bm7OISUrB/WoHd7e3dWHHYvW9cEYDJZhq5ngoizaaP8EnRMPXHp1G1sXHETXdA7A4y/yJprXI+2ybaw760LQFffjuKsSiLOMtaLGlBBPDk0Ez54GT7tTMfBj9milglu1NNNqP2DBUFtrRKYff8GtJQIOVwkhXPVyFY41OasrCsOsSSV0v5q2z+QsSbV3wYX8ugc2tb1jilWDz55ee+ENhpqRnhcV99yXPbCT8iYWu4y+aN2s3LUyG0wM1FV2TBb1B+yoCbrRb4RLAgjYbnk08LlKFm32pTQQNRbq13pmfVcGIthqwpyAjNmJ1RRmOMmpwFLO9yuq1TUOIUGBrQStHhJFL573LFv36LyUZPVfjBsFiaILMfCcV+FHHAZNEwMLm0uWcqG6DvUvRDvWdRy8x+UL4jqYmEyw5zf1+SulHh6oK7rDIWBMcNdmZMIx6q96gyGpjFv2sleJrO71LoqArFowRiL3zV6FzZ4lZ0ohWIkfodSTReigztjmZVQUJk36wghj8ZahfR/jl8e8ubCV4Jid7sFNeavAZfOrYnOOZdi9ZlIRlWVsUsCgkBaLryni1waNXS4zxM=
-  file: package.zip
+  - provider: script
+    script: bash $TRAVIS_BUILD_DIR/docker/ci-push $TRAVIS_TAG
+    on:
+      tags: true
+  - provider: releases
+    draft: true
+    skip_cleanup: true
+    overwrite: true
+    on:
+      tags: true
+    api_key:
+      secure: T+EgOhFIEIo278bi1tC+/mbea/9hIsBnyY4fp1vhEk/1znyv7I4Ua33olS+rhrrCW2RV+xJI79d7X6olZ1k+2gupzhtpp17q5bm7OISUrB/WoHd7e3dWHHYvW9cEYDJZhq5ngoizaaP8EnRMPXHp1G1sXHETXdA7A4y/yJprXI+2ybaw760LQFffjuKsSiLOMtaLGlBBPDk0Ez54GT7tTMfBj9milglu1NNNqP2DBUFtrRKYff8GtJQIOVwkhXPVyFY41OasrCsOsSSV0v5q2z+QsSbV3wYX8ugc2tb1jilWDz55ee+ENhpqRnhcV99yXPbCT8iYWu4y+aN2s3LUyG0wM1FV2TBb1B+yoCbrRb4RLAgjYbnk08LlKFm32pTQQNRbq13pmfVcGIthqwpyAjNmJ1RRmOMmpwFLO9yuq1TUOIUGBrQStHhJFL573LFv36LyUZPVfjBsFiaILMfCcV+FHHAZNEwMLm0uWcqG6DvUvRDvWdRy8x+UL4jqYmEyw5zf1+SulHh6oK7rDIWBMcNdmZMIx6q96gyGpjFv2sleJrO71LoqArFowRiL3zV6FzZ4lZ0ohWIkfodSTReigztjmZVQUJk36wghj8ZahfR/jl8e8ubCV4Jid7sFNeavAZfOrYnOOZdi9ZlIRlWVsUsCgkBaLryni1waNXS4zxM=
+    file:
+    - package.zip
