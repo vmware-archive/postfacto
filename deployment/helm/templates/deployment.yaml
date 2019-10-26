@@ -21,6 +21,16 @@ spec:
       serviceAccountName: {{ include "postfacto.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: psql-wait
+          image: postgres
+          env:
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Release.Name }}-postgresql"
+                key: postgresql-password
+          command: ["sh", "-c", "for i in {1..33}; do sleep 3; if PGPASSWORD=$POSTGRESQL_PASSWORD psql -h {{ .Release.Name }}-postgresql -U {{ .Values.postgresql.postgresqlUsername }}; then exit 0; fi; done; exit 1"]
       containers:
         - name: {{ .Chart.Name }}
           env:
