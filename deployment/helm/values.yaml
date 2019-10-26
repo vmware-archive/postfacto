@@ -2,14 +2,13 @@
 replicaCount: 1
 
 image:
-  repository: postfacto
+  repository: crswty/postfacto
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-secretKeyBase: todo
 
 serviceAccount:
   create: true
@@ -19,8 +18,7 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-#  type: ClusterIP
-  type: NodePort
+  type: ClusterIP
   port: 80
 
 ingress:
@@ -35,7 +33,9 @@ resources: {}
 
 nodeSelector: {}
 
+disableSSLRedirect:
 googleOAuthClientId:
+secretKeyBase:
 
 redis:
   cluster:

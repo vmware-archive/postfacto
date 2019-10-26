@@ -18,7 +18,8 @@ going to create retros through the admin dashboard
 helm install postfacto . \
   --set redis.password=<redis-password> \
   --set postgresql.postgresqlPassword=<postgresql-password> \
-  --set googleOAuthClientId=<client-id>
+  --set googleOAuthClientId=<client-id> \
+  --set secretKeyBase=<random-value>
 ```
 5. Optionally create an admin user if you need to access the admin console
 ```shell script
@@ -34,7 +35,8 @@ for redis and postgres as well as any other configuration
 helm upgrade postfacto . \
   --set redis.password=<redis-password> \
   --set postgresql.postgresqlPassword=<postgresql-password> \
-  --set googleOAuthClientId=<client-id>
+  --set googleOAuthClientId=<client-id> \
+  --set secretKeyBase=<random-value>
 ```
 
 # Parameters
@@ -44,6 +46,8 @@ helm upgrade postfacto . \
 Parameter | Description | Default
 ----------|-------------|--------
 googleOAuthClientId  | The Google oAuth client ID to use to allow users to log in using a google account | nil   
+disableSSLRedirect  | By default Postfacto redirects to HTTPS by default, setting this to true disables that behaviour and can be useful when getting started | nil   
+secretKeyBase | Used for signing and encryption, should be set to a random value | random 10 character alpha numeric string
 
 ## Subcharts
 This chart includes the following subcharts: 

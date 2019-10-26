@@ -42,9 +42,9 @@ spec:
           - name: DATABASE_URL
             value: "postgres://{{ .Values.postgresql.postgresqlUsername }}:$(POSTGRESQL_PASSWORD)@{{ .Release.Name }}-postgresql"
           - name: SECRET_KEY_BASE
-            value: "{{ .Values.secretKeyBase }}"
+            value: {{ include "postfacto.secretKey" . }}
           - name: DISABLE_SSL_REDIRECT
-            value: "true"
+            value: "{{ .Values.disableSSLRedirect }}"
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
