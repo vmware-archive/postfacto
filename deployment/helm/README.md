@@ -23,8 +23,8 @@ helm install postfacto . \
 5. Optionally create an admin user if you need to access the admin console
 ```shell script
 kubectl get pods
-# Take note of the postfacto pod ID
-kubectl exec <podID> create-admin-user <email> <password> 
+# Take note of the postfacto pod name
+kubectl exec <pod name> create-admin-user <email> <password> 
 ```
 
 # Upgrading
