@@ -42,6 +42,8 @@ spec:
                 key: redis-password
           - name: REDIS_URL
             value: "redis://:$(REDIS_PASSWORD)@{{ .Release.Name }}-redis-master"
+          - name: GOOGLE_OAUTH_CLIENT_ID
+            value: "{{ .Values.googleOAuthClientId }}"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"

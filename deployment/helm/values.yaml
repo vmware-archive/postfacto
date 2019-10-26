@@ -35,6 +35,8 @@ resources: {}
 
 nodeSelector: {}
 
+googleOAuthClientId:
+
 redis:
   cluster:
     enabled: false

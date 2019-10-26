@@ -10,6 +10,7 @@ FROM ruby:2.6.3
 RUN gem install bundler:2.0.1
 
 COPY ./api /postfacto
+COPY ./entrypoint.sh /
 COPY --from=front-end /web/build /postfacto/client/
 
 WORKDIR /postfacto
@@ -21,10 +22,12 @@ RUN bundle exec rake assets:precompile
 
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES true
+ENV GOOGLE_OAUTH_CLIENT_ID ""
+ENV ENABLE_ANALYTICS false
 
 EXPOSE 4000
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+ENTRYPOINT "/entrypoint.sh"
 
 
 
