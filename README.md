@@ -1,40 +1,50 @@
 # Postfacto
 [![Build Status](https://travis-ci.org/pivotal/postfacto.svg?branch=master)](https://travis-ci.org/pivotal/postfacto)
 
-Postfacto is a **free**, **open-source** and **self-hosted** **retro tool** aimed at helping **remote teams**.
+Postfacto helps teams run great [retrospecives](https://content.pivotal.io/blog/how-to-run-a-really-good-retrospective) remotely.
 
-![](media/sample-retro.png)
+<p align="center">
+  <img width="700px" src="https://github.com/crswty/postfacto/blob/feat-new-readme/media/sample-retro.gif?raw=true" />
+</p>
 
-Postfacto was created by [Pivotal Labs](https://pivotal.io/labs) by a team in their [Sydney office](https://pivotal.io/locations/sydney). It was originally available as a hosted SAAS product at [postfacto.io](https://postfacto.io) but has since been open sourced and focused on being a self hosted product. Postfacto is made up of a **React** web app and a **Ruby on Rails** API that provides an API for the front end.
-
-## Deployment
-
-Download the [latest release](https://github.com/pivotal/postfacto/releases) and follow the included instructions on deploying your own instance of Postfacto. 
-
-_Note: Postfacto **does not** support being deployed from source, it must be deployed from a packaged version/archived release._
 
 ## Features
 
-### Run retros remotely
+### Run Retros Remotely
+Postfacto lets you run an agile retrospective even when your team is distributed across the world. Retros live update across all your devices
+so each participant can follow along on their device
 
-Postfacto lets you run an agile retrospective even when your team is distributed across the world.
+### Record Action Items
+Retros are designed to help the team improve and that's hard to do without keeping track of the actions the team needs to carry 
+out and the also the one's you've achieved. Postfacto tracks the items you enter week to week to help you keep on top of them.
 
-### Record action items
+### Mobile Friendly
+Participants can add and vote on items from their mobile devices, so its easy to run a retro without everyone in the group having a laptop nearby. This works really well for retros where some people 
+are in the room and some are remote
 
-Retros are designed to help the team improve and that's hard to do without keeping track of the actions the team needs to carry out and the also the one's you've achieved. Postfacto tracks the items you enter week to week to help you keep on top of them.
+### Easy Onboarding
+Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their google accounts
 
-### Choose your level of security
+## Deployment
 
-You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access it. You can also let users sign up to your instance using Google OAuth or control access with the admin dashboard.
+Postfacto is a self hosted product, this makes it easier for you to stay in control of you data.
+We aim to make it as easy to deploy to as many different locations as possible, currently we support:
 
-### Easily deployable
+* [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-cloud-foundry)
+* [Pivotal Web Services](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-web-services)
+* [Heroku](https://github.com/pivotal/postfacto/tree/master/deployment#heroku)
 
-You can [deploy](#deployment) your own Postfacto to **Pivotal Web Services**, **Pivotal Cloud Foundry** or **Heroku** and stay in control of your own data.
+**Note: Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions above**
+
+If the platforms above don't work for you; you may be able to find a way to run Postfacto yourself by following the Contributing guide.
 
 ## Contributing
 
-Postfacto's code and design is hosted on [Github](https://github.com/pivotal/postfacto). See our [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md) for more info.
+See the [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md) for more info.
 
 ## License
 
-Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text of the license is available [here](https://github.com/pivotal/postfacto/blob/master/LICENSE.md). It's important to note that this license allows you to deploy an instance of Postfacto for private, public or internal use.
+Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text 
+of the license is available [here](https://github.com/pivotal/postfacto/blob/master/LICENSE.md). It's important to note 
+that this license allows you to deploy an instance of Postfacto for private, public or internal use.
+

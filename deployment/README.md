@@ -1,5 +1,7 @@
 # Deployment
 
+**Note: If you have not already done so, download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)**
+
 So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
 
 ## Pivotal Web Services
