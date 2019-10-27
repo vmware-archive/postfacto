@@ -1,32 +1,56 @@
-# Build & Install
+# Installing with the Helm chart
+**Note: this functionality is new and should be considered beta for now**
 
-To build and run the chart locally, follow the following steps
+This Helm chart installs Postfacto and its dependencies. 
 
-1. Install Helm CLI (version 3+)
-2. Add stable chart repository to helm
-```shell script
-helm repo add stable https://kubernetes-charts.storage.googleapis.com
-```
-3. Download subcharts:
-```shell script
-helm dep build
-```
-4. Run the chart choosing some passwords for the redis and mysql installs 
-as well as your google oauth client id. You can omit this if you are just 
-going to create retros through the admin dashboard
-```shell script
-helm install postfacto . \
-  --set redis.password=<redis-password> \
-  --set postgresql.postgresqlPassword=<postgresql-password> \
-  --set googleOAuthClientId=<client-id> \
-  --set secretKeyBase=<random-value>
-```
-5. Optionally create an admin user if you need to access the admin console
-```shell script
-kubectl get pods
-# Take note of the postfacto pod name
-kubectl exec <pod name> create-admin-user <email> <password> 
-```
+# Evaluation install
+Start with this simplified install if you just want to try out Postfacto, skip to the production install
+section if you want to run an instance for real. 
+
+1. Download the chart from the [releases page](https://github.com/pivotal/postfacto/releases)  
+
+1. Run the chart:
+    ```shell script
+    helm install postfacto <downloaded-chart.tgz>
+    ```
+    If you will be running in an environemtn that doesn't support HTTPS, you will need to turn off the automatic redirect with the `disableSSLRedirect option`
+
+1. Create an admin user so you can access the admin console
+    ```shell script
+    kubectl get pods
+    # Take note of the postfacto pod name
+    kubectl exec <pod name> create-admin-user <admin-email> <admin-password> 
+    ```
+   
+You should now have a Postfacto running in k8s, you can head to the /admin path to 
+create a retro then to /retros/<retro-name> to start using it. 
+
+This is a reasonable installation if you don't plan on upgrading or allowing other users
+to sign up and create retros, for that, read on to see a few more options you need to set. 
+
+## Production Install 
+The steps here are the same as the evaluation install, you just need to set a few more options (either 
+by passing them through using the --set command or --values with a file)
+
+### Passwords
+The first thing to do is to pick passwords for the redis and postgres, this is required for upgrades, 
+otherwise the sub charts will attempt to generate a new password which won't actually work.
+* `redis.password=<redis-password>`
+* `postgresql.postgresqlPassword=<postgresql-password>`
+
+### Letting other users register
+Postfacto can allow users to register with google and then create retros themselves, to do this you need to
+provice a google oAuth client ID, you can follow [this guide](https://developers.google.com/identity/protocols/OAuth2UserAgent) 
+up until generating scopes to get a client id to provide in this parameter: 
+
+* `googleOAuthClientId=<client-id>`
+
+### Keeping users logged in between upgrades
+An out of the box install will invalidate sessions after each upgrade, to stop this provide a secret key base
+that is the same across upgrades:
+
+* `secretKeyBase=<random-long-value>`
+
 
 # Upgrading
 Upgrading is similar to installing, make sure you provide the same passwords 
@@ -34,9 +58,7 @@ for redis and postgres as well as any other configuration
 ```shell script
 helm upgrade postfacto . \
   --set redis.password=<redis-password> \
-  --set postgresql.postgresqlPassword=<postgresql-password> \
-  --set googleOAuthClientId=<client-id> \
-  --set secretKeyBase=<random-value>
+  --set postgresql.postgresqlPassword=<postgresql-password> 
 ```
 
 # Parameters
@@ -61,3 +83,22 @@ option for postgres you would add the following to the install/upgrade command
 ```shell script
 --set postgresql.postgresqlDataDir=<new-data-dir>
 ```
+
+
+# Building the chart
+
+To build and run the chart locally, follow the following steps
+
+1. Install Helm CLI (version 3+)
+1. Add stable chart repository to helm
+    ```shell script
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com
+    ```
+1. Download subcharts:
+    ```shell script
+    helm dep build
+    ```
+1. Build the chart: 
+    ```shell script
+    helm package
+    ```
