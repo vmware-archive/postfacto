@@ -31,7 +31,8 @@
 #
 set -e
 
-VERSION=$1
+VERSION="$1-beta"
+APP_VERSION=$1
 
 if [ $# -lt 1 ]; then
   echo "usage: ./build.sh <version>"
@@ -40,7 +41,7 @@ if [ $# -lt 1 ]; then
 fi
 
 sed -i.bak s/version:.*/version:\ $VERSION/  Chart.yaml
-sed -i.bak s/appVersion:.*/appVersion:\ $VERSION/  Chart.yaml
+sed -i.bak s/appVersion:.*/appVersion:\ $APP_VERSION/  Chart.yaml
 
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
 
