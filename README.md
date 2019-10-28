@@ -23,7 +23,7 @@ Participants can add and vote on items from their mobile devices, so its easy to
 are in the room and some are remote.
 
 ### Easy Onboarding
-Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their google accounts
+Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their google accounts.
 
 ## Deployment
 
