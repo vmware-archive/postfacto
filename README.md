@@ -12,7 +12,7 @@ Postfacto helps teams run great [retrospecives](https://content.pivotal.io/blog/
 
 ### Run Retros Remotely
 Postfacto lets you run an agile retrospective even when your team is distributed across the world. Retros live update across all your devices
-so each participant can follow along on their device
+so each participant can follow along on their device.
 
 ### Record Action Items
 Retros are designed to help the team improve and that's hard to do without keeping track of the actions the team needs to carry 
