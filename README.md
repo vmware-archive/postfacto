@@ -20,7 +20,7 @@ out and the also the one's you've achieved. Postfacto tracks the items you enter
 
 ### Mobile Friendly
 Participants can add and vote on items from their mobile devices, so its easy to run a retro without everyone in the group having a laptop nearby. This works really well for retros where some people 
-are in the room and some are remote
+are in the room and some are remote.
 
 ### Easy Onboarding
 Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their google accounts
