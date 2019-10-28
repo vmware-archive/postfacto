@@ -4,39 +4,39 @@
 Postfacto helps teams run great [retrospectives](https://content.pivotal.io/blog/how-to-run-a-really-good-retrospective) remotely.
 
 <p align="center">
-  <img width="700px" src="https://github.com/crswty/postfacto/blob/feat-new-readme/media/sample-retro.gif?raw=true" />
+  <img width="700px" src="https://github.com/pivotal/postfacto/blob/master/media/sample-retro.gif?raw=true" />
 </p>
 
 
 ## Features
 
 ### Run Retros Remotely
-Postfacto lets you run an agile retrospective even when your team is distributed across the world. Retros live update across all your devices
-so each participant can follow along on their device.
-
-### Record Action Items
-Retros are designed to help the team improve and that's hard to do without keeping track of the actions the team needs to carry 
-out and the also the one's you've achieved. Postfacto tracks the items you enter week to week to help you keep on top of them.
-
-### Mobile Friendly
-Participants can add and vote on items from their mobile devices, so its easy to run a retro without everyone in the group having a laptop nearby. This works really well for retros where some people 
-are in the room and some are remote.
+Postfacto lets you run an agile retrospective even when your team is distributed across the world. Your retros will live update across all your devices so each participant can follow along on their device.
 
 ### Easy Onboarding
-Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their google accounts.
+Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their Google accounts. Alternatively, you can control access to your instance with the admin dashboard.
+
+### Define Retro Access
+You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access them without friction.
+
+### Mobile Friendly
+Participants can add and vote on items from their mobile devices, so it is easy to run a retro without everyone in the group having a laptop nearby. This works well for retros where some people are in the room and some are remote.
+
+### Record Action Items
+Retros are designed to help teams improve and that's hard to do without taking action. Postfacto tracks your team's actions to help you keep on top of them.
+
 
 ## Deployment
 
-Postfacto is a self hosted product, this makes it easier for you to stay in control of you data.
-We aim to make it as easy to deploy to as many different locations as possible, currently we support:
+Postfacto is a self hosted product, this makes it easier for you to stay in control of your data. We aim to make it easy to deploy to as many locations as possible. We currently support the following:
 
 * [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-cloud-foundry)
 * [Pivotal Web Services](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-web-services)
 * [Heroku](https://github.com/pivotal/postfacto/tree/master/deployment#heroku)
 
-**Note: Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions above**
+**Note: Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions above.**
 
-If the platforms above don't work for you; you may be able to find a way to run Postfacto yourself by following the Contributing guide.
+If the platforms above don't work for you; you may be able to find a way to run Postfacto yourself by following the Contributing Guide.
 
 ## Contributing
 
