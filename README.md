@@ -1,7 +1,7 @@
 # Postfacto
 [![Build Status](https://travis-ci.org/pivotal/postfacto.svg?branch=master)](https://travis-ci.org/pivotal/postfacto)
 
-Postfacto helps teams run great [retrospecives](https://content.pivotal.io/blog/how-to-run-a-really-good-retrospective) remotely.
+Postfacto helps teams run great [retrospectives](https://content.pivotal.io/blog/how-to-run-a-really-good-retrospective) remotely.
 
 <p align="center">
   <img width="700px" src="https://github.com/crswty/postfacto/blob/feat-new-readme/media/sample-retro.gif?raw=true" />
