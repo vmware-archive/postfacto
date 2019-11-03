@@ -33,7 +33,7 @@ FROM node:12.6.0 as front-end
 COPY ./web /web
 WORKDIR /web
 
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 FROM ruby:2.6.3
