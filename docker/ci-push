@@ -2,7 +2,7 @@
 set -e
 
 TAG=$1
-REPOSITORY=crswty/postfacto
+REPOSITORY=postfacto/postfacto
 VERSION_TAG="$REPOSITORY:$TAG"
 LATEST_TAG="$REPOSITORY:latest"
 

@@ -1,5 +1,4 @@
 language: minimal
-cache: bundler
 
 dist: bionic
 

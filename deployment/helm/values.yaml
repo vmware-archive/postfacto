@@ -31,7 +31,7 @@
 replicaCount: 1
 
 image:
-  repository: crswty/postfacto
+  repository: postfacto/postfacto
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

@@ -13,7 +13,7 @@ section if you want to run an instance for real.
     ```shell script
     helm install postfacto <downloaded-chart.tgz>
     ```
-    If you will be running in an environemtn that doesn't support HTTPS, you will need to turn off the automatic redirect with the `disableSSLRedirect option`
+    If you will be running in an environment that doesn't support HTTPS, you will need to turn off the automatic redirect with the `disableSSLRedirect option`
 
 1. Create an admin user so you can access the admin console
     ```shell script
