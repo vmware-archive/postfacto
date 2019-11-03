@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # Postfacto, a free, open-source and self-hosted retro tool aimed at helping
 # remote teams.
@@ -28,17 +29,23 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
+set -e
 
-require_relative 'config/environment'
+VERSION="$1-beta"
+APP_VERSION=$1
 
-if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
-  require 'rack/ssl'
+if [ $# -lt 1 ]; then
+  echo "usage: ./build.sh <version>"
+  echo "Builds the chart writing the given version as the app and chart version"
+  exit 1
+fi
 
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
-end
+sed -i.bak s/version:.*/version:\ $VERSION/  Chart.yaml
+sed -i.bak s/appVersion:.*/appVersion:\ $APP_VERSION/  Chart.yaml
 
-run Rails.application
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
+
+rm -f Chart.lock # workaround for: https://github.com/helm/helm/issues/6416
+helm dependency build
+
+helm package .

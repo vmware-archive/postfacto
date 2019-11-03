@@ -28,17 +28,40 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
+FROM node:12.6.0 as front-end
 
-require_relative 'config/environment'
+COPY ./web /web
+WORKDIR /web
 
-if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
-  require 'rack/ssl'
+RUN npm ci
+RUN npm run build
 
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
-end
+FROM ruby:2.6.3
+RUN gem install bundler:2.0.1
 
-run Rails.application
+COPY ./api /postfacto
+COPY docker/release/entrypoint /
+COPY docker/release/create-admin-user /usr/local/bin
+COPY --from=front-end /web/build /postfacto/client/
+
+WORKDIR /postfacto
+
+RUN bundle install --without test
+RUN apt-get update -qq
+RUN apt-get install -y nodejs
+RUN bundle exec rake assets:precompile
+
+ENV RAILS_ENV production
+ENV RAILS_SERVE_STATIC_FILES true
+ENV GOOGLE_OAUTH_CLIENT_ID ""
+ENV ENABLE_ANALYTICS false
+
+EXPOSE 3000
+
+ENTRYPOINT "/entrypoint"
+
+
+
+
+
+

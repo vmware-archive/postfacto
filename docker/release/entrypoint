@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # Postfacto, a free, open-source and self-hosted retro tool aimed at helping
 # remote teams.
@@ -28,17 +29,27 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
 
-require_relative 'config/environment'
+cat << EOF > /postfacto/client/config.js
+window.Retro = {
+  config: {
+    "globalNamespace": "Retro",
+    "title": "Postfacto",
+    "scripts": ["application.js"],
+    "stylesheets": ["application.css"],
+    "useRevManifest": false,
+    "hotModule": true,
+    "useWebpackDevMiddleware": true,
+    "api_base_url": "/api",
+    "websocket_url": "/cable",
+    "enable_analytics": $ENABLE_ANALYTICS,
+    "contact": "",
+    "terms": "",
+    "privacy": "",
+    "google_oauth_client_id": "$GOOGLE_OAUTH_CLIENT_ID"
+  }
+};
+EOF
 
-if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
-  require 'rack/ssl'
-
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
-end
-
-run Rails.application
+bundle exec rake db:migrate
+bundle exec rails server -b 0.0.0.0 -p 3000

@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+TAG=$1
+REPOSITORY=postfacto/postfacto
+VERSION_TAG="$REPOSITORY:$TAG"
+LATEST_TAG="$REPOSITORY:latest"
+
+echo "Tagging: $VERSION_TAG"
+docker tag travis-build-image $VERSION_TAG
+
+echo "Tagging: $LATEST_TAG"
+docker tag travis-build-image $LATEST_TAG
+
+#docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+
+echo "Pushing tag: $VERSION_TAG"
+docker push $VERSION_TAG
+
+echo "Pushing tag: $LATEST_TAG"
+docker push $LATEST_TAG

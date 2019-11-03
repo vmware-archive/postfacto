@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # Postfacto, a free, open-source and self-hosted retro tool aimed at helping
 # remote teams.
@@ -28,17 +29,11 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
 
-require_relative 'config/environment'
+if [ $# -lt 1 ]; then
+  echo "usage: ./create-admin-user.sh <email> <password"
+  echo "Creates an admin user for the install"
+  exit 1
+fi
 
-if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
-  require 'rack/ssl'
-
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
-end
-
-run Rails.application
+ADMIN_EMAIL=$1 ADMIN_PASSWORD=$2 rake admin:create_user

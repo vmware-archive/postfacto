@@ -28,17 +28,48 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# This file is used by Rack-based servers to start the application.
+replicaCount: 1
 
-require_relative 'config/environment'
+image:
+  repository: postfacto/postfacto
+  pullPolicy: IfNotPresent
 
-if ENV['RAILS_ENV'] == 'production' && ENV['DISABLE_SSL_REDIRECT'].nil?
-  require 'rack/ssl'
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
-  use Rack::SSL,
-      exclude: (lambda do |env|
-        env['HTTP_CONNECTION'] == 'Upgrade' && env['HTTP_UPGRADE'] == 'websocket'
-      end)
-end
 
-run Rails.application
+serviceAccount:
+  create: true
+  name:
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+
+resources: {}
+
+nodeSelector: {}
+
+disableSSLRedirect:
+googleOAuthClientId:
+secretKeyBase:
+
+redis:
+  cluster:
+    enabled: false
+
+tolerations: []
+
+affinity: {}

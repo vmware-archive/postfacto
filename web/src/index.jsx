@@ -45,7 +45,7 @@ if (process.env.REACT_APP_USE_MOCK_GOOGLE === 'true') {
   // Real Google auth
   config.mock_google_auth = false;
   config.google_oauth_client_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
-} else if (config.google_oauth_client_id === undefined) {
+} else if (!config.google_oauth_client_id) {
   // No login (must create retros via admin interface)
   config.mock_google_auth = false;
   config.google_oauth_client_id = null;

@@ -1,0 +1,116 @@
+#
+# Postfacto, a free, open-source and self-hosted retro tool aimed at helping
+# remote teams.
+#
+# Copyright (C) 2016 - Present Pivotal Software, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+#
+# it under the terms of the GNU Affero General Public License as
+#
+# published by the Free Software Foundation, either version 3 of the
+#
+# License, or (at your option) any later version.
+#
+#
+#
+# This program is distributed in the hope that it will be useful,
+#
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+#
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#
+# GNU Affero General Public License for more details.
+#
+#
+#
+# You should have received a copy of the GNU Affero General Public License
+#
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postfacto.fullname" . }}
+  labels:
+    {{- include "postfacto.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "postfacto.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "postfacto.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "postfacto.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: psql-wait
+          image: postgres
+          env:
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Release.Name }}-postgresql"
+                key: postgresql-password
+          command: ["sh", "-c", "for i in {1..33}; do sleep 3; if PGPASSWORD=$POSTGRESQL_PASSWORD psql -h {{ .Release.Name }}-postgresql -U {{ .Values.postgresql.postgresqlUsername }}; then exit 0; fi; done; exit 1"]
+      containers:
+        - name: {{ .Chart.Name }}
+          env:
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Release.Name }}-postgresql"
+                key: postgresql-password
+          - name: DATABASE_URL
+            value: "postgres://{{ .Values.postgresql.postgresqlUsername }}:$(POSTGRESQL_PASSWORD)@{{ .Release.Name }}-postgresql"
+          - name: SECRET_KEY_BASE
+            value: {{ include "postfacto.secretKey" . }}
+          - name: DISABLE_SSL_REDIRECT
+            value: "{{ .Values.disableSSLRedirect }}"
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Release.Name }}-redis"
+                key: redis-password
+          - name: REDIS_URL
+            value: "redis://:$(REDIS_PASSWORD)@{{ .Release.Name }}-redis-master"
+          - name: GOOGLE_OAUTH_CLIENT_ID
+            value: "{{ .Values.googleOAuthClientId }}"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
