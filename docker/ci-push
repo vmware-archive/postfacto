@@ -12,8 +12,8 @@ docker tag travis-build-image $VERSION_TAG
 echo "Tagging: $LATEST_TAG"
 docker tag travis-build-image $LATEST_TAG
 
-docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
-#echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+#docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 echo "Pushing tag: $VERSION_TAG"
 docker push $VERSION_TAG
