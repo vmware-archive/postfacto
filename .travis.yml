@@ -26,6 +26,7 @@ before_deploy:
 deploy:
   - provider: script
     script: bash $TRAVIS_BUILD_DIR/docker/ci-push $TRAVIS_TAG
+    skip_cleanup: true
     on:
       tags: true
   - provider: releases
