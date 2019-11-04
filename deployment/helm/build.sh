@@ -40,7 +40,6 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
-sed -i.bak s/version:.*/version:\ $VERSION/  Chart.yaml
 sed -i.bak s/appVersion:.*/appVersion:\ $APP_VERSION/  Chart.yaml
 
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
