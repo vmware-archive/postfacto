@@ -20,7 +20,7 @@ before_deploy:
   - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
   - cat .heroku-netrc >> $HOME/.netrc
   - cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
-  - ./test-package.sh --skip-package
+  - ./test-package.sh --skip-package --skip-heroku
   - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.0.0-beta.5 $TRAVIS_TAG
 
 deploy:
