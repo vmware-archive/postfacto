@@ -13,14 +13,14 @@ services:
   - docker
 
 script:
-  - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
+#  - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh && ./package.sh"
   - docker build $TRAVIS_BUILD_DIR -f $TRAVIS_BUILD_DIR/Dockerfile -t travis-build-image
 
 before_deploy:
-  - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
-  - cat .heroku-netrc >> $HOME/.netrc
-  - cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
-  - ./test-package.sh --skip-package
+#  - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
+#  - cat .heroku-netrc >> $HOME/.netrc
+#  - cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
+#  - ./test-package.sh --skip-package
   - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.0.0-beta.5 $TRAVIS_TAG
 
 deploy:
