@@ -18,12 +18,6 @@ jobs:
     name: "All Tests"
     script:
       - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh"
-    deploy:
-      - provider: script
-        script: bash $TRAVIS_BUILD_DIR/docker/ci-push $TRAVIS_TAG
-        skip_cleanup: true
-        on:
-          tags: true
   - stage: "Package"
   - name: "Build & Deploy Docker"
     script:
