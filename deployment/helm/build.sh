@@ -31,13 +31,10 @@
 #
 set -e
 
-VERSION="$1-beta"
-APP_VERSION=$1
 
+APP_VERSION=$1
 if [ $# -lt 1 ]; then
-  echo "usage: ./build.sh <version>"
-  echo "Builds the chart writing the given version as the app and chart version"
-  exit 1
+  APP_VERSION="dev"
 fi
 
 sed -i.bak s/appVersion:.*/appVersion:\ $APP_VERSION/  Chart.yaml
