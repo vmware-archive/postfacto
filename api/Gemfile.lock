@@ -188,7 +188,8 @@ GEM
     public_suffix (3.1.1)
     puma (3.12.0)
     rack (2.0.7)
-    rack-cors (1.0.2)
+    rack-cors (1.0.5)
+      rack (>= 1.6.0)
     rack-ssl (1.4.1)
       rack
     rack-test (1.1.0)
@@ -340,7 +341,7 @@ DEPENDENCIES
   pry
   pry-byebug
   puma
-  rack-cors
+  rack-cors (= 1.0.5)
   rack-ssl
   rails (>= 5.2.2.1)
   redis (~> 3.3.3)
