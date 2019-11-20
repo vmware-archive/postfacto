@@ -36,7 +36,7 @@ WORKDIR /web
 RUN npm ci
 RUN npm run build
 
-FROM ruby:2.6.3
+FROM ruby:2.6.3-alpine
 RUN gem install bundler:2.0.1
 
 COPY ./api /postfacto
@@ -46,9 +46,22 @@ COPY --from=front-end /web/build /postfacto/client/
 
 WORKDIR /postfacto
 
+# Nokogiri dependencies
+RUN apk add --update \
+  build-base \
+  libxml2-dev \
+  libxslt-dev
+
+RUN apk add --update \
+  mariadb-dev \
+  postgresql-dev \
+  sqlite-dev
+
+RUN apk add --update nodejs
+
+RUN bundle config build.nokogiri --use-system-libraries
 RUN bundle install --without test
-RUN apt-get update -qq
-RUN apt-get install -y nodejs
+
 RUN bundle exec rake assets:precompile
 
 ENV RAILS_ENV production
@@ -59,9 +72,4 @@ ENV ENABLE_ANALYTICS false
 EXPOSE 3000
 
 ENTRYPOINT "/entrypoint"
-
-
-
-
-
 
