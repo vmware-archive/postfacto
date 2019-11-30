@@ -52,8 +52,8 @@ fi
 
 mkdir tmp
 cp -r api/. tmp
-rm -rf .gitignore
-rm -rf .bundle
+rm -rf tmp/.gitignore
+rm -rf tmp/.bundle
 rm -rf tmp/client/*
 rm -rf tmp/db/*.sqlite3
 rm -rf tmp/log/*.log
