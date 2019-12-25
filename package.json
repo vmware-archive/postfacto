@@ -1,0 +1,21 @@
+{
+  "name": "postfacto",
+  "description": "Deployment package for Postfacto on Heroku",
+  "cacheDirectories": [
+    "web/node_modules"
+  ],
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "copy-assets": "cp -r ./web/build/. ./api/client",
+    "rearrange-repo": "cp -r ./api/. .",
+    "postrearrange-repo": "rm -rf ./api ./e2e ./mock-google-server ./web",
+    "install": "npm --prefix=web install",
+    "build": "npm --prefix=web run build",
+    "postbuild": "npm run copy-assets && npm run rearrange-repo"
+  },
+  "engines": {
+    "node": "12.6.0",
+    "npm": "6.9.0"
+  }
+}

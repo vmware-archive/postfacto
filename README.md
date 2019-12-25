@@ -8,6 +8,10 @@ Postfacto helps teams run great [retrospectives](https://content.pivotal.io/blog
 </p>
 
 
+Alternatively, use the following button for a one-click deploy to Heroku (this will deploy the latest code, not necessarily the latest release).
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Features
 
 ### Run Retros Remotely
