@@ -43,6 +43,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 APP_HOST=$1
 SESSION_TIME=${SESSION_TIME:-'""'}
+HEROKU_REGION=${HEROKU_REGION:-'us'}
 
 ASSETS_DIR="$SCRIPT_DIR/../assets"
 CONFIG_DIR="$SCRIPT_DIR/config"
@@ -56,7 +57,7 @@ cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 ###################
 
 pushd "$ASSETS_DIR"
-  heroku create ${APP_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200
+  heroku create ${APP_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v200 --region ${HEROKU_REGION}
   heroku addons:create heroku-postgresql:hobby-dev -a ${APP_HOST}
   heroku addons:create heroku-redis:hobby-dev -a ${APP_HOST}
   heroku config:set WEBSOCKET_PORT=4443 SESSION_TIME=${SESSION_TIME} -a ${APP_HOST}
