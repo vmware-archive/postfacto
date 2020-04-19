@@ -16,8 +16,8 @@ Postfacto lets you run an agile retrospective even when your team is distributed
 ### Easy Onboarding
 Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their Google accounts. Alternatively, you can control access to your instance with the admin dashboard.
 
-### Define Retro Access
-You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access them without friction.
+### Run Public or Private Retros
+You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access them.
 
 ### Mobile Friendly
 Participants can add and vote on items from their mobile devices, so it is easy to run a retro without everyone in the group having a laptop nearby. This works well for retros where some people are in the room and some are remote.
@@ -47,4 +47,3 @@ See the [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CO
 Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text 
 of the license is available [here](https://github.com/pivotal/postfacto/blob/master/LICENSE.md). It's important to note 
 that this license allows you to deploy an instance of Postfacto for private, public or internal use.
-
