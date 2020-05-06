@@ -181,10 +181,17 @@ module SpecHelpers
   def mark_all_retro_items_as_done
     sleep(0.3)
     find_all('div.retro-item').each do |retro_item|
-      retro_item.click
+      item_id = retro_item[:id]
+      non_flaky_click("##{item_id}")
       sleep(0.3)
-      retro_item.find('.item-done').click
+      non_flaky_click("##{item_id} .item-done")
     end
+  end
+
+  # This is a workaround for Capybara/Selenium click inconsistencies
+  # https://medium.com/@yuliaoletskaya/capybara-inconsistent-click-behavior-and-flickering-tests-f50b5fae8ab2
+  def non_flaky_click(selector)
+    page.execute_script("document.querySelector('#{selector}').click()")
   end
 
   def in_browser(name, &block)
