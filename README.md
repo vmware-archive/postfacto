@@ -30,7 +30,7 @@ Retros are designed to help teams improve and that's hard to do without taking a
 
 Postfacto is a self hosted product, this makes it easier for you to stay in control of your data. We aim to make it easy to deploy to as many locations as possible. We currently support the following:
 
-* [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-cloud-foundry)
+* [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#cloud-foundry)
 * [Pivotal Web Services](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-web-services)
 * [Heroku](https://github.com/pivotal/postfacto/tree/master/deployment#heroku)
 

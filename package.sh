@@ -76,14 +76,14 @@ cp -r deployment/upgrade-cf.sh package/pws/upgrade.sh
 cp -r deployment/mixpanel.sh package/pws/mixpanel.sh
 chmod u+x package/pws/*.sh
 
-# PCF
+# CF
 
-cp -r deployment/pcf package
-cp -r deployment/deploy-cf.sh package/pcf/deploy.sh
-cp -r deployment/migrate-cf.sh package/pcf/migrate.sh
-cp -r deployment/upgrade-cf.sh package/pcf/upgrade.sh
-cp -r deployment/mixpanel.sh package/pcf/mixpanel.sh
-chmod u+x package/pcf/*.sh
+cp -r deployment/cf package
+cp -r deployment/deploy-cf.sh package/cf/deploy.sh
+cp -r deployment/migrate-cf.sh package/cf/migrate.sh
+cp -r deployment/upgrade-cf.sh package/cf/upgrade.sh
+cp -r deployment/mixpanel.sh package/cf/mixpanel.sh
+chmod u+x package/cf/*.sh
 
 # Heroku
 
