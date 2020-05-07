@@ -4,9 +4,43 @@
 
 So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
 
+## Tanzu Portfolio
+
+### Tanzu Application Service
+
+#### Initial deployment
+
+1. Set yourself up with an organization and space in your TAS to deploy your Postfacto to.
+1. Take note of your TAS url, going forward referred to as `tas-url`
+1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
+1. Run the TAS deployment script from the `tas` directory:
+
+    ```bash
+    ./deploy.sh <app-name>
+    ```
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<tas-url>/admin`
+1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Log in to your retro at `<app-name>.<tas-url>/retros/your-retro-slug`
+1. Share the URL and password with your team and then run a retro!
+
+#### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `tas` directory:
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
+
+#### Migrating a deployment
+
+1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `tas` directory:
+    ```bash
+    ./migrate.sh <web-app-name> <api-app-name>
+    ```
+    **Note** tha
+
 ## Pivotal Web Services
 
-### Initial deployment
+#### Initial deployment
 
 [Pivotal Web Services](https://run.pivotal.io) provides a hosted version of VMware's [Tanzu Application Service](https://tanzu.vmware.com/application-service) platform and is probably the easiest place to get Postfacto up and running.
 
@@ -22,14 +56,14 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 1. Log in to your retro at `<app-name>.cfapps.io/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
-### Upgrading a deployment
+#### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `pws` directory:
     ```bash
     ./upgrade.sh <app-name>
     ```
 
-### Migrating a deployment
+#### Migrating a deployment
 
 1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `pws` directory:
     ```bash
@@ -39,7 +73,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 ## Cloud Foundry
 
-### Initial deployment
+#### Initial deployment
 
 1. Set yourself up with an organization and space in your CF to deploy your Postfacto to.
 1. Take note of your CF url, going forward referred to as `cf-url`
@@ -54,14 +88,14 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 1. Log in to your retro at `<app-name>.<cf-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
-### Upgrading a deployment
+#### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `cf` directory:
     ```bash
     ./upgrade.sh <app-name>
     ```
 
-### Migrating a deployment
+#### Migrating a deployment
 
 1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `cf` directory:
     ```bash
@@ -71,7 +105,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 ## Heroku
 
-### Initial deployment
+#### Initial deployment
 
 1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
@@ -84,14 +118,14 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 1. Log in to your retro at `<app-name>.herokuapp.com/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
-### Upgrading a deployment
+#### Upgrading a deployment
 
 1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `heroku` directory:
     ```bash
     ./upgrade.sh <app-name>
     ```
 
-### Migrating a deployment
+#### Migrating a deployment
 
  > ⚠️ **Warning**: the Heroku migration will attempt to migrate your data to a new database instance and delete the old one. Take a look at what the script is doing and make sure you understand the implications before running it.
 
