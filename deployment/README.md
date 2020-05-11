@@ -11,16 +11,17 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 #### Initial deployment
 
 1. Set yourself up with an organization and space in your TAS to deploy your Postfacto to.
-1. Take note of your TAS url, going forward referred to as `tas-url`
 1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
 1. Run the TAS deployment script from the `tas` directory:
 
     ```bash
     ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<tas-url>/admin`
+
+   Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`.
+1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
-1. Log in to your retro at `<app-name>.<tas-url>/retros/your-retro-slug`
+1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 #### Upgrading a deployment
