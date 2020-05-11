@@ -28,14 +28,14 @@ Retros are designed to help teams improve and that's hard to do without taking a
 
 ## Deployment
 
-Postfacto is a self hosted product, this makes it easier for you to stay in control of your data. We aim to make it easy to deploy to as many locations as possible. We currently support the following:
+Postfacto is a self hosted product, this makes it easier for you to stay in control of your data. We aim to make it easy to deploy to as many locations as possible.
+
+First, download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions below for your supported platform:
 
 * [Tanzu Application Service](https://github.com/pivotal/postfacto/tree/master/deployment#tanzu-application-service)
 * [Pivotal Web Services](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-web-services)
 * [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#cloud-foundry)
 * [Heroku](https://github.com/pivotal/postfacto/tree/master/deployment#heroku)
-
-**Note: Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions above.**
 
 If the platforms above don't work for you; you may be able to find a way to run Postfacto yourself by following the Contributing Guide.
 
