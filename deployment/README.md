@@ -4,13 +4,11 @@
 
 So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
 
-## Tanzu Portfolio
-
-### Tanzu Application Service
+## Tanzu Application Service
 
 #### Initial deployment
 
-1. Set yourself up with an organization and space in your TAS to deploy your Postfacto to.
+1. Set yourself up with an organization and space in your TAS account to deploy Postfacto to.
 1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
 1. Run the TAS deployment script from the `tas` directory:
 
@@ -19,7 +17,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```
 
    Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`.
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -30,14 +28,6 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```bash
     ./upgrade.sh <app-name>
     ```
-
-#### Migrating a deployment
-
-1. If you'd previously deployed a version of Postfacto prior to 4.0, run the migration script from the `tas` directory:
-    ```bash
-    ./migrate.sh <web-app-name> <api-app-name>
-    ```
-    **Note** tha
 
 ## Pivotal Web Services
 
@@ -52,7 +42,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```bash
     ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.cfapps.io/admin`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.cfapps.io/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `<app-name>.cfapps.io/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -84,7 +74,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```bash
     ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<cf-url>/admin`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<cf-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `<app-name>.<cf-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -114,7 +104,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```bash
     ./deploy.sh <app-name>
     ```
-1. Log in to the admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.herokuapp.com/admin`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.herokuapp.com/admin`
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `<app-name>.herokuapp.com/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
