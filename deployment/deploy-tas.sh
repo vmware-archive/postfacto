@@ -33,7 +33,7 @@ set -euo pipefail
 
 if [ $# -lt 1 ]; then
   echo "usage: ./deploy.sh <app-name>"
-  echo "This will deploy the app to a CF foundation of your choosing"
+  echo "This will deploy the app to a TAS instance of your choosing"
   exit 1
 fi
 # The directory in which this script is located
