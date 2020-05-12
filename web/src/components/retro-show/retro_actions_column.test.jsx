@@ -32,6 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import RetroActionsColumn from './retro_actions_column';
 
@@ -99,12 +100,18 @@ function mockDate(date) {
   global.Date.now = () => date.getTime();
 }
 
+const goofs = {
+  deleteRetroActionItem: goof,
+  doneRetroActionItem: goof,
+  editRetroActionItem: goof,
+};
+
 describe('RetroActionsColumn Current', () => {
   let dom;
 
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current"/>);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current" {...goofs}/>);
   });
 
   it('displays the current date in column header', () => {
@@ -128,7 +135,7 @@ describe('RetroActionsColumn last-week', () => {
 
   describe('multiple action items from different dates', () => {
     beforeEach(() => {
-      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week"/>);
+      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" {...goofs}/>);
     });
 
     it('displays the last week date in column header', () => {
@@ -172,7 +179,7 @@ describe('RetroActionsColumn last-week', () => {
 
     it('renders no items', () => {
       mockDate(new Date(2016, 7, 18));
-      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro_without_older} category="last-week"/>);
+      dom = mount(<RetroActionsColumn retroId={retroId} retro={retro_without_older} category="last-week" {...goofs}/>);
       expect(dom.find('.retro-action').length).toEqual(0);
     });
   });
@@ -183,7 +190,7 @@ describe('RetroActionsColumn older', () => {
 
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="older"/>);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="older" {...goofs}/>);
   });
 
   it('displays a column header', () => {
@@ -200,7 +207,7 @@ describe('RetroActionsColumn Current Archive', () => {
 
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives/>);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="current" archives {...goofs}/>);
   });
 
   describe('column header', () => {
@@ -219,7 +226,7 @@ describe('RetroActionsColumn last-week Archive', () => {
 
   beforeEach(() => {
     mockDate(new Date(2016, 7, 18));
-    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives/>);
+    dom = mount(<RetroActionsColumn retroId={retroId} retro={retro} category="last-week" archives {...goofs}/>);
   });
 
   it('is empty', () => {

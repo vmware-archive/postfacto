@@ -33,6 +33,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import Scroll from 'react-scroll';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import RetroColumnItem from './retro_column_item';
 
@@ -65,6 +66,7 @@ describe('RetroColumnItem', () => {
         updateRetroItem={updateRetroItem}
         deleteRetroItem={deleteRetroItem}
         scrollTo={scrollTo}
+        extendTimer={goof}
         {...props}
       />
     );
@@ -270,7 +272,7 @@ describe('RetroColumnItem', () => {
     let dom;
 
     beforeEach(() => {
-      dom = mount(<RetroColumnItem
+      dom = mount(<WiredRetroColumnItem
         retroId={retroId}
         item={item}
         highlighted_item_id={null}

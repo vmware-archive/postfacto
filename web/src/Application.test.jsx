@@ -30,7 +30,7 @@ describe('Application', () => {
   });
 
   it('passes the URL to the websocket', () => {
-    const config = {websocket_url, websocket_port: 1111};
+    const config = {websocket_url, websocket_port: 1111, contact: '', terms: '', privacy: ''};
 
     const app = mount(<EnhancedApplication config={config}/>);
 
