@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "actioncable": "^5.2.2",
+    "actioncable": "^5.2.4",
     "foundation-sites": "6.5.3",
-    "grapnel": "^0.7.0",
+    "grapnel": "^0.7.2",
     "http-proxy-middleware": "^0.19.1",
     "material-ui": "^0.20.2",
-    "mixpanel-browser": "^2.26.0",
+    "mixpanel-browser": "^2.36.0",
     "node-sass": "^4.14.1",
     "prop-types": "^15.6.2",
     "react": "16.8.6",
@@ -17,19 +17,19 @@
     "react-google-login": "^4.0.1",
     "react-helmet": "^5.2.0",
     "react-hotkeys": "^1.1.4",
-    "react-redux": "^7.0.1",
+    "react-redux": "^7.2.0",
     "react-scripts": "^3.4.1",
-    "react-scroll": "^1.7.10",
-    "redux": "^4.0.4"
+    "react-scroll": "^1.7.16",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint-config-airbnb": "^17.1.0",
     "fast-deep-equal": "^2.0.1",
-    "jest-enzyme": "^7.0.1",
+    "jest-enzyme": "^7.1.2",
     "promise-mock": "^2.1.0",
-    "serve": "^11.1.0"
+    "serve": "^11.3.0"
   },
   "scripts": {
     "start": "REACT_APP_USE_MOCK_GOOGLE=\"$USE_MOCK_GOOGLE\" REACT_APP_GOOGLE_OAUTH_CLIENT_ID=\"$GOOGLE_OAUTH_CLIENT_ID\" react-scripts start",
