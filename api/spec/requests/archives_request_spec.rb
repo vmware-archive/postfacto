@@ -89,7 +89,7 @@ describe 'retros/:retro_id/archives' do
         get retro_archive_path(wrong_retro, archive), as: :json
 
         expect(response).to be_forbidden
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
 
         expect(JSON.parse(response.body)).to eq({})
       end

@@ -37,7 +37,6 @@ require 'spec_helper'
 require 'request_spec_helper'
 require 'rspec/rails'
 require 'shoulda/matchers'
-require 'action_cable/testing/rspec'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
