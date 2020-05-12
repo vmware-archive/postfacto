@@ -355,7 +355,7 @@ describe '/retros/:retro_id/items' do
           do_request
 
           expect(response).to have_http_status(:not_found)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
 
           expect(JSON.parse(response.body)).to eq({})
         end
