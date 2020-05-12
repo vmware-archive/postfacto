@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "actioncable": "^5.2.4",
-    "foundation-sites": "6.5.3",
+    "foundation-sites": "6.6.3",
     "grapnel": "^0.7.2",
     "http-proxy-middleware": "^0.19.1",
     "material-ui": "^0.20.2",
