@@ -6,7 +6,7 @@
     "actioncable": "^5.2.4",
     "foundation-sites": "6.5.3",
     "grapnel": "^0.7.2",
-    "http-proxy-middleware": "^0.19.1",
+    "http-proxy-middleware": "^0.21.0",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.36.0",
     "node-sass": "^4.14.1",
