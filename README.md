@@ -14,7 +14,7 @@ Postfacto helps teams run great [retrospectives](https://content.pivotal.io/blog
 Postfacto lets you run an agile retrospective even when your team is distributed across the world. Your retros will live update across all your devices so each participant can follow along on their device.
 
 ### Easy Onboarding
-Easily [set up](https://github.com/pivotal/postfacto/tree/master/deployment#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their Google accounts. Alternatively, you can control access to your instance with the admin dashboard.
+Easily [set up](deployment/README.md#allowing-users-to-create-retros) Postfacto to work with Google OAuth so users can sign up with their Google accounts. Alternatively, you can control access to your instance with the admin dashboard.
 
 ### Run Public or Private Retros
 You can create private retro boards for your team that are password protected or choose to leave them public so that anyone you give the link to can access them.
@@ -32,19 +32,18 @@ Postfacto is a self hosted product, this makes it easier for you to stay in cont
 
 First, download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions below for your supported platform:
 
-* [Tanzu Application Service](https://github.com/pivotal/postfacto/tree/master/deployment#tanzu-application-service)
-* [Pivotal Web Services](https://github.com/pivotal/postfacto/tree/master/deployment#pivotal-web-services)
-* [Cloud Foundry](https://github.com/pivotal/postfacto/tree/master/deployment#cloud-foundry)
-* [Heroku](https://github.com/pivotal/postfacto/tree/master/deployment#heroku)
+* [Tanzu Application Service](deployment/README.md#tanzu-application-service)
+* [Pivotal Web Services](deployment/README.md#pivotal-web-services)
+* [Cloud Foundry](deployment/README.md#cloud-foundry)
+* [Heroku](deployment/README.md#heroku)
 
 If the platforms above don't work for you; you may be able to find a way to run Postfacto yourself by following the Contributing Guide.
 
 ## Contributing
 
-See the [Contributing Guide](https://github.com/pivotal/postfacto/blob/master/CONTRIBUTING.md) for more info.
+See the [Contributing Guide](CONTRIBUTING.md) for more info.
 
 ## License
 
 Postfacto is licensed under the **GNU Affero General Public License** (often referred to as **AGPL-3.0**). The full text 
-of the license is available [here](https://github.com/pivotal/postfacto/blob/master/LICENSE.md). It's important to note 
-that this license allows you to deploy an instance of Postfacto for private, public or internal use.
+of the license is available [here](LICENSE.md). It's important to note that this license allows you to deploy an instance of Postfacto for private, public or internal use.
