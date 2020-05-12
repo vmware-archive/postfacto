@@ -34,6 +34,7 @@ import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import {ShowRetroPage} from './show_retro_page';
 import RetroWebsocket from './retro_websocket';
@@ -90,6 +91,20 @@ function UnconnectedShowRetroPage(props) {
       requireRetroLogin={jest.fn()}
       showDialog={jest.fn()}
       signOut={jest.fn()}
+      voteRetroItem={goof}
+      doneRetroItem={goof}
+      undoneRetroItem={goof}
+      highlightRetroItem={goof}
+      unhighlightRetroItem={goof}
+      updateRetroItem={goof}
+      deleteRetroItem={goof}
+      deleteRetroActionItem={goof}
+      createRetroItem={goof}
+      createRetroActionItem={goof}
+      doneRetroActionItem={goof}
+      editRetroActionItem={goof}
+      extendTimer={goof}
+      websocketRetroDataReceived={goof}
       {...props}
     />
   );

@@ -32,6 +32,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import RetroColumn from './retro_column';
 
@@ -70,7 +71,7 @@ describe('RetroColumn', () => {
   let dom;
 
   beforeEach(() => {
-    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false}/>);
+    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
   });
 
   it('assigns a class name based on category', () => {

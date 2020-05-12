@@ -34,6 +34,7 @@ import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {getMenuLabels} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import {ShowRetroPage} from './show_retro_page';
 
@@ -104,16 +105,30 @@ describe('Show retro page archives', () => {
             featureFlags={{archiveEmails: true}}
             environment={{isMobile640: false}}
             getRetroArchive={jest.fn()}
-            getRetro={jest.fn()}
-            nextRetroItem={jest.fn()}
-            archiveRetro={jest.fn()}
-            hideDialog={jest.fn()}
-            toggleSendArchiveEmail={jest.fn()}
+            getRetro={goof}
+            nextRetroItem={goof}
+            archiveRetro={goof}
+            hideDialog={goof}
+            toggleSendArchiveEmail={goof}
             routeToRetroArchives={routeToRetroArchives}
-            routeToRetroSettings={jest.fn()}
-            requireRetroLogin={jest.fn()}
-            showDialog={jest.fn()}
-            signOut={jest.fn()}
+            routeToRetroSettings={goof}
+            requireRetroLogin={goof}
+            showDialog={goof}
+            signOut={goof}
+            voteRetroItem={goof}
+            doneRetroItem={goof}
+            undoneRetroItem={goof}
+            highlightRetroItem={goof}
+            unhighlightRetroItem={goof}
+            updateRetroItem={goof}
+            deleteRetroItem={goof}
+            createRetroActionItem={goof}
+            createRetroItem={goof}
+            doneRetroActionItem={goof}
+            deleteRetroActionItem={goof}
+            editRetroActionItem={goof}
+            extendTimer={goof}
+            websocketRetroDataReceived={goof}
           />
         </MuiThemeProvider>
       ));
@@ -162,17 +177,31 @@ describe('Show retro page archives', () => {
             config={config}
             featureFlags={{archiveEmails: true}}
             environment={{isMobile640: true}}
-            getRetroArchive={jest.fn()}
-            getRetro={jest.fn()}
-            nextRetroItem={jest.fn()}
-            archiveRetro={jest.fn()}
-            hideDialog={jest.fn()}
-            toggleSendArchiveEmail={jest.fn()}
+            getRetroArchive={jest.fn()} // should we test that this is called?
+            getRetro={goof}
+            nextRetroItem={goof}
+            archiveRetro={goof}
+            hideDialog={goof}
+            toggleSendArchiveEmail={goof}
             routeToRetroArchives={routeToRetroArchives}
-            routeToRetroSettings={jest.fn()}
-            requireRetroLogin={jest.fn()}
-            showDialog={jest.fn()}
-            signOut={jest.fn()}
+            routeToRetroSettings={goof}
+            requireRetroLogin={goof}
+            showDialog={goof}
+            signOut={goof}
+            voteRetroItem={goof}
+            doneRetroItem={goof}
+            undoneRetroItem={goof}
+            highlightRetroItem={goof}
+            unhighlightRetroItem={goof}
+            updateRetroItem={goof}
+            deleteRetroItem={goof}
+            createRetroActionItem={goof}
+            createRetroItem={goof}
+            doneRetroActionItem={goof}
+            deleteRetroActionItem={goof}
+            editRetroActionItem={goof}
+            extendTimer={goof}
+            websocketRetroDataReceived={goof}
           />
         </MuiThemeProvider>
       ));

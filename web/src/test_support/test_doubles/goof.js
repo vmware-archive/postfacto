@@ -29,17 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import {shallow} from 'enzyme';
-import '../../spec_helper';
-import goof from '../../test_support/test_doubles/goof';
-
-import RetroWebsocket from './retro_websocket';
-
-describe('RetroWebsocket', () => {
-  it('creates a setup cable', () => {
-    const webSocketDOM = shallow(<RetroWebsocket url="wss://websocket/url" retro_id="retro-slug-123" websocketRetroDataReceived={goof}/>);
-    const {cable} = webSocketDOM.state();
-    expect(cable.url).toEqual('wss://websocket/url');
-  });
-});
+export default function goof() {
+  throw new Error("Ya goofed! This isn't implemented and wasn't expected to be called.");
+}

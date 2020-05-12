@@ -34,6 +34,7 @@ import {mount} from 'enzyme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {invokeMenuOption} from '../../test_support/retro_menu_getters';
 import '../../spec_helper';
+import goof from '../../test_support/test_doubles/goof';
 
 import {ShowRetroPage} from './show_retro_page';
 
@@ -85,6 +86,20 @@ describe('Retro settings', () => {
           routeToRetroArchives={jest.fn()}
           showDialog={jest.fn()}
           signOut={jest.fn()}
+          voteRetroItem={goof}
+          doneRetroActionItem={goof}
+          undoneRetroItem={goof}
+          highlightRetroItem={goof}
+          unhighlightRetroItem={goof}
+          updateRetroItem={goof}
+          deleteRetroItem={goof}
+          createRetroActionItem={goof}
+          createRetroItem={goof}
+          doneRetroItem={goof}
+          deleteRetroActionItem={goof}
+          editRetroActionItem={goof}
+          extendTimer={goof}
+          websocketRetroDataReceived={goof}
         />
       </MuiThemeProvider>
     ));
