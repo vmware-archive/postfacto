@@ -9,7 +9,7 @@
     "http-proxy-middleware": "^0.19.1",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.26.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.6.2",
     "react": "16.8.6",
     "react-autosize-textarea": "^6.0.0",
@@ -18,7 +18,7 @@
     "react-helmet": "^5.2.0",
     "react-hotkeys": "^1.1.4",
     "react-redux": "^7.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.4.1",
     "react-scroll": "^1.7.10",
     "redux": "^4.0.4"
   },
