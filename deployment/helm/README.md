@@ -89,7 +89,7 @@ option for postgres you would add the following to the install/upgrade command
 
 ## Building the chart
 
-To build and run the chart locally, follow the following steps
+To build the chart locally, follow the following steps
 
 1. Install Helm CLI (version 3+)
 1. Add stable chart repository to helm
