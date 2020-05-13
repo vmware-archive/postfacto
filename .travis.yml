@@ -5,6 +5,7 @@ dist: bionic
 cache:
   directories:
     - .bundler_cache
+    - .npm_cache
 
 addons:
   apt:
@@ -21,7 +22,7 @@ jobs:
   - stage: "Test"
     name: "All Tests"
     script:
-      - docker run -v $TRAVIS_BUILD_DIR/.bundler_cache:/bundler_cache -v "$TRAVIS_BUILD_DIR":/postfacto -e BUNDLE_PATH=/bundler_cache postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh"
+      - docker run -v $TRAVIS_BUILD_DIR/.npm_cache:/npm_cache -v $TRAVIS_BUILD_DIR/.bundler_cache:/bundler_cache -v "$TRAVIS_BUILD_DIR":/postfacto -e npm_config_cache=/npm_cache -e BUNDLE_PATH=/bundler_cache postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh"
   - stage: "Package"
   - name: "Build & Deploy Docker"
     script:
