@@ -50,7 +50,7 @@ jobs:
         - $TRAVIS_BUILD_DIR/deployment/helm/postfacto-*.tgz
   - name: "Build & Test Package"
     script:
-    - docker run -v "$TRAVIS_BUILD_DIR":/postfacto postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh"
+    - docker run -v $TRAVIS_BUILD_DIR/.npm_cache:/npm_cache -v $TRAVIS_BUILD_DIR/.bundler_cache:/bundler_cache -v "$TRAVIS_BUILD_DIR":/postfacto -e npm_config_cache=/npm_cache -e BUNDLE_PATH=/bundler_cache postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh"
     before_deploy:
       - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
       - cat .heroku-netrc >> $HOME/.netrc
