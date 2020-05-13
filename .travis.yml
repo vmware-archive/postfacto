@@ -30,7 +30,7 @@ jobs:
           tags: true
   - name: "Build & Deploy Helm"
     script:
-      - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.0.0-beta.5 $TRAVIS_TAG
+      - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.2.1 $TRAVIS_TAG
     deploy:
       - provider: releases
         draft: true
