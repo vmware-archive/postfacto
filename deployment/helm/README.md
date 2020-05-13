@@ -85,7 +85,9 @@ option for postgres you would add the following to the install/upgrade command
 ```
 
 
-# Building the chart
+# Local development
+
+## Building the chart
 
 To build and run the chart locally, follow the following steps
 
@@ -100,5 +102,31 @@ To build and run the chart locally, follow the following steps
     ```
 1. Build the chart: 
     ```shell script
-    helm package
+    helm package .
+    ```
+
+## Installing the chart
+
+Installing the chart locally with the following command:
+
+```shell script
+helm install postfacto <local-chart.tgz>
+```
+
+Will automatically install `postgresql` with persistence enabled, which means the configuration and data
+survive `helm uninstall`.
+
+So the next time `postfacto` gets installed, `postgresql` will attempt to generate a new password and fail to authenticate.
+
+As of now there are two solutions to this problem:
+
+1. Disable persistence altogether:
+    ```shell script
+    helm install postfacto <local-chart.tgz> \
+      --set postgresql.persistence.enabled=false
+    ```
+1. Set `postgresql` password explicitly:
+    ```shell script
+    helm install postfacto <local-chart.tgz> \
+      --set postgresql.postgresqlPassword=<postgresql-password>
     ```
