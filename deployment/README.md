@@ -138,7 +138,7 @@ For deployments that do not want to setup Google OAuth, you will need to create 
    create a new project
 1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
 1. Choose a name for your app
-1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to PWS, your public URL will be `https://<app-name>.<cf-url>`
+1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to PWS, your public URL will be `https://<app-name>.cfapps.io`
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
 1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.

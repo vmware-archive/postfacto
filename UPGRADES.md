@@ -25,7 +25,7 @@ To update the version of Ruby used in Postfacto, the following steps need to be 
 
  9. Publish the new image to Docker Hub - this needs to happen *before* the Travis build can complete
 
- 10. Update the pinned buildpacks in `deployment/{cf,pws}/config/manifest-api.yml`, according to the latest
+ 10. Update the pinned buildpacks in `deployment/{cf,pws,tas}/config/manifest.yml`, according to the latest
     [release][2] that supports the selected version
 
  11. Update the pinned buildpacks in `deployment/{deploy,upgrade}-heroku.sh`, according to the latest [release][3] that

@@ -33,7 +33,7 @@ set -euo pipefail
 
 if [ $# -lt 1 ]; then
   echo "usage: ./upgrade.sh <app-name>"
-  echo "This will upgrade the app on a CF foundation of your choosing"
+  echo "This will upgrade the app on a TAS instance of your choosing"
   exit 1
 fi
 
