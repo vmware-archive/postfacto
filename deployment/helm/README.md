@@ -113,20 +113,13 @@ Installing the chart locally with the following command:
 helm install postfacto <local-chart.tgz>
 ```
 
-Will automatically install `postgresql` with persistence enabled, which means the configuration and data
+This will automatically install `postgresql` and `redis` with persistence enabled, which means the configuration and data
 survive `helm uninstall`.
 
-So the next time `postfacto` gets installed, `postgresql` will attempt to generate a new password and fail to authenticate.
+In this case the next time `postfacto` gets installed, `postgresql` will attempt to generate a new password and fail to authenticate.
 
-As of now there are two solutions to this problem:
+In order to clean the state after `helm uninstall` it is recommended to delete all persistent volume claims using:
 
-1. Disable persistence altogether:
-    ```shell script
-    helm install postfacto <local-chart.tgz> \
-      --set postgresql.persistence.enabled=false
-    ```
-1. Set `postgresql` password explicitly:
-    ```shell script
-    helm install postfacto <local-chart.tgz> \
-      --set postgresql.postgresqlPassword=<postgresql-password>
-    ```
+```shell script
+kubectl delete pvc -l release=postfacto
+```
