@@ -1,8 +1,16 @@
 # Deployment
 
-**Note: If you have not already done so, download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)**
+## Contents
+  * [Prerequisites](#prerequisites)
+  * [Tanzu Application Service](#tanzu-application-service)
+  * [Pivotal Web Services](#pivotal-web-services)
+  * [Cloud Foundry](#cloud-foundry)
+  * [Heroku](#heroku)
+  * [Configuration](#configuration)
 
-So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
+## Prerequisites
+1. Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)
+2. Choose a name for your app, we'll refer to this as `app-name` from now on
 
 ## Tanzu Application Service
 
