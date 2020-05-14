@@ -44,8 +44,16 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.2.0-beta
+version: 0.4.0-beta
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
 appVersion: latest
+
+dependencies:
+  - name: postgresql
+    version: 6.5.0
+    repository: "@stable"
+  - name: redis
+    version: 9.4.3
+    repository: "@stable"

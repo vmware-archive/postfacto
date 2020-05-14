@@ -85,9 +85,11 @@ option for postgres you would add the following to the install/upgrade command
 ```
 
 
-# Building the chart
+# Local development
 
-To build and run the chart locally, follow the following steps
+## Building the chart
+
+To build the chart locally, follow the following steps
 
 1. Install Helm CLI (version 3+)
 1. Add stable chart repository to helm
@@ -100,5 +102,24 @@ To build and run the chart locally, follow the following steps
     ```
 1. Build the chart: 
     ```shell script
-    helm package
+    helm package .
     ```
+
+## Installing the chart
+
+Installing the chart locally with the following command:
+
+```shell script
+helm install postfacto <local-chart.tgz>
+```
+
+This will automatically install `postgresql` and `redis` with persistence enabled, which means the configuration and data
+survive `helm uninstall`.
+
+In this case the next time `postfacto` gets installed, `postgresql` will attempt to generate a new password and fail to authenticate.
+
+In order to clean the state after `helm uninstall` it is recommended to delete all persistent volume claims using:
+
+```shell script
+kubectl delete pvc -l release=postfacto
+```
