@@ -71,7 +71,6 @@ rm -rf tmp
 
 cp -r deployment/tas package
 cp -r deployment/deploy-tas.sh package/tas/deploy.sh
-cp -r deployment/migrate-tas.sh package/tas/migrate.sh
 cp -r deployment/upgrade-tas.sh package/tas/upgrade.sh
 cp -r deployment/mixpanel.sh package/tas/mixpanel.sh
 chmod u+x package/tas/*.sh
