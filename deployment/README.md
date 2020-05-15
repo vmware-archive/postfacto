@@ -4,6 +4,31 @@
 
 So you're ready to set Postfacto up, choose a name for your app. We'll refer to this as `app-name` from now on.
 
+## Tanzu Kubernetes Grid (vSphere)
+
+### Initial deployment
+
+1. Set yourself up with a vSphere 6.7u3 instance with Tanzu Kubenetes Grid (TKG) provisioned.
+
+1. Make sure that your TKG cluster has a network load balancer install (eg. [Metallb](https://metallb.universe.tf/installation/))
+
+1. Make sure that [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [helm](https://helm.sh/docs/intro/install/) are installed to your machine.
+
+1. Run the TKG deployment script from the `tkg` directory:
+
+    ```bash
+    ./deploy.sh <app-name>
+    ```
+
+1. TO BE CONTINUED 
+
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `tkg` directory:
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
+
 ## Pivotal Web Services
 
 ### Initial deployment
