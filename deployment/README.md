@@ -26,11 +26,6 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 1. Install [helm](https://helm.sh/docs/intro/install/) to your machine.
 
-1. Run  
-    ```bash
-    export KUBECONFIG=</path/to/config-postfacto>
-    ```
-   
 1. Run the TKG deployment script from the `tkg` directory:
 
     ```bash
