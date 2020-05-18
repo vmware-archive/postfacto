@@ -6,14 +6,28 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 ## Tanzu Kubernetes Grid (vSphere)
 
+### Prerequisites
+
+1. You have vSphere 6.7u3 instance with Tanzu Kubenetes Grid (TKG) provisioned.
+
+1. Your TKG cluster has a network load balancer install (eg. [Metallb](https://metallb.universe.tf/installation/))
+
+1. Ask your administrator for the credentials for the cluster on which you want to run postfacto 
+
+    ```bash
+    tkg get credentials <cluster-name> --export-file $(pwd)/postfacto-cluster-credentials
+    ```
+   Copy the credentials to tkg/postfacto-config
+
 ### Initial deployment
+1. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) to your machine.
 
-1. Set yourself up with a vSphere 6.7u3 instance with Tanzu Kubenetes Grid (TKG) provisioned.
+1. Install [helm](https://helm.sh/docs/intro/install/) to your machine.
 
-1. Make sure that your TKG cluster has a network load balancer install (eg. [Metallb](https://metallb.universe.tf/installation/))
-
-1. Make sure that [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [helm](https://helm.sh/docs/intro/install/) are installed to your machine.
-
+1. Run  
+    ```bash
+    export KUBECONFIG=</path/to/config-postfacto>
+    ```
 1. Run the TKG deployment script from the `tkg` directory:
 
     ```bash

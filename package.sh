@@ -94,6 +94,14 @@ cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
 cp -r deployment/mixpanel.sh package/heroku/mixpanel.sh
 chmod u+x package/heroku/*.sh
 
+# TKG
+
+helm package deployment/helm -d package/tkg
+cp -r deployment/tkg package
+cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
+cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
+chmod u+x package/tkg/*.sh
+
 # Docs
 
 cp deployment/README.md package
