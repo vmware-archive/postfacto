@@ -12,6 +12,8 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 1. Your TKG cluster has a network load balancer install (eg. [Metallb](https://metallb.universe.tf/installation/))
 
+1. Your TKG cluster has an already defined storage class to be used for persistent volumes.
+
 1. Ask your administrator for the credentials for the cluster on which you want to run postfacto 
 
     ```bash
@@ -28,6 +30,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
     ```bash
     export KUBECONFIG=</path/to/config-postfacto>
     ```
+   
 1. Run the TKG deployment script from the `tkg` directory:
 
     ```bash
