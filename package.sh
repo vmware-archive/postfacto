@@ -97,6 +97,7 @@ chmod u+x package/heroku/*.sh
 # TKG
 
 helm package deployment/helm -d package/tkg
+touch package/tkg/postfacto-config
 cp -r deployment/tkg package
 cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
 cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
