@@ -33,24 +33,10 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
-  - name: "Build & Deploy Helm"
-    script:
-      - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.2.1 $TRAVIS_TAG
-    deploy:
-      - provider: releases
-        draft: true
-        skip_cleanup: true
-        overwrite: true
-        on:
-          tags: true
-        api_key:
-          secure: dPDprfJo3c5iCk5fcPR7tgRMz5OcCF6IAPRx1/WMAq1FJjgdkD6iu628/AAgezN/rlTDiqZpfx3nj3UhTSUOeBZgEaRbpvpIc3bLc2RABqqxQNuL2g+DNt3L7XYcq8PLHQBVIHmRKp8DK1XJCaG3LUEuYZD9gKaiftMwbvgsgfVOFasslyypgDTi/NdPm1tNsDdKvYVe9dkZpDpHClJsoIQLl/gtNvrJREFTF2w0T8oSdccsoQekAAC4kXWiL5lgXIKHDpQTo1K8oXrl/hUxuw0e1fGKA6R0kNZliA6cQYG3OOb0a9JhplzO3jGWvlZdmJluWgy0yUn+jRZZOXiQVJOZCd2Lht3JN8p6x9D91S43forMV7ZmrW3XPuEocGIwVdY7yVKEsHAiAK3Ih3VbMuUn1ITvKB8F4idyurWEL9cQwsszX9pFSOriAH5mhIQs7vwp6uvFJIoADGiS//wEqcAwzsFWHCDLBPYRTk9Zp17MSgUj8+PDBo29pbbWtx6+14w82LVQQdnyoReDiZR5G1ItxSx6xjWIeGlyo8yu4xmNq9nufPoj6ZkGDbAJtH2YeaGIEcltjXzIalmBdmoVp+6SKyr8EFnolgWd+ns8KkCvLqxp3fwuz4OD+B619Au1/8WUrHRdetChlvxzEHVx3wnwWnw0zbCBh/cq0mWUdzs=
-        file_glob: true
-        file:
-        - $TRAVIS_BUILD_DIR/deployment/helm/postfacto-*.tgz
   - name: "Build & Test Package"
     script:
-    - docker run -v $TRAVIS_BUILD_DIR/.npm_cache:/npm_cache -v $TRAVIS_BUILD_DIR/.bundler_cache:/bundler_cache -v "$TRAVIS_BUILD_DIR":/postfacto -e npm_config_cache=/npm_cache -e BUNDLE_PATH=/bundler_cache postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh"
+      - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.2.1 $TRAVIS_TAG
+      - docker run -v $TRAVIS_BUILD_DIR/.npm_cache:/npm_cache -v $TRAVIS_BUILD_DIR/.bundler_cache:/bundler_cache -v "$TRAVIS_BUILD_DIR":/postfacto -e npm_config_cache=/npm_cache -e BUNDLE_PATH=/bundler_cache postfacto/dev:2.6.3-12.6.0 /bin/bash -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh"
     before_deploy:
       - openssl aes-256-cbc -K $encrypted_5e88d222d606_key -iv $encrypted_5e88d222d606_iv -in .heroku-netrc.enc -out .heroku-netrc -d
       - cat .heroku-netrc >> $HOME/.netrc
@@ -67,4 +53,5 @@ jobs:
           secure: dPDprfJo3c5iCk5fcPR7tgRMz5OcCF6IAPRx1/WMAq1FJjgdkD6iu628/AAgezN/rlTDiqZpfx3nj3UhTSUOeBZgEaRbpvpIc3bLc2RABqqxQNuL2g+DNt3L7XYcq8PLHQBVIHmRKp8DK1XJCaG3LUEuYZD9gKaiftMwbvgsgfVOFasslyypgDTi/NdPm1tNsDdKvYVe9dkZpDpHClJsoIQLl/gtNvrJREFTF2w0T8oSdccsoQekAAC4kXWiL5lgXIKHDpQTo1K8oXrl/hUxuw0e1fGKA6R0kNZliA6cQYG3OOb0a9JhplzO3jGWvlZdmJluWgy0yUn+jRZZOXiQVJOZCd2Lht3JN8p6x9D91S43forMV7ZmrW3XPuEocGIwVdY7yVKEsHAiAK3Ih3VbMuUn1ITvKB8F4idyurWEL9cQwsszX9pFSOriAH5mhIQs7vwp6uvFJIoADGiS//wEqcAwzsFWHCDLBPYRTk9Zp17MSgUj8+PDBo29pbbWtx6+14w82LVQQdnyoReDiZR5G1ItxSx6xjWIeGlyo8yu4xmNq9nufPoj6ZkGDbAJtH2YeaGIEcltjXzIalmBdmoVp+6SKyr8EFnolgWd+ns8KkCvLqxp3fwuz4OD+B619Au1/8WUrHRdetChlvxzEHVx3wnwWnw0zbCBh/cq0mWUdzs=
         file:
         - package.zip
+        - $TRAVIS_BUILD_DIR/deployment/helm/postfacto-*.tgz
 
