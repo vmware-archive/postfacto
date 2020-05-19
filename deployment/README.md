@@ -12,7 +12,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 1. A network load balancer installed and configured on your TKG cluster (e.g. [MetalLB](https://metallb.universe.tf/installation/))
 
-1. A default storage class available in your TKG cluster (e.g. [vSphereStorageClass](tkg/storageclass.yaml))
+1. A default storage class available in your TKG cluster (e.g. [vSphereStorageClass](tkg/examples/storageclass.yaml))
 
 ### Initial deployment
 

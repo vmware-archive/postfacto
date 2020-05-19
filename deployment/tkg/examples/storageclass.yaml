@@ -36,4 +36,4 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: csi.vsphere.vmware.com
 parameters:
-  DatastoreURL: "ds:///vmfs/volumes/5ebc2a86-7d004313-17a0-000e1e65b0c0/"
+  DatastoreURL: "<vsphere-storage-datastore-url>"
