@@ -67,6 +67,15 @@ mkdir -p package/assets
 cp -r tmp/. package/assets
 rm -rf tmp
 
+# TKG
+
+cp -r deployment/tkg package
+cp -r deployment/helm/postfacto-*.tgz package/tkg
+cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
+cp -r deployment/upgrade-tkg.sh package/tkg/upgrade.sh
+cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
+chmod u+x package/tkg/*.sh
+
 # PWS
 
 cp -r deployment/pws package
@@ -93,15 +102,6 @@ cp -r deployment/migrate-heroku.sh package/heroku/migrate.sh
 cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
 cp -r deployment/mixpanel.sh package/heroku/mixpanel.sh
 chmod u+x package/heroku/*.sh
-
-# TKG
-
-helm package deployment/helm -d package/tkg
-touch package/tkg/postfacto-config
-cp -r deployment/tkg package
-cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
-cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
-chmod u+x package/tkg/*.sh
 
 # Docs
 

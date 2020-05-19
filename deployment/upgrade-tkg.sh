@@ -32,8 +32,8 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "usage: ./deploy.sh <app-name> [<kubeconfig-path>]"
-  echo "This will deploy the app to a kubernetes cluster of your choosing"
+  echo "usage: ./upgrade.sh <app-name> [<kubeconfig-path>]"
+  echo "This will upgrade the app on a kubernetes cluster of your choosing"
   exit 1
 fi
 
@@ -43,11 +43,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 APP_NAME=$1
 
-helm install $APP_NAME postfacto-*.tgz --set service.type=LoadBalancer
-
-kubectl wait --for=condition=ready --timeout=120s pod -l app.kubernetes.io/instance=${APP_NAME}
+POSTGRES_PASSWORD=$(kubectl get secret ${APP_NAME}-postgresql -o jsonpath='{.data.postgresql-password}' | base64 -d)
+REDIS_PASSWORD=$(kubectl get secret ${APP_NAME}-redis -o jsonpath='{.data.redis-password}' | base64 -d)
 POSTFACTO_POD=$(kubectl get pod -l app.kubernetes.io/instance=${APP_NAME} -o jsonpath="{.items[0].metadata.name}")
-kubectl exec $POSTFACTO_POD create-admin-user email@example.com password
+SECRET_KEY_BASE=$(kubectl get pod ${POSTFACTO_POD} -o jsonpath='{.spec.containers[0].env[?(@.name=="SECRET_KEY_BASE")].value}')
 
-export SERVICE_IP=$(kubectl get svc ${APP_NAME} --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
-echo "Access your application at http://$SERVICE_IP"
+helm upgrade $APP_NAME postfacto-*.tgz \
+  --set service.type=LoadBalancer \
+  --set secretKeyBase="${SECRET_KEY_BASE}" \
+  --set redis.password="${REDIS_PASSWORD}" \
+  --set postgresql.postgresqlPassword="${POSTGRES_PASSWORD}"
+
