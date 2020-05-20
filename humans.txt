@@ -22,6 +22,15 @@ Contact: froso.ellina@gmail.com
 Product Designer: Zarrin Rahman
 Contact: zarrin.rahman@gmail.com
 
+Engineer: Jennifer Lea
+Contact: jenny.lea28@gmail.com
+
+Engineer: Othman Alkhamra
+Contact: othmankhamra@gmail.com
+
+Engineer: Marco Garofalo
+Contact: marcogarofalo.personal@gmail.com
+
 /* PIVOTAL PARIS */
 
 Engineer: Daniel Garnier-Moiroux
