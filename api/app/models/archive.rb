@@ -29,7 +29,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class Archive < ApplicationRecord
-  belongs_to :retro
+  belongs_to :retro, optional: true
   has_many :items
   has_many :action_items
 end

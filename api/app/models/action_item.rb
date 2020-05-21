@@ -29,6 +29,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 class ActionItem < ActiveRecord::Base
-  belongs_to :retro
-  belongs_to :archive
+  belongs_to :retro, optional: true
+  belongs_to :archive, optional: true
 end
