@@ -32,7 +32,7 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "usage: ./upgrade.sh <app-name> [<kubeconfig-path>]"
+  echo "usage: ./upgrade.sh <app-name>"
   echo "This will upgrade the app on a kubernetes cluster of your choosing"
   exit 1
 fi

@@ -32,7 +32,7 @@
 set -euo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "usage: ./deploy.sh <app-name> [<kubeconfig-path>]"
+  echo "usage: ./deploy.sh <app-name>"
   echo "This will deploy the app to a kubernetes cluster of your choosing"
   exit 1
 fi
