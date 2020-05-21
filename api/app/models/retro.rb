@@ -35,7 +35,7 @@ class Retro < ActiveRecord::Base
   has_many :action_items, -> { order(:created_at).where(archived: false) }, dependent: :destroy
   has_many :archives
 
-  belongs_to :user
+  belongs_to :user, optional: true
   enum item_order: { time: 'time', votes: 'votes' }
 
   MAX_SLUG_LENGTH = 236
