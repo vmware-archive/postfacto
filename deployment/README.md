@@ -8,7 +8,7 @@ So you're ready to set Postfacto up, choose a name for your app. We'll refer to 
 
 ### Prerequisites
 
-1. A vSphere 6.7u3 instance with Tanzu Kubernetes Grid (TKG) provisioned
+1. A vSphere instance version 6.7u3 or higher, with Tanzu Kubernetes Grid (TKG) provisioned
 
 1. A network load balancer installed and configured on your TKG cluster (e.g. [MetalLB](https://metallb.universe.tf/installation/))
 
