@@ -41,8 +41,10 @@ class RetrosController < ApplicationController
   end
 
   def create
-    @retro = @user.retros.create(retro_params)
+    @retro = @user.retros.new(retro_params)
+
     if @retro.valid?
+      @retro.save!
       @retro.create_instruction_cards! if @user.retros.count == 1
       render json: {
         retro: @retro.as_json(only: [:id, :name, :slug]),
