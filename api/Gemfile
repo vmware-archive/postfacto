@@ -32,17 +32,17 @@ source 'https://rubygems.org'
 
 ruby '2.6.3'
 
-gem 'rails', '>= 6.0.2.2'
+gem 'rails', '>= 6.0.3.1'
 
-gem 'activeadmin', '>= 2.2.0'
+gem 'activeadmin', '>= 2.7.0'
 gem 'addressable'
 gem 'bcrypt'
 gem 'cf-app-utils'
 gem 'devise', '>= 4.7.1'
-gem 'friendly_id'
+gem 'friendly_id', '5.1.0'
 gem 'inherited_resources', '>= 1.11.0'
-gem 'jbuilder'
-gem 'premailer-rails', '>= 1.10.3'
+gem 'jbuilder', '>= 2.10.0'
+gem 'premailer-rails', '>= 1.11.1'
 gem 'puma', '>= 3.12.4'
 gem 'rack-cors', '>= 1.0.5', require: 'rack/cors'
 gem 'rack-ssl'
@@ -54,20 +54,20 @@ group :development, :test do
   gem 'dotenv-rails', '>= 2.7.5'
   gem 'pry'
   gem 'pry-byebug'
-  gem 'rspec-rails', '>= 3.8.2'
+  gem 'rspec-rails', '>= 4.0.0'
   gem 'rubocop', require: false
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '>= 4.0.1'
   gem 'webmock'
   gem 'tzinfo-data'
   gem 'climate_control'
-  gem 'action-cable-testing', '>= 0.5.0'
+  gem 'action-cable-testing', '>= 0.6.1'
 end
 
 group :development do
   gem 'sqlite3'
-  gem 'bullet'
+  gem 'bullet', '>= 6.1.0'
   gem 'listen'
-  gem 'web-console', '>= 3.7.0'
+  gem 'web-console', '>= 4.0.2'
 end
 
 group :production do

@@ -1,0 +1,14 @@
+---
+applications:
+- name: ((api-app-name))
+  instances: 2
+  buildpacks:
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.7.40
+  memory: 256M
+  command: bundle exec rake db:migrate && bundle exec rails s -p $PORT -e $RAILS_ENV
+  services:
+    - postfacto-db
+    - postfacto-redis
+  env:
+    WEBSOCKET_PORT: 443
+    SESSION_TIME: ((session-time))
