@@ -793,15 +793,15 @@ button:focus {
     .item-vote-submit {
       display: inline-block;
       text-align: center;
-      background-color: $white;
+      background-color: transparent;
       color: $light-black;
       font-size: 16px;
       border-radius: 1rem;
-      margin: 0;
-      padding: 0;
+      margin: -1.25em;
+      padding: 1.25em;
 
       &:hover {
-        background-color: $white;
+        background-color: transparent;
       }
 
       .vote-count {
