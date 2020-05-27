@@ -37,6 +37,39 @@
     ./upgrade.sh <app-name>
     ```
 
+## Tanzu Kubernetes Grid (vSphere)
+
+### Prerequisites
+
+1. A vSphere instance version 6.7u3 or higher, with Tanzu Kubernetes Grid (TKG) provisioned
+
+1. A network load balancer installed and configured on your TKG cluster (e.g. [MetalLB](https://metallb.universe.tf/installation/))
+
+1. A default storage class available in your TKG cluster (e.g. [vSphereStorageClass](tkg/examples/storageclass.yaml))
+
+### Initial deployment
+
+1. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) to your local machine
+1. Install [helm](https://helm.sh/docs/intro/install/) to your local machine
+1. Make sure `kubectl` is configured to connect to the TKG cluster (ask your administrator for the configuration)
+1. Run the deployment script from the `tkg` directory:
+
+    ```bash
+    ./deploy.sh <app-name>
+    ```
+1. Keep note of the application url output by the deployment script, going forward referred to as `tkg-url` 
+1. Log in to the admin dashboard at `<tkg-url>/admin` (email: `email@example.com` and password: `password`)
+1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
+1. Log in to your retro at `<tkg-url>/retros/your-retro-slug`
+1. Share the URL and password with your team and then run a retro!
+
+### Upgrading a deployment
+
+1. Presuming the steps in the Initial deployment section have been completed, run the upgrade script from the `tkg` directory:
+    ```bash
+    ./upgrade.sh <app-name>
+    ```
+
 ## Pivotal Web Services
 
 #### Initial deployment
@@ -50,8 +83,9 @@
     ```bash
     ./deploy.sh <app-name>
     ```
+
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.cfapps.io/admin`
-1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<app-name>.cfapps.io/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
@@ -82,8 +116,9 @@
     ```bash
     ./deploy.sh <app-name>
     ```
+
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<cf-url>/admin`
-1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<app-name>.<cf-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
@@ -112,8 +147,9 @@
     ```bash
     ./deploy.sh <app-name>
     ```
+
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.herokuapp.com/admin`
-1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<app-name>.herokuapp.com/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 

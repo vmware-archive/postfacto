@@ -32,6 +32,7 @@ Postfacto is a self hosted product, this makes it easier for you to stay in cont
 
 First, download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases) before following the instructions below for your supported platform:
 
+* [Tanzu Kubernetes Grid](deployment#tanzu-kubernetes-grid-vsphere)
 * [Tanzu Application Service](deployment/README.md#tanzu-application-service)
 * [Pivotal Web Services](deployment/README.md#pivotal-web-services)
 * [Cloud Foundry](deployment/README.md#cloud-foundry)
