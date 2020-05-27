@@ -59,7 +59,7 @@ cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client"
 cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 
 pushd "$ASSETS_DIR"
-  BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v200'
+  BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v215'
   if [[ ! $(heroku buildpacks -a ${APP_HOST}) =~ ${BUILDPACK} ]]; then
     heroku buildpacks:set -a ${APP_HOST} ${BUILDPACK}
   fi
