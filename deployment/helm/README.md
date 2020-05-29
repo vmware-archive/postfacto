@@ -92,9 +92,9 @@ option for postgres you would add the following to the install/upgrade command
 To build the chart locally, follow the following steps
 
 1. Install Helm CLI (version 3+)
-1. Add stable chart repository to helm
+1. Add Bitnami chart repository to helm
     ```shell script
-    helm repo add stable https://kubernetes-charts.storage.googleapis.com
+    helm repo add bitnami https://charts.bitnami.com/bitnami
     ```
 1. Download subcharts:
     ```shell script
