@@ -790,6 +790,9 @@ button:focus {
       cursor: pointer;
     }
 
+    $item-vote-vertical-extension: 0.9em;
+    $item-vote-horizontal-extension: 1.25em;
+
     .item-vote-submit {
       display: inline-block;
       text-align: center;
@@ -797,8 +800,8 @@ button:focus {
       color: $light-black;
       font-size: 16px;
       border-radius: 1rem;
-      margin: -1.25em;
-      padding: 1.25em;
+      margin: (-$item-vote-vertical-extension) (-$item-vote-horizontal-extension);
+      padding: $item-vote-vertical-extension $item-vote-horizontal-extension;
 
       &:hover {
         background-color: transparent;
