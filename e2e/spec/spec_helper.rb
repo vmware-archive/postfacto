@@ -159,6 +159,7 @@ module SpecHelpers
   end
 
   def visit_active_admin_page
+    page.current_window.resize_to(800, 2000)
     visit RETRO_ADMIN_BASE_URL
   end
 
