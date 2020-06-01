@@ -188,6 +188,11 @@ describe('RetroColumnItem', () => {
       it('hides edit button', () => {
         expect(dom.find('.item-edit i')).not.toExist();
       });
+
+      it('does record votes', () => {
+        dom.find('.item-vote-submit').simulate('click');
+        expect(voteRetroItem).toHaveBeenCalled();
+      });
     });
 
     it('scrolls to the centre of the screen when highlighted', () => {
