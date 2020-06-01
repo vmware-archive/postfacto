@@ -123,7 +123,7 @@ export default class RetroColumnItem extends React.Component {
   onItemVoteClicked(event) {
     event.stopPropagation();
     const {item, retroId, archives} = this.props;
-    if (this.isEnabled() && !this.isDone() && !archives) {
+    if (!this.isDone() && !archives) {
       this.props.voteRetroItem(retroId, item);
     }
   }
