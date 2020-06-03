@@ -49,8 +49,10 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Users'
         fill_in 'q_email', with: 'user-with-retros'
         click_on 'Filter'
+
         click_on 'Delete'
-        page.driver.browser.switch_to.alert.accept
+
+        accept_confirm
 
         expect(page).to have_content 'user-with-retros'
       end
@@ -70,10 +72,14 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Login'
 
         click_on 'Users'
-        fill_in 'q_email', with: 'user-without-retros'
+
+        expect(page).to have_content 'user-without-retros'
+
+        fill_in 'Email', with: 'user-without-retros'
         click_on 'Filter'
         click_on 'Delete'
-        page.driver.browser.switch_to.alert.accept
+
+        accept_confirm
 
         expect(page).to_not have_content 'user-without-retros'
       end
@@ -140,10 +146,10 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Login'
 
         click_on 'Retros'
-        fill_in 'q_name', with: 'Retro needs new owner'
-        click_on 'Filter'
 
-        click_on 'Edit'
+        within('tr', text: 'Retro needs new owner') do
+          click_on 'Edit'
+        end
 
         expect(page).to have_content 'Owner Email'
         expect(find_field('retro_owner_email').value).to eq 'old-retro-owner@example.com'
@@ -158,7 +164,7 @@ describe 'Alex', type: :feature, js: true do
 
         click_on 'Edit'
 
-        expect(find_field('retro_owner_email').value).to eq 'new-retro-owner@example.com'
+        expect(page).to have_field('Owner Email', with: 'new-retro-owner@example.com')
       end
 
       specify 'remove an owner from a retro' do
@@ -169,21 +175,22 @@ describe 'Alex', type: :feature, js: true do
         login_as_admin
 
         click_on 'Retros'
-        fill_in 'q_name', with: 'Banished user retro'
-        click_on 'Filter'
 
-        click_on 'Edit'
+        within('tr', text: 'Banished user retro') do
+          click_link 'Edit'
+        end
 
-        fill_in 'retro_owner_email', with: ''
+        fill_in 'Owner Email', with: ''
 
         click_on 'Update Retro'
 
         first(:link, 'Retros').click
-        fill_in 'q_name', with: 'Banished user retro'
-        click_on 'Filter'
 
-        click_on 'Edit'
-        expect(find_field('retro_owner_email').value).to eq ''
+        within('tr', text: 'Banished user retro') do
+          click_link 'Edit'
+        end
+
+        expect(page).to have_field('Owner Email', with: '')
       end
 
       specify 'the new owner email does not match any user' do
@@ -198,12 +205,12 @@ describe 'Alex', type: :feature, js: true do
         click_on 'Login'
 
         click_on 'Retros'
-        fill_in 'q_name', with: 'Not wanted retro'
-        click_on 'Filter'
 
-        click_on 'Edit'
+        within('tr', text: 'Not wanted retro') do
+          click_on 'Edit'
+        end
 
-        fill_in 'retro_owner_email', with: 'wrong@example.com'
+        fill_in 'Owner Email', with: 'wrong@example.com'
 
         click_on 'Update Retro'
         expect(page).to have_content 'Could not change owners. User not found by email.'
@@ -222,11 +229,12 @@ describe 'Alex', type: :feature, js: true do
       click_on 'Login'
 
       click_on 'Retros'
-      fill_in 'q_name', with: 'Dead retro'
-      click_on 'Filter'
 
-      click_on 'Delete'
-      page.driver.browser.switch_to.alert.accept
+      within('tr', text: 'Dead retro') do
+        click_on 'Delete'
+      end
+
+      accept_alert 'Are you sure you want to delete this?'
 
       expect(page).to have_content('Retros')
       expect(page).to_not have_content('Dead retro')
