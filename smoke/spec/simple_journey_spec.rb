@@ -31,7 +31,7 @@
 require 'spec_helper'
 require 'securerandom'
 
-describe 'A Journey Of Two Participants', type: :feature, js: true do
+describe 'A Simple Journey', type: :feature, js: true do
 
   before(:all) do
     test_id = SecureRandom.alphanumeric(6)
@@ -46,11 +46,20 @@ describe 'A Journey Of Two Participants', type: :feature, js: true do
     expect(page).not_to have_content(@retro_slug), "Failed to delete retro with slug #{@retro_slug}. This was created for testing purposes, please delete manually."
   end
 
-  specify 'Journey' do
+  specify ('Alex can create a retro') do
     in_browser(:alex) do
       create_retro_as_admin(@retro_name, @retro_slug, @retro_password)
     end
+  end
 
+  specify ('Peter can access the retro') do
+    in_browser(:peter) do
+      visit_retro_board(@retro_url, @retro_password)
+      expect(page).to have_content(@retro_name)
+    end
+  end
+
+  specify ('Peter and Felicity can create and see each others retro items in real time') do
     in_browser(:peter) do
       visit_retro_board(@retro_url, @retro_password)
       expect(page).to have_content(@retro_name)
@@ -87,13 +96,22 @@ describe 'A Journey Of Two Participants', type: :feature, js: true do
     in_browser(:peter) do
       expect(page).to have_content('this is an action')
     end
+  end
 
+
+  specify ('Felicity can archive the retro') do
     in_browser(:felicity) do
+      visit_retro_board(@retro_url, @retro_password)
+      expect(page).to have_content(@retro_name)
+
       click_menu_item 'Archive this retro'
       click_button 'Archive'
     end
 
     in_browser(:peter) do
+      visit_retro_board(@retro_url, @retro_password)
+      expect(page).to have_content(@retro_name)
+
       expect(page).to_not have_css('.retro-item')
     end
   end

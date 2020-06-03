@@ -32,7 +32,13 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 RUN apt-get -yqq update && apt-get -yqq install google-chrome-stable && rm -rf /var/lib/apt/lists/*
 
 COPY . /smoke
+
+# Install Nokogiri
+RUN apt-get update && \
+	apt-get install -y pkg-config libxslt-dev libxml2-dev && \
+	gem install nokogiri -- --use-system-libraries
+
 RUN cd smoke && bundle install
 
 WORKDIR "/smoke"
-CMD ["bundle", "exec", "rspec"]
+CMD ["bundle", "exec", "rspec", "--format", "documentation"]
