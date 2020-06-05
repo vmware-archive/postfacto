@@ -73,8 +73,8 @@ module SpecHelpers
   def login_as_admin
     visit_active_admin_page
 
-    fill_in 'admin_user_email', with: 'admin@example.com'
-    fill_in 'admin_user_password', with: 'secret'
+    fill_in 'admin_user_email', with: RETRO_ADMIN_EMAIL
+    fill_in 'admin_user_password', with: RETRO_ADMIN_PASSWORD
     click_on 'Login'
   end
 
