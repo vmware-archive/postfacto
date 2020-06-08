@@ -1,9 +1,9 @@
 dependencies:
 - name: postgresql
-  repository: https://kubernetes-charts.storage.googleapis.com
+  repository: https://charts.bitnami.com/bitnami
   version: 6.5.0
 - name: redis
-  repository: https://kubernetes-charts.storage.googleapis.com
+  repository: https://charts.bitnami.com/bitnami
   version: 9.4.3
-digest: sha256:18dea218d4c6460be6a3b7b203d6668650e1a9dfe42a4859ccdd7f5ebc6b9038
-generated: "2020-05-12T14:21:00.129069+01:00"
+digest: sha256:370a0cefafd00e023a76d01a3a785252db4cd17fbf19f5ee4a3adcc282092d3a
+generated: "2020-05-29T12:28:49.817707+01:00"
