@@ -87,7 +87,7 @@ then
     sleep 5
   done
 
-  pushd "$SCRIPT_DIR/last-release/package/pcf"
+  pushd "$SCRIPT_DIR/last-release/package/cf"
     echo 'Deploying old version to Cloud Foundry'
     ENABLE_ANALYTICS=false ./deploy.sh $OLD_APP
   popd
