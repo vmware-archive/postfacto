@@ -114,6 +114,33 @@ describe Retro do
     end
   end
 
+  context 'deleting a retro' do
+    let(:retro) { Retro.create(name: 'My Retro') }
+    let(:done_item) { Item.new(description: 'item1', category: :happy, done: true) }
+    let(:done_action) { ActionItem.new(description: 'action1', done: true) }
+    let(:current_item) { Item.new(description: 'item2', category: :happy, done: false) }
+    let(:current_action) { ActionItem.new(description: 'action2', done: false) }
+
+    it 'should delete all items and action items associated with the retro' do
+      retro.items << done_item
+      retro.action_items << done_action
+
+      RetroArchiveService.archive(retro, Time.now, false)
+
+      retro.reload
+
+      retro.items << current_item
+      retro.action_items << current_action
+
+      retro.destroy!
+
+      expect(Item.where(id: current_item.id)).not_to exist
+      expect(Item.where(id: done_item.id)).not_to exist
+      expect(ActionItem.where(id: current_action.id)).not_to exist
+      expect(ActionItem.where(id: done_action.id)).not_to exist
+    end
+  end
+
   context 'retro has an invalid slug' do
     let(:retro) { Retro.new(name: 'My Retro') }
 

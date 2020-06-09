@@ -30,6 +30,6 @@
 #
 class Archive < ApplicationRecord
   belongs_to :retro, optional: true
-  has_many :items
-  has_many :action_items
+  has_many :items, dependent: :destroy
+  has_many :action_items, dependent: :destroy
 end
