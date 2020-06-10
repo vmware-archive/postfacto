@@ -214,8 +214,10 @@ export default class RetroColumnInput extends React.Component {
               autoComplete="off"
               innerRef={(ref) => { this.textarea = ref; }}
             />
-            {this.renderEmojiButton()}
-            {this.renderDoneButton()}
+            <div className="input-buttons">
+              {this.renderEmojiButton()}
+              {this.renderDoneButton()}
+            </div>
           </div>
           {this.renderEmojiSelector()}
         </div>

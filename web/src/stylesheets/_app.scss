@@ -1006,6 +1006,11 @@ button:focus {
     }
   }
 
+  .input-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   &.multiline {
     flex-direction: column;
   }
