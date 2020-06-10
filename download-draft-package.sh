@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Postfacto, a free, open-source and self-hosted retro tool aimed at helping
 # remote teams.
@@ -28,39 +28,18 @@
 # You should have received a copy of the GNU Affero General Public License
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-set -e
 
-BASE_DIR="$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# API Unit Tests
-pushd "$BASE_DIR/api" >/dev/null
-  bundle exec rake db:create db:migrate
-  echo
-  echo "API Unit Tests:"
-  echo
-  bundle exec rake
-popd >/dev/null
+# Get the asset url of the latest draft
+asset_url=$(curl -u $GITHUB_USERNAME:$ACCESS_TOKEN \
+          --header "Accept: application/json" \
+          https://api.github.com/repos/pivotal/postfacto/releases \
+          | jq --raw-output '[.[] | select(.draft==true)][0].assets[0].url')
 
-# Frontend Linting
-echo
-echo "Frontend Lint:"
-echo
-CI=true npm --prefix="$BASE_DIR/web" run lint
-
-# Frontend Unit Tests
-echo
-echo "Frontend Unit Tests:"
-echo
-CI=true npm --prefix="$BASE_DIR/web" test
-
-# E2E Tests
-
-echo
-echo "End-to-end Tests:"
-echo
-"$BASE_DIR/e2e.sh"
-
-# Done
-
-echo
-echo "All tests passed :)"
+# Download asset
+curl --location --silent --show-error \
+          -u $GITHUB_USERNAME:$ACCESS_TOKEN \
+          --header "Accept: application/octet-stream" \
+          --output $SCRIPT_DIR/package.zip \
+          $asset_url

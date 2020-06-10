@@ -39,7 +39,7 @@ fi
 
 sed -i.bak s/appVersion:.*/appVersion:\ $APP_VERSION/  Chart.yaml
 
-helm repo add stable https://kubernetes-charts.storage.googleapis.com
+helm repo add bitnami https://charts.bitnami.com/bitnami
 
 helm dependency build
 
