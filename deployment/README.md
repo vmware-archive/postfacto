@@ -7,6 +7,7 @@
   * [Cloud Foundry](#cloud-foundry)
   * [Heroku](#heroku)
   * [Configuration](#configuration)
+  * [Testing your deployment](#testing-your-deployment)
 
 ## Prerequisites
 1. Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)
@@ -198,3 +199,12 @@ You can customise this window with the `SESSION_TIME` env variable to the `env` 
 ```bash
 SESSION_TIME=60 ./deploy <app-name>
 ```
+
+## Testing your deployment
+
+1. Log in to the Postfacto admin dashboard
+1. Create a new admin user for the test to use by clicking on 'Admin Users' and then 'New Admin User'. Take note of the email and password you use, as these will be used in the next step
+1. Run the smoke test script from the root of the package directory:
+    ```bash
+    ./smoke-test.sh <app-url> <app-admin-url> <test-admin-email> <test-admin-password>
+    ```

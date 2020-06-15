@@ -33,6 +33,15 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
+  - name: "Build & Deploy Docker for Smoke Tests"
+    script:
+    - $TRAVIS_BUILD_DIR/smoke/build.sh travis-build-image-smoke
+    deploy:
+    - provider: script
+      script: bash $TRAVIS_BUILD_DIR/docker/ci-push-smoke $TRAVIS_TAG
+      skip_cleanup: true
+      on:
+        tags: true
   - name: "Build & Upload Package"
     script:
       - docker run -v $TRAVIS_BUILD_DIR/deployment/helm/:/helm  -w /helm --entrypoint /helm/build.sh alpine/helm:3.2.1 $TRAVIS_TAG

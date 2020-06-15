@@ -111,6 +111,17 @@ cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
 cp -r deployment/mixpanel.sh package/heroku/mixpanel.sh
 chmod u+x package/heroku/*.sh
 
+# Smoke tests
+
+cp -r deployment/smoke-test.sh package
+chmod u+x package/smoke-test.sh
+
+# Persist version
+
+if [ $# -gt 0 ]; then
+  echo $1 > package/VERSION
+fi
+
 # Docs
 
 cp deployment/README.md package
