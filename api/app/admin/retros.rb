@@ -132,7 +132,7 @@ ActiveAdmin.register Retro do
       f.input :slug
       f.input :video_link
       f.input :owner_email, label: 'Owner Email'
-      f.input :is_private, label: 'Private?', input_html: { checked: f.object.is_private || true }
+      f.input :is_private, label: 'Private?'
     end
 
     f.inputs do
@@ -154,6 +154,12 @@ ActiveAdmin.register Retro do
 
     def find_user_by_email(owner_email)
       User.find_by_email(owner_email)
+    end
+
+    def new
+      super do
+        @retro.is_private = true
+      end
     end
 
     def update
