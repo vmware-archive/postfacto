@@ -28,33 +28,8 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-class RetroSerializer
-  ALLOWED_FIELDS = [
-    :created_at,
-    :highlighted_item_id,
-    :id,
-    :is_private,
-    :name,
-    :retro_item_end_time,
-    :send_archive_email,
-    :slug,
-    :updated_at,
-    :user_id,
-    :video_link,
-    :join_token
-  ].freeze
-
-  ASSOCIATIONS = {
-    action_items: {}.freeze,
-    archives: { only: :id }.freeze,
-    items: {}.freeze
-  }.freeze
-
-  def initialize(retro)
-    @retro = retro
-  end
-
-  def as_json
-    @retro.as_json(include: ASSOCIATIONS, only: ALLOWED_FIELDS)
+class AddJoinTokenToRetros < ActiveRecord::Migration[6.0]
+  def change
+    add_column :retros, :join_token, :string, :null => true
   end
 end

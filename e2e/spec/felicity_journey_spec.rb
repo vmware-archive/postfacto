@@ -30,6 +30,7 @@
 #
 require 'spec_helper'
 require 'pry-byebug'
+require 'clipboard'
 
 context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'true' do
   context 'when they have not registered before' do

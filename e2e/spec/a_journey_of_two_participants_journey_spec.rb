@@ -229,6 +229,23 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
     end
   end
 
+  specify 'sharing a retro url' do
+    retro_share_url = in_browser(:felicity) do
+      register('two-participants-sharing-felicity-user')
+      retro_url = create_private_retro('A retro only for people with the password')
+      visit retro_url
+
+      click_button 'SHARE'
+      find('.share-retro-url-copy').click
+      Clipboard.paste.encode('UTF-8')
+    end
+
+    in_browser(:peter) do
+      visit retro_share_url
+      expect(page).to have_content 'A retro only for people with the password'
+    end
+  end
+
   specify 'Public retros cannot be archived without password' do
     retro_url = ''
     view_all_archives_url = ''

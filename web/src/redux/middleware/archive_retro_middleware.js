@@ -53,6 +53,7 @@ const ArchiveMiddleware = () => (store) => (next) => (action) => {
         payload: {
           title: 'Archive this retro?',
           message: 'The board will be cleared ready for your next retro and incomplete action items will be carried across.',
+          type: 'ARCHIVE_RETRO',
         },
       });
     }

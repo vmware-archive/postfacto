@@ -39,16 +39,40 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if @retro.validate_login?(retro_params.fetch(:password))
-      render json: { token: generate_retro_token(@retro) }, status: :ok
+    password = retro_params.fetch(:password, nil)
+    if password
+      login_with_password(password)
+    elsif @retro.magic_link_enabled?
+      join_token = retro_params.fetch(:join_token, nil)
+      login_with_join_token(join_token)
     else
-      render json: :no_content, status: :forbidden
+      forbidden
     end
   end
 
   private
 
+  def login_with_password(password)
+    if @retro.validate_login?(password)
+      render json: { token: generate_retro_token(@retro) }, status: :ok
+    else
+      forbidden
+    end
+  end
+
+  def login_with_join_token(join_token)
+    if @retro.validate_join_token?(join_token)
+      render json: { token: generate_retro_token(@retro) }, status: :ok
+    else
+      forbidden
+    end
+  end
+
+  def forbidden
+    render json: :no_content, status: :forbidden
+  end
+
   def retro_params
-    params.require(:retro).permit(:name, :slug, :password, :item_order, :is_private)
+    params.require(:retro).permit(:name, :slug, :password, :item_order, :is_private, :join_token)
   end
 end

@@ -34,7 +34,7 @@ class SettingsController < ApplicationController
   before_action :load_and_authenticate_retro_admin
 
   def index
-    render json: { retro: @retro.as_json(only: [:id, :name, :slug, :is_private]) }, status: :ok
+    render json: { retro: @retro.as_json(only: [:id, :name, :slug, :is_private, :join_token]) }, status: :ok
   end
 
   private

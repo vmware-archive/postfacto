@@ -48,6 +48,7 @@ import {ConnectedListRetroArchivesPage} from './retro-archives/list_retro_archiv
 import Alert from './shared/alert';
 import {ConnectedRegistrationPage} from './registration/registration_page';
 import {clearAlert} from '../redux/actions/main_actions';
+import {joinRetro} from '../redux/actions/api_actions';
 
 
 class Router extends React.Component {
@@ -57,6 +58,7 @@ class Router extends React.Component {
     alert: types.object,
     not_found: types.object,
     clearAlert: types.func.isRequired,
+    joinRetro: types.func.isRequired,
   };
 
   static defaultProps = {
@@ -76,6 +78,7 @@ class Router extends React.Component {
     router.get('*', this.showNotFound);
     router.get('/', this.showHome);
     router.get('/retros/:retroId', this.showRetro);
+    router.get('/retros/:retroId/join/:joinToken', this.joinRetro);
     router.get('/retros/:retroId/archives', this.listRetroArchives);
     router.get('/retros/:retroId/archives/:archiveId', this.showRetroArchive);
     router.get('/retros/:retroId/login', this.loginToRetro);
@@ -117,6 +120,11 @@ class Router extends React.Component {
     }
 
     this.setPage(ConnectedShowRetroPage, {retroId, archives: false});
+  };
+
+  joinRetro = (req) => {
+    const {retroId, joinToken} = req.params;
+    this.props.joinRetro(retroId, joinToken);
   };
 
   listRetros = () => {
@@ -199,6 +207,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   clearAlert: () => dispatch(clearAlert()),
+  joinRetro: (retroId, joinToken) => dispatch(joinRetro(retroId, joinToken)),
 });
 
 const ConnectedRouter = connect(mapStateToProps, mapDispatchToProps)(Router);

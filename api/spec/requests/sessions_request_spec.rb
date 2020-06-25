@@ -32,7 +32,13 @@ require 'rails_helper'
 
 describe '/retros/:id/sessions' do
   let(:retro) do
-    Retro.create!(name: 'My Retro', password: 'the-password', video_link: 'the-video-link', is_private: false)
+    Retro.create!(
+      name: 'My Retro',
+      password: 'the-password',
+      video_link: 'the-video-link',
+      is_private: false,
+      is_magic_link_enabled: false
+    )
   end
 
   describe 'GET /new' do
@@ -86,6 +92,92 @@ describe '/retros/:id/sessions' do
       it 'responds with forbidden' do
         post retro_sessions_path(retro) + '/', params: { retro: { password: 'anything-else' } }, as: :json
         expect(status).to eq(403)
+      end
+    end
+
+    context 'if password is not provided' do
+      it 'responds with forbidden' do
+        post retro_sessions_path(retro) + '/', params: { retro: { name: retro.name } }, as: :json
+        expect(status).to eq(403)
+      end
+    end
+
+    context 'if magic link is enabled' do
+      before do
+        retro.is_magic_link_enabled = true
+        retro.save!
+      end
+
+      context 'if join token nor password is provided' do
+        it 'responds with forbidden' do
+          post retro_sessions_path(retro) + '/', params: { retro: { name: retro.name } }, as: :json
+          expect(status).to eq(403)
+        end
+      end
+
+      context 'if join token is correct' do
+        it 'responds with 200' do
+          post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+          expect(status).to eq(200)
+        end
+
+        it 'responds with a token' do
+          post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+
+          data = JSON.parse(response.body)
+          jwt = JWT.decode(data['token'], nil, false)
+
+          expect(jwt[0]['sub']).to eq(retro.slug)
+          expect(jwt[0]['iss']).to eq('retros')
+          expect(jwt[1]['alg']).to eq('HS256')
+        end
+
+        context 'when there is a session time' do
+          let(:session_time) { 1.seconds }
+
+          before do
+            allow(Rails.configuration).to receive(:session_time).and_return(session_time)
+            allow(CLOCK).to receive(:current_time).and_return(Time.now)
+          end
+
+          it 'responds with an expiring token' do
+            post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+
+            data = JSON.parse(response.body)
+            jwt = JWT.decode(data['token'], nil, false)
+
+            expect(jwt[0]['exp'].to_i).to eq((CLOCK.current_time + session_time).to_i)
+          end
+        end
+      end
+
+      context 'if join token is incorrect' do
+        it 'responds with forbidden' do
+          post retro_sessions_path(retro) + '/', params: { retro: { join_token: 'anything-else' } }, as: :json
+          expect(status).to eq(403)
+        end
+      end
+
+      context 'password has precedence over join token' do
+        it 'responds with 200' do
+          post retro_sessions_path(retro) + '/', params: {
+            retro: {
+              password: 'the-password',
+              join_token: 'anything-else'
+            }
+          }, as: :json
+          expect(status).to eq(200)
+        end
+
+        it 'responds with forbidden' do
+          post retro_sessions_path(retro) + '/', params: {
+            retro: {
+              password: 'anything-else',
+              join_token: retro.join_token
+            }
+          }, as: :json
+          expect(status).to eq(403)
+        end
       end
     end
   end

@@ -48,6 +48,7 @@ describe '/retros/:id/settings' do
         expect(data['retro']['slug']).to start_with('my-retro')
         expect(data['retro']['id']).to eq(retro.id)
         expect(data['retro']['is_private']).to eq(false)
+        expect(data['retro']['join_token']).to be_nil
       end
     end
 

@@ -59,9 +59,9 @@ describe('ShowRetroPasswordSettingsPage', () => {
     let showRetroForId;
     let updateRetroPassword;
     let signOut;
+    const environment = {isMobile640: isMobile};
 
     beforeEach(() => {
-      const environment = {isMobile640: isMobile};
       getRetroSettings = jest.fn();
       clearErrors = jest.fn();
       showRetroForId = jest.fn();
@@ -138,6 +138,33 @@ describe('ShowRetroPasswordSettingsPage', () => {
       dom.unmount();
 
       expect(clearErrors).toHaveBeenCalled();
+    });
+
+    it('displays magic link message when a join token is present', () => {
+      dom = mount((
+        <MuiThemeProvider>
+          <ShowRetroPasswordSettingsPage
+            retroId="13"
+            retro={{
+              ...retro,
+              join_token: 'join_token',
+            }}
+            session={session}
+            environment={environment}
+            getRetroSettings={getRetroSettings}
+            clearErrors={clearErrors}
+            showRetroForId={showRetroForId}
+            updateRetroPassword={updateRetroPassword}
+            signOut={signOut}
+          />
+        </MuiThemeProvider>
+      ));
+
+      expect(dom.find('.reminder')).toIncludeText('and magic link');
+    });
+
+    it('does not display magic link message when no join token is present', () => {
+      expect(dom.find('.reminder')).not.toIncludeText('and magic link');
     });
   };
 

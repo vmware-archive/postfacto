@@ -45,6 +45,8 @@ class Retro < ActiveRecord::Base
   validates_length_of :slug, maximum: MAX_SLUG_LENGTH
   validates_format_of :slug, with: /\A[a-zA-z0-9-]+\z/
 
+  before_update :recompute_join_token, if: :should_recompute_join_token?
+
   def password=(val)
     unless val.blank?
       self.salt = BCrypt::Engine.generate_salt
@@ -62,6 +64,22 @@ class Retro < ActiveRecord::Base
     else
       BCrypt::Engine.hash_secret(val, salt) == encrypted_password
     end
+  end
+
+  def validate_join_token?(val)
+    val == join_token
+  end
+
+  def is_magic_link_enabled=(val)
+    if ActiveModel::Type::Boolean.new.cast(val)
+      recompute_join_token
+    else
+      clear_join_token
+    end
+  end
+
+  def magic_link_enabled?
+    !join_token.nil?
   end
 
   def create_instruction_cards!
@@ -96,5 +114,17 @@ class Retro < ActiveRecord::Base
     end
 
     slug
+  end
+
+  def should_recompute_join_token?
+    magic_link_enabled? && :will_save_change_to_encrypted_password?
+  end
+
+  def recompute_join_token
+    self.join_token = SecureRandom.alphanumeric(32)
+  end
+
+  def clear_join_token
+    self.join_token = nil
   end
 end

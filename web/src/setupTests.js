@@ -29,29 +29,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// SASS variable overrides must be declared before loading up Active Admin's styles.
-//
-// To view the variables that Active Admin provides, take a look at
-// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
-// Active Admin source.
-//
-// For example, to change the sidebar width:
-// $sidebar-width: 242px;
 
-// Active Admin's got SASS!
-@import "active_admin/mixins";
-@import "active_admin/base";
+/* eslint-disable no-alert, no-console */
+const error = console.error;
 
-// Overriding any non-variable SASS must be done after the fact.
-// For example, to change the default status-tag color:
-//
-//   .status_tag { background: #6090DB; }
+console.error = (...args) => {
+  const message = args[0];
+  error.apply(console, args); // keep default behaviour
+  throw (message instanceof Error ? message : new Error(message));
+};
 
-.checkbox-label {
-  display: inline;
-}
-
-.checkbox-description {
-  margin-bottom: .5rem;
-  padding-left: 1.5rem;
-}
+/* eslint-enable no-alert, no-console */

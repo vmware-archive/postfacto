@@ -87,7 +87,8 @@ module SpecHelpers
   end
 
   def create_private_retro(team_name = nil)
-    fill_in_create_retro_form
+    fill_in_create_retro_form(team_name)
+    find('#retro_is_magic_link_enabled', visible: :all).set(true)
     submit_create_retro_form(team_name)
   end
 

@@ -61,6 +61,7 @@ class RetroCreatePage extends React.Component {
       slug: '',
       password: '',
       isPrivate: true,
+      isMagicLinkEnabled: false,
       errors: {
         name: '',
         slug: '',
@@ -111,6 +112,7 @@ class RetroCreatePage extends React.Component {
         slug: this.state.slug,
         password: this.state.password,
         isPrivate: this.state.isPrivate,
+        isMagicLinkEnabled: this.state.isMagicLinkEnabled,
       });
     }
   }
@@ -178,6 +180,12 @@ class RetroCreatePage extends React.Component {
     }));
   };
 
+  toggleMagicLinkEnabled = () => {
+    this.setState((oldState) => ({
+      isMagicLinkEnabled: !oldState.isMagicLinkEnabled,
+    }));
+  };
+
   renderAccessInstruction() {
     const accessPrivate = (
       <div>
@@ -206,7 +214,7 @@ class RetroCreatePage extends React.Component {
   }
 
   render() {
-    const {name, slug, password, isPrivate, errors} = this.state;
+    const {name, slug, password, isPrivate, isMagicLinkEnabled, errors} = this.state;
     const toggle = DEFAULT_TOGGLE_STYLE;
 
     return (
@@ -278,6 +286,31 @@ class RetroCreatePage extends React.Component {
                   iconStyle={toggle.iconStyle}
                 />
                 {this.renderAccessInstruction()}
+              </div>
+
+              <div className="row">
+                <label className="label" htmlFor="retro_is_magic_link_enabled">Can participants share this retro using a magic link?</label>
+
+                <Toggle
+                  id="retro_is_magic_link_enabled"
+                  name="isMagicLinkEnabled"
+                  label={isMagicLinkEnabled ? 'Yes' : 'No'}
+                  labelPosition="right"
+                  toggled={isMagicLinkEnabled}
+                  onToggle={this.toggleMagicLinkEnabled}
+                  trackStyle={toggle.trackStyle}
+                  trackSwitchedStyle={toggle.trackSwitchedStyle}
+                  labelStyle={toggle.labelStyle}
+                  thumbStyle={toggle.thumbStyle}
+                  thumbSwitchedStyle={toggle.thumbSwitchedStyle}
+                  iconStyle={toggle.iconStyle}
+                />
+
+                <div className="access-instruction">
+                  This will provide a magic link that allows users to access this retro
+                  without being prompted for a password. This is not the same as making a retro public.
+                </div>
+
               </div>
 
               <div className="row">

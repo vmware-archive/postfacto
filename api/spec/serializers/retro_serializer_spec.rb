@@ -77,7 +77,8 @@ RSpec.describe RetroSerializer do
         'slug' => retro.slug,
         'updated_at' => retro.updated_at,
         'user_id' => retro.user_id,
-        'video_link' => retro.video_link
+        'video_link' => retro.video_link,
+        'join_token' => nil
       )
     end
 

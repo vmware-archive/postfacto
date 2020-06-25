@@ -104,7 +104,7 @@ def token_for(item)
   case item
   when Retro
     AuthToken.generate(
-      retro.slug,
+      item.slug,
       'retros',
       CLOCK.current_time,
       nil,
@@ -113,7 +113,7 @@ def token_for(item)
 
   when User
     AuthToken.generate(
-      user.email,
+      item.email,
       'users',
       CLOCK.current_time,
       nil,

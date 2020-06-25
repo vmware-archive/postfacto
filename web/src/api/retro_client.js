@@ -53,12 +53,13 @@ export default class RetroClient {
           slug: data.slug,
           password: data.password,
           is_private: data.isPrivate,
+          is_magic_link_enabled: data.isMagicLinkEnabled,
         },
       }),
     });
   }
 
-  updateRetro(id, name, slug, token, is_private, request_uuid, video_link) {
+  updateRetro(id, name, slug, token, is_private, request_uuid, video_link, is_magic_link_enabled) {
     return this.fetchJson(`${this.apiBaseUrl()}/retros/${id}`, {
       method: 'PATCH',
       accessToken: token,
@@ -68,6 +69,7 @@ export default class RetroClient {
           slug,
           is_private,
           video_link,
+          is_magic_link_enabled,
         },
         request_uuid,
       }),
@@ -99,6 +101,13 @@ export default class RetroClient {
     return this.fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/sessions`, {
       method: 'POST',
       body: JSON.stringify({retro: {password}}),
+    });
+  }
+
+  joinRetro({retro_id, join_token}) {
+    return this.fetchJson(`${this.apiBaseUrl()}/retros/${retro_id}/sessions`, {
+      method: 'POST',
+      body: JSON.stringify({retro: {join_token}}),
     });
   }
 

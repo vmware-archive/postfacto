@@ -29,9 +29,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Dialog from 'material-ui/Dialog';
-import Toggle from 'material-ui/Toggle';
-
 import React from 'react';
 import types from 'prop-types';
 
@@ -46,7 +43,6 @@ import RetroHeading from './retro_heading';
 
 import EmptyPage from '../shared/empty_page';
 
-import {DEFAULT_TOGGLE_STYLE} from '../shared/constants';
 import {
   archiveRetro,
   createRetroActionItem,
@@ -76,6 +72,8 @@ import {
 } from '../../redux/actions/main_actions';
 import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/router_actions';
 import {websocketUrl} from '../../helpers/websockets';
+import ArchiveRetroDialog from './archive_retro_dialog';
+import ShareRetroDialog from './share_retro_dialog';
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -96,6 +94,7 @@ class ShowRetroPage extends React.Component {
     dialog: types.shape({
       title: types.string,
       message: types.string,
+      type: types.string,
     }),
     environment: types.shape({
       isMobile640: types.bool,
@@ -265,65 +264,33 @@ class ShowRetroPage extends React.Component {
     );
   }
 
-  renderArchiveConfirmationDialog() {
-    const title = this.props.dialog ? this.props.dialog.title : '';
-    const message = this.props.dialog ? this.props.dialog.message : '';
-    const toggle = DEFAULT_TOGGLE_STYLE;
+  renderDialog() {
+    const dialogType = this.props.dialog ? this.props.dialog.type : '';
 
-    const archiveButton = (
-      <button
-        className="archive-dialog__actions--archive"
-        type="button"
-        onClick={this.handleArchiveRetroConfirmation}
-      >
-        {this.props.retro.send_archive_email && this.props.featureFlags.archiveEmails ? 'Archive & send email' : 'Archive'}
-      </button>
-    );
-
-    const cancelButton = (
-      <button
-        className="archive-dialog__actions--cancel"
-        type="button"
-        onClick={this.props.hideDialog}
-      >
-        Cancel
-      </button>
-    );
-
-    return (
-      <Dialog
-        title={title}
-        actions={[cancelButton, archiveButton]}
-        open={!!this.props.dialog}
-        onRequestClose={this.props.hideDialog}
-        actionsContainerClassName="archive-dialog__actions"
-        contentClassName="archive-dialog"
-      >
-        <p>{message}</p>
-        {
-          this.props.featureFlags.archiveEmails ? (
-            <div>
-              <label className="label" htmlFor="send_archive_email">Send action items to the team via email?</label>
-
-              <Toggle
-                id="send_archive_email"
-                name="sendArchiveEmail"
-                label={this.props.retro.send_archive_email ? 'Yes' : 'No'}
-                toggled={this.props.retro.send_archive_email}
-                labelPosition="right"
-                onToggle={this.handleArchiveEmailPreferenceChange}
-                trackStyle={toggle.trackStyle}
-                trackSwitchedStyle={toggle.trackSwitchedStyle}
-                labelStyle={toggle.labelStyle}
-                thumbStyle={toggle.thumbStyle}
-                thumbSwitchedStyle={toggle.thumbSwitchedStyle}
-                iconStyle={toggle.iconStyle}
-              />
-            </div>
-          ) : null
-        }
-      </Dialog>
-    );
+    switch (dialogType) {
+      case 'ARCHIVE_RETRO':
+        return (
+          <ArchiveRetroDialog
+            title={this.props.dialog.title}
+            message={this.props.dialog.message}
+            retro={this.props.retro}
+            featureFlags={this.props.featureFlags}
+            toggleSendArchiveEmail={this.props.toggleSendArchiveEmail}
+            archiveRetro={this.props.archiveRetro}
+            onClose={this.props.hideDialog}
+          />
+        );
+      case 'SHARE_RETRO':
+        return (
+          <ShareRetroDialog
+            retro={this.props.retro}
+            retroId={this.props.retroId}
+            onClose={this.props.hideDialog}
+          />
+        );
+      default:
+        return null;
+    }
   }
 
   renderMobile(retro) {
@@ -332,7 +299,7 @@ class ShowRetroPage extends React.Component {
     return (
       <span>
         <RetroWebsocket url={websocketUrl(config)} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
-        {this.renderArchiveConfirmationDialog()}
+        {this.renderDialog()}
         <div className={archives ? 'mobile-display archived' : 'mobile-display'}>
 
           <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
@@ -405,7 +372,7 @@ class ShowRetroPage extends React.Component {
       <HotKeys keyMap={keyMap} handlers={keyHandlers}>
         <span>
           <RetroWebsocket url={websocketUrl(config)} retro_id={retroId} websocketRetroDataReceived={this.props.websocketRetroDataReceived}/>
-          {this.renderArchiveConfirmationDialog()}
+          {this.renderDialog()}
           <div className={retroContainerClasses}>
 
             <RetroLegalBanner retroId={retroId} isPrivate={retro.is_private} config={config}/>
