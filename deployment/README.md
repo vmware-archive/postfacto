@@ -3,6 +3,7 @@
 ## Contents
   * [Prerequisites](#prerequisites)
   * [Tanzu Application Service](#tanzu-application-service)
+  * [Tanzu Kubernetes Grid (vSphere)](#tanzu-kubernetes-grid-vsphere)
   * [Pivotal Web Services](#pivotal-web-services)
   * [Cloud Foundry](#cloud-foundry)
   * [Heroku](#heroku)
