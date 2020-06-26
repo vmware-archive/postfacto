@@ -117,7 +117,7 @@ class Retro < ActiveRecord::Base
   end
 
   def should_recompute_join_token?
-    magic_link_enabled? && :will_save_change_to_encrypted_password?
+    magic_link_enabled? && will_save_change_to_encrypted_password?
   end
 
   def recompute_join_token

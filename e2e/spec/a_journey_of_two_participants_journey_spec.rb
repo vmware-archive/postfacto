@@ -236,8 +236,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       visit retro_url
 
       click_button 'SHARE'
-      find('.share-retro-url-copy').click
-      Clipboard.paste.encode('UTF-8')
+      find('#share-retro-url').value
     end
 
     in_browser(:peter) do
