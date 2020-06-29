@@ -190,6 +190,13 @@ module SpecHelpers
     end
   end
 
+  def get_share_url
+    click_button 'SHARE'
+    share_url = find('#share-retro-url').value
+    click_button 'Close'
+    share_url
+  end
+
   # This is a workaround for Capybara/Selenium click inconsistencies
   # https://medium.com/@yuliaoletskaya/capybara-inconsistent-click-behavior-and-flickering-tests-f50b5fae8ab2
   def non_flaky_click(selector)

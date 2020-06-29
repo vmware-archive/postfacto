@@ -235,8 +235,7 @@ context 'A Journey Of Two Participants', type: :feature, js: true do
       retro_url = create_private_retro('A retro only for people with the password')
       visit retro_url
 
-      click_button 'SHARE'
-      find('#share-retro-url').value
+      get_share_url
     end
 
     in_browser(:peter) do

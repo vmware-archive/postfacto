@@ -100,11 +100,18 @@ describe Retro do
       expect(retro.join_token).to_not be_nil
     end
 
-    it 'does change the join token if the password is changed' do
+    it 'changes the join token if the password is changed' do
       old_join_token = retro.join_token
       retro.password = 'something-new'
       retro.save!
       expect(retro.join_token).not_to eq old_join_token
+    end
+
+    it 'does not change the join token if anything else is changed' do
+      old_join_token = retro.join_token
+      retro.name = 'My new retro name'
+      retro.save!
+      expect(retro.join_token).to eq old_join_token
     end
 
     it 'clears the join token if magic link gets disabled' do

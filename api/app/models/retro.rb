@@ -72,6 +72,10 @@ class Retro < ActiveRecord::Base
 
   def is_magic_link_enabled=(val)
     if ActiveModel::Type::Boolean.new.cast(val)
+      unless join_token.nil?
+        return
+      end
+
       recompute_join_token
     else
       clear_join_token

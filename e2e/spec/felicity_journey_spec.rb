@@ -171,6 +171,43 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
       end
     end
 
+    describe 'sharing a retro' do
+      share_url = ''
+
+      before do
+        retro_url = create_private_retro('Share Retro')
+        visit retro_url
+
+        share_url = get_share_url
+      end
+
+      specify 'changing the password changes the share url' do
+        click_menu_item 'Retro settings'
+        click_link 'Change password'
+
+        fill_in('current_password', with: 'password')
+        fill_in('new_password', with: 'new_password')
+        fill_in('confirm_new_password', with: 'new_password')
+
+        click_button('Save new password')
+
+        expect(page).to have_content 'Settings'
+        expect(page).to have_content 'Password changed'
+
+        click_on 'Save changes'
+
+        expect(get_share_url).not_to eq(share_url)
+      end
+
+      specify 'changing other settings does not change the share url' do
+        click_menu_item 'Retro settings'
+        fill_in 'retro_name', with: 'New Name'
+        click_on 'Save changes'
+
+        expect(get_share_url).to eq(share_url)
+      end
+    end
+
     describe 'archiving a retro' do
       describe 'summary email option' do
         xspecify 'is remembered from the last retro' do
