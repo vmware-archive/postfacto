@@ -47,7 +47,8 @@ describe('Router', () => {
     const fakeRouter = {get: () => {}};
 
     clearAlert = jest.fn();
-    rendered = shallow(<Router alert={{}} clearAlert={clearAlert} router={fakeRouter} config={{}}/>);
+
+    rendered = shallow(<Router alert={{}} clearAlert={clearAlert} router={fakeRouter} joinRetro={jest.fn()} config={{}}/>);
   });
 
   it('renders alert', () => {

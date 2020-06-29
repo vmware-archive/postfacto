@@ -43,6 +43,7 @@ const defaultRetro = {
   video_link: 'http://the/video/link',
   items: [],
   action_items: [],
+  join_token: null,
 };
 
 function createShallowRetroHeading(retroOverrides = {}, propOverrides = {}) {
@@ -103,6 +104,7 @@ describe('RetroHeading', () => {
       expect(showDialog).toHaveBeenCalledWith({
         title: 'You\'re about to archive this retro.',
         message: 'Are you sure?',
+        type: 'ARCHIVE_RETRO',
       });
     });
 
@@ -117,6 +119,36 @@ describe('RetroHeading', () => {
       it('hides the video button', () => {
         const dom = createShallowRetroHeading({video_link: null});
         expect(dom.find('.video-button')).not.toExist();
+      });
+    });
+
+    it('does not include the share button if the magic link is disabled', () => {
+      const dom = createShallowRetroHeading({
+        join_token: null,
+        items: [],
+      });
+      expect(dom.find('.share-button')).not.toExist();
+    });
+
+    it('includes the share button if the magic link is enabled', () => {
+      const dom = createShallowRetroHeading({
+        join_token: 'join-token',
+        items: [],
+      });
+      expect(dom.find('.share-button')).toExist();
+    });
+
+    it('dispatches showDialog when the share button is clicked', () => {
+      const showDialog = jest.fn();
+      const dom = createShallowRetroHeading({
+        join_token: 'join-token',
+        items: [],
+      }, {showDialog});
+
+      dom.find('.share-button').simulate('click');
+
+      expect(showDialog).toHaveBeenCalledWith({
+        type: 'SHARE_RETRO',
       });
     });
   });

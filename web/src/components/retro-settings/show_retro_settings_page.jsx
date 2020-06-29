@@ -51,6 +51,7 @@ function getStateUpdateFor(retro, errors) {
     stateUpdate.slug = retro.slug;
     stateUpdate.isPrivate = retro.is_private;
     stateUpdate.video_link = retro.video_link;
+    stateUpdate.isMagicLinkEnabled = retro.join_token !== null;
   }
 
   if (errors) {
@@ -100,6 +101,7 @@ class ShowRetroSettingsPage extends React.Component {
         name: '',
         slug: '',
         video_link: '',
+        isMagicLinkEnabled: false,
         errors: {},
       },
       getStateUpdateFor(retro, errors),
@@ -176,14 +178,22 @@ class ShowRetroSettingsPage extends React.Component {
 
   handleRetroSettingsSubmit() {
     const {retroId, retro, session} = this.props;
-    const {name, slug, isPrivate, video_link} = this.state;
+    const {name, slug, isPrivate, video_link, isMagicLinkEnabled} = this.state;
     const errors = {
       name: this.validateName(name),
       slug: this.validateSlug(slug),
     };
 
     if (!errors.name && !errors.slug) {
-      this.props.updateRetroSettings(retroId, name, slug, retro.slug, isPrivate, session.request_uuid, video_link);
+      this.props.updateRetroSettings(
+        retroId, name,
+        slug,
+        retro.slug,
+        isPrivate,
+        session.request_uuid,
+        video_link,
+        isMagicLinkEnabled,
+      );
     } else {
       this.setState({errors});
     }
@@ -221,6 +231,12 @@ class ShowRetroSettingsPage extends React.Component {
   togglePrivate = () => {
     this.setState((oldState) => ({
       isPrivate: !oldState.isPrivate,
+    }));
+  };
+
+  toggleMagicLinkEnabled = () => {
+    this.setState((oldState) => ({
+      isMagicLinkEnabled: !oldState.isMagicLinkEnabled,
     }));
   };
 
@@ -368,6 +384,33 @@ class ShowRetroSettingsPage extends React.Component {
                   {this.renderAccessInstruction()}
                 </div>
 
+                <div className="row">
+                  <label
+                    className="label"
+                    htmlFor="retro_is_magic_link_enabled"
+                  >Can participants share this retro using a magic link?
+                  </label>
+
+                  <Toggle
+                    id="retro_is_magic_link_enabled"
+                    name="isMagicLinkEnabled"
+                    label={this.state.isMagicLinkEnabled ? 'Yes' : 'No'}
+                    toggled={this.state.isMagicLinkEnabled}
+                    labelPosition="right"
+                    onToggle={this.toggleMagicLinkEnabled}
+                    trackStyle={toggle.trackStyle}
+                    trackSwitchedStyle={toggle.trackSwitchedStyle}
+                    labelStyle={toggle.labelStyle}
+                    thumbStyle={toggle.thumbStyle}
+                    thumbSwitchedStyle={toggle.thumbSwitchedStyle}
+                    iconStyle={toggle.iconStyle}
+                  />
+
+                  <div className="access-instruction">
+                    This will provide a magic link that allows users to access this retro without
+                    being prompted for a password. This is not the same as making a retro public.
+                  </div>
+                </div>
 
                 <div className="row">
                   <button
@@ -397,7 +440,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   clearErrors: () => dispatch(clearErrors()),
   showRetroForId: (retroId) => dispatch(showRetroForId(retroId)),
-  updateRetroSettings: (retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink) => dispatch(updateRetroSettings(retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink)),
+  updateRetroSettings: (retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink, isMagicLinkEnabled) => dispatch(updateRetroSettings(retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink, isMagicLinkEnabled)),
   routeToRetroPasswordSettings: (retroId) => dispatch(retroPasswordSettings(retroId)),
   getRetroSettings: (retroId) => dispatch(getRetroSettings(retroId)),
   signOut: () => dispatch(signOut()),

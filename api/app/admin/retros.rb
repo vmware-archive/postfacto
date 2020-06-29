@@ -33,7 +33,7 @@ require 'queries/safe_order_by'
 ActiveAdmin.register Retro do
   menu priority: 1
   actions :all
-  permit_params :name, :slug, :video_link, :password, :encrypted_password, :is_private
+  permit_params :name, :slug, :video_link, :password, :encrypted_password, :is_private, :is_magic_link_enabled
 
   filter :name
   filter :slug
@@ -127,12 +127,19 @@ ActiveAdmin.register Retro do
   form do |f|
     f.semantic_errors
 
+    private_label =  '<strong> Make this retro private? </strong> ' +
+      '<p class="checkbox-description">A private retro requires a password to access. A public retro can be accessed by anyone.</p> '
+
+    magic_link_label = '<strong> Share this retro using a magic link? </strong>' +
+      '<p class="checkbox-description"> This will provide a magic link that allows users to access' +
+      ' this retro without being prompted for a password. This is not the same as making a retro public.</p>'
     f.inputs 'Details' do
       f.input :name
       f.input :slug
       f.input :video_link
       f.input :owner_email, label: 'Owner Email'
-      f.input :is_private, label: 'Private?'
+      f.input :is_private, label: simple_format(private_label, { class: 'checkbox-label'} )
+      f.input :magic_link_enabled?, label: simple_format(magic_link_label, { class: 'checkbox-label'} ) , as: :boolean, input_html: { checked: f.object.magic_link_enabled? }
     end
 
     f.inputs do
@@ -177,6 +184,9 @@ ActiveAdmin.register Retro do
       if params['retro']['remove_password'] && params['retro']['remove_password'][1] == 'Remove'
         params[:retro][:encrypted_password] = nil
       end
+
+      params[:retro][:is_magic_link_enabled] = params['retro']['magic_link_enabled?'] == "1"
+      params[:retro].delete('magic_link_enabled?')
 
       params[:retro].delete('remove_password')
       update!

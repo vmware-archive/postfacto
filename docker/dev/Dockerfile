@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y python
 
 # Install Chrome WebDriver
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
-RUN CHROMEDRIVER_VERSION='75.0.3770.90' && \
+RUN CHROMEDRIVER_VERSION='83.0.4103.39' && \
     mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
     curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
     unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \

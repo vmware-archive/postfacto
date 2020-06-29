@@ -41,7 +41,7 @@ import {
   deleteRetroItem, doneRetroActionItem, doneRetroItem, editRetroActionItem, extendTimer,
   getRetro, getRetroArchive, getRetroArchives,
   getRetroLogin,
-  getRetroSettings, highlightRetroItem, loginToRetro, nextRetroItem, retrieveConfig,
+  getRetroSettings, highlightRetroItem, joinRetro, loginToRetro, nextRetroItem, retrieveConfig,
   retroCreate, undoneRetroItem, unhighlightRetroItem, updateRetroItem,
   updateRetroPassword,
   updateRetroSettings, voteRetroItem,
@@ -201,8 +201,17 @@ describe('ApiMiddleware', () => {
   });
 
   describe('UPDATE_RETRO_SETTINGS', () => {
-    function dispatchRetroData(new_slug, old_slug, is_private, request_uuid) {
-      middleware(store)(next)(updateRetroSettings(13, 'the new retro name', new_slug, old_slug, is_private, request_uuid, 'http://www.example.com'));
+    function dispatchRetroData(new_slug, old_slug, is_private, request_uuid, is_magic_link_enabled) {
+      middleware(store)(next)(updateRetroSettings(
+        13,
+        'the new retro name',
+        new_slug,
+        old_slug,
+        is_private,
+        request_uuid,
+        'http://www.example.com',
+        is_magic_link_enabled,
+      ));
     }
 
     beforeEach(() => {
@@ -213,7 +222,13 @@ describe('ApiMiddleware', () => {
     });
 
     it('makes an api PATCH to /retros/:id', () => {
-      dispatchRetroData('the-new-slug-123', 'retro-slug-123', true, 'some-uuid');
+      dispatchRetroData(
+        'the-new-slug-123',
+        'retro-slug-123',
+        true,
+        'some-uuid',
+        true,
+      );
       expect(MockFetch).toHaveRequested('/retros/13', {
         method: 'PATCH',
         headers: {
@@ -227,6 +242,7 @@ describe('ApiMiddleware', () => {
             slug: 'the-new-slug-123',
             is_private: true,
             video_link: 'http://www.example.com',
+            is_magic_link_enabled: true,
           },
           request_uuid: 'some-uuid',
         },
@@ -236,6 +252,7 @@ describe('ApiMiddleware', () => {
       request.ok({
         retro: {
           is_private: true,
+          join_token: 'join-token',
         },
       });
       Promise.runAll();
@@ -244,6 +261,7 @@ describe('ApiMiddleware', () => {
         name: 'the new retro name',
         slug: 'the-new-slug-123',
         is_private: true,
+        join_token: 'join-token',
       };
       expect(localStorage.getItem('apiToken-the-new-slug-123')).toEqual('the-auth-token');
       expect(localStorage.getItem('apiToken-retro-slug-123')).toEqual(null);
@@ -260,7 +278,7 @@ describe('ApiMiddleware', () => {
 
     describe('when forbidden is received', () => {
       beforeEach(() => {
-        dispatchRetroData('the-new-slug-123', 'retro-slug-123', 'some-uuid');
+        dispatchRetroData('the-new-slug-123', 'retro-slug-123', false, 'some-uuid', false);
 
         const request = MockFetch.latestRequest();
         request.forbidden();
@@ -453,6 +471,34 @@ describe('ApiMiddleware', () => {
         Promise.runAll();
         expect(store.dispatch).toHaveBeenCalledWith(setNotFound({retro_not_found: true}));
       });
+    });
+  });
+
+  describe('joinRetro', () => {
+    beforeEach(() => {
+      middleware(store)(next)(joinRetro(15, 'the-join-token'));
+    });
+
+    it('makes an api POST to /retros/:id/sessions', () => {
+      expect(MockFetch).toHaveRequested('/retros/15/sessions', {
+        method: 'POST',
+        data: {retro: {join_token: 'the-join-token'}},
+      });
+      const request = MockFetch.latestRequest();
+      request.ok({token: 'the-api-token'});
+      Promise.runAll();
+      expect(localStorage.getItem('apiToken-15')).toEqual('the-api-token');
+
+      expect(store.dispatch).toHaveBeenCalledWith(showRetroForId(15));
+    });
+
+    it('clears the api token if the join token is rejected', () => {
+      localStorage.setItem('apiToken-15', 'the-api-token');
+      const request = MockFetch.latestRequest();
+      request.notFound();
+      Promise.runAll();
+      expect(localStorage.getItem('apiToken-15')).toBeNull();
+      expect(store.dispatch).toHaveBeenCalledWith(showRetroForId(15));
     });
   });
 

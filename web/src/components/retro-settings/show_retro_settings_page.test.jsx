@@ -50,6 +50,7 @@ describe('ShowRetroSettingsPage', () => {
       video_link: 'http://the/video/link',
       items: [],
       action_items: [],
+      join_token: null,
     };
 
     let dom;
@@ -245,6 +246,54 @@ describe('ShowRetroSettingsPage', () => {
       expect(dom.find('input#retro_is_private')).not.toBeChecked();
     });
 
+    describe('magic link toggle defaults to the current setting', () => {
+      it('default to true if there is a valid join token', () => {
+        const privateRetro = Object.assign({}, retro, {join_token: 'join-token'});
+        dom = mount((
+          <MuiThemeProvider>
+            <ShowRetroSettingsPage
+              retroId="13"
+              retro={privateRetro}
+              environment={environment}
+              clearErrors={clearErrors}
+              showRetroForId={showRetroForId}
+              updateRetroSettings={updateRetroSettings}
+              routeToRetroPasswordSettings={routeToRetroPasswordSettings}
+              getRetroSettings={getRetroSettings}
+              signOut={signOut}
+            />
+          </MuiThemeProvider>
+        ));
+
+        expect(dom.find('input#retro_is_magic_link_enabled')).toBeChecked();
+        dom.find('input#retro_is_magic_link_enabled').simulate('change');
+        expect(dom.find('input#retro_is_magic_link_enabled')).not.toBeChecked();
+      });
+
+      it('default to false if the join token is missing', () => {
+        const privateRetro = Object.assign({}, retro, {join_token: null});
+        dom = mount((
+          <MuiThemeProvider>
+            <ShowRetroSettingsPage
+              retroId="13"
+              retro={privateRetro}
+              environment={environment}
+              clearErrors={clearErrors}
+              showRetroForId={showRetroForId}
+              updateRetroSettings={updateRetroSettings}
+              routeToRetroPasswordSettings={routeToRetroPasswordSettings}
+              getRetroSettings={getRetroSettings}
+              signOut={signOut}
+            />
+          </MuiThemeProvider>
+        ));
+
+        expect(dom.find('input#retro_is_magic_link_enabled')).not.toBeChecked();
+        dom.find('input#retro_is_magic_link_enabled').simulate('change');
+        expect(dom.find('input#retro_is_magic_link_enabled')).toBeChecked();
+      });
+    });
+
     describe('all fields are empty', () => {
       beforeEach(() => {
         fieldRetroName.simulate('change', {target: {value: ''}});
@@ -282,9 +331,20 @@ describe('ShowRetroSettingsPage', () => {
       expect(dom.find('input#retro_is_private')).not.toBeChecked();
       dom.find('input#retro_is_private').simulate('change');
 
+      dom.find('input#retro_is_magic_link_enabled').simulate('change');
+
       dom.find('.retro-settings-form-submit').simulate('click');
 
-      expect(updateRetroSettings).toHaveBeenCalledWith('13', 'the new retro name', 'the-new-retro-slug', retro.slug, true, 'some-request-uuid', new_video_url);
+      expect(updateRetroSettings).toHaveBeenCalledWith(
+        '13',
+        'the new retro name',
+        'the-new-retro-slug',
+        retro.slug,
+        true,
+        'some-request-uuid',
+        new_video_url,
+        true,
+      );
     });
 
     it('routes to retro password settings when change password link is clicked', () => {

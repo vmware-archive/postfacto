@@ -59,7 +59,9 @@ class RetrosController < ApplicationController
     if @retro.save # TODO: no error handling
       broadcast_force_relogin if force_relogin_required?
       broadcast
-      render json: { retro: @retro.as_json(only: [:id, :name, :slug, :is_private, :video_link]) }, status: :ok
+      render json: {
+        retro: @retro.as_json(only: [:id, :name, :slug, :is_private, :video_link, :join_token])
+      }, status: :ok
     else
       render json: { errors: retro_errors_hash }, status: :unprocessable_entity
     end
@@ -113,7 +115,7 @@ class RetrosController < ApplicationController
   end
 
   def retro_params
-    params.require(:retro).permit(:name, :slug, :password, :item_order, :is_private)
+    params.require(:retro).permit(:name, :slug, :password, :item_order, :is_private, :is_magic_link_enabled)
   end
 
   def retro_archive_params
@@ -121,7 +123,7 @@ class RetrosController < ApplicationController
   end
 
   def retro_update_params
-    params.permit({ retro: [:name, :slug, :is_private, :video_link] }, :request_uuid)
+    params.permit({ retro: [:name, :slug, :is_private, :video_link, :is_magic_link_enabled] }, :request_uuid)
   end
 
   def retro_update_password_params

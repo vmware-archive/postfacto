@@ -52,6 +52,7 @@ describe('RetroReducer', () => {
         action_items: [],
         is_private: false,
         send_archive_email: true,
+        join_token: null,
       },
       retroArchives: [],
       currentArchivedRetro: {
@@ -61,6 +62,7 @@ describe('RetroReducer', () => {
         action_items: [],
         is_private: false,
         send_archive_email: true,
+        join_token: null,
       },
       retros: [],
     });
@@ -75,6 +77,7 @@ describe('RetroReducer', () => {
         action_items: [{}],
         is_private: true,
         send_archive_email: false,
+        join_token: 'join-token',
       };
 
       const action = {
@@ -167,6 +170,7 @@ describe('RetroReducer', () => {
         action_items: [{}],
         is_private: true,
         send_archive_email: false,
+        join_token: 'join-token',
       };
 
       const uniqueItem = {id: 3, category: 'happy'};
@@ -190,6 +194,7 @@ describe('RetroReducer', () => {
         action_items: [{}],
         is_private: true,
         send_archive_email: false,
+        join_token: 'join-token',
       };
 
       const uppdatedItem = {item: {id: 2, category: 'meh'}};
@@ -215,6 +220,7 @@ describe('RetroReducer', () => {
           is_private: true,
           send_archive_email: false,
           highlighted_item_id: 2,
+          join_token: 'join-token',
         };
 
         const uniqueAction = {
@@ -241,6 +247,7 @@ describe('RetroReducer', () => {
         is_private: true,
         send_archive_email: false,
         highlighted_item_id: 2,
+        join_token: 'join-token',
       };
 
       const newActionItem = {id: 2, description: 'new description', done: false};
@@ -266,6 +273,7 @@ describe('RetroReducer', () => {
         is_private: true,
         send_archive_email: false,
         highlighted_item_id: 2,
+        join_token: 'join-token',
       };
 
       const action = {
@@ -290,6 +298,7 @@ describe('RetroReducer', () => {
         is_private: true,
         send_archive_email: false,
         highlighted_item_id: 2,
+        join_token: 'join-token',
       };
 
       const action = {
@@ -342,6 +351,7 @@ describe('RetroReducer', () => {
         action_items: [{}],
         is_private: true,
         send_archive_email: false,
+        join_token: 'join-token',
       };
 
       const action = {

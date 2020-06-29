@@ -31,9 +31,9 @@
 require 'rails_helper'
 
 describe '/retros' do
-  let(:retro) do
-    retro_admin = User.create!(email: 'admin@test.io', name: 'random')
+  let(:retro_admin) { User.create!(email: 'admin@test.io', name: 'random') }
 
+  let(:retro) do
     Retro.create!(
       name: 'My Retro',
       password: 'the-password',
@@ -172,6 +172,7 @@ describe '/retros' do
 
         expect(data['retro']['name']).to eq('My Retro')
         expect(data['retro']['is_private']).to eq(false)
+        expect(data['retro']['join_token']).to be_nil
         expect(data['retro']['slug']).to eq(retro.slug)
         expect(data['retro']['video_link']).to eq('the-video-link')
         expect(data['retro']['created_at']).to_not be_nil
@@ -201,6 +202,25 @@ describe '/retros' do
         expect(data['retro']['archives'].count).to eq(2)
         expect(data['retro']['archives'][0]['id']).to eq(retro.archives[0].id)
         expect(data['retro']['archives'][1]['id']).to eq(retro.archives[1].id)
+      end
+
+      it 'returns the retro with a join token if the retro has magic link enabled' do
+        private_retro = Retro.create!(
+          name: 'My Private Retro',
+          password: 'the-password',
+          is_magic_link_enabled: true,
+          user: retro_admin
+        )
+
+        api_token = ActionController::HttpAuthentication::Token.encode_credentials(token_for(private_retro))
+
+        status = get "/api/retros/#{private_retro.slug}", headers: { HTTP_AUTHORIZATION: api_token }, as: :json
+
+        expect(status).to eq(200)
+        data = JSON.parse(response.body)
+
+        expect(data['retro']['name']).to eq('My Private Retro')
+        expect(data['retro']['join_token']).to_not be_nil
       end
     end
 
@@ -327,7 +347,7 @@ describe '/retros' do
       patch(
         retro_path(retro),
         params: {
-          retro: { name: 'Your Retro', is_private: is_private },
+          retro: { name: 'Your Retro', is_private: is_private, is_magic_link_enabled: true },
           request_uuid: 'some-request-uuid'
         },
         headers: { HTTP_AUTHORIZATION: token },
@@ -337,7 +357,7 @@ describe '/retros' do
 
     context 'when private and authenticated' do
       before do
-        retro.update(is_private: true)
+        retro.update(is_private: true, is_magic_link_enabled: false)
       end
 
       let(:is_private) { false }
@@ -350,10 +370,12 @@ describe '/retros' do
         expect(data['retro']['id']).to eq(retro.id)
         expect(data['retro']['name']).to eq('Your Retro')
         expect(data['retro']['is_private']).to eq(false)
+        expect(data['retro']['join_token']).to_not be_nil
 
         retro.reload
         expect(retro.name).to eq('Your Retro')
         expect(retro.is_private).to eq(false)
+        expect(retro.join_token).to_not be_nil
       end
 
       it 'broadcasts the updated retro' do

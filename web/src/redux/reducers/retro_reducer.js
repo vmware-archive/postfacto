@@ -36,6 +36,7 @@ const initialState = {
     action_items: [],
     is_private: false,
     send_archive_email: true,
+    join_token: null,
   },
   retroArchives: [],
   currentArchivedRetro: {
@@ -45,6 +46,7 @@ const initialState = {
     action_items: [],
     is_private: false,
     send_archive_email: true,
+    join_token: null,
   },
   retros: [],
 };

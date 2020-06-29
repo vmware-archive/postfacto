@@ -82,6 +82,71 @@ describe Retro do
     end
   end
 
+  context 'retro has magic link enabled' do
+    let(:retro) do
+      Retro.create!(
+        name: 'My Retro',
+        video_link: 'the-video-link',
+        password: 'some-password'
+      )
+    end
+
+    before do
+      retro.is_magic_link_enabled = true
+      retro.save!
+    end
+
+    it 'has a join token' do
+      expect(retro.join_token).to_not be_nil
+    end
+
+    it 'changes the join token if the password is changed' do
+      old_join_token = retro.join_token
+      retro.password = 'something-new'
+      retro.save!
+      expect(retro.join_token).not_to eq old_join_token
+    end
+
+    it 'does not change the join token if anything else is changed' do
+      old_join_token = retro.join_token
+      retro.name = 'My new retro name'
+      retro.save!
+      expect(retro.join_token).to eq old_join_token
+    end
+
+    it 'clears the join token if magic link gets disabled' do
+      retro.is_magic_link_enabled = false
+      retro.save!
+      expect(retro.join_token).to be_nil
+    end
+  end
+
+  context 'retro has magic link disabled' do
+    let(:retro) do
+      Retro.create!(
+        name: 'My Retro',
+        video_link: 'the-video-link',
+        password: 'some-password'
+      )
+    end
+
+    it 'does not have a join token' do
+      expect(retro.join_token).to be_nil
+    end
+
+    it 'does populate the join token if magic link gets re-enabled' do
+      retro.is_magic_link_enabled = true
+      retro.save!
+      expect(retro.join_token).to_not be_nil
+    end
+
+    it 'does not populate the join token if the password is changed' do
+      retro.password = 'something-new'
+      retro.save!
+      expect(retro.join_token).to be_nil
+    end
+  end
+
   context 'retro has a password' do
     let(:retro) { Retro.create!(name: 'My Retro', video_link: 'the-video-link', password: 'some-password') }
 

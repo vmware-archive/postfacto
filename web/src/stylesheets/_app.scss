@@ -622,11 +622,11 @@ ol ol > li:before {
   }
 }
 
-.archive-dialog {
+.archive-dialog, .share-dialog {
   max-width: 40rem !important;
 }
 
-.archive-dialog__actions {
+.archive-dialog__actions, .share-dialog__actions {
   padding-left: 24px !important;
   padding-right: 24px !important;
 }
@@ -642,6 +642,54 @@ ol ol > li:before {
       background-color: inherit;
       color: inherit;
     }
+  }
+}
+
+.share-dialog__actions button {
+  @extend .button;
+
+  &.share-dialog__actions--close {
+    background-color: white;
+    color: $black;
+
+    &:hover {
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+}
+
+.share-dialog {
+  .share-retro-url-wrapper {
+    font-size: 1.5rem;
+    position: relative;
+
+    input {
+      margin-bottom: 0;
+      margin-top: 1rem;
+      background-color: transparent;
+      border: 2px solid $lighter-gray;
+      padding-right: 3rem;
+      border-radius: 0.3rem;
+    }
+
+    .share-retro-url-copy {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 0.5rem 1rem 0;
+      color: $normal-gray;
+      text-align: right;
+
+      &:hover {
+        color: $highlight;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .share-dialog__actions {
+    padding-top: 0 !important;
   }
 }
 

@@ -219,8 +219,8 @@ class ShowRetroPasswordSettingsPage extends React.Component {
                   <div className="error-message">{errors.confirm_new_password}</div>
                 </div>
 
-                <div className="row">
-                  <em>Remember to let your team know the new password!</em>
+                <div className="row reminder">
+                  <em>Remember to let your team know the new password{this.props.retro.join_token ? ' and magic link' : ''}!</em>
                 </div>
 
                 <div className="row actions">

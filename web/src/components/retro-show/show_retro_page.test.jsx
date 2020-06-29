@@ -38,6 +38,8 @@ import goof from '../../test_support/test_doubles/goof';
 
 import {ShowRetroPage} from './show_retro_page';
 import RetroWebsocket from './retro_websocket';
+import ArchiveRetroDialog from './archive_retro_dialog';
+import ShareRetroDialog from './share_retro_dialog';
 
 const config = {
   title: 'Retro',
@@ -83,7 +85,6 @@ function UnconnectedShowRetroPage(props) {
       getRetro={jest.fn()}
       nextRetroItem={jest.fn()}
       archiveRetro={jest.fn()}
-      hideDialog={jest.fn()}
       getRetroArchive={jest.fn()}
       toggleSendArchiveEmail={jest.fn()}
       routeToRetroArchives={jest.fn()}
@@ -91,6 +92,7 @@ function UnconnectedShowRetroPage(props) {
       requireRetroLogin={jest.fn()}
       showDialog={jest.fn()}
       signOut={jest.fn()}
+      hideDialog={goof}
       voteRetroItem={goof}
       doneRetroItem={goof}
       undoneRetroItem={goof}
@@ -207,7 +209,7 @@ describe('ShowRetroPage', () => {
       expect(dom.find('.retro-back')).not.toExist();
     });
 
-    it('displays a dialog if requested', () => {
+    it('displays the archive dialog if requested', () => {
       dom = mount((
         <MuiThemeProvider>
           <UnconnectedShowRetroPage
@@ -218,27 +220,17 @@ describe('ShowRetroPage', () => {
             dialog={{
               title: 'Some dialog title',
               message: 'Some dialog message',
+              type: 'ARCHIVE_RETRO',
             }}
             featureFlags={{archiveEmails: true}}
             environment={environment}
           />
         </MuiThemeProvider>
       ));
-      const dialog = dom.find(Dialog);
-
-      expect(dialog).toHaveProp({open: true});
-      expect(dialog).toHaveProp({title: 'Some dialog title'});
-
-      // Dialog renders outside usual flow, so must use hacks:
-      const popupDialog = document.getElementsByClassName('archive-dialog')[0];
-
-      expect(popupDialog.querySelector('h3').innerHTML).toEqual('Some dialog title');
-      expect(popupDialog.querySelector('p').innerHTML).toEqual('Some dialog message');
-      expect(popupDialog.querySelector('div label').innerHTML).toEqual('Send action items to the team via email?');
+      expect(dom.find(ArchiveRetroDialog)).toExist();
     });
 
-    it('hides the dialog when requested', () => {
-      const hideDialog = jest.fn();
+    it('displays the share retro dialog if requested', () => {
       dom = mount((
         <MuiThemeProvider>
           <UnconnectedShowRetroPage
@@ -247,23 +239,18 @@ describe('ShowRetroPage', () => {
             archives={false}
             config={config}
             dialog={{
-              title: 'Some dialog title',
-              message: 'Some dialog message',
+              type: 'SHARE_RETRO',
             }}
             featureFlags={{archiveEmails: true}}
             environment={environment}
-            hideDialog={hideDialog}
           />
         </MuiThemeProvider>
       ));
-      const dialog = dom.find(Dialog);
-
-      dialog.props().onRequestClose();
-      expect(hideDialog).toHaveBeenCalled();
+      expect(dom.find(ShareRetroDialog)).toExist();
     });
 
-    it('does not display a dialog by default', () => {
-      expect(dom.find(Dialog)).toHaveProp({open: false});
+    it('does not display any dialog by default', () => {
+      expect(dom.find(Dialog)).not.toExist();
     });
 
     it('passes the retro URL to RetroWebsocket', () => {

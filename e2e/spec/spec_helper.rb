@@ -87,7 +87,8 @@ module SpecHelpers
   end
 
   def create_private_retro(team_name = nil)
-    fill_in_create_retro_form
+    fill_in_create_retro_form(team_name)
+    find('#retro_is_magic_link_enabled', visible: :all).set(true)
     submit_create_retro_form(team_name)
   end
 
@@ -187,6 +188,13 @@ module SpecHelpers
       sleep(0.3)
       non_flaky_click("##{item_id} .item-done")
     end
+  end
+
+  def get_share_url
+    click_button 'SHARE'
+    share_url = find('#share-retro-url').value
+    click_button 'Close'
+    share_url
   end
 
   # This is a workaround for Capybara/Selenium click inconsistencies

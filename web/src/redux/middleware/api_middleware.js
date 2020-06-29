@@ -68,6 +68,10 @@ function setApiToken(retroId, token) {
   localStorage.setItem('apiToken-' + retroId, token);
 }
 
+function clearApiToken(retroId) {
+  localStorage.removeItem('apiToken-' + retroId);
+}
+
 function resetApiToken(oldRetroId, newRetroId) {
   if (oldRetroId === newRetroId) {
     return;
@@ -100,11 +104,16 @@ const ApiMiddleware = (retroClient) => (store) => (next) => (action) => {
   if (action.type === 'UPDATE_RETRO_SETTINGS') {
     Logger.info('updateRetroSettings');
 
-    const {retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink} = action.payload;
-    retroClient.updateRetro(retroId, retroName, newSlug, getApiToken(retroId), isPrivate, requestUuid, videoLink).then(([status, data]) => {
+    const {retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink, isMagicLinkEnabled} = action.payload;
+    retroClient.updateRetro(retroId, retroName, newSlug, getApiToken(retroId), isPrivate, requestUuid, videoLink, isMagicLinkEnabled).then(([status, data]) => {
       if (status >= 200 && status < 400) {
         resetApiToken(oldSlug, newSlug);
-        const retro = {name: retroName, slug: newSlug, is_private: data.retro.is_private};
+        const retro = {
+          name: retroName,
+          slug: newSlug,
+          is_private: data.retro.is_private,
+          join_token: data.retro.join_token,
+        };
         store.dispatch(currentRetroUpdated(retro));
         store.dispatch(clearErrors());
         store.dispatch(showRetro(retro));
@@ -165,6 +174,23 @@ const ApiMiddleware = (retroClient) => (store) => (next) => (action) => {
         Logger.warn(`getRetro: Retro not found, retroId=${retroId}`);
         store.dispatch(setNotFound({retro_not_found: true}));
       }
+    });
+    return;
+  }
+
+  if (action.type === 'JOIN_RETRO') {
+    Logger.info('joinRetro');
+    const {retroId, joinToken} = action.payload;
+    retroClient.joinRetro({retro_id: retroId, join_token: joinToken}).then(([status, response]) => {
+      if (status >= 200 && status < 400) {
+        const token = response.token;
+        if (token) {
+          setApiToken(retroId, token);
+        }
+      } else {
+        clearApiToken(retroId);
+      }
+      store.dispatch(showRetroForId(retroId));
     });
     return;
   }

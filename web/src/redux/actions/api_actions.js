@@ -37,6 +37,10 @@ const getRetro = (id) => ({
   type: 'GET_RETRO',
   payload: id,
 });
+const joinRetro = (retroId, joinToken) => ({
+  type: 'JOIN_RETRO',
+  payload: {retroId, joinToken},
+});
 const getRetroSettings = (id) => ({
   type: 'GET_RETRO_SETTINGS',
   payload: id,
@@ -125,9 +129,9 @@ const createSession = (accessToken, email, name) => ({
   type: 'CREATE_SESSION',
   payload: {accessToken, email, name},
 });
-const updateRetroSettings = (retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink) => ({
+const updateRetroSettings = (retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink, isMagicLinkEnabled) => ({
   type: 'UPDATE_RETRO_SETTINGS',
-  payload: {retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink},
+  payload: {retroId, retroName, newSlug, oldSlug, isPrivate, requestUuid, videoLink, isMagicLinkEnabled},
 });
 const updateRetroPassword = (retroId, currentPassword, newPassword, requestUuid) => ({
   type: 'UPDATE_RETRO_PASSWORD',
@@ -141,6 +145,7 @@ const retrieveConfig = () => ({
 export {
   retroCreate,
   getRetro,
+  joinRetro,
   getRetroSettings,
   getRetroLogin,
   loginToRetro,

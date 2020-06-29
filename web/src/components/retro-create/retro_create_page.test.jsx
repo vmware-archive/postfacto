@@ -228,9 +228,16 @@ describe('RetroCreatePage', () => {
 
   it('submits when clicking submit if all fields are valid', () => {
     dom.find('.new-retro-page input#retro_is_private').simulate('change');
+    dom.find('.new-retro-page input#retro_is_magic_link_enabled').simulate('change');
     dom.find('.retro-form-submit').simulate('click');
 
-    expect(retroCreate).toHaveBeenCalledWith({name: 'newRetro', slug: 'new-retro', password: 'retroPass', isPrivate: false});
+    expect(retroCreate).toHaveBeenCalledWith({
+      name: 'newRetro',
+      slug: 'new-retro',
+      password: 'retroPass',
+      isPrivate: false,
+      isMagicLinkEnabled: true,
+    });
   });
 
   it('redirects to home page when not logged in', () => {
