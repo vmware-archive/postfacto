@@ -138,7 +138,7 @@ ActiveAdmin.register Retro do
       f.input :slug
       f.input :video_link
       f.input :owner_email, label: 'Owner Email'
-      f.input :is_private, label: simple_format(private_label, { class: 'checkbox-label'} ), input_html: { checked: f.object.is_private || true }
+      f.input :is_private, label: simple_format(private_label, { class: 'checkbox-label'} )
       f.input :magic_link_enabled?, label: simple_format(magic_link_label, { class: 'checkbox-label'} ) , as: :boolean, input_html: { checked: f.object.magic_link_enabled? }
     end
 
@@ -161,6 +161,12 @@ ActiveAdmin.register Retro do
 
     def find_user_by_email(owner_email)
       User.find_by_email(owner_email)
+    end
+
+    def new
+      super do
+        @retro.is_private = true
+      end
     end
 
     def update

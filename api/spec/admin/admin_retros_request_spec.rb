@@ -168,6 +168,30 @@ describe '/admin/retros', type: :request do
     end
   end
 
+  describe 'new' do
+    it 'has Private? checked by default' do
+      get new_admin_retro_path
+
+      doc = Nokogiri::HTML(response.body)
+      is_checked = doc.xpath('//input[@id="retro_is_private"]')[0]['checked']
+
+      expect(is_checked).to eq('checked')
+    end
+  end
+
+  describe 'edit' do
+    it 'should reflect the value of Private?' do
+      retro.update!(is_private: false)
+
+      get edit_admin_retro_path(retro.id)
+
+      doc = Nokogiri::HTML(response.body)
+      is_checked = doc.xpath('//input[@id="retro_is_private"]')[0]['checked']
+
+      expect(is_checked).not_to eq('checked')
+    end
+  end
+
   describe 'index CSV export' do
     it 'includes the desired columns' do
       get admin_retros_path + '.csv'
