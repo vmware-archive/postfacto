@@ -82,6 +82,20 @@ describe Retro do
     end
   end
 
+  describe '#magic_link_enabled' do
+    it 'behaves like a boolean' do
+      retro = Retro.new
+
+      2.times do
+        retro.magic_link_enabled = true
+        expect(retro.magic_link_enabled).to eq(true)
+
+        retro.magic_link_enabled = false
+        expect(retro.magic_link_enabled).to eq(false)
+      end
+    end
+  end
+
   context 'retro has magic link enabled' do
     let(:retro) do
       Retro.create!(

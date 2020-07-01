@@ -133,13 +133,17 @@ ActiveAdmin.register Retro do
     magic_link_label = '<strong> Share this retro using a magic link? </strong>' +
       '<p class="checkbox-description"> This will provide a magic link that allows users to access' +
       ' this retro without being prompted for a password. This is not the same as making a retro public.</p>'
+
     f.inputs 'Details' do
       f.input :name
       f.input :slug
       f.input :video_link
       f.input :owner_email, label: 'Owner Email'
-      f.input :is_private, label: simple_format(private_label, { class: 'checkbox-label'} )
-      f.input :magic_link_enabled?, label: simple_format(magic_link_label, { class: 'checkbox-label'} ) , as: :boolean, input_html: { checked: f.object.magic_link_enabled? }
+      f.input :is_private,
+              label: simple_format(private_label, { class: 'checkbox-label'} )
+      f.input :magic_link_enabled,
+              as: :boolean,
+              label: simple_format(magic_link_label, { class: 'checkbox-label'} )
     end
 
     f.inputs do
@@ -184,9 +188,6 @@ ActiveAdmin.register Retro do
       if params['retro']['remove_password'] && params['retro']['remove_password'][1] == 'Remove'
         params[:retro][:encrypted_password] = nil
       end
-
-      params[:retro][:is_magic_link_enabled] = params['retro']['magic_link_enabled?'] == "1"
-      params[:retro].delete('magic_link_enabled?')
 
       params[:retro].delete('remove_password')
       update!
