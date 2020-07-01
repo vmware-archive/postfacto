@@ -127,23 +127,13 @@ ActiveAdmin.register Retro do
   form do |f|
     f.semantic_errors
 
-    private_label =  '<strong> Make this retro private? </strong> ' +
-      '<p class="checkbox-description">A private retro requires a password to access. A public retro can be accessed by anyone.</p> '
-
-    magic_link_label = '<strong> Share this retro using a magic link? </strong>' +
-      '<p class="checkbox-description"> This will provide a magic link that allows users to access' +
-      ' this retro without being prompted for a password. This is not the same as making a retro public.</p>'
-
     f.inputs 'Details' do
       f.input :name
       f.input :slug
       f.input :video_link
-      f.input :owner_email, label: 'Owner Email'
-      f.input :is_private,
-              label: simple_format(private_label, { class: 'checkbox-label'} )
-      f.input :magic_link_enabled,
-              as: :boolean,
-              label: simple_format(magic_link_label, { class: 'checkbox-label'} )
+      f.input :owner_email
+      f.input :is_private
+      f.input :magic_link_enabled, as: :boolean
     end
 
     f.inputs do
