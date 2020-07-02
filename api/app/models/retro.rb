@@ -70,11 +70,9 @@ class Retro < ActiveRecord::Base
     val == join_token
   end
 
-  def is_magic_link_enabled=(val)
-    if ActiveModel::Type::Boolean.new.cast(val)
-      unless join_token.nil?
-        return
-      end
+  def magic_link_enabled=(val)
+    if val.present?
+      return if magic_link_enabled?
 
       recompute_join_token
     else
@@ -82,9 +80,15 @@ class Retro < ActiveRecord::Base
     end
   end
 
-  def magic_link_enabled?
-    !join_token.nil?
+  def magic_link_enabled
+    join_token?
   end
+
+  alias magic_link_enabled? magic_link_enabled
+
+  # aliasing this in order to limit changes required to API
+  # TODO: change API and front end to refer to this key as just 'magic_link_enabled'
+  alias_attribute :is_magic_link_enabled, :magic_link_enabled
 
   def create_instruction_cards!
     I18n.t('instruction_cards.items').each do |category, descriptions|

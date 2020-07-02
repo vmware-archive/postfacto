@@ -40,6 +40,9 @@
 
 // Active Admin's got SASS!
 @import "active_admin/mixins";
+
+$text-input-total-padding: $text-input-total-padding + 2px;
+
 @import "active_admin/base";
 
 // Overriding any non-variable SASS must be done after the fact.
@@ -47,11 +50,6 @@
 //
 //   .status_tag { background: #6090DB; }
 
-.checkbox-label {
-  display: inline;
-}
-
-.checkbox-description {
-  margin-bottom: .5rem;
-  padding-left: 1.5rem;
+form fieldset > ol > li.boolean label {
+  font-weight: bold;
 }
