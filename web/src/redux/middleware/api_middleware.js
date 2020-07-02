@@ -48,7 +48,9 @@ import {
   createdRetro,
   createdRetroItem,
   doneActionItem,
-  undoneActionItem, visitedRetro,
+  undoneActionItem,
+  visitedRetro,
+  visitedRetroMagicLink,
 } from '../actions/analytics_actions';
 import {
   home,
@@ -186,6 +188,7 @@ const ApiMiddleware = (retroClient) => (store) => (next) => (action) => {
         const token = response.token;
         if (token) {
           setApiToken(retroId, token);
+          store.dispatch(visitedRetroMagicLink(retroId));
         }
       } else {
         clearApiToken(retroId);

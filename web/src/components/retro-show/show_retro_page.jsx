@@ -76,8 +76,8 @@ import ArchiveRetroDialog from './archive_retro_dialog';
 import ShareRetroDialog from './share_retro_dialog';
 import {
   copiedMagicLink,
-  viewedMagicLink
-} from "../../redux/actions/analytics_actions";
+  viewedMagicLink,
+} from '../../redux/actions/analytics_actions';
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -127,6 +127,7 @@ class ShowRetroPage extends React.Component {
     deleteRetroActionItem: types.func.isRequired,
     editRetroActionItem: types.func.isRequired,
     viewedMagicLink: types.func.isRequired,
+    copiedMagicLink: types.func.isRequired,
     extendTimer: types.func.isRequired,
     websocketRetroDataReceived: types.func.isRequired,
   };
