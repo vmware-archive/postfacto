@@ -40,6 +40,7 @@ export default class ShareRetroDialog extends React.Component {
       join_token: types.string,
     }).isRequired,
     onClose: types.func.isRequired,
+    copiedMagicLink: types.func.isRequired,
   };
 
   constructor(props) {
@@ -55,6 +56,7 @@ export default class ShareRetroDialog extends React.Component {
     textToCopy.setSelectionRange(0, 99999); /* For mobile devices */
 
     document.execCommand('copy');
+    this.props.copiedMagicLink(this.props.retroId);
   }
 
   render() {

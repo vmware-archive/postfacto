@@ -59,6 +59,7 @@ function createShallowRetroHeading(retroOverrides = {}, propOverrides = {}) {
     requireRetroLogin={jest.fn()}
     showDialog={jest.fn()}
     signOut={jest.fn()}
+    viewedMagicLink={jest.fn()}
     {...propOverrides}
   />);
 }
@@ -150,6 +151,18 @@ describe('RetroHeading', () => {
       expect(showDialog).toHaveBeenCalledWith({
         type: 'SHARE_RETRO',
       });
+    });
+
+    it('invokes viewedMagicLink when the share button is clicked', () => {
+      const viewedMagicLink = jest.fn();
+      const dom = createShallowRetroHeading({
+        join_token: 'join-token',
+        items: [],
+      }, {viewedMagicLink});
+
+      dom.find('.share-button').simulate('click');
+
+      expect(viewedMagicLink).toHaveBeenCalledWith('13');
     });
   });
 

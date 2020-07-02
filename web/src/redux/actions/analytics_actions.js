@@ -17,6 +17,8 @@ const createdActionItem = (retroId) => event('Created Action Item', {'retroId': 
 const doneActionItem = (retroId) => event('Done Action Item', {'retroId': retroId});
 const undoneActionItem = (retroId) => event('Undone Action Item', {'retroId': retroId});
 const archivedRetro = (retroId) => event('Archived Retro', {'retroId': retroId});
+const viewedMagicLink = (retroId) => event('Viewed Magic Link', {'retroId': retroId});
+const copiedMagicLink = (retroId) => event('Copied Magic Link to Clipboard', {'retroId': retroId});
 const homePageShown = () => event('Loaded homepage');
 
 export {
@@ -28,5 +30,7 @@ export {
   doneActionItem,
   undoneActionItem,
   archivedRetro,
+  viewedMagicLink,
+  copiedMagicLink,
   homePageShown,
 };

@@ -40,11 +40,12 @@ function mountShareRetroDialog(props) {
   return mount((
     <MuiThemeProvider>
       <ShareRetroDialog
-        retroId="my-retro"
+        retroId='my-retro'
         retro={{
           join_token: null,
         }}
         onClose={jest.fn()}
+        copiedMagicLink={jest.fn()}
         {...props}
       />
     </MuiThemeProvider>
@@ -62,6 +63,16 @@ describe('ShareRetroDialog', () => {
     mountShareRetroDialog();
     getDialogElement().querySelector('.share-retro-url-copy').click();
     expect(document.execCommand).toHaveBeenCalledWith('copy');
+  });
+
+  it('invokes copiedMagicLink when the copy button is clicked', async () => {
+    document.execCommand = jest.fn();
+    const copiedMagicLink = jest.fn();
+    mountShareRetroDialog({
+      copiedMagicLink
+    });
+    getDialogElement().querySelector('.share-retro-url-copy').click();
+    expect(copiedMagicLink).toHaveBeenCalledWith('my-retro');
   });
 
   it('invokes onClose when the close button is clicked', () => {

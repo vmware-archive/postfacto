@@ -105,6 +105,8 @@ function UnconnectedShowRetroPage(props) {
       createRetroActionItem={goof}
       doneRetroActionItem={goof}
       editRetroActionItem={goof}
+      viewedMagicLink={goof}
+      copiedMagicLink={goof}
       extendTimer={goof}
       websocketRetroDataReceived={goof}
       {...props}

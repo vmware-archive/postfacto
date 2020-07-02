@@ -74,6 +74,10 @@ import {retroArchives, retroLogin, retroSettings} from '../../redux/actions/rout
 import {websocketUrl} from '../../helpers/websockets';
 import ArchiveRetroDialog from './archive_retro_dialog';
 import ShareRetroDialog from './share_retro_dialog';
+import {
+  copiedMagicLink,
+  viewedMagicLink
+} from "../../redux/actions/analytics_actions";
 
 function getItemArchiveTime(item) {
   if (!item.archived_at) {
@@ -122,6 +126,7 @@ class ShowRetroPage extends React.Component {
     doneRetroActionItem: types.func.isRequired,
     deleteRetroActionItem: types.func.isRequired,
     editRetroActionItem: types.func.isRequired,
+    viewedMagicLink: types.func.isRequired,
     extendTimer: types.func.isRequired,
     websocketRetroDataReceived: types.func.isRequired,
   };
@@ -286,6 +291,7 @@ class ShowRetroPage extends React.Component {
             retro={this.props.retro}
             retroId={this.props.retroId}
             onClose={this.props.hideDialog}
+            copiedMagicLink={this.props.copiedMagicLink}
           />
         );
       default:
@@ -314,6 +320,7 @@ class ShowRetroPage extends React.Component {
             requireRetroLogin={this.props.requireRetroLogin}
             showDialog={this.props.showDialog}
             signOut={this.props.signOut}
+            viewedMagicLink={this.props.viewedMagicLink}
           />
 
           <div className="mobile-tabs">
@@ -387,6 +394,7 @@ class ShowRetroPage extends React.Component {
               requireRetroLogin={this.props.requireRetroLogin}
               showDialog={this.props.showDialog}
               signOut={this.props.signOut}
+              viewedMagicLink={this.props.viewedMagicLink}
             />
             <div className="retro-item-list">
               <RetroColumn
@@ -505,6 +513,8 @@ const mapDispatchToProps = (dispatch) => ({
   doneRetroActionItem: (retroId, actionItemId, done) => dispatch(doneRetroActionItem(retroId, actionItemId, done)),
   deleteRetroActionItem: (retroId, actionItem) => dispatch(deleteRetroActionItem(retroId, actionItem)),
   editRetroActionItem: (retroId, actionItemId, description) => dispatch(editRetroActionItem(retroId, actionItemId, description)),
+  viewedMagicLink: (retroId) => dispatch(viewedMagicLink(retroId)),
+  copiedMagicLink: (retroId) => dispatch(copiedMagicLink(retroId)),
   extendTimer: (retroId) => dispatch(extendTimer(retroId)),
   websocketRetroDataReceived: (data) => {
     if (data.command === 'force_relogin') {
