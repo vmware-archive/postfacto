@@ -46,6 +46,7 @@ export default class RetroHeading extends React.Component {
     requireRetroLogin: types.func.isRequired,
     showDialog: types.func.isRequired,
     signOut: types.func.isRequired,
+    viewedMagicLink: types.func.isRequired,
   };
 
   constructor(props) {
@@ -106,6 +107,7 @@ export default class RetroHeading extends React.Component {
   }
 
   handleShareRetro() {
+    this.props.viewedMagicLink(this.props.retroId);
     this.props.showDialog({
       type: 'SHARE_RETRO',
     });
