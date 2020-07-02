@@ -35,5 +35,4 @@ test:
   adapter: test
 
 production:
-  adapter: redis
-  url: <%= RedisConfigurationProvider.new.redis_config %>
+  <%= ActionCableAdapterConfigurationProvider.new.cable_config %>
