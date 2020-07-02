@@ -85,6 +85,9 @@ class Retro < ActiveRecord::Base
   end
 
   alias magic_link_enabled? magic_link_enabled
+
+  # aliasing this in order to limit changes required to API
+  # TODO: change API and front end to refer to this key as just 'magic_link_enabled'
   alias_attribute :is_magic_link_enabled, :magic_link_enabled
 
   def create_instruction_cards!
