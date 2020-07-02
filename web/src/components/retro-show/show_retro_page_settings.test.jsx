@@ -98,6 +98,8 @@ describe('Retro settings', () => {
           doneRetroItem={goof}
           deleteRetroActionItem={goof}
           editRetroActionItem={goof}
+          viewedMagicLink={goof}
+          copiedMagicLink={goof}
           extendTimer={goof}
           websocketRetroDataReceived={goof}
         />

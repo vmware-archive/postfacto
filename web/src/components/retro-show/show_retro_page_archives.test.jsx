@@ -127,6 +127,8 @@ describe('Show retro page archives', () => {
             doneRetroActionItem={goof}
             deleteRetroActionItem={goof}
             editRetroActionItem={goof}
+            viewedMagicLink={goof}
+            copiedMagicLink={goof}
             extendTimer={goof}
             websocketRetroDataReceived={goof}
           />
@@ -200,6 +202,8 @@ describe('Show retro page archives', () => {
             doneRetroActionItem={goof}
             deleteRetroActionItem={goof}
             editRetroActionItem={goof}
+            viewedMagicLink={goof}
+            copiedMagicLink={goof}
             extendTimer={goof}
             websocketRetroDataReceived={goof}
           />

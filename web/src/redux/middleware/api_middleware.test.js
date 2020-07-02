@@ -65,7 +65,9 @@ import {
   createdRetro,
   createdRetroItem,
   doneActionItem,
-  undoneActionItem, visitedRetro,
+  undoneActionItem,
+  visitedRetro,
+  visitedRetroMagicLink,
 } from '../actions/analytics_actions';
 import {
   home,
@@ -490,6 +492,7 @@ describe('ApiMiddleware', () => {
       expect(localStorage.getItem('apiToken-15')).toEqual('the-api-token');
 
       expect(store.dispatch).toHaveBeenCalledWith(showRetroForId(15));
+      expect(store.dispatch).toHaveBeenCalledWith(visitedRetroMagicLink(15));
     });
 
     it('clears the api token if the join token is rejected', () => {

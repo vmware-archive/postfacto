@@ -40,7 +40,7 @@ function mountShareRetroDialog(props) {
   return mount((
     <MuiThemeProvider>
       <ShareRetroDialog
-        retroId='my-retro'
+        retroId="my-retro"
         retro={{
           join_token: null,
         }}
@@ -69,7 +69,7 @@ describe('ShareRetroDialog', () => {
     document.execCommand = jest.fn();
     const copiedMagicLink = jest.fn();
     mountShareRetroDialog({
-      copiedMagicLink
+      copiedMagicLink,
     });
     getDialogElement().querySelector('.share-retro-url-copy').click();
     expect(copiedMagicLink).toHaveBeenCalledWith('my-retro');
