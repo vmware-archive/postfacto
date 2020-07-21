@@ -30,7 +30,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 set -e
 
-BASE_DIR="$(dirname "$0")"
+export BASE_DIR="$(dirname "$0")"
+export RAILS_ENV="development"
 
 # Parse configuration
 
@@ -60,8 +61,6 @@ pushd "$BASE_DIR/api" >/dev/null
   ADMIN_EMAIL="$ADMIN_USER" ADMIN_PASSWORD="$ADMIN_PASS" bundle exec rake admin:create_user
 popd >/dev/null
 
-export BASE_DIR
-export RAILS_ENV
 export USE_MOCK_GOOGLE
 export GOOGLE_OAUTH_CLIENT_ID
 
