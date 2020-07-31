@@ -19,7 +19,7 @@
     "react-hotkeys": "^1.1.4",
     "react-redux": "^7.2.0",
     "react-scripts": "^3.4.1",
-    "react-scroll": "^1.7.16",
+    "react-scroll": "^1.8.0",
     "redux": "^4.0.5"
   },
   "devDependencies": {
