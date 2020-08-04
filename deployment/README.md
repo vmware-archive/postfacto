@@ -204,7 +204,6 @@ SESSION_TIME=60 ./deploy <app-name>
 ### [From 4.3.0] Removing Redis dependency
 If you are on a later version than 4.3.0 and using Postgres, Redis is no longer required. Instead set the environment variable `USE_POSTGRES_FOR_ACTION_CABLE=true` on deploy.
 
-
 ## Testing your deployment
 
 1. Log in to the Postfacto admin dashboard
