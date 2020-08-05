@@ -212,3 +212,32 @@ If you are on a later version than 4.3.0 and using Postgres, Redis is no longer 
     ```bash
     ./smoke-test.sh <app-url> <app-admin-url> <test-admin-email> <test-admin-password>
     ```
+## Using TLS for database connections
+
+If your database only accepts incoming TLS encrypted connections, you will need to modify the application settings to include the appropriate SSL parameters. Please add the below configuration snipped to `package/assets/config/database.yml` prior to executing `deploy.sh`.
+
+### For MySQL
+
+```yaml
+production:
+  sslmode: preferred # or verify_identiy, verify_ca
+  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where you ca file is located
+```
+
+When this is not set, you will receive this error:
+
+```
+Connections using insecure transport are prohibited while --require_secure_transport=ON.
+```
+
+More information about MySQL SSL modes can be found [here](https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html).
+
+### For PostgreSQL
+
+```yaml
+production:
+  sslmode: prefer # or verify-full, verify-ca, require
+  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where you ca file is located
+```
+
+More information about SSL modes can be found [here](https://www.postgresql.org/docs/9.1/libpq-ssl.html).
