@@ -36,9 +36,9 @@ export default function Footer({config}) {
   return (
     <div className="footer">
       <div className="links">
-        <a href={config.contact}>Contact Us</a>
-        <a target="_blank" href={config.terms} rel="noopener noreferrer">Terms & Conditions</a>
-        <a target="_blank" href={config.privacy} rel="noopener noreferrer">Privacy Policy</a>
+        {config.contact ? (<a href={config.contact}>Contact Us</a>) : null}
+        {config.terms ? (<a target="_blank" href={config.terms} rel="noopener noreferrer">Terms & Conditions</a>) : null}
+        {config.privacy ? (<a target="_blank" href={config.privacy} rel="noopener noreferrer">Privacy Policy</a>) : null}
       </div>
     </div>
   );

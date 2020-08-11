@@ -36,9 +36,9 @@ const LegalBanner = ({config: {terms, privacy}, onDismiss}) => (
   <div className="banner" style={{display: 'flex'}}>
     <div className="terms-text">
       By accessing and using Postfacto, you agree to our
-      {' '}<a href={terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and
-      {' '}<a href={privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and
-      use of cookies
+      {terms ? (<span>{' '}<a href={terms} target="_blank" rel="noopener noreferrer">Terms of Use</a> and</span>) : null}
+      {privacy ? (<span>{' '}<a href={privacy} target="_blank" rel="noopener noreferrer">Privacy Policy</a> and</span>) : null}
+      <span>{' '}use of cookies</span>
     </div>
     <button className="button ok-button" type="button" onClick={onDismiss}>OK</button>
   </div>

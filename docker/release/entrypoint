@@ -43,9 +43,9 @@ window.Retro = {
     "api_base_url": "/api",
     "websocket_url": "/cable",
     "enable_analytics": $ENABLE_ANALYTICS,
-    "contact": "",
-    "terms": "",
-    "privacy": "",
+    "contact": "$CONFIG_CONTACT_URL",
+    "terms": "$CONFIG_TERMS_URL",
+    "privacy": "$CONFIG_PRIVACY_URL",
     "google_oauth_client_id": "$GOOGLE_OAUTH_CLIENT_ID"
   }
 };
