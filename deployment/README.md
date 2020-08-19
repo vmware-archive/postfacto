@@ -2,13 +2,14 @@
 
 1. Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)
 1. Choose a name for your app, we'll refer to this as `app-name` from now on
+1. [Configure your deployment](#configuration) by adding Google Auth, enabling analytics, increasing the session timeout or setting the environment variable to run without Redis (only for v4.3.0 or higher with Postgres)
 1. Follow the instructions to deploy for your platform:
       * [Tanzu Application Service](#tanzu-application-service)
       * [Tanzu Kubernetes Grid (vSphere)](#tanzu-kubernetes-grid-vsphere)
       * [Cloud Foundry](#cloud-foundry)
       * [Heroku](#heroku)
 1. [Test your deployment](#testing-your-deployment)
-1. [Configure your deployment](#configuration) by adding Google Auth, enabling analytics, increasing the session timeout and removing Redis (only for v4.3.0 or higher with Postgres)
+
 ## Tanzu Application Service
 
 #### Initial deployment
