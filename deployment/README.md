@@ -5,7 +5,7 @@
 1. [Optional] Configure your deployment
       * [Add Google Auth](#allowing-users-to-create-retros)
       * [Enable analytics](#enabling-analytics)
-      * [Increasing the session timeout](#changing-session-timeout)
+      * [Increase the session timeout](#changing-session-timeout)
       * [Use TLS for database connections](#using-tls-for-database-connections)
       * [Deploy without Redis (only for v4.3.0 or higher with Postgres)](#removing-redis-dependency)
 1. Follow the instructions to deploy for your platform:
