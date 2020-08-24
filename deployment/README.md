@@ -2,13 +2,80 @@
 
 1. Download and extract the latest package from the [releases page](https://github.com/pivotal/postfacto/releases)
 1. Choose a name for your app, we'll refer to this as `app-name` from now on
-1. [Configure your deployment](#configuration) by adding Google Auth, enabling analytics, increasing the session timeout or setting the environment variable to run without Redis (only for v4.3.0 or higher with Postgres)
+1. [Optional] Configure your deployment
+      * [Add Google Auth](#allowing-users-to-create-retros)
+      * [Enable analytics](#enabling-analytics)
+      * [Increasing the session timeout](#changing-session-timeout)
+      * [Use TLS for database connections](#using-tls-for-database-connections)
+      * [Deploy without Redis (only for v4.3.0 or higher with Postgres)](#removing-redis-dependency)
 1. Follow the instructions to deploy for your platform:
       * [Tanzu Application Service](#tanzu-application-service)
       * [Tanzu Kubernetes Grid (vSphere)](#tanzu-kubernetes-grid-vsphere)
       * [Cloud Foundry](#cloud-foundry)
       * [Heroku](#heroku)
 1. [Test your deployment](#testing-your-deployment)
+
+## Configuration
+
+### Allowing users to create retros
+
+In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
+For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
+`<app-name>.cfapps.io/admin` or `<app-name>.<cf-url>/admin`.
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com) and
+   create a new project
+1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
+1. Choose a name for your app
+1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to Heroku, your public URL will be `https://<app-name>.herokuapp.com`.
+1. You can leave redirect blank
+1. Take note of your `client-id` that is generated
+1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
+
+### Enabling analytics
+
+If you'd like to have your instance send analytics data to the Postfacto team so they can learn about how you're using it and continue to improve it you can! To switch this on add `"enable_analytics": true` to the `config.js` object for your installation. Please note that we do not record any personal data (such as emails or retro data). As we are recording events from you we will however see the URL of the web client for your instance. If you're not comfortable with this don't worry, this feature is disabled by default.
+
+### Changing session timeout
+
+You can customise this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
+
+```bash
+SESSION_TIME=60 ./deploy <app-name>
+```
+
+### Using TLS for database connections
+
+If your database only accepts incoming TLS encrypted connections, you will need to modify the application settings to include the appropriate SSL parameters. Please add the below configuration snippet to `package/assets/config/database.yml` prior to executing `deploy.sh`.
+
+#### For MySQL
+
+```yaml
+production:
+  sslmode: preferred # or verify_identiy, verify_ca
+  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where your ca file is located
+```
+
+When this is not set, you will receive this error:
+
+```
+Connections using insecure transport are prohibited while --require_secure_transport=ON.
+```
+
+More information about MySQL SSL modes can be found [here](https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html).
+
+#### For PostgreSQL
+
+```yaml
+production:
+  sslmode: prefer # or verify-full, verify-ca, require
+  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where your ca file is located
+```
+
+More information about SSL modes can be found [here](https://www.postgresql.org/docs/9.1/libpq-ssl.html).
+
+### Removing Redis dependency
+If you are on a **later version than 4.3.0** and using Postgres, Redis is no longer required. Instead set the environment variable `USE_POSTGRES_FOR_ACTION_CABLE=true` on deploy.
 
 ## Tanzu Application Service
 
@@ -134,38 +201,6 @@
     ```
     **Note** that the admin panel will move from `<api-app-name>.herokuapp.com/admin` to `<web-app-name>.herokuapp.com/admin` and the API app will be deleted
 
-## Configuration
-
-### Allowing users to create retros
-
-In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
-For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
-`<app-name>.cfapps.io/admin` or `<app-name>.<cf-url>/admin`.
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com) and
-   create a new project
-1. Go to APIs & Services > Credentials > Create Credentials > OAuth client ID > Web application
-1. Choose a name for your app
-1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to Heroku, your public URL will be `https://<app-name>.herokuapp.com`
-1. You can leave redirect blank
-1. Take note of your `client-id` that is generated
-1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
-
-### Enabling analytics
-
-If you'd like to have your instance send analytics data to the Postfacto team so they can learn about how you're using it and continue to improve it you can! To switch this on add `"enable_analytics": true` to the `config.js` object for your installation. Please note that we do not record any personal data (such as emails or retro data). As we are recording events from you we will however see the URL of the web client for your instance. If you're not comfortable with this don't worry, this feature is disabled by default.
-
-### Changing session timeout
-
-You can customise this window with the `SESSION_TIME` env variable to the `env` on deploy. To set a session time of 1 hour for example:
-
-```bash
-SESSION_TIME=60 ./deploy <app-name>
-```
-
-### [From 4.3.0] Removing Redis dependency
-If you are on a later version than 4.3.0 and using Postgres, Redis is no longer required. Instead set the environment variable `USE_POSTGRES_FOR_ACTION_CABLE=true` on deploy.
-
 ## Testing your deployment
 
 1. Log in to the Postfacto admin dashboard
@@ -174,32 +209,3 @@ If you are on a later version than 4.3.0 and using Postgres, Redis is no longer 
     ```bash
     ./smoke-test.sh <app-url> <app-admin-url> <test-admin-email> <test-admin-password>
     ```
-## Using TLS for database connections
-
-If your database only accepts incoming TLS encrypted connections, you will need to modify the application settings to include the appropriate SSL parameters. Please add the below configuration snippet to `package/assets/config/database.yml` prior to executing `deploy.sh`.
-
-### For MySQL
-
-```yaml
-production:
-  sslmode: preferred # or verify_identiy, verify_ca
-  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where your ca file is located
-```
-
-When this is not set, you will receive this error:
-
-```
-Connections using insecure transport are prohibited while --require_secure_transport=ON.
-```
-
-More information about MySQL SSL modes can be found [here](https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html).
-
-### For PostgreSQL
-
-```yaml
-production:
-  sslmode: prefer # or verify-full, verify-ca, require
-  sslca: /etc/ssl/certs/ca-certificates.crt # or alternate location where your ca file is located
-```
-
-More information about SSL modes can be found [here](https://www.postgresql.org/docs/9.1/libpq-ssl.html).
