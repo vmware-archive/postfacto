@@ -32,7 +32,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.3'
 
-gem 'rails', '>= 6.0.3.2'
+gem 'rails', '>= 6.0.3.3'
 
 gem 'activeadmin', '>= 2.7.0'
 gem 'addressable'
@@ -67,7 +67,7 @@ group :development do
   gem 'sqlite3'
   gem 'bullet', '>= 6.1.0'
   gem 'listen'
-  gem 'web-console', '>= 4.0.2'
+  gem 'web-console', '>= 4.0.3'
 end
 
 group :production do
