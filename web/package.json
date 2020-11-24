@@ -5,7 +5,7 @@
   "dependencies": {
     "actioncable": "^5.2.4",
     "foundation-sites": "6.6.3",
-    "grapnel": "^0.7.2",
+    "grapnel": "^0.7.6",
     "http-proxy-middleware": "^0.21.0",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.39.0",
