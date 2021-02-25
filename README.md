@@ -34,7 +34,6 @@ First, download and extract the latest package from the [releases page](https://
 
 * [Tanzu Kubernetes Grid](deployment#tanzu-kubernetes-grid-vsphere)
 * [Tanzu Application Service](deployment/README.md#tanzu-application-service)
-* [Pivotal Web Services](deployment/README.md#pivotal-web-services)
 * [Cloud Foundry](deployment/README.md#cloud-foundry)
 * [Heroku](deployment/README.md#heroku)
 
