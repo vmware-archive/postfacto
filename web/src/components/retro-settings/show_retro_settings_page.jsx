@@ -116,11 +116,11 @@ class ShowRetroSettingsPage extends React.Component {
     this.handleRetroSettingsSubmit = this.handleRetroSettingsSubmit.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getSettings(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {retro, errors} = nextProps;
     this.setState(getStateUpdateFor(retro, errors));
   }

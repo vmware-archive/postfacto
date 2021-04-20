@@ -33,7 +33,9 @@ import MessageMiddleware from './message_middleware';
 import {clearAlert, showAlert} from '../actions/main_actions';
 
 describe('MessageMiddleware', () => {
-  jest.useFakeTimers();
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
 
   it('calls next with action if action type not recognised', () => {
     const next = jest.fn();

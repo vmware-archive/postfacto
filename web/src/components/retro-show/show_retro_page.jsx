@@ -152,14 +152,14 @@ class ShowRetroPage extends React.Component {
     this.moveToNextItem = this.moveToNextItem.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {retroId, archiveId, retro_archives, archives} = this.props;
 
     this.fetchRetros(retroId, archives, archiveId);
     this.initializeArchivesState(retro_archives, archives);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {retroId, archiveId, retro_archives, archives} = nextProps;
 
     if (archives !== this.props.archives) {

@@ -43,11 +43,9 @@ class Item < ActiveRecord::Base
   private
 
   def clear_highlight
-    if using_sqlite?
-      if retro.highlighted_item_id == id
-        retro.highlighted_item_id = nil
-        retro.save!
-      end
+    if using_sqlite? && (retro.highlighted_item_id == id)
+      retro.highlighted_item_id = nil
+      retro.save!
     end
   end
 

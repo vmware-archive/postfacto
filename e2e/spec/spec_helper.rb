@@ -181,12 +181,13 @@ module SpecHelpers
   end
 
   def mark_all_retro_items_as_done
-    sleep(0.3)
+    sleep(1)
     find_all('div.retro-item').each do |retro_item|
       item_id = retro_item[:id]
       non_flaky_click("##{item_id}")
-      sleep(0.3)
+      sleep(0.5)
       non_flaky_click("##{item_id} .item-done")
+      sleep(0.5)
     end
   end
 

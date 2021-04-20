@@ -269,7 +269,7 @@ describe '/retros' do
 
     context 'when authenticated' do
       subject do
-        put retro_path(retro) + '/archive',
+        put "#{retro_path(retro)}/archive",
             headers: { HTTP_AUTHORIZATION: token },
             params: { send_archive_email: true },
             as: :json
@@ -304,13 +304,13 @@ describe '/retros' do
       end
 
       it 'persist the send_archive_email value' do
-        put retro_path(retro) + '/archive',
+        put "#{retro_path(retro)}/archive",
             headers: { HTTP_AUTHORIZATION: token },
             params: { send_archive_email: true }, as: :json
         data = JSON.parse(response.body)
         expect(data['retro']['send_archive_email']).to eq(true)
 
-        put retro_path(retro) + '/archive',
+        put "#{retro_path(retro)}/archive",
             headers: { HTTP_AUTHORIZATION: token },
             params: { send_archive_email: false }, as: :json
         data = JSON.parse(response.body)
@@ -320,7 +320,7 @@ describe '/retros' do
 
     context 'when not authenticated' do
       subject do
-        put retro_path(retro) + '/archive', as: :json
+        put "#{retro_path(retro)}/archive", as: :json
       end
 
       it 'does not archive the items' do
@@ -380,15 +380,15 @@ describe '/retros' do
 
       it 'broadcasts the updated retro' do
         expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including('retro' => hash_including('name' => 'Your Retro'))
-          )
+          hash_including('retro' => hash_including('name' => 'Your Retro'))
+        )
       end
 
       context 'and changing retro to public' do
         it 'does not broadcast force relogin' do
           expect { do_request }.not_to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-              hash_including('command' => 'force_relogin')
-            )
+            hash_including('command' => 'force_relogin')
+          )
         end
       end
     end
@@ -417,8 +417,8 @@ describe '/retros' do
 
         it 'broadcasts force relogin and updated retro' do
           expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-              hash_including('command' => 'force_relogin')
-            )
+            hash_including('command' => 'force_relogin')
+          )
         end
       end
     end

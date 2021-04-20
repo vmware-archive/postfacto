@@ -38,6 +38,7 @@ class LoginToRetroPage extends React.Component {
   static propTypes = {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
     errors: types.object,
     force_relogin: types.bool,
     config: types.shape({
@@ -76,7 +77,7 @@ class LoginToRetroPage extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {login_error_message} = nextProps.errors;
 
     this.setState({

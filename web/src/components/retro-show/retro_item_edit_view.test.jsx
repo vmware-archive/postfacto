@@ -126,7 +126,7 @@ describe('RetroItemEditView', () => {
       dom.find('.emoji-button').simulate('click', {});
       dom.find('.emoji-selector-option').first().simulate('mouseDown', {});
 
-      expect(textarea).toHaveText(String.fromCodePoint(0x1F600) + 'anything');
+      expect(textarea).toHaveText(`anything${String.fromCodePoint(0x1F600)}`);
     });
   });
 });

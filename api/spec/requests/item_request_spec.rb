@@ -95,10 +95,10 @@ describe '/retros/:retro_id/items' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('items' => be_empty)
-              )
+          hash_including(
+            'retro' => hash_including('items' => be_empty)
           )
+        )
       end
     end
   end
@@ -106,7 +106,7 @@ describe '/retros/:retro_id/items' do
   describe 'POST /' do
     context 'when authenticated' do
       subject do
-        post retro_path(retro) + '/items', params: {
+        post "#{retro_path(retro)}/items", params: {
           item: { description: 'This is a description', category: Item.categories.fetch(:happy) }
         }, headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
@@ -126,16 +126,16 @@ describe '/retros/:retro_id/items' do
 
       it 'broadcasts to retro channel with updated retro including item' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('items' => have_attributes(size: 2))
-              )
+          hash_including(
+            'retro' => hash_including('items' => have_attributes(size: 2))
           )
+        )
       end
     end
 
     context 'when not authenticated' do
       subject do
-        post retro_path(retro) + '/items', params: {
+        post "#{retro_path(retro)}/items", params: {
           item: { description: 'This is a description', category: Item.categories.fetch(:happy) }
         }, as: :json
       end
@@ -161,7 +161,7 @@ describe '/retros/:retro_id/items' do
   describe 'POST /:item_id/vote' do
     context 'when not authenticated' do
       subject do
-        post retro_item_path(retro, item) + '/vote', as: :json
+        post "#{retro_item_path(retro, item)}/vote", as: :json
       end
 
       context 'when the retro is private' do
@@ -185,7 +185,7 @@ describe '/retros/:retro_id/items' do
       let(:expected_count) { item.vote_count + 1 }
 
       subject do
-        post retro_item_path(retro, item) + '/vote',
+        post "#{retro_item_path(retro, item)}/vote",
              headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
 
@@ -203,14 +203,14 @@ describe '/retros/:retro_id/items' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('items' => match_array(
-                    [
-                      hash_including('vote_count' => expected_count)
-                    ]
-                  ))
-              )
+          hash_including(
+            'retro' => hash_including('items' => match_array(
+              [
+                hash_including('vote_count' => expected_count)
+              ]
+            ))
           )
+        )
       end
     end
   end
@@ -220,7 +220,7 @@ describe '/retros/:retro_id/items' do
 
     context 'if password is correct' do
       subject do
-        patch retro_item_path(retro, item) + '/done',
+        patch "#{retro_item_path(retro, item)}/done",
               params: body,
               headers: { HTTP_AUTHORIZATION: token },
               as: :json
@@ -237,14 +237,14 @@ describe '/retros/:retro_id/items' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('items' => match_array(
-                    [
-                      hash_including('done' => true)
-                    ]
-                  ))
-              )
+          hash_including(
+            'retro' => hash_including('items' => match_array(
+              [
+                hash_including('done' => true)
+              ]
+            ))
           )
+        )
       end
 
       context 'done param is set to true' do
@@ -297,7 +297,7 @@ describe '/retros/:retro_id/items' do
 
     context 'if password is incorrect' do
       subject do
-        patch retro_item_path(retro, item) + '/done', as: :json
+        patch "#{retro_item_path(retro, item)}/done", as: :json
       end
 
       it 'redirects to login page' do
@@ -327,14 +327,14 @@ describe '/retros/:retro_id/items' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('items' => match_array(
-                    [
-                      hash_including('description' => 'Changed description')
-                    ]
-                  ))
-              )
+          hash_including(
+            'retro' => hash_including('items' => match_array(
+              [
+                hash_including('description' => 'Changed description')
+              ]
+            ))
           )
+        )
       end
 
       context 'if item does not exist' do

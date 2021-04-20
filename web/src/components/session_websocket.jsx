@@ -50,7 +50,7 @@ export default class SessionWebsocket extends React.Component {
     this.initialize(url);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {url} = nextProps;
     this.initialize(url);
   }

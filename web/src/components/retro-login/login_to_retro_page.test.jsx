@@ -67,7 +67,8 @@ describe('LoginToRetroPage', () => {
       expect(dom.find('label')).toIncludeText('Enter the password to access the retro name.');
     });
 
-    it('focuses the password input field', () => {
+    // TODO known issue in JSDOM https://github.com/jsdom/jsdom/issues/3041
+    it.skip('focuses the password input field', () => {
       expect(dom.find('.form-input')).toBeFocused();
     });
 

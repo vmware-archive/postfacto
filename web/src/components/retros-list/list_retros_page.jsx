@@ -54,7 +54,7 @@ class ListRetrosPage extends React.Component {
     this.handleSignOutButtonClicked = this.handleSignOutButtonClicked.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.getRetros();
   }
 

@@ -33,10 +33,10 @@
 class RetroFacilitator
   def facilitate(retro)
     rules = NoDoneItemsRule.new(
-        EndWithHappiestRule.new(
-            OrderedByVoteRule.new(
-                HappyMehSadOrderRule.new
-              )))
+      EndWithHappiestRule.new(
+        OrderedByVoteRule.new(
+          HappyMehSadOrderRule.new
+        )))
 
     rules.apply(retro, retro.items)
   end

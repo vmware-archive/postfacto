@@ -37,7 +37,7 @@ describe 'retros/:retro_id/archives' do
   before do
     retro.items.create!(description: 'The Item', category: 'happy')
     retro.action_items.create!(description: 'The Action Item', done: true)
-    put retro_path(retro) + '/archive', headers: { HTTP_AUTHORIZATION: token }, as: :json
+    put "#{retro_path(retro)}/archive", headers: { HTTP_AUTHORIZATION: token }, as: :json
   end
 
   describe 'GET /' do

@@ -1,10 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER pivotal
 
 SHELL ["/bin/bash", "-c"]
 
 # Install dependencies
-RUN apt-get update && apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
 
 # Install Rbenv and Ruby
 
@@ -12,16 +12,16 @@ RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && echo 'export PATH="
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 ENV PATH $PATH:/root/.rbenv/bin:/root/.rbenv/shims
 RUN cd /root/.rbenv/plugins/ruby-build && git pull && cd -
-ENV RUBY_VERSION 2.6.3
+ENV RUBY_VERSION 2.7.3
 RUN rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
-RUN gem install bundler
+RUN gem install bundler:2.2.16
 
 # Install Node
 ENV NVM_DIR /usr/local/nvm
 RUN mkdir -p $NVM_DIR
-ENV NODE_VERSION 12.6.0
-RUN curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+ENV NODE_VERSION 14.16.1
+RUN curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 RUN source $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y python
 
 # Install Chrome WebDriver
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
-RUN CHROMEDRIVER_VERSION='83.0.4103.39' && \
+RUN CHROMEDRIVER_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
     mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
     curl -sS -o /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
     unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \

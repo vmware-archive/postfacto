@@ -83,12 +83,12 @@ class ShowRetroPasswordSettingsPage extends React.Component {
     this.handleSubmitButtonClicked = this.handleSubmitButtonClicked.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {retroId} = this.props;
     this.props.getRetroSettings(retroId);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({
         errors: {

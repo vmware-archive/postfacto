@@ -1,20 +1,20 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER pivotal
 
 SHELL ["/bin/bash", "-c"]
 
 # Install dependencies
-RUN apt-get update && apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y autoconf bison build-essential curl git libfontconfig libpq-dev libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev libnss3 libxi6 libgconf-2-4 unzip wget
 
 # Install Rbenv and Ruby
 RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc && echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 ENV PATH $PATH:/root/.rbenv/bin:/root/.rbenv/shims
 RUN cd /root/.rbenv/plugins/ruby-build && git pull && cd -
-ENV RUBY_VERSION 2.6.3
+ENV RUBY_VERSION 2.7.3
 RUN rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && rbenv rehash
 RUN echo 'gem: --no-rdoc --no-ri' >> /.gemrc
-RUN gem install bundler
+RUN gem install bundler:2.2.16
 
 # Install Chrome WebDriver
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates

@@ -70,7 +70,7 @@ class ListRetroArchivesPage extends React.Component {
     archives: null,
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {retroId} = this.props;
     this.props.getRetroArchives(retroId);
   }

@@ -45,12 +45,12 @@ export default class RetroCable extends React.Component {
     this.state = {subscription: null};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {cable, retro_id, websocketRetroDataReceived} = this.props;
     this.initialize(cable, retro_id, websocketRetroDataReceived);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {cable, retro_id, websocketRetroDataReceived} = nextProps;
     this.initialize(cable, retro_id, websocketRetroDataReceived);
   }

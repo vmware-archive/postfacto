@@ -44,11 +44,11 @@ export default class SessionCable extends React.Component {
     this.state = {subscription: null};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.initialize(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.initialize(nextProps);
   }
 

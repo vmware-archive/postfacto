@@ -57,7 +57,7 @@ cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 ###################
 
 pushd "$ASSETS_DIR"
-  heroku create ${APP_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v215 --region ${HEROKU_REGION}
+  heroku create ${APP_HOST} --buildpack https://github.com/heroku/heroku-buildpack-ruby.git#v227 --region ${HEROKU_REGION}
   heroku addons:create heroku-postgresql:hobby-dev -a ${APP_HOST}
   heroku addons:create heroku-redis:hobby-dev -a ${APP_HOST}
   heroku config:set WEBSOCKET_PORT=4443 SESSION_TIME=${SESSION_TIME} -a ${APP_HOST}
@@ -66,6 +66,6 @@ pushd "$ASSETS_DIR"
   git init .
   git add .
   git commit -m "Packaging for initial Heroku deployment"
-  git push --set-upstream https://git.heroku.com/${APP_HOST}.git master
+  git push --set-upstream https://git.heroku.com/${APP_HOST}.git main
   heroku run rake admin:create_user ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password -a ${APP_HOST} -x
 popd

@@ -37,7 +37,7 @@ describe '/retros/:retro_id/action_items' do
   describe 'when authorized' do
     it 'successfully create an action item and renders json' do
       expect(RetrosChannel).to receive(:broadcast)
-      post retro_path(retro) + '/action_items', params: {
+      post "#{retro_path(retro)}/action_items", params: {
         action_item: { description: 'This is a description' }
       }, headers: { HTTP_AUTHORIZATION: token }, as: :json
       expect(retro.action_items.count).to eq(1)
@@ -67,7 +67,7 @@ describe '/retros/:retro_id/action_items' do
 
       it 'returns 403 when try to create and and not logged in' do
         expect do
-          post retro_path(retro) + '/action_items',
+          post "#{retro_path(retro)}/action_items",
                params: { action_item: { description: 'This is a description' } },
                headers: { HTTP_AUTHORIZATION: 'wrong' }, as: :json
         end.to_not change { ActionItem.count }
@@ -89,7 +89,7 @@ describe '/retros/:retro_id/action_items' do
 
       it 'returns 200 when try to create and and not logged in' do
         expect do
-          post retro_path(retro) + '/action_items',
+          post "#{retro_path(retro)}/action_items",
                params: { action_item: { description: 'This is a description' } }, as: :json
         end.to change { ActionItem.count }.by(1)
         expect(response.status).to eq(201)

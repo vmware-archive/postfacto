@@ -50,10 +50,10 @@ describe '/retros/:retro_id/discussion/transitions' do
 
       it 'broadcasts the change' do
         expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('highlighted_item_id' => item.id)
-              )
+          hash_including(
+            'retro' => hash_including('highlighted_item_id' => item.id)
           )
+        )
       end
     end
 
@@ -78,18 +78,18 @@ describe '/retros/:retro_id/discussion/transitions' do
 
       it 'broadcasts the change' do
         expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including(
-                    'highlighted_item_id' => item2.id,
-                    'items' => match_array(
-                                   [
-                                     hash_including('id' => item.id, 'done' => true),
-                                     hash_including('id' => item2.id, 'done' => false)
-                                   ]
-                                 )
-                  )
+          hash_including(
+            'retro' => hash_including(
+              'highlighted_item_id' => item2.id,
+              'items' => match_array(
+                [
+                  hash_including('id' => item.id, 'done' => true),
+                  hash_including('id' => item2.id, 'done' => false)
+                ]
               )
+            )
           )
+        )
       end
     end
 
@@ -114,10 +114,10 @@ describe '/retros/:retro_id/discussion/transitions' do
 
       it 'broadcasts the change' do
         expect { do_request }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('highlighted_item_id' => be_nil)
-              )
+          hash_including(
+            'retro' => hash_including('highlighted_item_id' => be_nil)
           )
+        )
       end
     end
 
@@ -129,7 +129,7 @@ describe '/retros/:retro_id/discussion/transitions' do
   end
 
   def do_request(transition = 'NEXT')
-    post retro_path(retro) + '/discussion/transitions',
+    post "#{retro_path(retro)}/discussion/transitions",
          headers: { HTTP_AUTHORIZATION: token },
          params: { transition: transition },
          as: :json

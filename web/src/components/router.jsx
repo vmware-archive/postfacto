@@ -93,7 +93,7 @@ class Router extends React.Component {
     this.setState({Page: page, additionalProps});
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {api_server_not_found, retro_not_found, not_found} = nextProps.not_found;
     if (api_server_not_found) {
       this.setPage(ConnectedApiServerNotFoundPage);

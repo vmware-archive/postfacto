@@ -12,9 +12,9 @@ module AuthToken
     decoded.first['sub']
   rescue JWT::InvalidIssuerError
     nil
-  rescue JWT::ExpiredSignature
+  rescue JWT::ExpiredSignature # rubocop:disable Lint/DuplicateBranch
     nil
-  rescue JWT::DecodeError
+  rescue JWT::DecodeError # rubocop:disable Lint/DuplicateBranch
     nil
   end
 end

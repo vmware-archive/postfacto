@@ -46,12 +46,12 @@ export default class RetroWebsocket extends React.Component {
     this.state = {cable: null};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {url} = this.props;
     this.initialize(url);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {url} = nextProps;
     this.initialize(url);
   }
