@@ -41,9 +41,7 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
       end
 
       specify 'they can learn about retros' do
-        click_on 'What\'s a retro?'
-        select_last_tab
-        expect(page).to have_content('How to Run a Really Good Retrospective')
+        expect(page).to have_link('What\'s a retro?', href: 'https://builttoadapt.io/how-to-run-a-really-good-retrospective-8982bd839e16')
       end
 
       specify 'they can get help' do
