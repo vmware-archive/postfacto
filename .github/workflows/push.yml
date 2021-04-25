@@ -11,6 +11,7 @@ jobs:
       with:
         ruby-version: 2.7.3
         bundler-cache: true
+        working-directory: api
     - run: bundle install --without production
       working-directory: api
     - run: bundle exec rake db:create db:migrate
