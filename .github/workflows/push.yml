@@ -18,6 +18,7 @@ jobs:
       working-directory: api
     - run: bundle exec rake
       working-directory: api
+
   node-test:
     runs-on: ubuntu-20.04
     steps:
@@ -38,6 +39,7 @@ jobs:
       working-directory: web
     - run: npm test
       working-directory: web
+
   e2e-test:
     runs-on: ubuntu-20.04
     needs:
@@ -52,6 +54,7 @@ jobs:
           -v "$GITHUB_WORKSPACE":/postfacto \
           postfacto/dev:2.7.3-14.16.1 /bin/bash \
           -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./e2e.sh"
+
   docker-build:
     runs-on: ubuntu-20.04
     needs: e2e-test
@@ -64,6 +67,7 @@ jobs:
           "$GITHUB_WORKSPACE" \
           -f "$GITHUB_WORKSPACE/Dockerfile" \
           -t travis-build-image
+
   package-build:
     runs-on: ubuntu-20.04
     needs: e2e-test
@@ -90,6 +94,7 @@ jobs:
           -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh $TAG"
       env:
         TAG: ${{ steps.full_tag.outputs.VERSION }}
+
   smoke-build:
     runs-on: ubuntu-20.04
     needs: e2e-test
@@ -99,6 +104,6 @@ jobs:
     - name: Smoke build
       run: |
         docker build \
-          "$GITHUB_WORKSPACE" \
+          "$GITHUB_WORKSPACE/smoke" \
           -f "$GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
           -t travis-build-image-smoke
