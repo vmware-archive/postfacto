@@ -3,28 +3,48 @@ name: Pipeline
 on: [push, pull_request]
 
 jobs:
-  build:
+  ruby-test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.3
+        bundler-cache: true
+    - run: bundle exec rake db:create db:migrate
+      working-directory: api
+    - run: bundle exec rake
+      working-directory: api
+  node-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.16.1'
     - uses: actions/cache@v2
       with:
-        path: |
-          "$GITHUB_WORKSPACE/.npm_cache"
-          "$GITHUB_WORKSPACE/.bundler_cache"
-        key: postfacto-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/Gemfile.lock') }}
+        path: ~/.npm
+        key: postfacto-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          postfacto-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/Gemfile.lock') }}
-          postfacto-${{ hashFiles('**/package-lock.json') }}-
-          postfacto-
+          postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+          postfacto-npm-
+    - run: npm ci
+      working-directory: web
+    - run: npm run lint
+      working-directory: web
+    - run: npm test
+      working-directory: web
+  e2e-test:
+    runs-on: ubuntu-20.04
+    needs:
+    - ruby-test
+    - node-test
+    steps:
+    - uses: actions/checkout@v2
     - uses: docker/setup-buildx-action@v1
-    - run: |
+    - name: e2e.sh
+      run: |
         docker run \
-          -v "$GITHUB_WORKSPACE/.npm_cache":/npm_cache \
-          -v "$GITHUB_WORKSPACE/.bundler_cache":/bundler_cache \
-          -v "$GITHUB_WORKSPACE":/postfacto \
-          -e npm_config_cache=/npm_cache \
-          -e BUNDLE_PATH=/bundler_cache \
-          postfacto/dev:2.7.3-14.16.1 \
-          /bin/bash \
-          -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./test.sh"
+          postfacto/dev:2.7.3-14.16.1 /bin/bash \
+          -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./e2e.sh"
