@@ -52,3 +52,53 @@ jobs:
           -v "$GITHUB_WORKSPACE":/postfacto \
           postfacto/dev:2.7.3-14.16.1 /bin/bash \
           -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./e2e.sh"
+  docker-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Docker build
+      run: |
+        docker build \
+          "$GITHUB_WORKSPACE" \
+          -f "GITHUB_WORKSPACE/Dockerfile" \
+          -t travis-build-image
+  package-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+    - name: Helm build
+      run: |
+        docker run \
+          -v "$GITHUB_WORKSPACE/deployment/helm/":/helm \
+          -w /helm \
+          --entrypoint /helm/build.sh \
+          alpine/helm:3.2.1 $TAG
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+    - name: Package build
+      run: |
+        docker run \
+          -v "$GITHUB_WORKSPACE":/postfacto \
+          postfacto/dev:2.7.3-14.16.1 /bin/bash \
+          -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && ./package.sh $TAG"
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+  smoke-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Smoke build
+      run: |
+        docker build \
+          "$GITHUB_WORKSPACE" \
+          -f "GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
+          -t travis-build-image-smoke
