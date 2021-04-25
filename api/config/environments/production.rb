@@ -28,9 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'sendgrid_vcap_parser'
-require 'action_cable_host_provider'
-require 'action_cable_configuration_provider'
+require 'configurations/sendgrid_vcap_parser'
+require 'configurations/action_cable_host_provider'
+require 'configurations/action_cable_configuration_provider'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
