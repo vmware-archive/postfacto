@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.3
+        ruby-version: .ruby-version
         bundler-cache: true
         working-directory: api
     - run: bundle install --without production
@@ -49,5 +49,6 @@ jobs:
     - name: e2e.sh
       run: |
         docker run \
+          -v "$GITHUB_WORKSPACE":/postfacto
           postfacto/dev:2.7.3-14.16.1 /bin/bash \
           -c "cd /postfacto && npm config set user 0 && npm config set unsafe-perm true && ./deps.sh && EPHEMERAL_CONTAINER=true ./e2e.sh"
