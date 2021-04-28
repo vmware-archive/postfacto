@@ -120,13 +120,22 @@ jobs:
           alpine/helm:3.2.1 $TAG
       env:
         TAG: ${{ steps.full_tag.outputs.VERSION }}
-    - name: Package build
+    - name: Package build with dependencies
       run: ./package.sh $TAG
       env:
         TAG: ${{ steps.full_tag.outputs.VERSION }}
     - uses: actions/upload-artifact@v2
       with:
-        name: package
+        name: Package (including dependencies)
+        path: package.zip
+    - run: rm -rf ./api/vendor/
+    - name: Package build without dependencies
+      run: ./package.sh $TAG --skip-build
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package (no dependencies)
         path: package.zip
 
   smoke-build:
