@@ -52,9 +52,12 @@ then
       && exit 1)
 fi
 
-curl -L -o "$SCRIPT_DIR/last-release.zip" 'https://github.com/pivotal/postfacto/releases/latest/download/package.zip'
+if [[ ! $* =~ --skip-upgrade ]];
+then
+  curl -L -o "$SCRIPT_DIR/last-release.zip" 'https://github.com/pivotal/postfacto/releases/latest/download/package.zip'
+  unzip "$SCRIPT_DIR/last-release.zip" -d "$SCRIPT_DIR/last-release"
+fi
 unzip "$SCRIPT_DIR/package.zip"
-unzip "$SCRIPT_DIR/last-release.zip" -d "$SCRIPT_DIR/last-release"
 echo 'Setup complete'
 
 NOW=$(date +%s)
@@ -72,13 +75,13 @@ then
   cf target -s $SPACE
 
   cf create-service \
-    ${REDIS_SERVICE:-'p-redis'} \
-    ${REDIS_PLAN:-'shared-vm'} \
+    "${REDIS_SERVICE:-p-redis}" \
+    "${REDIS_PLAN:-shared-vm}" \
     postfacto-redis
 
   cf create-service \
-    ${DB_SERVICE:-'p.mysql'} \
-    ${DB_PLAN:-'db-small'} \
+    "${DB_SERVICE:-p.mysql}" \
+    "${DB_PLAN:-db-small}" \
     postfacto-db
 
   while [[ $(cf services) =~ 'create in progress' ]];
@@ -87,23 +90,28 @@ then
     sleep 5
   done
 
-  pushd "$SCRIPT_DIR/last-release/package/cf"
-    echo 'Deploying old version to Cloud Foundry'
-    ENABLE_ANALYTICS=false ./deploy.sh $OLD_APP
-  popd
-
   pushd "$SCRIPT_DIR/package/cf"
-    echo 'Upgrading old version on Cloud Foundry'
-    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_APP
-
     echo 'Deploying new version to Cloud Foundry'
-    ENABLE_ANALYTICS=false ./deploy.sh $NEW_APP
+    ENABLE_ANALYTICS=false ./deploy.sh "$NEW_APP"
   popd
+
+  if [[ ! $* =~ --skip-upgrade ]];
+  then
+    pushd "$SCRIPT_DIR/last-release/package/cf"
+      echo 'Deploying old version to Cloud Foundry'
+      ENABLE_ANALYTICS=false ./deploy.sh "$OLD_APP"
+    popd
+
+    pushd "$SCRIPT_DIR/package/cf"
+      echo 'Upgrading old version on Cloud Foundry'
+      ENABLE_ANALYTICS=false ./upgrade.sh "$OLD_APP"
+    popd
+  fi
 
   echo 'Cleaning up Cloud Foundry'
-  for APP in $OLD_APP $NEW_APP
+  for APP in $NEW_APP $OLD_APP
   do
-    cf delete $APP -f -r
+    cf delete "$APP" -f -r
   done
 
   for SERVICE in 'postfacto-redis' 'postfacto-db'
@@ -117,30 +125,35 @@ then
     sleep 5
   done
 
-  cf delete-space $SPACE -f
+  cf delete-space "$SPACE" -f
 fi
 
 if [[ ! $* =~ --skip-heroku ]];
 then
   echo '####### Heroku'
 
-  pushd "$SCRIPT_DIR/last-release/package/heroku"
-    echo 'Deploying old version to Heroku'
-    ENABLE_ANALYTICS=false ./deploy.sh $OLD_APP
-  popd
-
   pushd "$SCRIPT_DIR/package/heroku"
-    echo 'Upgrading old version on Heroku'
-    ENABLE_ANALYTICS=false ./upgrade.sh $OLD_APP
-
     echo 'Deploying new version to Heroku'
-    ENABLE_ANALYTICS=false ./deploy.sh $NEW_APP
+    ENABLE_ANALYTICS=false ./deploy.sh "$NEW_APP"
   popd
+
+  if [[ ! $* =~ --skip-upgrade ]];
+  then
+    pushd "$SCRIPT_DIR/last-release/package/heroku"
+      echo 'Deploying old version to Heroku'
+      ENABLE_ANALYTICS=false ./deploy.sh "$OLD_APP"
+    popd
+
+    pushd "$SCRIPT_DIR/package/heroku"
+      echo 'Upgrading old version on Heroku'
+      ENABLE_ANALYTICS=false ./upgrade.sh "$OLD_APP"
+    popd
+  fi
 
   echo 'Cleaning up Heroku'
-  for APP in $OLD_APP $NEW_APP
+  for APP in $NEW_APP $OLD_APP
   do
-    heroku apps:delete -a $APP -c $APP
+    heroku apps:delete -a "$APP" -c "$APP" || echo "$APP not found"
   done
 fi
 
