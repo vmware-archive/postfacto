@@ -163,32 +163,32 @@ jobs:
 #          "$GITHUB_WORKSPACE/smoke" \
 #          -f "$GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
 #          -t build-image-smoke
-
-  cf-deploy:
-    runs-on: ubuntu-20.04
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: package-build
-    steps:
-    - uses: actions/checkout@v2
-    - name: Download package from draft release
-      run: ./download-draft-package.sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Install CF CLI
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget gnupg gnupg2 gnupg1
-        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-        sudo apt-get update
-        sudo apt-get install cf-cli
-    - name: Log in to Cloud Foundry
-      run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
-      env:
-        CF_ENDPOINT: ${{ secrets.CF_ENDPOINT }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-    - run: ./test-package.sh --skip-package --skip-heroku
+#
+#  cf-deploy:
+#    runs-on: ubuntu-20.04
+#    if: startsWith(github.ref, 'refs/tags/')
+#    needs: package-build
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: Download package from draft release
+#      run: ./download-draft-package.sh
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#    - name: Install CF CLI
+#      run: |
+#        sudo apt-get update
+#        sudo apt-get install -y wget gnupg gnupg2 gnupg1
+#        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+#        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+#        sudo apt-get update
+#        sudo apt-get install cf-cli
+#    - name: Log in to Cloud Foundry
+#      run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
+#      env:
+#        CF_ENDPOINT: ${{ secrets.CF_ENDPOINT }}
+#        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+#        CF_USERNAME: ${{ secrets.CF_USERNAME }}
+#    - run: ./test-package.sh --skip-package --skip-heroku
 
   heroku-deploy:
     runs-on: ubuntu-20.04
@@ -207,6 +207,7 @@ jobs:
         HEROKU_NETRC: ${{ secrets.HEROKU_NETRC }}
     - name: Configure git
       run: |
-        git config user.email "email@example.com"
-        git config user.name "Postfactobot"
+        git config --global init.defaultBranch main
+        git config --global user.email "postfacto@pivotal.io"
+        git config --global user.name "Postfacto Robot"
     - run: ./test-package.sh --skip-package --skip-cf
