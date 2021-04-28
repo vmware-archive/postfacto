@@ -175,7 +175,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install CF CLI
-      run: snap install cf-cli
+      run: sudo snap install cf-cli
     - name: Log in to Cloud Foundry
       run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
       env:
