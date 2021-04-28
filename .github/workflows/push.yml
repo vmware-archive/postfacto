@@ -1,0 +1,263 @@
+#
+# Postfacto, a free, open-source and self-hosted retro tool aimed at helping
+# remote teams.
+#
+# Copyright (C) 2016 - Present Pivotal Software, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+#
+# it under the terms of the GNU Affero General Public License as
+#
+# published by the Free Software Foundation, either version 3 of the
+#
+# License, or (at your option) any later version.
+#
+#
+#
+# This program is distributed in the hope that it will be useful,
+#
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+#
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#
+# GNU Affero General Public License for more details.
+#
+#
+#
+# You should have received a copy of the GNU Affero General Public License
+#
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+name: Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  ruby-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
+        working-directory: api
+    - run: bundle install
+      working-directory: e2e
+    - run: bundle exec rake db:create db:migrate
+      working-directory: api
+    - run: bundle exec rake
+      working-directory: api
+
+  node-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.16.1'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+          postfacto-npm-
+    - run: npm ci
+      working-directory: web
+    - run: npm ci
+      working-directory: mock-google-server
+    - run: npm run lint
+      working-directory: web
+    - run: npm test
+      working-directory: web
+
+  e2e-test:
+    runs-on: ubuntu-20.04
+    needs:
+    - ruby-test
+    - node-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
+        working-directory: api
+    - run: bundle install
+      working-directory: e2e
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.16.1'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+          postfacto-npm-
+    - run: npm ci
+      working-directory: web
+    - run: npm ci
+      working-directory: mock-google-server
+    - run: ./e2e.sh
+
+  docker-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
+    - name: Docker build
+      run: |
+        docker build \
+          "$GITHUB_WORKSPACE" \
+          -f "$GITHUB_WORKSPACE/Dockerfile" \
+          -t build-image
+    - name: Deploy to Docker Hub
+      if: startsWith(github.ref, 'refs/tags/')
+      run: ./docker/ci-push $TAG
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+
+  package-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: .ruby-version
+        bundler-cache: true
+        working-directory: api
+    - run: bundle pack
+      working-directory: api
+    - run: rm -rf ./api/vendor/bundle/
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.16.1'
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          postfacto-npm-${{ hashFiles('**/package-lock.json') }}
+          postfacto-npm-
+    - run: npm ci
+      working-directory: web
+    - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
+    - name: Helm build
+      run: |
+        docker run \
+          -v "$GITHUB_WORKSPACE/deployment/helm/":/helm \
+          -w /helm \
+          --entrypoint /helm/build.sh \
+          alpine/helm:3.2.1 $TAG
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+    - name: Package build with dependencies
+      run: ./package.sh $TAG
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+    - run: mv package.zip package-vendored.zip
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package (including dependencies)
+        path: package-vendored.zip
+    - run: rm -rf ./api/vendor/
+    - name: Package build without dependencies
+      run: ./package.sh $TAG --skip-build
+      env:
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package (no dependencies)
+        path: package.zip
+    - uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        draft: true
+        files: |
+          package*.zip
+          deployment/helm/postfacto-*.tgz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  smoke-build:
+    runs-on: ubuntu-20.04
+    needs: e2e-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
+    - name: Smoke build
+      run: |
+        docker build \
+          "$GITHUB_WORKSPACE/smoke" \
+          -f "$GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
+          -t build-image-smoke
+    - name: Deploy to Docker Hub
+      if: startsWith(github.ref, 'refs/tags/')
+      run: ./docker/ci-push-smoke $TAG
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
+
+  cf-deploy:
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: package-build
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download package from draft release
+      run: ./download-draft-package.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install CF CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget gnupg gnupg2 gnupg1
+        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+        sudo apt-get update
+        sudo apt-get install cf-cli
+    - name: Log in to Cloud Foundry
+      run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
+      env:
+        CF_ENDPOINT: ${{ secrets.CF_ENDPOINT }}
+        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        CF_USERNAME: ${{ secrets.CF_USERNAME }}
+    - run: ./test-package.sh --skip-package --skip-heroku
+
+  heroku-deploy:
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: package-build
+    steps:
+    - uses: actions/checkout@v2
+    - run: ./download-draft-package.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Heroku CLI
+      run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+    - name: Provide Heroku credentials
+      run: "echo $HEROKU_NETRC >> $HOME/.netrc"
+      env:
+        HEROKU_NETRC: ${{ secrets.HEROKU_NETRC }}
+    - name: Configure git
+      run: |
+        git config --global init.defaultBranch main
+        git config --global user.email "postfacto@pivotal.io"
+        git config --global user.name "Postfacto Robot"
+    - run: ./test-package.sh --skip-package --skip-cf

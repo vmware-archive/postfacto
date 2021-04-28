@@ -21,5 +21,5 @@
 .byebug_history
 credentials.yml
 
-# Ignore gems when deploying from travis
+# Ignore gems when deploying
 /vendor/bundle
