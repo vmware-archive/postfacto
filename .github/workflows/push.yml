@@ -176,12 +176,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install CF CLI
       run: |
-        apt-get update
-        apt-get install -y wget gnupg gnupg2 gnupg1
-        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add -
-        echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-        apt-get update
-        apt-get install cf-cli
+        sudo apt-get update
+        sudo apt-get install -y wget gnupg gnupg2 gnupg1
+        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+        sudo apt-get update
+        sudo apt-get install cf-cli
     - name: Log in to Cloud Foundry
       run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
       env:
@@ -205,4 +205,8 @@ jobs:
       run: "echo $HEROKU_NETRC >> $HOME/.netrc"
       env:
         HEROKU_NETRC: ${{ secrets.HEROKU_NETRC }}
+    - name: Configure git
+      run: |
+        git config user.email "email@example.com"
+        git config user.name "Postfactobot"
     - run: ./test-package.sh --skip-package --skip-cf
