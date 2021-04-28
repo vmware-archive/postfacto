@@ -12,6 +12,8 @@ jobs:
         ruby-version: .ruby-version
         bundler-cache: true
         working-directory: api
+    - run: bundle install
+      working-directory: e2e
     - run: bundle exec rake db:create db:migrate
       working-directory: api
     - run: bundle exec rake
@@ -33,6 +35,8 @@ jobs:
           postfacto-npm-
     - run: npm ci
       working-directory: web
+    - run: npm ci
+      working-directory: mock-google-server
     - run: npm run lint
       working-directory: web
     - run: npm test
@@ -50,6 +54,8 @@ jobs:
         ruby-version: .ruby-version
         bundler-cache: true
         working-directory: api
+    - run: bundle install
+      working-directory: e2e
     - uses: actions/setup-node@v1
       with:
         node-version: '14.16.1'
@@ -62,6 +68,8 @@ jobs:
           postfacto-npm-
     - run: npm ci
       working-directory: web
+    - run: npm ci
+      working-directory: mock-google-server
     - run: ./e2e.sh
 
   docker-build:
