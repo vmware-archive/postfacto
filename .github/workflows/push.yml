@@ -95,6 +95,9 @@ jobs:
         ruby-version: .ruby-version
         bundler-cache: true
         working-directory: api
+    - run: bundle pack
+      working-directory: api
+    - run: rm -rf ./api/vendor/bundle/
     - uses: actions/setup-node@v1
       with:
         node-version: '14.16.1'
