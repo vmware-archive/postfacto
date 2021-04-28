@@ -73,7 +73,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Configure Premailer with a strategy that just replaces stylesheets with nothing
-  module NoopPremailerStrategy
+  module NoopPremailerStrategy # rubocop:disable Lint/ConstantDefinitionInBlock
     def self.load(*)
       ''
     end

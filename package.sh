@@ -67,15 +67,6 @@ mkdir -p package/assets
 cp -r tmp/. package/assets
 rm -rf tmp
 
-# TKG
-
-cp -r deployment/tkg package
-cp -r deployment/helm/postfacto-*.tgz package/tkg
-cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
-cp -r deployment/upgrade-tkg.sh package/tkg/upgrade.sh
-cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
-chmod u+x package/tkg/*.sh
-
 # TAS
 
 cp -r deployment/tas package
@@ -83,15 +74,6 @@ cp -r deployment/deploy-tas.sh package/tas/deploy.sh
 cp -r deployment/upgrade-tas.sh package/tas/upgrade.sh
 cp -r deployment/mixpanel.sh package/tas/mixpanel.sh
 chmod u+x package/tas/*.sh
-
-# PWS
-
-cp -r deployment/pws package
-cp -r deployment/deploy-cf.sh package/pws/deploy.sh
-cp -r deployment/migrate-cf.sh package/pws/migrate.sh
-cp -r deployment/upgrade-cf.sh package/pws/upgrade.sh
-cp -r deployment/mixpanel.sh package/pws/mixpanel.sh
-chmod u+x package/pws/*.sh
 
 # CF
 
@@ -110,6 +92,15 @@ cp -r deployment/migrate-heroku.sh package/heroku/migrate.sh
 cp -r deployment/upgrade-heroku.sh package/heroku/upgrade.sh
 cp -r deployment/mixpanel.sh package/heroku/mixpanel.sh
 chmod u+x package/heroku/*.sh
+
+# TKG
+
+cp -r deployment/tkg package
+cp -r deployment/helm/postfacto-*.tgz package/tkg
+cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
+cp -r deployment/upgrade-tkg.sh package/tkg/upgrade.sh
+cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
+chmod u+x package/tkg/*.sh
 
 # Smoke tests
 

@@ -62,9 +62,10 @@ class HappyMehSadOrderRule
       last_category = retro.items.find(retro.highlighted_item_id).category
     end
 
-    if last_category == 'happy'
+    case last_category
+    when 'happy'
       ['meh', 'sad', 'happy']
-    elsif last_category == 'meh'
+    when 'meh'
       ['sad', 'happy', 'meh']
     else
       ['happy', 'meh', 'sad']

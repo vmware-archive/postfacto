@@ -1,6 +1,8 @@
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.7
   DisplayCopNames: true
+  NewCops: enable
+  SuggestExtensions: false
   Exclude:
     - 'db/schema.rb'
     - 'db/migrate/*'
@@ -15,7 +17,7 @@ Style/FrozenStringLiteralComment:
 Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Style/WordArray:

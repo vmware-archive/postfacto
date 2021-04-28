@@ -28,9 +28,9 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-require 'sendgrid_vcap_parser'
-require 'action_cable_host_provider'
-require 'action_cable_configuration_provider'
+require 'configurations/sendgrid_vcap_parser'
+require 'configurations/action_cable_host_provider'
+require 'configurations/action_cable_configuration_provider'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -113,7 +113,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end

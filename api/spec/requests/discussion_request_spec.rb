@@ -38,7 +38,7 @@ describe '/retros/:retro_id/discussion' do
   describe 'POST /' do
     context 'when authenticated' do
       subject do
-        post retro_path(retro) + '/discussion',
+        post "#{retro_path(retro)}/discussion",
              headers: { HTTP_AUTHORIZATION: token },
              params: { item_id: item.id },
              as: :json
@@ -59,16 +59,16 @@ describe '/retros/:retro_id/discussion' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('highlighted_item_id' => item.id)
-              )
+          hash_including(
+            'retro' => hash_including('highlighted_item_id' => item.id)
           )
+        )
       end
     end
 
     context 'when not authenticated' do
       subject do
-        post retro_path(retro) + '/discussion',
+        post "#{retro_path(retro)}/discussion",
              params: { item_id: item.id },
              as: :json
       end
@@ -98,7 +98,7 @@ describe '/retros/:retro_id/discussion' do
   describe 'PATCH /' do
     context 'when authenticated' do
       subject do
-        patch retro_path(retro) + '/discussion', headers: { HTTP_AUTHORIZATION: token }, as: :json
+        patch "#{retro_path(retro)}/discussion", headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
 
       it 'adds 2 minutes to the timer' do
@@ -123,7 +123,7 @@ describe '/retros/:retro_id/discussion' do
 
     context 'when not authenticated' do
       subject do
-        patch retro_path(retro) + '/discussion', params: { retro: { id: retro.id } }, as: :json
+        patch "#{retro_path(retro)}/discussion", params: { retro: { id: retro.id } }, as: :json
       end
 
       it 'returns 403' do
@@ -146,7 +146,7 @@ describe '/retros/:retro_id/discussion' do
 
     context 'when authenticated' do
       subject do
-        delete retro_path(retro) + '/discussion', headers: { HTTP_AUTHORIZATION: token }, as: :json
+        delete "#{retro_path(retro)}/discussion", headers: { HTTP_AUTHORIZATION: token }, as: :json
       end
 
       it 'removes the highlighted item' do
@@ -159,16 +159,16 @@ describe '/retros/:retro_id/discussion' do
 
       it 'broadcasts to retro channel' do
         expect { subject }.to have_broadcasted_to(retro).from_channel(RetrosChannel).with(
-            hash_including(
-                'retro' => hash_including('highlighted_item_id' => be_nil)
-              )
+          hash_including(
+            'retro' => hash_including('highlighted_item_id' => be_nil)
           )
+        )
       end
     end
 
     context 'when not authenticated' do
       subject do
-        delete retro_path(retro) + '/discussion', params: { retro: { id: retro.id } }, as: :json
+        delete "#{retro_path(retro)}/discussion", params: { retro: { id: retro.id } }, as: :json
       end
 
       it 'returns 403' do

@@ -2,9 +2,9 @@
 
 ## Dependencies
 
-* Ruby 2.6.3
-* bundler
-* Node 11+
+* Ruby 2.7.3
+* bundler 2.2.16
+* Node 14
 * chromedriver
 * tmux
 

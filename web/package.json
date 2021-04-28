@@ -18,7 +18,7 @@
     "react-helmet": "^5.2.0",
     "react-hotkeys": "^1.1.4",
     "react-redux": "^7.2.1",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^4.0.3",
     "react-scroll": "^1.8.0",
     "redux": "^4.0.5"
   },
@@ -29,7 +29,7 @@
     "fast-deep-equal": "^2.0.1",
     "jest-enzyme": "^7.1.2",
     "promise-mock": "^2.1.0",
-    "serve": "^11.3.0"
+    "serve": "^11.3.2"
   },
   "scripts": {
     "start": "REACT_APP_USE_MOCK_GOOGLE=\"$USE_MOCK_GOOGLE\" REACT_APP_GOOGLE_OAUTH_CLIENT_ID=\"$GOOGLE_OAUTH_CLIENT_ID\" react-scripts start",
@@ -43,7 +43,7 @@
     "extends": "react-app"
   },
   "engines": {
-    "node": "^12.6.0"
+    "node": "^14.16.1"
   },
   "browserslist": [
     ">0.2%",

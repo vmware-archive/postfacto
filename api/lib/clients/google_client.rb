@@ -50,15 +50,14 @@ class GoogleClient
   end
 
   def validate_hosted_domain(user)
-    if @hosted_domain
-      if user[:hd] != @hosted_domain
-        raise InvalidUserDomain.new
-      end
+    if @hosted_domain && (user[:hd] != @hosted_domain)
+      raise InvalidUserDomain.new
     end
   end
 
   class GetUserFailed < StandardError
   end
+
   class InvalidUserDomain < StandardError
   end
 end

@@ -7,7 +7,7 @@ class SessionTimeConfigurationProvider
     Integer(@env['SESSION_TIME']).minutes
   rescue ArgumentError
     nil
-  rescue TypeError
+  rescue TypeError # rubocop:disable Lint/DuplicateBranch
     nil
   end
 end

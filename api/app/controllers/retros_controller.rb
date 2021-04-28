@@ -105,9 +105,7 @@ class RetrosController < ApplicationController
   end
 
   def retro_errors_hash
-    errors_hash = @retro.errors.messages
-    errors_hash.each { |k, v| errors_hash[k] = v.join(' ') }
-    errors_hash
+    @retro.errors.messages.transform_values { |v| v.join(' ') }
   end
 
   def broadcast

@@ -76,13 +76,13 @@ class RetroCreatePage extends React.Component {
     this.onChangePassword = this.onChange.bind(this, 'password');
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!localStorage.getItem('authToken')) {
       this.props.redirectToHome();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({
         errors: {

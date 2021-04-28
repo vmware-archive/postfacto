@@ -54,12 +54,12 @@ describe '/retros/:id/sessions' do
   describe 'POST /' do
     context 'if password is correct' do
       it 'responds with 200' do
-        post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+        post "#{retro_sessions_path(retro)}/", params: { retro: { password: 'the-password' } }, as: :json
         expect(status).to eq(200)
       end
 
       it 'responds with a token' do
-        post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+        post "#{retro_sessions_path(retro)}/", params: { retro: { password: 'the-password' } }, as: :json
 
         data = JSON.parse(response.body)
         jwt = JWT.decode(data['token'], nil, false)
@@ -78,7 +78,7 @@ describe '/retros/:id/sessions' do
         end
 
         it 'responds with an expiring token' do
-          post retro_sessions_path(retro) + '/', params: { retro: { password: 'the-password' } }, as: :json
+          post "#{retro_sessions_path(retro)}/", params: { retro: { password: 'the-password' } }, as: :json
 
           data = JSON.parse(response.body)
           jwt = JWT.decode(data['token'], nil, false)
@@ -90,14 +90,14 @@ describe '/retros/:id/sessions' do
 
     context 'if password is incorrect' do
       it 'responds with forbidden' do
-        post retro_sessions_path(retro) + '/', params: { retro: { password: 'anything-else' } }, as: :json
+        post "#{retro_sessions_path(retro)}/", params: { retro: { password: 'anything-else' } }, as: :json
         expect(status).to eq(403)
       end
     end
 
     context 'if password is not provided' do
       it 'responds with forbidden' do
-        post retro_sessions_path(retro) + '/', params: { retro: { name: retro.name } }, as: :json
+        post "#{retro_sessions_path(retro)}/", params: { retro: { name: retro.name } }, as: :json
         expect(status).to eq(403)
       end
     end
@@ -110,19 +110,19 @@ describe '/retros/:id/sessions' do
 
       context 'if join token nor password is provided' do
         it 'responds with forbidden' do
-          post retro_sessions_path(retro) + '/', params: { retro: { name: retro.name } }, as: :json
+          post "#{retro_sessions_path(retro)}/", params: { retro: { name: retro.name } }, as: :json
           expect(status).to eq(403)
         end
       end
 
       context 'if join token is correct' do
         it 'responds with 200' do
-          post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+          post "#{retro_sessions_path(retro)}/", params: { retro: { join_token: retro.join_token } }, as: :json
           expect(status).to eq(200)
         end
 
         it 'responds with a token' do
-          post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+          post "#{retro_sessions_path(retro)}/", params: { retro: { join_token: retro.join_token } }, as: :json
 
           data = JSON.parse(response.body)
           jwt = JWT.decode(data['token'], nil, false)
@@ -141,7 +141,7 @@ describe '/retros/:id/sessions' do
           end
 
           it 'responds with an expiring token' do
-            post retro_sessions_path(retro) + '/', params: { retro: { join_token: retro.join_token } }, as: :json
+            post "#{retro_sessions_path(retro)}/", params: { retro: { join_token: retro.join_token } }, as: :json
 
             data = JSON.parse(response.body)
             jwt = JWT.decode(data['token'], nil, false)
@@ -153,14 +153,14 @@ describe '/retros/:id/sessions' do
 
       context 'if join token is incorrect' do
         it 'responds with forbidden' do
-          post retro_sessions_path(retro) + '/', params: { retro: { join_token: 'anything-else' } }, as: :json
+          post "#{retro_sessions_path(retro)}/", params: { retro: { join_token: 'anything-else' } }, as: :json
           expect(status).to eq(403)
         end
       end
 
       context 'password has precedence over join token' do
         it 'responds with 200' do
-          post retro_sessions_path(retro) + '/', params: {
+          post "#{retro_sessions_path(retro)}/", params: {
             retro: {
               password: 'the-password',
               join_token: 'anything-else'
@@ -170,7 +170,7 @@ describe '/retros/:id/sessions' do
         end
 
         it 'responds with forbidden' do
-          post retro_sessions_path(retro) + '/', params: {
+          post "#{retro_sessions_path(retro)}/", params: {
             retro: {
               password: 'anything-else',
               join_token: retro.join_token

@@ -54,7 +54,7 @@ export default class CountdownTimer extends React.Component {
     this.startTimer();
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.startTimer();
   }
 

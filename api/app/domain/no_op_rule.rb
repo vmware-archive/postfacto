@@ -30,7 +30,7 @@
 #
 
 class NoOpRule
-  def apply(___, items)
+  def apply(___, items) # rubocop:disable Naming/MethodParameterName
     items
   end
 end

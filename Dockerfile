@@ -28,7 +28,7 @@
 #
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-FROM node:12.6.0 as front-end
+FROM node:14.16.1 as front-end
 
 COPY ./web /web
 WORKDIR /web
@@ -36,8 +36,8 @@ WORKDIR /web
 RUN npm ci
 RUN npm run build
 
-FROM ruby:2.6.3-alpine
-RUN gem install bundler:2.0.1
+FROM ruby:2.7.3-alpine
+RUN gem install bundler:2.2.16
 
 COPY ./api /postfacto
 COPY docker/release/entrypoint /
@@ -72,4 +72,3 @@ ENV ENABLE_ANALYTICS false
 EXPOSE 3000
 
 ENTRYPOINT "/entrypoint"
-

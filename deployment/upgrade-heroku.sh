@@ -59,13 +59,14 @@ cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client"
 cp "$CONFIG_DIR/Procfile" "$ASSETS_DIR"
 
 pushd "$ASSETS_DIR"
-  BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v215'
+  BUILDPACK='https://github.com/heroku/heroku-buildpack-ruby.git#v227'
   if [[ ! $(heroku buildpacks -a ${APP_HOST}) =~ ${BUILDPACK} ]]; then
     heroku buildpacks:set -a ${APP_HOST} ${BUILDPACK}
   fi
+  heroku stack:set heroku-20 -a ${APP_HOST}
   rm -rf .git # blow away any existent git directory from a previous run
   git init .
   git add .
   git commit -m "Packaging for Heroku upgrade"
-  git push --force --set-upstream https://git.heroku.com/${APP_HOST}.git master
+  git push --force --set-upstream https://git.heroku.com/${APP_HOST}.git main
 popd
