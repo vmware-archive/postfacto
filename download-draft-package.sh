@@ -32,16 +32,15 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Get the asset url of the latest draft
-# TODO: need to switch this back to pivotal/postfacto
-asset_url=$(curl \
+ASSET_URL=$(curl \
           --header "Authorization: Bearer $GITHUB_TOKEN" \
           --header "Accept: application/json" \
-          https://api.github.com/repos/textbook/postfacto/releases \
+          https://api.github.com/repos/pivotal/postfacto/releases \
           | jq --raw-output '[[.[] | select(.draft==true)] | first.assets | .[] | select(.name=="package.zip")] | first.url')
 
 # Download asset
 curl --location --silent --show-error \
           --header "Authorization: Bearer $GITHUB_TOKEN" \
           --header "Accept: application/octet-stream" \
-          --output $SCRIPT_DIR/package.zip \
-          $asset_url
+          --output "$SCRIPT_DIR/package.zip" \
+          "$ASSET_URL"
