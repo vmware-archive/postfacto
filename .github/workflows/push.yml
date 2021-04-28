@@ -175,7 +175,13 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install CF CLI
-      run: sudo snap install cf-cli
+      run: |
+        apt-get update
+        apt-get install -y wget gnupg gnupg2 gnupg1
+        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add -
+        echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+        apt-get update
+        apt-get install cf-cli
     - name: Log in to Cloud Foundry
       run: cf login -a $CF_ENDPOINT -u $CF_USERNAME -p $CF_PASSWORD
       env:
