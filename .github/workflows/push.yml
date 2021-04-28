@@ -108,12 +108,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
     - name: Docker build
       run: |
         docker build \
           "$GITHUB_WORKSPACE" \
           -f "$GITHUB_WORKSPACE/Dockerfile" \
           -t build-image
+    - name: Deploy to Docker Hub
+      if: startsWith(github.ref, 'refs/tags/')
+      run: ./docker/ci-push $TAG
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
 
   package-build:
     runs-on: ubuntu-20.04
@@ -187,12 +197,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF##*/}
     - name: Smoke build
       run: |
         docker build \
           "$GITHUB_WORKSPACE/smoke" \
           -f "$GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
           -t build-image-smoke
+    - name: Deploy to Docker Hub
+      if: startsWith(github.ref, 'refs/tags/')
+      run: ./docker/ci-push-smoke $TAG
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
 
   cf-deploy:
     runs-on: ubuntu-20.04
