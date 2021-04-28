@@ -7,10 +7,10 @@ VERSION_TAG="$REPOSITORY:$TAG"
 LATEST_TAG="$REPOSITORY:latest"
 
 echo "Tagging: $VERSION_TAG"
-docker tag travis-build-image-smoke $VERSION_TAG
+docker tag build-image-smoke $VERSION_TAG
 
 echo "Tagging: $LATEST_TAG"
-docker tag travis-build-image-smoke $LATEST_TAG
+docker tag build-image-smoke $LATEST_TAG
 
 echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 

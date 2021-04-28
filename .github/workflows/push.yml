@@ -83,7 +83,7 @@ jobs:
         docker build \
           "$GITHUB_WORKSPACE" \
           -f "$GITHUB_WORKSPACE/Dockerfile" \
-          -t travis-build-image
+          -t build-image
 
   package-build:
     runs-on: ubuntu-20.04
@@ -152,4 +152,4 @@ jobs:
         docker build \
           "$GITHUB_WORKSPACE/smoke" \
           -f "$GITHUB_WORKSPACE/docker/smoke/Dockerfile" \
-          -t travis-build-image-smoke
+          -t build-image-smoke

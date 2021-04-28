@@ -1,5 +1,5 @@
 # Postfacto
-[![Build Status](https://travis-ci.org/pivotal/postfacto.svg?branch=master)](https://travis-ci.org/pivotal/postfacto)
+[![Build Status](https://github.com/pivotal/postfacto/actions/workflows/push.yml/badge.svg)](https://github.com/pivotal/postfacto/actions/workflows/push.yml)
 
 Postfacto helps teams run great [retrospectives](https://content.pivotal.io/blog/how-to-run-a-really-good-retrospective) remotely.
 
