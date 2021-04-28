@@ -202,7 +202,7 @@ jobs:
     - name: Install Heroku CLI
       run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
     - name: Provide Heroku credentials
-      run: "echo $HEROKU_NETRC >> $HOME/.heroku-netrc"
+      run: "echo $HEROKU_NETRC >> $HOME/.netrc"
       env:
         HEROKU_NETRC: ${{ secrets.HEROKU_NETRC }}
     - run: ./test-package.sh --skip-package --skip-cf
