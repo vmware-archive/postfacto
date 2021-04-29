@@ -115,7 +115,7 @@ Note: if you would like to submit an "_obvious fix_" for something like a typo, 
 
 ## Working on features
 
-If you're interested on working on a feature for us we have a [Backlog](https://github.com/pivotal/postfacto/projects/1) of work for people to pick up at anytime. Have a look at both the Backlog' and 'Icebox' sections and if something catches your eye leave a comment and we can chat about assigning it to you. If the feature you had in mind isn't already there then [get in touch](https://gitter.im/pivotalpostfacto/Lobby)! We're always eager to hear about new ideas for Postfacto.
+If you're interested on working on a feature for us we have a [Backlog](https://github.com/pivotal/postfacto/projects/1) of work for people to pick up at anytime. Have a look at both the Backlog' and 'Icebox' sections and if something catches your eye leave a comment and we can chat about assigning it to you. If the feature you had in mind isn't already there then [get in touch](https://github.com/pivotal/postfacto/issues/new)! We're always eager to hear about new ideas for Postfacto.
 
 ## Code reviews
 
