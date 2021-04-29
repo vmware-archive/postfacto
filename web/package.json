@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "actioncable": "^5.2.4",
+    "actioncable": "^5.2.5",
     "foundation-sites": "6.6.3",
     "grapnel": "^0.7.2",
     "http-proxy-middleware": "^0.21.0",
