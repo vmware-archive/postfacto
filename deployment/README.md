@@ -30,7 +30,7 @@ For deployments that do not want to setup Google OAuth, you will need to create 
 1. In `Authorized JavaScript Origins`, set it to the public URL of your `app-name`. For example: if deploying to Heroku, your public URL will be `https://<app-name>.herokuapp.com`.
 1. You can leave redirect blank
 1. Take note of your `client-id` that is generated
-1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation.
+1. Add `"google_oauth_client_id": {{client-id}}` to the `config.js` for your installation
 
 ### Enabling analytics
 
@@ -77,20 +77,21 @@ More information about SSL modes can be found [here](https://www.postgresql.org/
 ### Removing Redis dependency
 If you are on a **later version than 4.3.0** and using Postgres, Redis is no longer required. Instead set the environment variable `USE_POSTGRES_FOR_ACTION_CABLE=true` on deploy.
 
+ > ⚠️ **Warning**: in [some cases](https://github.com/pivotal/postfacto/issues/346) realtime actions will stop working after adding lots of retro items
+
 ## Tanzu Application Service
 
 #### Initial deployment
 
-1. Set yourself up with an organization and space in your TAS account to deploy Postfacto to.
-1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
+1. Set yourself up with an organization and space in your TAS account to deploy Postfacto to
+1. Add a database (Postgres or MySQL) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
 1. Run the TAS deployment script from the `tas` directory:
-
     ```bash
     ./deploy.sh <app-name>
     ```
-
-   Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`.
+   Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
+1. To improve security, change the default admin user email and password
 1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
 1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -107,9 +108,7 @@ If you are on a **later version than 4.3.0** and using Postgres, Redis is no lon
 ### Prerequisites
 
 1. A vSphere instance version 6.7u3 or higher, with Tanzu Kubernetes Grid (TKG) provisioned
-
 1. A network load balancer installed and configured on your TKG cluster (e.g. [MetalLB](https://metallb.universe.tf/installation/))
-
 1. A default storage class available in your TKG cluster (e.g. [vSphereStorageClass](tkg/examples/storageclass.yaml))
 
 ### Initial deployment
@@ -117,13 +116,13 @@ If you are on a **later version than 4.3.0** and using Postgres, Redis is no lon
 1. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) to your local machine
 1. Install [helm](https://helm.sh/docs/intro/install/) to your local machine
 1. Make sure `kubectl` is configured to connect to the TKG cluster (ask your administrator for the configuration)
-1. Run the deployment script from the `tkg` directory:
-
+1. Run the TKG deployment script from the `tkg` directory:
     ```bash
     ./deploy.sh <app-name>
     ```
-1. Keep note of the application url output by the deployment script, going forward referred to as `tkg-url` 
-1. Log in to the admin dashboard at `<tkg-url>/admin` (email: `email@example.com` and password: `password`)
+   Keep note of the URL output by the deployment script, going forward referred to as `tkg-url`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<tkg-url>/admin`
+1. To improve security, change the default admin user email and password
 1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<tkg-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -139,18 +138,18 @@ If you are on a **later version than 4.3.0** and using Postgres, Redis is no lon
 
 #### Initial deployment
 
-1. Set yourself up with an organization and space in your CF to deploy your Postfacto to.
-1. Take note of your CF url, going forward referred to as `cf-url`
-1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
+1. Set yourself up with an organization and space in your CF to deploy your Postfacto to
+1. Take note of your CF URL, going forward referred to as `cf-url`
+1. Add a database (Postgres or MySQL) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`.
 1. Run the CF deployment script from the `cf` directory:
-
     ```bash
     ./deploy.sh <app-name>
     ```
-
-1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.<cf-url>/admin`
+   Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
+1. To improve security, change the default admin user email and password
 1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
-1. Log in to your retro at `<app-name>.<cf-url>/retros/your-retro-slug`
+1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 #### Upgrading a deployment
@@ -174,12 +173,11 @@ If you are on a **later version than 4.3.0** and using Postgres, Redis is no lon
 
 1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory:
-
     ```bash
     ./deploy.sh <app-name>
     ```
-
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-name>.herokuapp.com/admin`
+1. To improve security, change the default admin user email and password
 1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<app-name>.herokuapp.com/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
