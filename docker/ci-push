@@ -53,4 +53,4 @@ done
 echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
 echo 'Pushing tags'
-docker push "$REPOSITORY"
+docker push --all-tags "$REPOSITORY"
