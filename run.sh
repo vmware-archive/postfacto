@@ -35,8 +35,8 @@ export RAILS_ENV="development"
 
 # Parse configuration
 
-ADMIN_USER="${ADMIN_USER:-email@example.com}"
-ADMIN_PASS="${ADMIN_PASS:-password}"
+ADMIN_EMAIL="${ADMIN_EMAIL:-email@example.com}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-password}"
 
 INFO=""
 
@@ -58,7 +58,7 @@ fi
 pushd "$BASE_DIR/api" >/dev/null
   echo "Migrating database..."
   bundle exec rake db:create db:migrate
-  ADMIN_EMAIL="$ADMIN_USER" ADMIN_PASSWORD="$ADMIN_PASS" bundle exec rake admin:create_user
+  ADMIN_EMAIL="$ADMIN_EMAIL" ADMIN_PASSWORD="$ADMIN_PASSWORD" bundle exec rake admin:create_user
 popd >/dev/null
 
 export USE_MOCK_GOOGLE
@@ -80,7 +80,7 @@ if [[ "$USE_MOCK_GOOGLE" == "true" ]]; then
 fi
 
 INFO+=$'\n'
-INFO+="Created admin user '$ADMIN_USER' with password '$ADMIN_PASS'"$'\n'
+INFO+="Created admin user '$ADMIN_EMAIL' with password '$ADMIN_PASSWORD'"$'\n'
 INFO+="Log in to http://localhost:4000/admin to administer"$'\n'
 INFO+="App will be available at http://localhost:3000/"$'\n'
 INFO+="Press 'q' to stop all services"

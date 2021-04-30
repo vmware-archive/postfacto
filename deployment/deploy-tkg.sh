@@ -42,12 +42,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/mixpanel.sh" "TKG $(basename "${BASH_SOURCE[0]}")" "$@"
 
 APP_NAME=$1
+ADMIN_EMAIL="${ADMIN_EMAIL:-email@example.com}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-password}"
 
-helm install $APP_NAME postfacto-*.tgz --set service.type=LoadBalancer
+helm install "$APP_NAME" postfacto-*.tgz --set service.type=LoadBalancer
 
-kubectl wait --for=condition=ready --timeout=120s pod -l app.kubernetes.io/instance=${APP_NAME}
-POSTFACTO_POD=$(kubectl get pod -l app.kubernetes.io/instance=${APP_NAME} -o jsonpath="{.items[0].metadata.name}")
-kubectl exec $POSTFACTO_POD create-admin-user email@example.com password
+kubectl wait --for=condition=ready --timeout=120s pod -l "app.kubernetes.io/instance=$APP_NAME"
+POSTFACTO_POD=$(kubectl get pod -l "app.kubernetes.io/instance=$APP_NAME" -o jsonpath="{.items[0].metadata.name}")
+kubectl exec "$POSTFACTO_POD" create-admin-user "$ADMIN_EMAIL" "$ADMIN_PASSWORD"
 
-export SERVICE_IP=$(kubectl get svc ${APP_NAME} --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+SERVICE_IP=$(kubectl get svc "$APP_NAME" --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+export SERVICE_IP
 echo "Access your application at http://$SERVICE_IP"
