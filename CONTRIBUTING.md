@@ -8,7 +8,7 @@
 * chromedriver
 * tmux
 
-To avoid having to install and manage these dependencies you can use the Postfacto [docker image](https://hub.docker.com/r/postfacto/dev/) for development:
+To avoid having to install and manage these dependencies you can use the Postfacto [Docker image](https://hub.docker.com/r/postfacto/dev/) for development:
 
 ```bash
 ./docker.sh
@@ -25,7 +25,7 @@ Before development you'll need to install library dependencies (gems and npm pac
 
 ## Running locally
 
-You can run Postfacto locally at [http://localhost:3000]() by running:
+You can run Postfacto locally at <http://localhost:3000> by running:
 
 ```bash
 ./run.sh
@@ -39,9 +39,9 @@ Or to use real authentication (this will use no authentication unless `config.js
 
 ---
 
-The admin dashboard will be available at [http://localhost:4000/admin]().
+The admin dashboard will be available at <http://localhost:4000/admin>.
 
-A default admin user 'email@example.com' with password 'password' will be created
+A default admin user `email@example.com` with password `password` will be created
 
 You can create other admin users using the following rake task in the `api` directory:
 
@@ -115,7 +115,7 @@ Note: if you would like to submit an "_obvious fix_" for something like a typo, 
 
 ## Working on features
 
-If you're interested on working on a feature for us we have a [Backlog](https://github.com/pivotal/postfacto/projects/1) of work for people to pick up at anytime. Have a look at both the Backlog' and 'Icebox' sections and if something catches your eye leave a comment and we can chat about assigning it to you. If the feature you had in mind isn't already there then [get in touch](https://github.com/pivotal/postfacto/issues/new)! We're always eager to hear about new ideas for Postfacto.
+If you're interested on working on a feature for us we have a [Backlog](https://github.com/pivotal/postfacto/projects/1) of work for people to pick up at any time. Have a look at both the 'Backlog' and 'Icebox' sections and if something catches your eye leave a comment and we can chat about assigning it to you. If the feature you had in mind isn't already there then [get in touch](https://github.com/pivotal/postfacto/issues/new)! We're always eager to hear about new ideas for Postfacto.
 
 ## Code reviews
 
