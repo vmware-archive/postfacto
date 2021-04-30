@@ -42,6 +42,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 APP_HOST=$1
 SESSION_TIME=${SESSION_TIME:-'""'}
+ADMIN_EMAIL="${ADMIN_EMAIL:-email@example.com}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-password}"
 
 ASSETS_DIR="$SCRIPT_DIR/../assets"
 CONFIG_DIR="$SCRIPT_DIR/config"
@@ -51,5 +53,5 @@ cf target \
     && exit 1)
 
 cp "$CONFIG_DIR/config.js" "$ASSETS_DIR/client/config.js"
-cf push -f "$CONFIG_DIR"/manifest.yml -p "$ASSETS_DIR" --var api-app-name=$APP_HOST --var session-time=$SESSION_TIME
-cf run-task $APP_HOST 'ADMIN_EMAIL=email@example.com ADMIN_PASSWORD=password rake admin:create_user'
+cf push -f "$CONFIG_DIR"/manifest.yml -p "$ASSETS_DIR" --var "api-app-name=$APP_HOST" --var "session-time=$SESSION_TIME"
+cf run-task "$APP_HOST" "ADMIN_EMAIL=$ADMIN_EMAIL ADMIN_PASSWORD=$ADMIN_PASSWORD rake admin:create_user"
