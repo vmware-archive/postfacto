@@ -1,21 +1,44 @@
 #!/bin/bash
-set -e
+#
+# Postfacto, a free, open-source and self-hosted retro tool aimed at helping
+# remote teams.
+#
+# Copyright (C) 2016 - Present Pivotal Software, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+#
+# it under the terms of the GNU Affero General Public License as
+#
+# published by the Free Software Foundation, either version 3 of the
+#
+# License, or (at your option) any later version.
+#
+#
+#
+# This program is distributed in the hope that it will be useful,
+#
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+#
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#
+# GNU Affero General Public License for more details.
+#
+#
+#
+# You should have received a copy of the GNU Affero General Public License
+#
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+set -euo pipefail
 
-TAG=$1
-REPOSITORY=postfacto/smoke
-VERSION_TAG="$REPOSITORY:$TAG"
-LATEST_TAG="$REPOSITORY:latest"
+IMAGE='build-image-smoke'
+NAME='smoke'
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Tagging: $VERSION_TAG"
-docker tag build-image-smoke $VERSION_TAG
+if [[ $# -ne 1 ]]; then
+  echo 'usage: ./ci-push-smoke <tag>'
+  echo "This will tag and deploy $IMAGE as postfacto/$NAME"
+  exit 1
+fi
 
-echo "Tagging: $LATEST_TAG"
-docker tag build-image-smoke $LATEST_TAG
-
-echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-
-echo "Pushing tag: $VERSION_TAG"
-docker push $VERSION_TAG
-
-echo "Pushing tag: $LATEST_TAG"
-docker push $LATEST_TAG
+IMAGE="$IMAGE" NAME="$NAME" "$SCRIPT_DIR/ci-push" "$1"
