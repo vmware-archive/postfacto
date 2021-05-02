@@ -261,3 +261,27 @@ jobs:
         git config --global user.email "postfacto@pivotal.io"
         git config --global user.name "Postfacto Robot"
     - run: ./test-package.sh --skip-package --skip-cf
+
+  docker-smoke:
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+    - docker-build
+    - smoke-build
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/setup-buildx-action@v1
+    - name: Get full tag
+      id: full_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+    - name: Smoke test Docker containers
+      run: |
+        docker-compose run setup
+        docker-compose run test
+      working-directory: docker/smoke/
+      env:
+        ADMIN_EMAIL: 'admin@example.com'
+        ADMIN_PASSWORD: 'opensesame'
+        POSTGRES_PASSWORD: 'friend'
+        SECRET_KEY_BASE: 'supersecret'
+        TAG: ${{ steps.full_tag.outputs.VERSION }}
