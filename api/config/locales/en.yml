@@ -72,7 +72,7 @@ en:
     labels:
       retro:
         is_private: "Make this retro private?"
-        magic_link_enabled: "Share this retro using a magic link?"
+        is_magic_link_enabled: "Share this retro using a magic link?"
         owner_email: "Owner Email"
     hints:
       retro:

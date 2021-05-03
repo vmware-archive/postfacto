@@ -119,7 +119,7 @@ popd >/dev/null
 
 pushd "$BASE_DIR/e2e" >/dev/null
   echo 'Running E2E tests...'
-  bundle exec rspec $1
+  bundle exec rspec "$@"
 popd >/dev/null
 
 # Shutdown services
