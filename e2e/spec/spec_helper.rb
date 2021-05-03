@@ -86,6 +86,17 @@ module SpecHelpers
     page.driver.execute_script("window.localStorage.setItem('authToken', 'secret-test-user-token-ef87c521b979');")
   end
 
+  def create_sharable_retro_as_admin(slug, password)
+    login_as_admin
+    click_on 'Retros'
+    click_on 'New Retro'
+    fill_in 'Name', with: 'Sharable retro'
+    fill_in 'Slug', with: slug
+    fill_in 'Password', with: password
+    page.check 'Share this retro using a magic link?'
+    click_on 'Create Retro'
+  end
+
   def create_private_retro(team_name = nil)
     fill_in_create_retro_form(team_name)
     find('#retro_is_magic_link_enabled', visible: :all).set(true)

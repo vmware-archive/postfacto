@@ -129,6 +129,7 @@ describe '/admin/retros', type: :request do
                               'Ordered By',
                               'Password',
                               'Private',
+                              'Magic Link',
                               'User'
                             ])
     end
@@ -151,6 +152,7 @@ describe '/admin/retros', type: :request do
       expect(data[11]).to eq('the-video-link')
       expect(data[13]).to include('Yes')
       expect(data[14]).to include('Yes')
+      expect(data[15]).to include('No')
     end
 
     it 'has a filter for public/private retros' do

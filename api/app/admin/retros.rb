@@ -70,6 +70,8 @@ ActiveAdmin.register Retro do
 
     column('Private', :is_private)
 
+    column('Magic Link', :is_magic_link_enabled)
+
     column('User', :user)
     actions
   end
@@ -133,7 +135,7 @@ ActiveAdmin.register Retro do
       f.input :video_link
       f.input :owner_email
       f.input :is_private
-      f.input :magic_link_enabled, as: :boolean
+      f.input :is_magic_link_enabled, as: :boolean
     end
 
     f.inputs do

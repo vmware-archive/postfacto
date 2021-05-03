@@ -252,6 +252,18 @@ context 'Felicity', type: :feature, js: true, if: ENV['USE_MOCK_GOOGLE'] == 'tru
     end
   end
 
+  context 'from admin panel' do
+    specify 'sharing a retro' do
+      slug = 'i-can-be-shared'
+      password = 'opensesame'
+      create_sharable_retro_as_admin(slug, password)
+      visit "#{RETRO_APP_BASE_URL}/retros/#{slug}"
+      fill_in 'Password', with: password
+      click_on 'Login'
+      expect(get_share_url).to include "/retros/#{slug}/join/"
+    end
+  end
+
   specify 'Auto facilitation journey' do
     register('felicity-auto-facilitate-user')
     create_public_retro
