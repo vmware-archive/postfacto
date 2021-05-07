@@ -48,6 +48,7 @@ export default class RetroColumnInput extends React.Component {
 
     constructor(props) {
       super(props);
+      this.textarea = React.createRef();
       this.state = {
         inputText: '',
         isFocused: false,
@@ -142,16 +143,16 @@ export default class RetroColumnInput extends React.Component {
       event.preventDefault();
       const {isSelectingEmoji} = this.state;
       this.setState({isSelectingEmoji: !isSelectingEmoji});
-      this.textarea.focus();
+      this.textarea.current.focus();
     }
 
     onEmojiSelect(event, emoji) {
       event.preventDefault();
       this.setState(({inputText, ...oldState}) => {
-        const start = this.textarea.selectionStart;
-        const end = this.textarea.selectionEnd;
+        const start = this.textarea.current.selectionStart;
+        const end = this.textarea.current.selectionEnd;
         const newInputText = inputText.substring(0, start) + emoji + inputText.substring(end, inputText.length);
-        this.textarea.focus();
+        this.textarea.current.focus();
         return ({
           ...oldState,
           inputText: newInputText,
@@ -212,7 +213,7 @@ export default class RetroColumnInput extends React.Component {
               onResize={this.onResize}
               required
               autoComplete="off"
-              innerRef={(ref) => { this.textarea = ref; }}
+              ref={this.textarea}
             />
             <div className="input-buttons">
               {this.renderEmojiButton()}

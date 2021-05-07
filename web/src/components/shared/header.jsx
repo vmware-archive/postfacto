@@ -31,7 +31,7 @@
 
 import React from 'react';
 import types from 'prop-types';
-import Helmet from 'react-helmet';
+import {Helmet} from 'react-helmet';
 import {connect} from 'react-redux';
 
 const Header = ({config, retro}) => (
