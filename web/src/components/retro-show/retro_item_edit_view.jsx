@@ -43,6 +43,7 @@ export default class RetroItemEditView extends React.Component {
 
     constructor(props) {
       super(props);
+      this.textarea = React.createRef();
       this.state = {
         editedText: '',
         saveDisabled: '',
@@ -84,15 +85,15 @@ export default class RetroItemEditView extends React.Component {
     onEmojiButtonClicked() {
       const {isSelectingEmoji} = this.state;
       this.setState({isSelectingEmoji: !isSelectingEmoji});
-      this.textarea.focus();
+      this.textarea.current.focus();
     }
 
     onEmojiSelected(event, emoji) {
       this.setState(({editedText, ...oldState}) => {
-        const start = this.textarea.selectionStart;
-        const end = this.textarea.selectionEnd;
+        const start = this.textarea.current.selectionStart;
+        const end = this.textarea.current.selectionEnd;
         const newInputText = editedText.substring(0, start) + emoji + editedText.substring(end, editedText.length);
-        this.textarea.focus();
+        this.textarea.current.focus();
         return ({
           ...oldState,
           editedText: newInputText,
@@ -119,7 +120,7 @@ export default class RetroItemEditView extends React.Component {
             value={this.state.editedText}
             onChange={this.onTextChanged}
             onKeyPress={this.onKeyPress}
-            innerRef={(ref) => { this.textarea = ref; }}
+            ref={this.textarea}
           />
         </div>
       );
