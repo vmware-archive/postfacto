@@ -107,7 +107,7 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
-    execjs (2.8.0)
+    execjs (2.8.1)
     ffi (1.15.0)
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
