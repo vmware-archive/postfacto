@@ -59,7 +59,7 @@ CF_VERSION="$(cf -v | awk '{print $3}' | awk -F '.' '{print $1}')"
 TASK_COMMAND="ADMIN_EMAIL=$ADMIN_EMAIL ADMIN_PASSWORD=$ADMIN_PASSWORD rake admin:create_user"
 
 if [ $CF_VERSION -ge 7 ]; then
-  TASK_COMMAND="--command $TASK_COMMAND"
+  cf run-task "$APP_HOST" --command "$TASK_COMMAND"
+else
+  cf run-task "$APP_HOST" "$TASK_COMMAND"
 fi
-
-cf run-task "$APP_HOST" "$TASK_COMMAND"
