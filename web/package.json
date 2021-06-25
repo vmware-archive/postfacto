@@ -9,7 +9,7 @@
     "http-proxy-middleware": "^2.0.0",
     "material-ui": "^0.20.2",
     "mixpanel-browser": "^2.41.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.1",
     "prop-types": "^15.6.2",
     "react": "^17.0.2",
     "react-autosize-textarea": "^7.1.0",
