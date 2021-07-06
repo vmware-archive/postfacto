@@ -75,7 +75,7 @@ describe('RetroColumnItem', () => {
   const retroId = 'retro-slug-123';
   const item = {
     id: 2,
-    description: 'the happy retro item',
+    description: 'the happy retro item. http://happy.com',
     vote_count: 1,
     category: 'happy',
     done: false,
@@ -103,7 +103,11 @@ describe('RetroColumnItem', () => {
 
     it('shows vote count and message', () => {
       expect(dom.find('.vote-count')).toIncludeText('1');
-      expect(dom.find('.item-text')).toHaveText('the happy retro item');
+      expect(dom.find('.item-text')).toHaveText('the happy retro item. http://happy.com');
+    });
+
+    it('renders URLs as links', () => {
+      expect(dom.find('.item-text a')).toHaveText('http://happy.com');
     });
 
     describe('editing', () => {
