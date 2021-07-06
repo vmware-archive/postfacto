@@ -33,6 +33,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import types from 'prop-types';
 import Scroll from 'react-scroll';
+import MarkdownView from 'react-showdown';
 import CountdownTimer from './countdown_timer';
 import RetroItemEditView from './retro_item_edit_view';
 
@@ -260,7 +261,16 @@ export default class RetroColumnItem extends React.Component {
 
     return (
       <div className="item-text">
-        <button type="button">{item.description}</button>
+        <button type="button">
+          <MarkdownView
+            markdown={item.description}
+            options={{
+              emoji: true,
+              openLinksInNewWindow: true,
+              simplifiedAutoLink: true,
+            }}
+          />
+        </button>
       </div>
     );
   }
