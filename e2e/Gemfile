@@ -35,7 +35,7 @@ ruby '2.7.3'
 group :development, :test do
   gem 'rspec'
   gem 'rspec-retry'
-  gem 'capybara', '>= 3.32.2'
+  gem 'capybara', '>= 3.35.3'
   gem 'selenium-webdriver', '>= 3.141.0'
   gem 'pry'
   gem 'pry-byebug'
