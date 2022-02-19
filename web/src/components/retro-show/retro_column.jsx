@@ -48,6 +48,7 @@ export default class RetroColumn extends React.Component {
     retro: types.object.isRequired,
     retroId: types.string.isRequired,
     archives: types.bool,
+    sortsByVotes: types.bool,
     isMobile: types.bool.isRequired,
     voteRetroItem: types.func.isRequired,
     doneRetroItem: types.func.isRequired,
@@ -63,7 +64,18 @@ export default class RetroColumn extends React.Component {
 
   static defaultProps = {
     archives: false,
+    sortsByVotes: false,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      sortsByVotes: props.sortsByVotes,
+    };
+
+    this.toggleItemSorting = this.toggleItemSorting.bind(this);
+  }
 
   renderRetroItems() {
     const {
@@ -74,13 +86,17 @@ export default class RetroColumn extends React.Component {
       isMobile,
     } = this.props;
 
+    const {
+      sortsByVotes,
+    } = this.state;
+
     if (!items) {
       return null;
     }
 
     return items
       .filter((item) => item.category === category)
-      .sort((a, b) => (b.created_at <= a.created_at ? -1 : 1))
+      .sort((a, b) => ((sortsByVotes ? (b.vote_count <= a.vote_count) : (b.created_at <= a.created_at)) ? -1 : 1))
       .map((item) => (
         <RetroColumnItem
           key={item.id}
@@ -120,13 +136,30 @@ export default class RetroColumn extends React.Component {
       return null;
     }
     return (
-      <RetroColumnInput
-        retroId={retroId}
-        category={category}
-        createRetroItem={this.props.createRetroItem}
-        createRetroActionItem={this.props.createRetroActionItem}
-      />
+      <div className="column-input-header">
+        <RetroColumnInput
+          retroId={retroId}
+          category={category}
+          createRetroItem={this.props.createRetroItem}
+          createRetroActionItem={this.props.createRetroActionItem}
+        />
+        <div className="sort-items-toggle">
+          <div className={'sort-items-toggle-submit-' + this.resolveSortingClass()} onClick={this.toggleItemSorting}>
+            <div className="vote-icon"><i className="fa fa-heart" aria-hidden="true"/></div>
+          </div>
+        </div>
+      </div>
     );
+  }
+
+  toggleItemSorting() {
+    const {sortsByVotes} = this.state;
+    this.setState({sortsByVotes: !sortsByVotes});
+  }
+
+  resolveSortingClass() {
+    const {sortsByVotes} = this.state;
+    return sortsByVotes ? 'active' : 'inactive';
   }
 
   render() {

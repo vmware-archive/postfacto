@@ -373,6 +373,7 @@ ol ol > li:before {
 .retro-item-list-input {
   padding-top: 0.5rem;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .retro-item:hover {
@@ -779,6 +780,31 @@ button:focus {
 .retro-action-edit .action-text {
   @extend .small-12;
   padding: 0;
+}
+
+.column-input-header {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.sort-items-toggle-submit-inactive {
+  &:hover {
+    color: $highlight;
+    cursor: pointer;
+  }
+  padding-left: 8px;
+  margin-right: 0;
+}
+.sort-items-toggle-submit-active {
+  &:hover {
+    color: $highlight;
+    cursor: pointer;
+  }
+  color: $white;
+  padding-left: 8px;
+  margin-right: 0;
 }
 
 .item-content, .action-content {

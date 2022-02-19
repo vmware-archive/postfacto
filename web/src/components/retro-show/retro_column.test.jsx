@@ -46,14 +46,14 @@ const retro = {
       description: 'the happy retro item',
       category: 'happy',
       created_at: '2016-07-19T00:00:00.000Z',
-      vote_count: 10,
+      vote_count: 9,
     },
     {
       id: 2,
       description: 'the 2nd happy retro item',
       category: 'happy',
       created_at: '2016-07-18T00:00:00.000Z',
-      vote_count: 9,
+      vote_count: 10,
     },
     {
       id: 3,
@@ -67,11 +67,12 @@ const retro = {
     },
   ],
 };
-describe('RetroColumn', () => {
+
+describe('RetroColumnSortedByTime', () => {
   let dom;
 
   beforeEach(() => {
-    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
+    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" sortsByVotes={false} isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
   });
 
   it('assigns a class name based on category', () => {
@@ -87,5 +88,28 @@ describe('RetroColumn', () => {
     const happyItems = dom.find('.retro-item .item-text');
     expect(happyItems.at(0)).toHaveText('the happy retro item');
     expect(happyItems.at(1)).toHaveText('the 2nd happy retro item');
+  });
+});
+
+describe('RetroColumnSortedByVotes', () => {
+  let dom;
+
+  beforeEach(() => {
+    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" sortsByVotes={true} isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
+  });
+
+  it('assigns a class name based on category', () => {
+    expect(dom.find('.column-happy')).toExist();
+  });
+
+  it('displays all items', () => {
+    expect(dom.find('textarea.retro-item-add-input').prop('placeholder')).toEqual('I\'m glad that...');
+    expect(dom.find('.retro-item')).toHaveLength(2);
+  });
+
+  it('displays items ordered by votes', () => {
+    const happyItems = dom.find('.retro-item .item-text');
+    expect(happyItems.at(0)).toHaveText('the 2nd happy retro item');
+    expect(happyItems.at(1)).toHaveText('the happy retro item');
   });
 });
