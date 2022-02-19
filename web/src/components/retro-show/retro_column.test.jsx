@@ -95,7 +95,7 @@ describe('RetroColumnSortedByVotes', () => {
   let dom;
 
   beforeEach(() => {
-    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" sortsByVotes={true} isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
+    dom = mount(<RetroColumn retro={retro} retroId="retro-slug-123" category="happy" sortsByVotes isMobile={false} createRetroActionItem={goof} createRetroItem={goof} deleteRetroItem={goof} doneRetroItem={goof} extendTimer={goof} highlightRetroItem={goof} undoneRetroItem={goof} unhighlightRetroItem={goof} updateRetroItem={goof} voteRetroItem={goof}/>);
   });
 
   it('assigns a class name based on category', () => {
