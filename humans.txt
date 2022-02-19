@@ -61,3 +61,6 @@ Contact: mike.kenyon@gmail.com
 
 Engineer: Max Brauer
 Contact: github.com/mamachanko
+
+Engineer: Nick Hagi
+Contact: github.com/nickkhg
