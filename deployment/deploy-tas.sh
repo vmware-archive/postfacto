@@ -41,9 +41,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$SCRIPT_DIR/mixpanel.sh" "TAS $(basename "${BASH_SOURCE[0]}")" "$@"
 
 APP_HOST=$1
+SESSION_TIME=${SESSION_TIME:-'""'}
 ADMIN_EMAIL="${ADMIN_EMAIL:-email@example.com}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-password}"
-SESSION_TIME=${SESSION_TIME:-'""'}
 
 ASSETS_DIR="$SCRIPT_DIR/../assets"
 CONFIG_DIR="$SCRIPT_DIR/config"
