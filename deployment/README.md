@@ -22,7 +22,7 @@
 
 In order for users to sign-up and create their own retros using the web UI, Postfacto needs Google OAuth setup.
 For deployments that do not want to setup Google OAuth, you will need to create your retros through the admin console of your server via
-`<app-name>.<cf-url>/admin`
+`<app-url>/admin`
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com) and
    create a new project
@@ -100,7 +100,7 @@ However, note that for larger retros the live websocket updates may stop working
 
    Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`
 1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
-1. Create a retro for yourself by clicking on 'Retros' and the 'New Retro'
+1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
@@ -116,9 +116,7 @@ However, note that for larger retros the live websocket updates may stop working
 ### Prerequisites
 
 1. A vSphere instance version 6.7u3 or higher, with Tanzu Kubernetes Grid (TKG) provisioned
-
 1. A network load balancer installed and configured on your TKG cluster (e.g. [MetalLB](https://metallb.universe.tf/installation/))
-
 1. A default storage class available in your TKG cluster (e.g. [vSphereStorageClass](tkg/examples/storageclass.yaml))
 
 ### Initial deployment
@@ -138,8 +136,8 @@ However, note that for larger retros the live websocket updates may stop working
     ./deploy.sh <app-name>
     ```
 
-1. Keep note of the application url output by the deployment script, going forward referred to as `tkg-url` 
-1. Log in to the admin dashboard at `<tkg-url>/admin` (email: `email@example.com` and password: `password`)
+   Keep note of the application url output by the deployment script, going forward referred to as `tkg-url` 
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<tkg-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
 1. Log in to your retro at `<tkg-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
@@ -155,9 +153,8 @@ However, note that for larger retros the live websocket updates may stop working
 
 #### Initial deployment
 
-1. Set yourself up with an organization and space in your CF to deploy your Postfacto to
-1. Take note of your CF url, going forward referred to as `cf-url`
-1. Add a database (Postgres or Mysql) and a Redis service instance to your space from the Marketplace; name these services `postfacto-db` and `postfacto-redis`
+1. Set yourself up with an organization and space in your CF to deploy Postfacto to
+1. Add a database (Postgres or MySQL) and a Redis service instance to your space from the Marketplace. Name these services `postfacto-db` and `postfacto-redis`
 1. Run the CF deployment script from the `cf` directory, either:
 
     ```bash
@@ -170,9 +167,10 @@ However, note that for larger retros the live websocket updates may stop working
     ./deploy.sh <app-name>
     ```
 
-1. Log in to the Postfacto admin dashboard to check everything has worked at `<app-name>.<cf-url>/admin`
+   Take note of the URL that has shown up in the `routes:` section of the script output, going forward referred to as `<app-url>`
+1. Log in to the Postfacto admin dashboard (email: `email@example.com` and password: `password`) to check everything has worked at `<app-url>/admin`
 1. Create a retro for yourself by clicking on 'Retros' and then 'New Retro'
-1. Log in to your retro at `<app-name>.<cf-url>/retros/your-retro-slug`
+1. Log in to your retro at `<app-url>/retros/your-retro-slug`
 1. Share the URL and password with your team and then run a retro!
 
 #### Upgrading a deployment
