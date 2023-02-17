@@ -65,6 +65,7 @@ nodeSelector: {}
 disableSSLRedirect:
 googleOAuthClientId:
 secretKeyBase:
+clientOrigin:
 
 redis:
   cluster:

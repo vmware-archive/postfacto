@@ -84,6 +84,8 @@ spec:
             value: "redis://:$(REDIS_PASSWORD)@{{ .Release.Name }}-redis-master"
           - name: GOOGLE_OAUTH_CLIENT_ID
             value: "{{ .Values.googleOAuthClientId }}"
+          - name: CLIENT_ORIGIN
+            value: "{{ .Values.clientOrigin }}"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
