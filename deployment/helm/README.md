@@ -51,6 +51,11 @@ that is the same across upgrades:
 
 * `secretKeyBase=<random-long-value>`
 
+### Allow websocket connections
+To allow realtime updates via websocket connections, you need to set the URL that connections will be accepted from. In a public facing deployment, this is usually the public facing URL:
+
+* `clientOrigin=https://<host>`
+
 
 # Upgrading
 Upgrading is similar to installing, make sure you provide the same passwords 
@@ -65,11 +70,12 @@ helm upgrade postfacto . \
 
 ## Postfacto parameters
 
-Parameter | Description | Default
-----------|-------------|--------
-googleOAuthClientId  | The Google oAuth client ID to use to allow users to log in using a google account | nil   
-disableSSLRedirect  | By default Postfacto redirects to HTTPS by default, setting this to true disables that behaviour and can be useful when getting started | nil   
-secretKeyBase | Used for signing and encryption, should be set to a random value | random 10 character alpha numeric string
+Parameter | Description                                                                                                                             | Default
+----------|-----------------------------------------------------------------------------------------------------------------------------------------|--------
+googleOAuthClientId  | The Google oAuth client ID to use to allow users to log in using a google account                                                       | nil
+disableSSLRedirect  | By default Postfacto redirects to HTTPS by default, setting this to true disables that behaviour and can be useful when getting started | nil
+secretKeyBase | Used for signing and encryption, should be set to a random value                                                                        | random 10 character alpha numeric string
+clientOrigin | A URL to whitelist connections to                                                                                                       | nil
 
 ## Subcharts
 This chart includes the following subcharts: 
