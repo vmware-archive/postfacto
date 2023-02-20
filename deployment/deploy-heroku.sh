@@ -65,7 +65,7 @@ pushd "$ASSETS_DIR"
   heroku config:set WEBSOCKET_PORT=4443 "SESSION_TIME=$SESSION_TIME" -a "$APP_HOST"
 
   rm -rf .git # blow away any existent git directory from a previous run
-  git init .
+  git init -b main .
   git add .
   git commit -m "Packaging for initial Heroku deployment"
   git push --set-upstream "https://git.heroku.com/$APP_HOST.git" main
