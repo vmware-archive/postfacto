@@ -101,6 +101,14 @@ bundle exec rake
 ./e2e.sh
 ```
 
+## Creating a release package
+
+To create a `.zip` with deployment instructions run:
+
+```bash
+./package.sh
+```
+
 # Contributing to Pivotal Projects
 
 We’d love to accept your patches and contributions to this project. Please review the following guidelines you'll need to follow in order to make a contribution.
