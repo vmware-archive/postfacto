@@ -194,7 +194,9 @@ However, note that for larger retros the live websocket updates may stop working
 
 #### Initial deployment
 
-1. Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+Heroku deployment requires you have payment info added and verified in your Heroku account.
+
+1. Install and authenticate the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Run the Heroku deployment script from the `heroku` directory, either:
 
     ```bash

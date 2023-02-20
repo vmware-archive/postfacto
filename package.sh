@@ -95,12 +95,14 @@ chmod u+x package/heroku/*.sh
 
 # TKG
 
-cp -r deployment/tkg package
-cp -r deployment/helm/postfacto-*.tgz package/tkg
-cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
-cp -r deployment/upgrade-tkg.sh package/tkg/upgrade.sh
-cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
-chmod u+x package/tkg/*.sh
+if [ -d deployment/helm/postfacto-*.tgz ]; then
+  cp -r deployment/tkg package
+  cp -r deployment/helm/postfacto-*.tgz package/tkg
+  cp -r deployment/deploy-tkg.sh package/tkg/deploy.sh
+  cp -r deployment/upgrade-tkg.sh package/tkg/upgrade.sh
+  cp -r deployment/mixpanel.sh package/tkg/mixpanel.sh
+  chmod u+x package/tkg/*.sh
+fi
 
 # Smoke tests
 
